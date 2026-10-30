@@ -1,0 +1,46 @@
+{
+  "schema": 1,
+  "candidate": "standalone",
+  "originalInputSha256": "436eb70ff930da3e934843d4bd70604823fe1aed9e4c5a16c6f68839c85ab6a0",
+  "fields": [
+    {
+      "originalMetadataTypeName": "CloriumAutoSizing.Program",
+      "fieldName": "Encryption_key1",
+      "storage": "private static readonly string field initializer",
+      "environmentVariable": "CLORIUM_AUTOSIZING_STANDALONE_LICENSE_KEY1",
+      "sourceFile": "projects/Clorium.AutoSizing.Standalone/CloriumAutoSizing/Program.cs",
+      "emptyOriginalDefault": false,
+      "requiredWhen": "at least one corresponding original license file check can be performed; no key replacement",
+      "sourceLine": 16
+    },
+    {
+      "originalMetadataTypeName": "CloriumAutoSizing.Program",
+      "fieldName": "Encryption_key2",
+      "storage": "private static readonly string field initializer",
+      "environmentVariable": "CLORIUM_AUTOSIZING_STANDALONE_LICENSE_KEY2",
+      "sourceFile": "projects/Clorium.AutoSizing.Standalone/CloriumAutoSizing/Program.cs",
+      "emptyOriginalDefault": false,
+      "requiredWhen": "at least one corresponding original license file check can be performed; no key replacement",
+      "sourceLine": 18
+    },
+    {
+      "originalMetadataTypeName": "CloriumAutoSizing.F_Measure+SendDataInfo",
+      "fieldName": "Vendor_aip_key",
+      "storage": "public mutable instance string field initializer",
+      "environmentVariable": "CLORIUM_AUTOSIZING_STANDALONE_VENDOR_API_KEY",
+      "sourceFile": "projects/Clorium.AutoSizing.Standalone/CloriumAutoSizing/F_Measure.cs",
+      "emptyOriginalDefault": false,
+      "requiredWhen": "existing optional API GET/POST path is selected; external caller can still assign the public field",
+      "sourceLine": 29
+    },
+    {
+      "originalMetadataTypeName": "CloriumAutoSizing.F_Measure+SendDataInfo",
+      "fieldName": "VendorID",
+      "environmentVariable": "CLORIUM_AUTOSIZING_STANDALONE_VENDOR_ID",
+      "sourceFile": "projects/Clorium.AutoSizing.Standalone/CloriumAutoSizing/F_Measure.cs",
+      "sourceLine": 30
+    }
+  ],
+  "forbiddenOutput": "secret values; use local-only provisioned material outside customer ZIP",
+  "hostHandling": "ApiHostName empty default and image metadata Comment fallback retained; no fixed default URL removed"
+}

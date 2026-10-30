@@ -1,0 +1,42 @@
+<Project Sdk="Microsoft.NET.Sdk">
+<PropertyGroup>
+<TargetFramework>net48</TargetFramework>
+<AssemblyName>Clorium Centering</AssemblyName>
+<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+<AutomaticallyUseReferenceAssemblyPackages>false</AutomaticallyUseReferenceAssemblyPackages>
+<TargetFrameworkRootPath>$(MSBuildThisFileDirectory)../../framework-refs/net48/</TargetFrameworkRootPath>
+<EnableFrameworkPathOverride>false</EnableFrameworkPathOverride>
+<NoStdLib>true</NoStdLib>
+<LangVersion>14.0</LangVersion>
+<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+<CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+<PlatformTarget>x64</PlatformTarget>
+<EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
+<RootNamespace />
+<OutputType>WinExe</OutputType>
+<ApplicationIcon>app.ico</ApplicationIcon>
+<BuildEditableXaml Condition="'$(BuildEditableXaml)' == ''">true</BuildEditableXaml><UseWPF>$(BuildEditableXaml)</UseWPF><EnableDefaultPageItems>false</EnableDefaultPageItems><OutputPath Condition="'$(BuildEditableXaml)' == 'true'">bin/$(Configuration)/Editable/</OutputPath><OutputPath Condition="'$(BuildEditableXaml)' != 'true'">bin/$(Configuration)/Preserved/</OutputPath><IntermediateOutputPath Condition="'$(BuildEditableXaml)' == 'true'">obj/$(Configuration)/Editable/</IntermediateOutputPath><IntermediateOutputPath Condition="'$(BuildEditableXaml)' != 'true'">obj/$(Configuration)/Preserved/</IntermediateOutputPath></PropertyGroup>
+<ItemGroup>
+<Reference Include="mscorlib"><HintPath>../../framework-refs/net48/.NETFramework/v4.8/mscorlib.dll</HintPath><Private>false</Private></Reference>
+<Reference Include="PresentationFramework"><HintPath>../../framework-refs/net48/.NETFramework/v4.8/PresentationFramework.dll</HintPath><Private>false</Private></Reference>
+<Reference Include="System"><HintPath>../../framework-refs/net48/.NETFramework/v4.8/System.dll</HintPath><Private>false</Private></Reference>
+<Reference Include="System.Xaml"><HintPath>../../framework-refs/net48/.NETFramework/v4.8/System.Xaml.dll</HintPath><Private>false</Private></Reference>
+<Reference Include="PresentationCore"><HintPath>../../framework-refs/net48/.NETFramework/v4.8/PresentationCore.dll</HintPath><Private>false</Private></Reference>
+<Reference Include="WindowsBase"><HintPath>../../framework-refs/net48/.NETFramework/v4.8/WindowsBase.dll</HintPath><Private>false</Private></Reference>
+<Reference Include="Microsoft.WindowsAPICodePack"><HintPath>../../dependencies/Centering/microsoft.windowsapicodepack.dll</HintPath><Private>false</Private></Reference>
+<Reference Include="Microsoft.WindowsAPICodePack.Shell"><HintPath>../../dependencies/Centering/microsoft.windowsapicodepack.shell.dll</HintPath><Private>false</Private></Reference>
+<Reference Include="System.Core"><HintPath>../../framework-refs/net48/.NETFramework/v4.8/System.Core.dll</HintPath><Private>false</Private></Reference>
+<Reference Include="netstandard"><HintPath>../../framework-refs/net48/.NETFramework/v4.8/Facades/netstandard.dll</HintPath><Private>false</Private></Reference>
+<EmbeddedResource Include="../../resources/Centering/Clorium Centering.g.resources" LogicalName="Clorium Centering.g.resources" Condition="'$(BuildEditableXaml)' != 'true'" />
+<EmbeddedResource Include="../../resources/Centering/Clorium_Centering.Properties.Resources.resources" LogicalName="Clorium_Centering.Properties.Resources.resources" />
+<EmbeddedResource Include="../../resources/Centering/costura.controlzex.dll.compressed" LogicalName="costura.controlzex.dll.compressed" />
+<EmbeddedResource Include="../../resources/Centering/costura.controlzex.pdb.compressed" LogicalName="costura.controlzex.pdb.compressed" />
+<EmbeddedResource Include="../../resources/Centering/costura.costura.dll.compressed" LogicalName="costura.costura.dll.compressed" />
+<EmbeddedResource Include="../../resources/Centering/costura.costura.pdb.compressed" LogicalName="costura.costura.pdb.compressed" />
+<EmbeddedResource Include="../../resources/Centering/costura.microsoft.windowsapicodepack.dll.compressed" LogicalName="costura.microsoft.windowsapicodepack.dll.compressed" />
+<EmbeddedResource Include="../../resources/Centering/costura.microsoft.windowsapicodepack.shell.dll.compressed" LogicalName="costura.microsoft.windowsapicodepack.shell.dll.compressed" />
+<EmbeddedResource Include="../../resources/Centering/costura.microsoft.xaml.behaviors.dll.compressed" LogicalName="costura.microsoft.xaml.behaviors.dll.compressed" />
+<EmbeddedResource Include="../../resources/Centering/costura.microsoft.xaml.behaviors.pdb.compressed" LogicalName="costura.microsoft.xaml.behaviors.pdb.compressed" />
+<EmbeddedResource Include="../../resources/Centering/costura.metadata" LogicalName="costura.metadata" />
+</ItemGroup>
+<ItemGroup Condition="'$(BuildEditableXaml)' == 'true'"><Compile Remove="**/*.PreservedUi.g.cs" /><Page Include="Clorium_Centering/MainWindow.xaml" LogicalName="mainwindow.xaml" Generator="MSBuild:Compile" SubType="Designer" /><Page Include="Clorium_Centering/ProgressRingControl.xaml" LogicalName="progressringcontrol.xaml" Generator="MSBuild:Compile" SubType="Designer" /><Resource Include="logo.ico" LogicalName="logo.ico" /></ItemGroup></Project>

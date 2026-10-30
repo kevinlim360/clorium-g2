@@ -1,0 +1,34 @@
+{
+  "date": "2026-10-28",
+  "application": ".local/g2-runtime/CameraControl.exe",
+  "build": "0 errors; 10 existing warnings",
+  "regression": "18 groups PASS",
+  "legacy": "19 guards PASS against raw candidate; initial invocation used wrong root, corrected to src/Clorium.G2",
+  "postprocess": "WPF/WIA/WMPLib PASS",
+  "maintenance": "Isolated runtime guard PASS",
+  "independentReview": false,
+  "rules": "High: Small SDK positions at A, A+3, ... B inclusive (last remainder allowed). Medium: round(High*2/3); Low: round(High/3); minimum 2, maximum200. Both directions retained.",
+  "custom": "Blank input uses preset. Integer2..200 must not exceed span+1, no duplicate focus positions. Exact requested count distributed over inclusive anchors, closest endpoint first. Selecting preset clears custom input.",
+  "example": "A0 B72: High25 (was73), Medium17 (was49), Low8 (was24). Exact one-third differs at inclusive endpoints/rounding.",
+  "ui": "Observed launcher in left sidebar between Live display and Calibration; no image overlay launcher. Opened popup and saw Quality label, small count textbox, Focus-box label, no clipping.",
+  "device": "No new exposures this change. Native screenshot tool became intermittent: encode latest capture frame failed: window crop is outside captured monitor. Refreshed window selection/activation retry failed. Custom capture plan and three-step pattern verified in injected-camera regression, previous actual bidirectional capture evidence retained separately.",
+  "leftRunning": "New candidate live view and popup running; no A/B test anchors registered. Focus-box checkbox was clicked during attempted test, so its mode may be off; user can turn it on.",
+  "modules": [
+    {
+      "sha256": "0a9ed8bde579fa2fd66919f3644159156f07efdf180478acb353f5c8de813b9b",
+      "file": "CameraControl.exe"
+    },
+    {
+      "sha256": "ca99f19e4af14c125976af03f28489033fd4a06766992f988445034982e67bc4",
+      "file": "CameraControl.Core.dll"
+    },
+    {
+      "sha256": "3be30247f5d5dfc9f88e5482664671c7df1fc0debd15b62892e227333712288a",
+      "file": "CameraControl.Devices.dll"
+    },
+    {
+      "sha256": "a931b94d8631b341c01ee3c2f3b07997855032687cfc5242be780bb2544f13d2",
+      "file": "Canon.Eos.Framework.dll"
+    }
+  ]
+}

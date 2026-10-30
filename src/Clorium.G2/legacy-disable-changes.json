@@ -1,0 +1,23 @@
+[
+  "projects\\CameraControl\\CameraControl\\ViewModel\\LiveViewViewModel.cs",
+  "projects\\CameraControl\\CameraControl\\ViewModel\\MultipleLiveViewViewModel.cs",
+  "projects\\CameraControl\\CameraControl\\ViewModel\\SimpleLiveViewViewModel.cs",
+  "projects\\CameraControl\\CameraControl\\ViewModel\\TurnTableViewModel.cs",
+  "projects\\CameraControl\\CameraControl\\ViewModel\\WebCamViewModel.cs",
+  "projects\\CameraControl\\CameraControl\\windows\\LiveViewWnd.xaml",
+  "projects\\CameraControl\\CameraControl\\windows\\TurnTableWnd.xaml",
+  "projects\\CameraControl\\CameraControl\\windows\\TurnTableWnd.xaml.cs",
+  "projects\\CameraControl.Core\\CameraControl\\Core\\Classes\\CameraHelper.cs",
+  "projects\\CameraControl.Core\\CameraControl\\Core\\Classes\\CloriumStackProcess.cs",
+  "projects\\CameraControl.Devices\\CameraControl\\Devices\\BaseCameraDevice.cs",
+  "projects\\CameraControl.Devices\\CameraControl\\Devices\\LegacyCapturePolicy.cs",
+  "projects\\CameraControl.Devices\\CameraControl\\Devices\\Canon\\CanonSDKBase.cs",
+  "projects\\CameraControl.Devices\\CameraControl\\Devices\\Nikon\\NikonBase.cs",
+  "projects\\CameraControl.Devices\\CameraControl\\Devices\\Nikon\\NikonD3200.cs",
+  "projects\\CameraControl.Devices\\CameraControl\\Devices\\Nikon\\NikonD4.cs",
+  "projects\\CameraControl.Devices\\CameraControl\\Devices\\Nikon\\NikonD800.cs",
+  "projects\\CameraControl.Devices\\CameraControl\\Devices\\Nikon\\NikonZ6.cs",
+  "projects\\CameraControl.Devices\\CameraControl\\Devices\\Others\\GoProBaseCamera.cs",
+  "projects\\CameraControl.Devices\\CameraControl\\Devices\\Others\\WebCameraDevice.cs",
+  "projects\\CameraControl.Devices\\CameraControl\\Devices\\Others\\YiCamera.cs"
+]

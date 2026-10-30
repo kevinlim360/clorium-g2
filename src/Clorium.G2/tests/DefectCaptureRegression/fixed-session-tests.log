@@ -1,0 +1,4 @@
+C:\Users\user\Documents\Codex\c4714r2\tests\DefectCaptureRegression\Program.cs(127,11): warning CS0219: 'pathname' 할당되었지만 사용되지 않았습니다. [C:\Users\user\Documents\Codex\c4714r2\tests\DefectCaptureRegression\DefectHarness.csproj]
+C:\Users\user\Documents\Codex\c4714r2\tests\DefectCaptureRegression\Program.cs(201,24): warning CS0414: 'MainCapture.isCalibrationMode' 필드가 할당되었지만 사용되지 않았습니다. [C:\Users\user\Documents\Codex\c4714r2\tests\DefectCaptureRegression\DefectHarness.csproj]
+C:\Users\user\Documents\Codex\c4714r2\tests\DefectCaptureRegression\Program.cs(440,227): warning CS0414: 'Program.oneFailure' 필드가 할당되었지만 사용되지 않았습니다. [C:\Users\user\Documents\Codex\c4714r2\tests\DefectCaptureRegression\DefectHarness.csproj]
+{"tests":163,"passed":163,"failed":0,"resultPath":"C:\\Users\\user\\Documents\\Codex\\c4714r2\\tests\\DefectCaptureRegression\\bin\\Debug\\net10.0\\results.json"}

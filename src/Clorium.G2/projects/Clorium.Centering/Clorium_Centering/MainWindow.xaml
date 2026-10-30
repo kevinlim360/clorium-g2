@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Window x:Class="Clorium_Centering.MainWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:local="clr-namespace:Clorium_Centering" Title="Clorium Centroid Alignment" Height="1136" Width="1947">
+  <Grid Margin="10">
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="300" />
+      <ColumnDefinition Width="*" />
+    </Grid.ColumnDefinitions>
+    <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto">
+      <StackPanel VerticalAlignment="Top" Margin="0,0,10,0">
+        <GroupBox Header="1. Input" Margin="0,0,0,10">
+          <StackPanel Margin="5">
+            <Button Name="BtnLoadImages" Content="Load Image Folder" Height="30" Margin="0,5" Click="BtnLoadImages_Click" />
+            <ListBox Name="ListBoxImages" Height="225" Margin="0,2" SelectionChanged="ListBoxImages_SelectionChanged">
+              <ItemsControl.ItemContainerStyle>
+                <Style TargetType="{x:Type ListBoxItem}">
+                  <EventSetter Event="MouseDoubleClick" Handler="ListBoxItem_MouseDoubleClick" />
+                </Style>
+              </ItemsControl.ItemContainerStyle>
+            </ListBox>
+            <UniformGrid Columns="2" Margin="0,5">
+              <Button Name="BtnPlayOriginal" Content="▶ Play Org" Height="25" Margin="0,0,2,0" Background="#F0F0F0" Click="BtnPlayOriginal_Click" />
+              <Button Name="BtnStopOriginal" Content="■ Stop" Height="25" Margin="2,0,0,0" Click="BtnStopOriginal_Click" />
+            </UniformGrid>
+            <DockPanel Margin="0,2">
+              <Label Content="Speed:" FontSize="10" VerticalAlignment="Center" />
+              <TextBlock Width="25" VerticalAlignment="Center" TextAlignment="Right" Foreground="#0078D7" FontSize="10" FontWeight="Bold" Text="{Binding ElementName=SliderSpeedOriginal, Path=Value}" />
+              <Slider Name="SliderSpeedOriginal" Minimum="10" Maximum="500" Value="100" TickFrequency="10" IsSnapToTickEnabled="True" VerticalAlignment="Center" AutoToolTipPlacement="TopLeft" AutoToolTipPrecision="0" />
+            </DockPanel>
+          </StackPanel>
+        </GroupBox>
+        <GroupBox Header="2. Condition" Margin="0,0,0,10">
+          <StackPanel Margin="5">
+            <TextBlock Text="* 값이 높을수록 물체만 인식" Foreground="#FF808080" FontSize="10" Margin="5,0,0,0" />
+            <StackPanel Orientation="Horizontal" Margin="5">
+              <TextBlock Text="Threshold  : " VerticalAlignment="Center" />
+              <TextBox Name="TxtThreshold" Text="200" Width="50" TextChanged="TxtThreshold_TextChanged" />
+              <RepeatButton Name="BtnDownThreshold" Content="-" Width="25" Height="22" Delay="500" Interval="100" Click="BtnDownThreshold_Click" />
+              <RepeatButton Name="BtnUpThreshold" Content="+" Width="25" Height="22" Delay="500" Interval="100" Click="BtnUpThreshold_Click" />
+              <Button Name="BtnTestThreshold" Content="Preview" Margin="5,0,0,0" Padding="5,0" Click="BtnPreviewThreshold_Click" />
+            </StackPanel>
+            <TextBlock Text="* 출력 이미지 크기" Foreground="#FF808080" FontSize="10" Margin="5,0,0,0" />
+            <StackPanel Orientation="Horizontal" Margin="5">
+              <TextBlock Text="Crop Ratio : " VerticalAlignment="Center" />
+              <TextBox Name="TxtCropRatio" Text="70" Width="50" TextChanged="TxtCropRatio_TextChanged" />
+              <RepeatButton Name="BtnDownCrop" Content="-" Width="25" Height="22" Delay="500" Interval="100" Click="BtnDownCrop_Click" />
+              <RepeatButton Name="BtnUpCrop" Content="+" Width="25" Height="22" Delay="500" Interval="100" Click="BtnUpCrop_Click" />
+              <TextBlock Text="%" VerticalAlignment="Center" Margin="5,0,0,0" />
+            </StackPanel>
+          </StackPanel>
+        </GroupBox>
+        <GroupBox Header="3. Correction" Margin="0,0,0,10">
+          <StackPanel Margin="5">
+            <TextBlock Text="* 출력 이미지 파일" Foreground="#FF808080" FontSize="10" Margin="5,0,0,0" />
+            <StackPanel Orientation="Horizontal" Margin="5">
+              <CheckBox Name="ChkSaveTransparent" Content="배경제거" IsChecked="True" Margin="0,0,0,5" />
+              <CheckBox Name="ChkSaveCenter" Content="센터링" IsChecked="True" Margin="15,0,0,5" />
+              <CheckBox Name="ChkSaveMag" Content="원근보정" IsChecked="True" Margin="15,0,0,5" />
+            </StackPanel>
+            <UniformGrid Columns="2">
+              <Button Name="BtnCorrectAll" Content="START" Height="45" Margin="2" Background="#0078D7" Foreground="#FFFFFFFF" FontWeight="Bold" Click="BtnCorrectAll_Click" />
+              <Button Name="BtnCorrectStop" Content="STOP" Height="45" Margin="2" Background="#E81123" Foreground="#FFFFFFFF" FontWeight="Bold" IsEnabled="False" Click="BtnCorrectStop_Click" />
+            </UniformGrid>
+            <ProgressBar Name="ProgressBarCorrection" Height="20" Margin="0,5" />
+          </StackPanel>
+        </GroupBox>
+        <GroupBox Header="4. Output" Margin="0,0,0,10">
+          <StackPanel Margin="5">
+            <Button Name="BtnLoadFolder" Content="Load Result Folder" Height="30" Margin="0,5" Click="BtnLoadFolder_Click" />
+            <ListBox Name="ListBoxCorrected" Height="225" Margin="0,2" SelectionChanged="ListBoxCorrected_SelectionChanged" />
+            <UniformGrid Columns="2" Margin="0,5">
+              <Button Name="BtnPlay" Content="▶ Play" Height="25" Margin="0,0,2,0" Click="BtnPlay_Click" />
+              <Button Name="BtnStop" Content="■ Stop" Height="25" Margin="2,0,0,0" Click="BtnStop_Click" />
+            </UniformGrid>
+            <DockPanel Margin="0,2">
+              <Label Content="Speed:" FontSize="11" VerticalAlignment="Center" />
+              <TextBlock Width="25" VerticalAlignment="Center" TextAlignment="Right" Foreground="#0078D7" FontSize="10" FontWeight="Bold" Text="{Binding ElementName=SliderSpeed, Path=Value}" />
+              <Slider Name="SliderSpeed" Minimum="10" Maximum="500" Value="100" TickFrequency="10" IsSnapToTickEnabled="True" AutoToolTipPlacement="TopLeft" AutoToolTipPrecision="0" ValueChanged="SliderSpeed_ValueChanged" />
+            </DockPanel>
+          </StackPanel>
+        </GroupBox>
+      </StackPanel>
+    </ScrollViewer>
+    <Border Grid.Column="1" Margin="5" BorderThickness="1" BorderBrush="#FF808080" Background="#F0F0F0">
+      <Grid>
+        <Grid IsHitTestVisible="False">
+          <Panel.Background>
+            <VisualBrush TileMode="Tile" Viewport="0,0,20,20" ViewportUnits="Absolute">
+              <VisualBrush.Visual>
+                <Grid Width="20" Height="20">
+                  <Rectangle Fill="#FFFFFFFF" Width="20" Height="20" />
+                  <Rectangle Fill="#E5E5E5" HorizontalAlignment="Left" VerticalAlignment="Top" Width="10" Height="10" />
+                  <Rectangle Fill="#E5E5E5" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="10" Height="10" />
+                </Grid>
+              </VisualBrush.Visual>
+            </VisualBrush>
+          </Panel.Background>
+        </Grid>
+        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+          <Image Name="ImgPreview" RenderOptions.BitmapScalingMode="HighQuality" Stretch="Uniform" />
+        </ScrollViewer>
+        <TextBlock Text="PREVIEW AREA" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="10" Foreground="#BBBBBB" FontWeight="Bold" FontSize="20" IsHitTestVisible="False" />
+      </Grid>
+    </Border>
+    <local:ProgressRingControl x:Name="ProgressRing" Grid.Column="1" Panel.ZIndex="999" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
+  </Grid>
+</Window>

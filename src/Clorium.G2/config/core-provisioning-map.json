@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "candidate": "core",
+  "originalInputSha256": "77819ce0c941759453dabaf35c9488712f875538c024cd5fe51a07676f4a6a9d",
+  "fields": [
+    {
+      "originalMetadataTypeName": "CameraControl.Core.Classes.Settings",
+      "fieldName": "_presetpassword",
+      "environmentVariable": "CLORIUM_PRESET_PASSWORD"
+    }
+  ]
+}

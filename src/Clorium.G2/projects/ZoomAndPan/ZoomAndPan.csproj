@@ -1,0 +1,65 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>ZoomAndPan</AssemblyName>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <TargetFramework>net48</TargetFramework>
+    <PlatformTarget>x64</PlatformTarget>
+    <AutomaticallyUseReferenceAssemblyPackages>false</AutomaticallyUseReferenceAssemblyPackages>
+    <TargetFrameworkRootPath>$(MSBuildThisFileDirectory)../../framework-refs/net48/</TargetFrameworkRootPath>
+    <EnableFrameworkPathOverride>false</EnableFrameworkPathOverride>
+    <NoStdLib>true</NoStdLib>
+    <LangVersion>14.0</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
+    <BuildEditableXaml Condition="'$(BuildEditableXaml)' == ''">true</BuildEditableXaml>
+    <UseWPF>$(BuildEditableXaml)</UseWPF>
+    <EnableDefaultPageItems>false</EnableDefaultPageItems>
+    <OutputPath Condition="'$(BuildEditableXaml)' == 'true'">bin/$(Configuration)/Editable/</OutputPath>
+    <OutputPath Condition="'$(BuildEditableXaml)' != 'true'">bin/$(Configuration)/Preserved/</OutputPath>
+    <IntermediateOutputPath Condition="'$(BuildEditableXaml)' == 'true'">obj/$(Configuration)/Editable/</IntermediateOutputPath>
+    <IntermediateOutputPath Condition="'$(BuildEditableXaml)' != 'true'">obj/$(Configuration)/Preserved/</IntermediateOutputPath>
+    <DefineConstants>$(DefineConstants);DEBUG</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib">
+      <HintPath>../../framework-refs/net48/.NETFramework/v4.8/mscorlib.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="PresentationFramework">
+      <HintPath>../../framework-refs/net48/.NETFramework/v4.8/PresentationFramework.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="PresentationCore">
+      <HintPath>../../framework-refs/net48/.NETFramework/v4.8/PresentationCore.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="WindowsBase">
+      <HintPath>../../framework-refs/net48/.NETFramework/v4.8/WindowsBase.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="System.Xaml">
+      <HintPath>../../framework-refs/net48/.NETFramework/v4.8/System.Xaml.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="System">
+      <HintPath>../../framework-refs/net48/.NETFramework/v4.8/System.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="System.Core">
+      <HintPath>../../framework-refs/net48/.NETFramework/v4.8/System.Core.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="../../resources/ZoomAndPan/ZoomAndPan.g.resources" LogicalName="ZoomAndPan.g.resources" Condition="'$(BuildEditableXaml)' != 'true'" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(BuildEditableXaml)' == 'true'">
+    <Page Include="themes/generic.xaml" LogicalName="themes/generic.xaml" Generator="MSBuild:Compile" SubType="Designer" />
+  </ItemGroup>
+  <Target Name="ExcludeUnusedGenericInternalTypeHelper" BeforeTargets="CoreCompile" Condition="'$(BuildEditableXaml)' == 'true'">
+    <ItemGroup>
+      <Compile Remove="@(Compile)" Condition="'%(Compile.Filename)' == 'GeneratedInternalTypeHelper.g'" />
+    </ItemGroup>
+  </Target>
+</Project>

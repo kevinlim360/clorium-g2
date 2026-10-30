@@ -1,0 +1,10 @@
+System.IO.IOException: 업데이트를 완료하지 못해 이전 파일로 복원했습니다. 다른 프로그램에서 파일을 사용 중인지 확인해 주세요. ---> System.IO.IOException: 요청한 작업은, 사용자가 매핑한 구역이 열려 있는 상태인 파일에서 수행할 수 없습니다.
+
+   위치: System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+   위치: System.IO.FileStream.Init(String path, FileMode mode, FileAccess access, Int32 rights, Boolean useRights, FileShare share, Int32 bufferSize, FileOptions options, SECURITY_ATTRIBUTES secAttrs, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   위치: System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share, Int32 bufferSize, FileOptions options, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   위치: System.IO.File.InternalWriteAllBytes(String path, Byte[] bytes, Boolean checkHost)
+   위치: CloriumUpdate.UpdateEngine.Install(String installPath)
+   --- 내부 예외 스택 추적의 끝 ---
+   위치: CloriumUpdate.UpdateEngine.Install(String installPath)
+   위치: WindowsUpdaterTests.Main(String[] args)

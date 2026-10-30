@@ -1,0 +1,989 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Clorium G2 · main window, design A (light).
+  Drawn fresh from the design; only the existing behaviour is wired in (handlers, commands, bindings, and the
+  element names the code-behind uses). Shared tokens/styles: styles/g2theme.xaml.
+-->
+<Controls:MetroWindow x:Class="CameraControl.MainWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:local="clr-namespace:CameraControl.Controls" xmlns:Core="clr-namespace:CameraControl.Core;assembly=CameraControl.Core" xmlns:myClasess="clr-namespace:CameraControl.Classes" xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro" xmlns:T="clr-namespace:CameraControl.Core.Translation;assembly=CameraControl.Core" xmlns:Panels="clr-namespace:CameraControl.Panels" xmlns:Devices="clr-namespace:CameraControl.Devices;assembly=CameraControl.Devices" xmlns:tb="http://www.hardcodet.net/taskbar" xmlns:dragDrop="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop" xmlns:viewModel="clr-namespace:CameraControl.ViewModel" xmlns:wpf="clr-namespace:CameraControl.Core.Wpf;assembly=CameraControl.Core" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" xmlns:zoomAndPan="clr-namespace:ZoomAndPan;assembly=ZoomAndPan" xmlns:my="clr-namespace:CameraControl" x:Name="Window" Title="Clorium" Height="1476" Width="1257" ShowTitleBar="False" Icon="/CameraControl;component/Images/logo.png" WindowState="Maximized" VerticalContentAlignment="Center" TextElement.FontWeight="Regular" TextElement.FontSize="13" TextOptions.TextFormattingMode="Ideal" TextOptions.TextRenderingMode="Auto" TextElement.Foreground="{DynamicResource G2Text}" Background="{DynamicResource G2Page}" FontFamily="{DynamicResource G2Font}" Loaded="MetroWindow_Loaded" Closing="Window_Closing" Closed="Window_Closed" PreviewKeyDown="MetroWindow_PreviewKeyDown" KeyDown="Window_KeyDown" StateChanged="Window_StateChanged" SizeChanged="Window_SizeChanged" MouseWheel="Window_MouseWheel">
+  <FrameworkElement.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/CameraControl;component/styles/g2theme.xaml" />
+        <ResourceDictionary>
+          <!-- keep this window light even when the app theme is Dark (for embedded panels that still use theme brushes) -->
+          <FontFamily x:Key="MaterialDesignFont">pack://application:,,,/CameraControl;component/fonts/#Noto Sans KR, Malgun Gothic</FontFamily>
+          <SolidColorBrush x:Key="MaterialDesignBackground" Color="#FFFFFFFF" />
+          <SolidColorBrush x:Key="MaterialDesignPaper" Color="#FFF3F4F6" />
+          <SolidColorBrush x:Key="MaterialDesignCardBackground" Color="#FFFFFFFF" />
+          <SolidColorBrush x:Key="MaterialDesignBody" Color="#FF16181C" />
+          <SolidColorBrush x:Key="MaterialDesignBodyLight" Color="#FF56606C" />
+          <SolidColorBrush x:Key="MaterialDesignDivider" Color="#FFE1E4E9" />
+          <SolidColorBrush x:Key="MaterialDesignSelection" Color="#FFE3ECFB" />
+          <SolidColorBrush x:Key="MaterialDesignPaperLight" Color="#FFFFFFFF" />
+          <SolidColorBrush x:Key="MaterialDesignTextBoxBorder" Color="#FFA9B0BA" />
+          <SolidColorBrush x:Key="MaterialDesignCheckBoxOff" Color="#FFA9B0BA" />
+          <SolidColorBrush x:Key="MaterialDesignToolBackground" Color="#FFE1E4E9" />
+          <SolidColorBrush x:Key="MaterialDesignToolForeground" Color="#FF16181C" />
+          <SolidColorBrush x:Key="MaterialDesignFlatButtonClick" Color="#FFE3ECFB" />
+          <SolidColorBrush x:Key="MahApps.Brushes.ThemeBackground" Color="#FFFFFFFF" />
+          <SolidColorBrush x:Key="MahApps.Brushes.ThemeForeground" Color="#FF16181C" />
+          <SolidColorBrush x:Key="MahApps.Brushes.Text" Color="#FF16181C" />
+          <SolidColorBrush x:Key="MahApps.Brushes.Label.Text" Color="#FF16181C" />
+          <SolidColorBrush x:Key="MahApps.Brushes.Control.Background" Color="#FFFFFFFF" />
+          <SolidColorBrush x:Key="MahApps.Brushes.Window.Background" Color="#FFF3F4F6" />
+          <SolidColorBrush x:Key="WhiteBrush" Color="#FFFFFFFF" />
+          <SolidColorBrush x:Key="BlackBrush" Color="#FF16181C" />
+          <SolidColorBrush x:Key="TextBrush" Color="#FF16181C" />
+          <SolidColorBrush x:Key="LabelTextBrush" Color="#FF16181C" />
+          <SolidColorBrush x:Key="ControlBackgroundBrush" Color="#FFFFFFFF" />
+        </ResourceDictionary>
+      </ResourceDictionary.MergedDictionaries>
+      <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter1" />
+      <wpf:IntToProgressConverter x:Key="MyConverter" />
+      <myClasess:G2PlusOneConverter x:Key="G2PlusOne" />
+      <!-- small two-state segmented button (lighting on/off, timer actions) -->
+      <Style x:Key="G2SegButton" TargetType="Button" BasedOn="{StaticResource G2ButtonBase}">
+        <Setter Property="Tag" Value="6" />
+        <Setter Property="Height" Value="28" />
+        <Setter Property="Padding" Value="11,0" />
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+      </Style>
+      <Style x:Key="G2RowLabel" TargetType="TextBlock" BasedOn="{StaticResource G2Caption}">
+        <Setter Property="VerticalAlignment" Value="Center" />
+      </Style>
+      <Style x:Key="G2Popup" TargetType="Border">
+        <Setter Property="Background" Value="{StaticResource G2Panel}" />
+        <Setter Property="BorderBrush" Value="{StaticResource G2Line2}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="12" />
+        <Setter Property="Padding" Value="12" />
+        <Setter Property="Margin" Value="0,0,12,12" />
+        <Setter Property="TextElement.FontFamily" Value="{StaticResource G2Font}" />
+        <Setter Property="TextElement.FontSize" Value="13" />
+        <Setter Property="TextElement.Foreground" Value="{StaticResource G2Text}" />
+        <Setter Property="Effect">
+          <Setter.Value>
+            <DropShadowEffect BlurRadius="20" ShadowDepth="4" Opacity="0.22" />
+          </Setter.Value>
+        </Setter>
+      </Style>
+    </ResourceDictionary>
+  </FrameworkElement.Resources>
+  <Window.TaskbarItemInfo>
+    <TaskbarItemInfo ProgressState="Normal" ProgressValue="{Binding Source={x:Static Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.TransferProgress, Converter={StaticResource MyConverter}}" />
+  </Window.TaskbarItemInfo>
+  <Grid Background="{StaticResource G2Page}" TextElement.Foreground="{StaticResource G2Text}" TextElement.FontFamily="{StaticResource G2Font}" TextElement.FontSize="13">
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="74" />
+      <ColumnDefinition Width="*" />
+      <ColumnDefinition Width="Auto" />
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="62" />
+      <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
+    <tb:TaskbarIcon Name="MyNotifyIcon" IconSource="/CameraControl;component/logo.ico" MenuActivation="LeftOrRightClick" ToolTipText="{Binding Source={x:Static Core:ServiceProvider.Branding}, Path=ApplicationTitle}" TrayMouseDoubleClick="MyNotifyIcon_TrayMouseDoubleClick">
+      <FrameworkElement.ContextMenu>
+        <ContextMenu>
+          <FrameworkElement.DataContext>
+            <viewModel:MainMenuViewModel />
+          </FrameworkElement.DataContext>
+          <MenuItem CommandParameter="Restore" Header="{T:Translate LabelRestore}" Command="{Binding SendCommand}" InputGestureText="{myClasess:CommandShortcutExtensioncs Restore}" />
+          <Separator />
+          <MenuItem CommandParameter="All_Close" Header="{T:Translate MenuExit}" Command="{Binding SendCommand}" InputGestureText="{myClasess:CommandShortcutExtensioncs All_Close}" />
+        </ContextMenu>
+      </FrameworkElement.ContextMenu>
+    </tb:TaskbarIcon>
+
+    <!-- ===================== top bar ===================== -->
+    <Border Grid.Row="0" Grid.ColumnSpan="3" Background="{StaticResource G2Panel}" BorderBrush="{StaticResource G2Line}" BorderThickness="0,0,0,1">
+      <Grid Margin="12,0,138,0">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="Auto" />
+          <ColumnDefinition Width="Auto" />
+          <ColumnDefinition Width="Auto" />
+          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="Auto" />
+          <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <!-- logo = main menu (파일 · 화면 · 세션 · 카메라 · 플러그인 · 도움말) -->
+        <Button Grid.Column="0" Style="{StaticResource G2ButtonBase}" Tag="9" Height="42" Padding="10,0,8,0" Margin="0,0,20,0" ToolTip="메뉴" Click="G2LogoMenu_Click">
+          <FrameworkElement.ContextMenu>
+            <ContextMenu Placement="Bottom" VerticalOffset="6">
+              <FrameworkElement.DataContext>
+                <viewModel:MainMenuViewModel />
+              </FrameworkElement.DataContext>
+              <MenuItem Header="파일">
+                <MenuItem Header="열기" ToolTip="현재 세션 폴더를 윈도우 탐색기로 엽니다" Click="G2OpenSessionFolder_Click" />
+                <MenuItem Header="다른 이름으로 저장" ToolTip="선택한 사진을 다른 이름으로 복사해 저장합니다 (원본은 그대로)" Click="G2SaveAs_Click" />
+              </MenuItem>
+              <MenuItem Header="{T:Translate MenuSession}" Visibility="{Binding Branding.ShowSessionPanel, Converter={StaticResource BooleanToVisibilityConverter1}}">
+                <MenuItem Header="{T:Translate MenuSessionAdd}" Command="{Binding NewSessionCommand}" />
+                <Separator />
+                <MenuItem Header="{T:Translate MenuSessionEdit}" Command="{Binding EditSessionCommand}" />
+                <MenuItem Header="{T:Translate MenuSessionDel}" Command="{Binding DelSessionCommand}" />
+              </MenuItem>
+              <MenuItem Header="{T:Translate MenuView}" Visibility="{Binding Branding.ShowViewMenu, Converter={StaticResource BooleanToVisibilityConverter1}}">
+                <MenuItem IsCheckable="True" Header="{T:Translate MenuFlip}" IsChecked="{Binding FlipPreview}" />
+                <MenuItem IsCheckable="True" Header="{T:Translate MenuShowThumbInfo}" IsChecked="{Binding ShowThumbInfo}" />
+                <Separator />
+                <MenuItem Header="{T:Translate MenuLayout}">
+                  <MenuItem CommandParameter="Normal" Header="{T:Translate MenuLayoutLandscape}" Command="{Binding SetLayoutCommand}" />
+                  <MenuItem CommandParameter="GridRight" Header="{T:Translate MenuLayoutPortrait}" Command="{Binding SetLayoutCommand}" />
+                  <MenuItem CommandParameter="Grid" Header="{T:Translate MenuLayoutGrid}" Command="{Binding SetLayoutCommand}" />
+                </MenuItem>
+                <MenuItem Header="{T:Translate MenuThumbnailSize}">
+                  <MenuItem Header="80 %" CommandParameter="80" Command="{Binding ThumbSizeCommand}" />
+                  <MenuItem Header="100 %" CommandParameter="100" Command="{Binding ThumbSizeCommand}" />
+                  <MenuItem Header="200 %" CommandParameter="200" Command="{Binding ThumbSizeCommand}" />
+                  <MenuItem Header="300 %" CommandParameter="300" Command="{Binding ThumbSizeCommand}" />
+                  <MenuItem Header="400 %" CommandParameter="400" Command="{Binding ThumbSizeCommand}" />
+                  <MenuItem Header="500 %" CommandParameter="500" Command="{Binding ThumbSizeCommand}" />
+                </MenuItem>
+                <MenuItem Header="{T:Translate MenuWindows}">
+                  <MenuItem Header="{T:Translate LiveViewToolTip}" Command="{Binding Source={x:Static myClasess:WpfCommands.ShowLiveViewCommand}}" CommandParameter="{Binding Source={x:Static Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice}" InputGestureText="{myClasess:CommandShortcutExtensioncs BarcodeWnd_Show}" />
+                  <MenuItem CommandParameter="MultipleCameraWnd_Show" Header="{T:Translate MenuMultipleCamera}" Command="{Binding SendCommand}" InputGestureText="{myClasess:CommandShortcutExtensioncs MultipleCameraWnd_Show}" IsEnabled="{Binding Source={x:Static Core:ServiceProvider.Branding}, Path=ControlMultiCamera}" />
+                </MenuItem>
+              </MenuItem>
+              <MenuItem Header="{T:Translate MenuCamera}" Visibility="{Binding Branding.ShowCameraMenu, Converter={StaticResource BooleanToVisibilityConverter1}}">
+                <MenuItem Header="{T:Translate MenuCameraProperty}" Command="{Binding Path=CameraPropertyCommand}" IsEnabled="{Binding CameraConnected}" />
+                <MenuItem Header="{T:Translate LabelUseAsMaster}" Command="{Binding Path=UseAsMasterCommand}" IsEnabled="{Binding CameraConnected}" />
+                <Separator />
+                <MenuItem Header="{T:Translate LabelRefreshCameraList}" Command="{Binding Path=RefreshCommand}" />
+              </MenuItem>
+              <MenuItem Header="설정">
+                <MenuItem Header="클로리움 설정" Command="{Binding SettingsCommand}" Visibility="{Binding Branding.ShowSettingMenuMainWindow, Converter={StaticResource BooleanToVisibilityConverter1}}" />
+                <MenuItem Header="라이선스 · PC 이전" Click="OpenManagedLicense_Click" />
+                <Separator />
+                <MenuItem Header="{T:Translate MenuPlugins}" Visibility="{Binding Branding.ShowPluginMenu, Converter={StaticResource BooleanToVisibilityConverter1}}">
+                  <MenuItem Header="{T:Translate LabelExport}" ItemsSource="{Binding ExportPlugins}">
+                    <ItemsControl.ItemContainerStyle>
+                      <Style TargetType="MenuItem" BasedOn="{StaticResource G2MenuItem}">
+                        <Setter Property="Header" Value="{Binding Title}" />
+                        <Setter Property="Command" Value="{Binding Path=DataContext.ExecuteExportPluginCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ContextMenu}}}" />
+                        <Setter Property="CommandParameter" Value="{Binding}" />
+                      </Style>
+                    </ItemsControl.ItemContainerStyle>
+                  </MenuItem>
+                  <MenuItem Header="{T:Translate LabelTools}" ItemsSource="{Binding ToolsPlugins}">
+                    <ItemsControl.ItemContainerStyle>
+                      <Style TargetType="MenuItem" BasedOn="{StaticResource G2MenuItem}">
+                        <Setter Property="Header" Value="{Binding Title}" />
+                        <Setter Property="Command" Value="{Binding Path=DataContext.ExecuteToolPluginCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ContextMenu}}}" />
+                        <Setter Property="CommandParameter" Value="{Binding}" />
+                      </Style>
+                    </ItemsControl.ItemContainerStyle>
+                  </MenuItem>
+                </MenuItem>
+                <MenuItem Header="{T:Translate MenuHelp}" Visibility="{Binding Branding.OnlineReference, Converter={StaticResource BooleanToVisibilityConverter1}}">
+                  <MenuItem Header="{T:Translate MenuOnlineManual}" Command="{Binding ManualPageCommand}" />
+                  <MenuItem Header="{T:Translate MenuHomePage}" Command="{Binding HomePageCommand}" />
+                  <MenuItem Header="{T:Translate MenuForum}" Command="{Binding ForumCommand}" />
+                  <Separator />
+                  <MenuItem Header="{T:Translate LabelSendTheLogFile}" Command="{Binding SendLogFileCommand}" />
+                  <MenuItem Header="{T:Translate MenuCheckForUpdate}" Command="{Binding CheckUpdateCommand}" />
+                  <MenuItem Header="{T:Translate LabelChangelog}" Command="{Binding ShowChangeLogCommand}" />
+                  <MenuItem Header="{T:Translate MenuAbout}" Command="{Binding AboutCommand}" />
+                </MenuItem>
+              </MenuItem>
+              <MenuItem CommandParameter="All_Close" Header="종료" Command="{Binding SendCommand}" InputGestureText="{myClasess:CommandShortcutExtensioncs All_Close}" />
+            </ContextMenu>
+          </FrameworkElement.ContextMenu>
+          <StackPanel Orientation="Horizontal">
+            <Image Height="28" Source="{Binding ElementName=Window, Path=Icon}" RenderOptions.BitmapScalingMode="HighQuality" />
+            <TextBlock Text="G2" Margin="8,0,6,0" VerticalAlignment="Center" FontSize="12" FontWeight="Bold" Foreground="#FF5C636B" />
+            <Viewbox Width="12" Height="12" VerticalAlignment="Center"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoChevron}" Stroke="{StaticResource G2Sub}" /></Viewbox>
+          </StackPanel>
+        </Button>
+
+        <!-- product name -->
+        <Border Grid.Column="1" Height="44" Margin="0,0,22,0" Padding="14,0,16,0" CornerRadius="10" Background="{StaticResource G2Panel2}" BorderBrush="{StaticResource G2Line}" BorderThickness="1" VerticalAlignment="Center">
+          <StackPanel Orientation="Horizontal">
+            <Viewbox Width="18" Height="18" VerticalAlignment="Center"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoBarcode}" Stroke="{StaticResource G2Sub}" /></Viewbox>
+            <TextBlock Text="상품이름" Margin="10,0,12,0" VerticalAlignment="Center" FontSize="12" Foreground="{StaticResource G2Sub}" />
+            <TextBlock Width="230" FontFamily="{StaticResource G2Mono}" FontSize="21" FontWeight="SemiBold" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Text="{Binding ElementName=Window, Path=BarCodeValue}" ToolTip="{Binding ElementName=Window, Path=BarCodeValue}" />
+          </StackPanel>
+        </Border>
+
+        <!-- session count + work time (timer controls in a popup) -->
+        <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,22,0">
+          <StackPanel Margin="0,0,20,0" VerticalAlignment="Center">
+            <TextBlock Text="이 세션" Style="{StaticResource G2Caption}" FontSize="12" />
+            <TextBlock FontFamily="{StaticResource G2Mono}" FontSize="15" FontWeight="SemiBold" Text="{Binding Path=DefaultSession.FilesCount, StringFormat={}{0}건}" />
+          </StackPanel>
+          <ToggleButton x:Name="G2TimerToggle" Style="{StaticResource G2ButtonBase}" Padding="6,2" HorizontalContentAlignment="Left" ToolTip="작업 타이머 · 오늘 카운터" Visibility="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=ShowStatistics, Converter={StaticResource BooleanToVisibilityConverter1}}">
+            <StackPanel>
+              <StackPanel Orientation="Horizontal">
+                <TextBlock Text="작업 시간" Style="{StaticResource G2Caption}" FontSize="12" />
+                <Viewbox Width="10" Height="10" Margin="4,1,0,0" VerticalAlignment="Center"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoChevron}" Stroke="{StaticResource G2Sub}" /></Viewbox>
+              </StackPanel>
+              <Label Name="ElapsedTime" Padding="2,0" Foreground="{StaticResource G2Text}" FontFamily="{StaticResource G2Mono}" FontSize="15" FontWeight="SemiBold" Content="00:00:00" />
+            </StackPanel>
+          </ToggleButton>
+          <Popup PlacementTarget="{Binding ElementName=G2TimerToggle}" Placement="Bottom" StaysOpen="False" AllowsTransparency="True" VerticalOffset="8" IsOpen="{Binding IsChecked, ElementName=G2TimerToggle, Mode=TwoWay}">
+            <Border Style="{StaticResource G2Popup}">
+              <StackPanel Width="264">
+                <Label Name="ElapsedText" Padding="0,0,0,10" FontWeight="Bold" FontSize="14" Content="{T:Translate LabelSessionTimer}" />
+                <StackPanel IsEnabled="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=UseAlarm}">
+                  <Button Style="{StaticResource G2GhostButton}" Height="36" HorizontalContentAlignment="Left" Margin="0,0,0,6" ToolTip="{T:Translate LabelPauseToolTip}" Click="but_ToggleStartStop_Click">
+                    <StackPanel Orientation="Horizontal">
+                      <materialDesign:PackIcon Name="but_ToggleStartStop" Kind="Restart" Width="0" Height="0" Visibility="Collapsed" />
+                      <Viewbox Width="16" Height="16" VerticalAlignment="Center">
+                        <Path Width="24" Height="24" StrokeThickness="1.8" StrokeLineJoin="Round" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Stroke="{StaticResource G2Accent}">
+                          <Path.Style>
+                            <Style TargetType="Path">
+                              <Setter Property="Data" Value="{StaticResource G2IcoPlay}" />
+                              <Style.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=but_ToggleStartStop, Path=Kind}" Value="PauseOctagonOutline">
+                                  <Setter Property="Data" Value="{StaticResource G2IcoPause}" />
+                                </DataTrigger>
+                              </Style.Triggers>
+                            </Style>
+                          </Path.Style>
+                        </Path>
+                      </Viewbox>
+                      <TextBlock Name="ToggleStartStopText" Text="작업시작" Margin="8,0,0,0" VerticalAlignment="Center" FontWeight="SemiBold" />
+                    </StackPanel>
+                  </Button>
+                  <UniformGrid Columns="3">
+                    <Button Style="{StaticResource G2GhostButton}" Padding="0" Margin="0,0,4,0" ToolTip="{T:Translate LabelTimerResetToolTip}" Click="btn_TimerReset_Click" Content="리셋" />
+                    <Button Style="{StaticResource G2GhostButton}" Padding="0" Margin="2,0" ToolTip="{T:Translate LabelAlarmOffToolTip}" Click="but_AlarmOff_Click" Content="알람 끄기" />
+                    <Button Style="{StaticResource G2GhostButton}" Padding="0" Margin="4,0,0,0" ToolTip="{T:Translate LabelStatisticsToolTip}" Click="but_Statistics_Click" Content="작업 종료" />
+                  </UniformGrid>
+                </StackPanel>
+                <Border Style="{StaticResource G2Divider}" Margin="0,12" />
+                <DockPanel>
+                  <Button DockPanel.Dock="Right" Style="{StaticResource G2GhostButton}" ToolTip="{T:Translate LabelTodayResetToolTip}" Click="btn_TodayReset_Click" Content="초기화" />
+                  <TextBlock VerticalAlignment="Center" Foreground="{StaticResource G2Sub}" Text="오늘 촬영" />
+                  <TextBlock VerticalAlignment="Center" Margin="8,0,0,0" FontFamily="{StaticResource G2Mono}" FontWeight="SemiBold" Text="{Binding TodaySessionCounter}" />
+                </DockPanel>
+              </StackPanel>
+            </Border>
+          </Popup>
+        </StackPanel>
+
+        <!-- current session -->
+        <StackPanel Grid.Column="3" Orientation="Horizontal" VerticalAlignment="Center" ToolTip="{Binding Path=DefaultSession.Folder}" Margin="0,0,18,0">
+          <Viewbox Width="17" Height="17" VerticalAlignment="Center"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoFolder}" Stroke="{StaticResource G2Sub}" /></Viewbox>
+          <TextBlock Margin="8,0,10,0" VerticalAlignment="Center" FontWeight="SemiBold" Text="{Binding Path=DefaultSession.Name}" />
+          <TextBlock VerticalAlignment="Center" FontFamily="{StaticResource G2Mono}" FontSize="11" Foreground="{StaticResource G2Sub}" TextTrimming="CharacterEllipsis" Text="{Binding Path=DefaultSession.Folder}" />
+        </StackPanel>
+
+        <!-- camera + battery -->
+        <StackPanel Grid.Column="4" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,14,0" DataContext="{Binding Source={x:Static Core:ServiceProvider.DeviceManager}}">
+          <Ellipse Width="8" Height="8" VerticalAlignment="Center" Margin="0,0,8,0">
+            <Ellipse.Style>
+              <Style TargetType="Ellipse">
+                <Setter Property="Fill" Value="{StaticResource G2SwitchOff}" />
+                <Style.Triggers>
+                  <DataTrigger Binding="{Binding SelectedCameraDevice.IsConnected}" Value="True">
+                    <Setter Property="Fill" Value="{StaticResource G2Ok}" />
+                  </DataTrigger>
+                </Style.Triggers>
+              </Style>
+            </Ellipse.Style>
+          </Ellipse>
+          <StackPanel VerticalAlignment="Center">
+            <TextBlock FontSize="12">
+              <TextBlock.Style>
+                <Style TargetType="TextBlock">
+                  <Setter Property="Text" Value="{Binding SelectedCameraDevice.DisplayName}" />
+                  <Style.Triggers>
+                    <DataTrigger Binding="{Binding SelectedCameraDevice.IsConnected}" Value="False">
+                      <Setter Property="Text" Value="카메라 연결 안 됨" />
+                      <Setter Property="Foreground" Value="{StaticResource G2Sub}" />
+                    </DataTrigger>
+                  </Style.Triggers>
+                </Style>
+              </TextBlock.Style>
+            </TextBlock>
+            <StackPanel Orientation="Horizontal" Visibility="{Binding Source={x:Static Core:ServiceProvider.Branding}, Path=ShowBattery, Converter={StaticResource BooleanToVisibilityConverter1}}" ToolTip="카메라 배터리">
+              <Border Width="18" Height="9" BorderBrush="{StaticResource G2Sub}" BorderThickness="1" CornerRadius="2" Padding="1" VerticalAlignment="Center">
+                <ProgressBar Minimum="0" Maximum="100" Value="{Binding SelectedCameraDevice.Battery, Mode=OneWay}" Background="Transparent" BorderThickness="0" Foreground="{StaticResource G2Ok}" Height="5">
+                  <ProgressBar.Template>
+                    <ControlTemplate TargetType="ProgressBar">
+                      <Grid x:Name="PART_Track">
+                        <Border x:Name="PART_Indicator" HorizontalAlignment="Left" CornerRadius="1" Background="{TemplateBinding Foreground}" />
+                      </Grid>
+                    </ControlTemplate>
+                  </ProgressBar.Template>
+                </ProgressBar>
+              </Border>
+              <TextBlock Margin="5,0,0,0" FontSize="10" FontFamily="{StaticResource G2Mono}" Foreground="{StaticResource G2Sub}" Text="{Binding SelectedCameraDevice.Battery, StringFormat={}{0}%}" />
+            </StackPanel>
+          </StackPanel>
+        </StackPanel>
+
+        <!-- settings + right panel toggle -->
+        <StackPanel Grid.Column="5" Orientation="Horizontal" VerticalAlignment="Center">
+          <Button Style="{StaticResource G2ButtonBase}" Width="40" Height="40" Foreground="{StaticResource G2Sub}" ToolTip="{T:Translate SettingsToolTip}" Command="{Binding SettingsCommand}" Visibility="{Binding Branding.ShowSettingMenuMainWindow, Converter={StaticResource BooleanToVisibilityConverter1}}">
+            <FrameworkElement.DataContext>
+              <viewModel:MainMenuViewModel />
+            </FrameworkElement.DataContext>
+            <Viewbox Width="22" Height="22"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoSliders}" /></Viewbox>
+          </Button>
+          <ToggleButton Name="PanelButton" IsChecked="True" Width="40" Height="40" Style="{StaticResource G2ButtonBase}" Foreground="{StaticResource G2Sub}" ToolTip="오른쪽 패널 보이기/숨기기">
+            <Viewbox Width="21" Height="21"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoPanel}" /></Viewbox>
+          </ToggleButton>
+        </StackPanel>
+      </Grid>
+    </Border>
+
+    <!-- ===================== left tool rail ===================== -->
+    <Border Grid.Row="1" Grid.Column="0" Background="{StaticResource G2Panel}" BorderBrush="{StaticResource G2Line}" BorderThickness="0,0,1,0">
+      <DockPanel LastChildFill="True">
+        <StackPanel DockPanel.Dock="Bottom" Margin="4,0,4,10">
+          <Border Style="{StaticResource G2Divider}" Margin="10,0,10,8" />
+          <TextBlock HorizontalAlignment="Center" FontSize="10" FontWeight="SemiBold" Foreground="{StaticResource G2Accent}" Text="웹서버" ToolTip="모바일용 웹서버 가동중" Visibility="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=UseWebserver, Converter={StaticResource BooleanToVisibilityConverter1}}" />
+          <TextBlock HorizontalAlignment="Center" FontSize="10" FontWeight="SemiBold" Foreground="{StaticResource G2Accent}" Text="FTP" ToolTip="FTP서버 가동중" Visibility="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=UseFTPserver, Converter={StaticResource BooleanToVisibilityConverter1}}" />
+          <TextBlock HorizontalAlignment="Center" FontSize="10" FontFamily="{StaticResource G2Mono}" Foreground="{StaticResource G2Sub}" ToolTip="오늘 촬영 컷수" Text="{Binding ElementName=Window, Path=CaptureCount, StringFormat={}{0}컷}" />
+          <TextBlock HorizontalAlignment="Center" FontSize="10" FontFamily="{StaticResource G2Mono}" Foreground="{StaticResource G2Sub}" ToolTip="메모리 사용률" Text="{Binding ElementName=Window, Path=UsingMemory, StringFormat=메모리 {0:F0}%}" />
+          <Label HorizontalAlignment="Center" FontSize="9" FontFamily="{StaticResource G2Mono}" Foreground="{StaticResource G2Sub}" ToolTip="버전 (더블클릭: 변경 내역)" Content="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=Version_Debug}" MouseDoubleClick="Version_DoubleClick" />
+        </StackPanel>
+        <StackPanel Margin="7,10,7,6">
+          <Button Name="btn_liveview" Style="{StaticResource G2RailButton}" ToolTip="{T:Translate LiveViewToolTip}" Command="{Binding Source={x:Static myClasess:WpfCommands.ShowLiveViewCommand}}" CommandParameter="{Binding Source={x:Static Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice}">
+            <StackPanel>
+              <Viewbox Width="22" Height="22" HorizontalAlignment="Center"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoLive}" /></Viewbox>
+              <TextBlock Text="라이브뷰" HorizontalAlignment="Center" Margin="0,4,0,0" />
+            </StackPanel>
+          </Button>
+          <Button Name="btn_browse" Style="{StaticResource G2RailButton}" ToolTip="{T:Translate BrowseSessionsToolTip}" Click="btn_browse_Click">
+            <StackPanel>
+              <Viewbox Width="22" Height="22" HorizontalAlignment="Center"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoPhotos}" /></Viewbox>
+              <TextBlock Text="사진" HorizontalAlignment="Center" Margin="0,4,0,0" />
+            </StackPanel>
+          </Button>
+          <Button Name="but_Ruler" Style="{StaticResource G2RailButton}" ToolTip="{T:Translate LabelRuler}" Click="but_Ruler_Click" Visibility="{Binding Source={x:Static Core:ServiceProvider.Branding}, Path=ControlAutoSizing, Converter={StaticResource BooleanToVisibilityConverter1}}">
+            <StackPanel>
+              <Viewbox Width="22" Height="22" HorizontalAlignment="Center"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoRuler}" /></Viewbox>
+              <TextBlock Text="치수" HorizontalAlignment="Center" Margin="0,4,0,0" />
+            </StackPanel>
+          </Button>
+          <Button Name="but_Lighting" Style="{StaticResource G2RailButton}" ToolTip="{T:Translate LabelLighting}" Click="but_Lighting_Click" Visibility="{Binding Source={x:Static Core:ServiceProvider.Branding}, Path=ControlLighting, Converter={StaticResource BooleanToVisibilityConverter1}}">
+            <StackPanel>
+              <Viewbox Width="22" Height="22" HorizontalAlignment="Center"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoBulb}" /></Viewbox>
+              <TextBlock Text="조명" HorizontalAlignment="Center" Margin="0,4,0,0" />
+            </StackPanel>
+          </Button>
+          <Button Style="{StaticResource G2RailButton}" ToolTip="{T:Translate LabelColorCompensation}" Click="but_ColorCompensation_Click">
+            <StackPanel>
+              <Viewbox Width="22" Height="22" HorizontalAlignment="Center"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoDrop}" /></Viewbox>
+              <TextBlock Text="색보정" HorizontalAlignment="Center" Margin="0,4,0,0" />
+            </StackPanel>
+          </Button>
+          <Button Name="but_AIRemoveBg" Style="{StaticResource G2RailButton}" ToolTip="{T:Translate LabelAIRemoveBg}" Click="but_AIRemoveBg_Click" Visibility="{Binding Source={x:Static Core:ServiceProvider.Branding}, Path=ControlRemoveBackground, Converter={StaticResource BooleanToVisibilityConverter1}}">
+            <StackPanel>
+              <Viewbox Width="22" Height="22" HorizontalAlignment="Center"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoLayers}" /></Viewbox>
+              <TextBlock Text="배경제거" HorizontalAlignment="Center" Margin="0,4,0,0" />
+            </StackPanel>
+          </Button>
+          <Button Style="{StaticResource G2RailButton}" ToolTip="수퍼포커스" Click="OpenSuperfocus_Click" Visibility="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=UseSuperfocus, Converter={StaticResource BooleanToVisibilityConverter1}}">
+            <StackPanel>
+              <Viewbox Width="22" Height="22" HorizontalAlignment="Center"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoFocus}" /></Viewbox>
+              <TextBlock Text="수퍼포커스" HorizontalAlignment="Center" Margin="0,4,0,0" />
+            </StackPanel>
+          </Button>
+          <Button Name="but_TurnTable" Style="{StaticResource G2RailButton}" ToolTip="{T:Translate LabelTurnTable}" Click="but_TurnTable_Click" Visibility="{Binding Source={x:Static Core:ServiceProvider.Branding}, Path=ControlTurnTable, Converter={StaticResource BooleanToVisibilityConverter1}}">
+            <StackPanel>
+              <Viewbox Width="22" Height="22" HorizontalAlignment="Center"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoTurn}" /></Viewbox>
+              <TextBlock Text="턴테이블" HorizontalAlignment="Center" Margin="0,4,0,0" />
+            </StackPanel>
+          </Button>
+          <ToggleButton x:Name="G2MoreToggle" Style="{StaticResource G2ButtonBase}" Tag="10" Width="60" Height="56" Margin="0,2" Foreground="{StaticResource G2Sub}" FontSize="11" ToolTip="도구 더보기">
+            <StackPanel>
+              <Viewbox Width="22" Height="22" HorizontalAlignment="Center"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoGrid}" /></Viewbox>
+              <TextBlock Text="더보기" HorizontalAlignment="Center" Margin="0,4,0,0" />
+            </StackPanel>
+          </ToggleButton>
+          <Popup PlacementTarget="{Binding ElementName=G2MoreToggle}" Placement="Right" HorizontalOffset="10" StaysOpen="False" AllowsTransparency="True" IsOpen="{Binding IsChecked, ElementName=G2MoreToggle, Mode=TwoWay}">
+            <Border Style="{StaticResource G2Popup}" Padding="8">
+              <StackPanel>
+                <TextBlock Text="도구" Style="{StaticResource G2SectionTitle}" Margin="6,2,0,8" />
+                <WrapPanel Width="320">
+                <Button Name="but_fullscreen" Style="{StaticResource G2ToolTile}" ToolTip="{T:Translate FullscreenToolTip}" Click="but_fullscreen_Click">
+                  <StackPanel>
+                    <Viewbox Width="20" Height="20" HorizontalAlignment="Center"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoExpand}" /></Viewbox>
+                    <TextBlock Text="전체 화면" HorizontalAlignment="Center" Margin="0,5,0,0" TextTrimming="CharacterEllipsis" />
+                  </StackPanel>
+                </Button>
+                <Button Name="but_multiple" Style="{StaticResource G2ToolTile}" ToolTip="{T:Translate MenuMultipleCamera}" Click="but_multicamera_Click" Visibility="{Binding Source={x:Static Core:ServiceProvider.Branding}, Path=ControlMultiCamera, Converter={StaticResource BooleanToVisibilityConverter1}}">
+                  <StackPanel>
+                    <Viewbox Width="20" Height="20" HorizontalAlignment="Center"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoCameras}" /></Viewbox>
+                    <TextBlock Text="멀티 카메라" HorizontalAlignment="Center" Margin="0,5,0,0" TextTrimming="CharacterEllipsis" />
+                  </StackPanel>
+                </Button>
+                <Button Name="but_webcam" Style="{StaticResource G2ToolTile}" ToolTip="{T:Translate MenuWebCam}" Click="but_webcam_Click" Visibility="{Binding Source={x:Static Core:ServiceProvider.Branding}, Path=ControlWebCam, Converter={StaticResource BooleanToVisibilityConverter1}}">
+                  <StackPanel>
+                    <Viewbox Width="20" Height="20" HorizontalAlignment="Center"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoWebcam}" /></Viewbox>
+                    <TextBlock Text="웹캠" HorizontalAlignment="Center" Margin="0,5,0,0" TextTrimming="CharacterEllipsis" />
+                  </StackPanel>
+                </Button>
+                <Button Style="{StaticResource G2ToolTile}" ToolTip="에러 정보 저장" Click="but_ErrorInform_Click">
+                  <StackPanel>
+                    <Viewbox Width="20" Height="20" HorizontalAlignment="Center"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoAlert}" /></Viewbox>
+                    <TextBlock Text="에러 저장" HorizontalAlignment="Center" Margin="0,5,0,0" TextTrimming="CharacterEllipsis" />
+                  </StackPanel>
+                </Button>
+                <Button Name="but_qr" Style="{StaticResource G2ToolTile}" ToolTip="{T:Translate LabelWebserver}" Click="but_qr_Click" Visibility="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=UseWebserver, Converter={StaticResource BooleanToVisibilityConverter1}}">
+                  <StackPanel>
+                    <Viewbox Width="20" Height="20" HorizontalAlignment="Center"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoQr}" /></Viewbox>
+                    <TextBlock Text="QR 접속" HorizontalAlignment="Center" Margin="0,5,0,0" TextTrimming="CharacterEllipsis" />
+                  </StackPanel>
+                </Button>
+                <Button Name="but_wifi" Style="{StaticResource G2ToolTile}" ToolTip="{T:Translate LabelWifiNew}" Click="but_wifi_Click" Visibility="{Binding Source={x:Static Core:ServiceProvider.Branding}, Path=ShowWifiCameraButtonMainWindow, Converter={StaticResource BooleanToVisibilityConverter1}}">
+                  <StackPanel>
+                    <Viewbox Width="20" Height="20" HorizontalAlignment="Center"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoWifi}" /></Viewbox>
+                    <TextBlock Text="Wi-Fi" HorizontalAlignment="Center" Margin="0,5,0,0" TextTrimming="CharacterEllipsis" />
+                  </StackPanel>
+                </Button>
+                <Button Name="but_barcode" Style="{StaticResource G2ToolTile}" ToolTip="{T:Translate LabelBarcode}" Click="but_barcode_Click" Visibility="{Binding Source={x:Static Core:ServiceProvider.Branding}, Path=ShowWifiCameraButtonMainWindow, Converter={StaticResource BooleanToVisibilityConverter1}}">
+                  <StackPanel>
+                    <Viewbox Width="20" Height="20" HorizontalAlignment="Center"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoScan}" /></Viewbox>
+                    <TextBlock Text="바코드" HorizontalAlignment="Center" Margin="0,5,0,0" TextTrimming="CharacterEllipsis" />
+                  </StackPanel>
+                </Button>
+                <Button Name="but_sequencer" Style="{StaticResource G2ToolTile}" ToolTip="{T:Translate LabelImageSequencer}" Click="but_sequencer_Click" Visibility="{Binding Source={x:Static Core:ServiceProvider.Branding}, Path=ShowWifiCameraButtonMainWindow, Converter={StaticResource BooleanToVisibilityConverter1}}">
+                  <StackPanel>
+                    <Viewbox Width="20" Height="20" HorizontalAlignment="Center"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoFilm}" /></Viewbox>
+                    <TextBlock Text="시퀀서" HorizontalAlignment="Center" Margin="0,5,0,0" TextTrimming="CharacterEllipsis" />
+                  </StackPanel>
+                </Button>
+                <Button Name="but_bt" Style="{StaticResource G2ToolTile}" ToolTip="{T:Translate LabelConnectbluetoothdevice}" Click="but_bt_Click" Visibility="{Binding Source={x:Static Core:ServiceProvider.Branding}, Path=ShowWifiCameraButtonMainWindow, Converter={StaticResource BooleanToVisibilityConverter1}}">
+                  <StackPanel>
+                    <Viewbox Width="20" Height="20" HorizontalAlignment="Center"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoBluetooth}" /></Viewbox>
+                    <TextBlock Text="블루투스" HorizontalAlignment="Center" Margin="0,5,0,0" TextTrimming="CharacterEllipsis" />
+                  </StackPanel>
+                </Button>
+                <Button Name="but_download" Style="{StaticResource G2ToolTile}" ToolTip="{T:Translate DownloadWindowTitle}" Click="but_download_Click" Visibility="{Binding Source={x:Static Core:ServiceProvider.Branding}, Path=ShowDownloadButtonMainWindow, Converter={StaticResource BooleanToVisibilityConverter1}}" IsEnabled="{Binding Source={x:Static Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}">
+                  <StackPanel>
+                    <Viewbox Width="20" Height="20" HorizontalAlignment="Center"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoDownload}" /></Viewbox>
+                    <TextBlock Text="다운로드" HorizontalAlignment="Center" Margin="0,5,0,0" TextTrimming="CharacterEllipsis" />
+                  </StackPanel>
+                </Button>
+                <Button Name="btn_br" Style="{StaticResource G2ToolTile}" ToolTip="{T:Translate BraketingToolTip}" Click="btn_br_Click" Visibility="{Binding Source={x:Static Core:ServiceProvider.Branding}, Path=ShowBracketingButtonMainWindow, Converter={StaticResource BooleanToVisibilityConverter1}}" IsEnabled="{Binding Source={x:Static Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}">
+                  <StackPanel>
+                    <Viewbox Width="20" Height="20" HorizontalAlignment="Center"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoBracket}" /></Viewbox>
+                    <TextBlock Text="브라케팅" HorizontalAlignment="Center" Margin="0,5,0,0" TextTrimming="CharacterEllipsis" />
+                  </StackPanel>
+                </Button>
+                <Button Name="but_timelapse" Style="{StaticResource G2ToolTile}" ToolTip="{T:Translate TimeLapseToolTip}" Click="but_timelapse_Click" Visibility="{Binding Source={x:Static Core:ServiceProvider.Branding}, Path=ShowTimelapseButtonMainWindow, Converter={StaticResource BooleanToVisibilityConverter1}}">
+                  <StackPanel>
+                    <Viewbox Width="20" Height="20" HorizontalAlignment="Center"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoClock}" /></Viewbox>
+                    <TextBlock Text="타임랩스" HorizontalAlignment="Center" Margin="0,5,0,0" TextTrimming="CharacterEllipsis" />
+                  </StackPanel>
+                </Button>
+                <Button Name="but_star" Style="{StaticResource G2ToolTile}" ToolTip="{T:Translate LabelAstronomy}" Click="but_star_Click" Visibility="{Binding Source={x:Static Core:ServiceProvider.Branding}, Path=ShowAstronomyButtonMainWindow, Converter={StaticResource BooleanToVisibilityConverter1}}">
+                  <StackPanel>
+                    <Viewbox Width="20" Height="20" HorizontalAlignment="Center"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoMoon}" /></Viewbox>
+                    <TextBlock Text="천체" HorizontalAlignment="Center" Margin="0,5,0,0" TextTrimming="CharacterEllipsis" />
+                  </StackPanel>
+                </Button>
+                <Button Name="but_print" Style="{StaticResource G2ToolTile}" ToolTip="{T:Translate LabelPrint}" Click="but_print_Click" Visibility="{Binding Source={x:Static Core:ServiceProvider.Branding}, Path=ShowPrintButtonMainWindow, Converter={StaticResource BooleanToVisibilityConverter1}}">
+                  <StackPanel>
+                    <Viewbox Width="20" Height="20" HorizontalAlignment="Center"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoPrinter}" /></Viewbox>
+                    <TextBlock Text="인쇄" HorizontalAlignment="Center" Margin="0,5,0,0" TextTrimming="CharacterEllipsis" />
+                  </StackPanel>
+                </Button>
+                <Button Name="but_Enfuse" Style="{StaticResource G2ToolTile}" ToolTip="{T:Translate LabelEnfuse}" Click="but_Enfuse_Click" Visibility="{Binding Source={x:Static Core:ServiceProvider.Branding}, Path=ShowEnfuseButtonMainWindow, Converter={StaticResource BooleanToVisibilityConverter1}}">
+                  <StackPanel>
+                    <Viewbox Width="20" Height="20" HorizontalAlignment="Center"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoStack}" /></Viewbox>
+                    <TextBlock Text="Enfuse" HorizontalAlignment="Center" Margin="0,5,0,0" TextTrimming="CharacterEllipsis" />
+                  </StackPanel>
+                </Button>
+                <Button Style="{StaticResource G2ToolTile}" ToolTip="촬영 테스트 시작 (3초 주기)" Click="but_TestStart_Click" Visibility="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=ShowDebugTest, Converter={StaticResource BooleanToVisibilityConverter1}}">
+                  <StackPanel>
+                    <Viewbox Width="20" Height="20" HorizontalAlignment="Center"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoPlay}" /></Viewbox>
+                    <TextBlock Text="테스트 시작" HorizontalAlignment="Center" Margin="0,5,0,0" TextTrimming="CharacterEllipsis" />
+                  </StackPanel>
+                </Button>
+                <Button Style="{StaticResource G2ToolTile}" ToolTip="촬영 테스트 정지" Click="but_TestStop_Click" Visibility="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=ShowDebugTest, Converter={StaticResource BooleanToVisibilityConverter1}}">
+                  <StackPanel>
+                    <Viewbox Width="20" Height="20" HorizontalAlignment="Center"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoStop}" /></Viewbox>
+                    <TextBlock Text="테스트 정지" HorizontalAlignment="Center" Margin="0,5,0,0" TextTrimming="CharacterEllipsis" />
+                  </StackPanel>
+                </Button>
+                </WrapPanel>
+                <ItemsControl Margin="2,4,2,0" ItemsSource="{Binding Source={x:Static Core:ServiceProvider.PluginManager}, Path=ToolBarPlugins}">
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                      <ContentControl Content="{Binding Control}" Visibility="{Binding Path=Visible, Converter={StaticResource BooleanToVisibilityConverter1}}" />
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                  <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                      <WrapPanel Width="320" />
+                    </ItemsPanelTemplate>
+                  </ItemsControl.ItemsPanel>
+                </ItemsControl>
+              </StackPanel>
+            </Border>
+          </Popup>
+        </StackPanel>
+      </DockPanel>
+    </Border>
+
+    <!-- ===================== center: LayoutNormal (stage + thumbnails) ===================== -->
+    <Grid Grid.Row="1" Grid.Column="1">
+      <DockPanel Name="StackLayout" LastChildFill="True" />
+      <!-- floating camera settings (opened from the right panel, closed with ×) -->
+      <Border x:Name="G2CamPanel" Width="330" Margin="0,16,16,0" HorizontalAlignment="Right" VerticalAlignment="Top" Panel.ZIndex="20" CornerRadius="14" Background="{StaticResource G2Panel}" BorderBrush="{StaticResource G2Line2}" BorderThickness="1" Visibility="{Binding ElementName=G2CamToggle, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter1}}">
+        <UIElement.RenderTransform>
+          <TranslateTransform x:Name="G2CamPanelOffset" />
+        </UIElement.RenderTransform>
+        <UIElement.Effect>
+          <DropShadowEffect BlurRadius="24" ShadowDepth="6" Opacity="0.25" />
+        </UIElement.Effect>
+        <DockPanel>
+          <Grid DockPanel.Dock="Top" Height="46">
+            <Thumb Cursor="SizeAll" DragDelta="G2CamPanel_DragDelta" ToolTip="끌어서 옮기기">
+              <Thumb.Template>
+                <ControlTemplate TargetType="Thumb">
+                  <Border Background="Transparent" />
+                </ControlTemplate>
+              </Thumb.Template>
+            </Thumb>
+            <StackPanel Orientation="Horizontal" Margin="16,0,0,0" VerticalAlignment="Center" IsHitTestVisible="False">
+              <Viewbox Width="18" Height="18" Margin="0,0,8,0"><Path Style="{StaticResource G2IconPath}" Stroke="{StaticResource G2Accent}" Data="{StaticResource G2IcoCamera}" /></Viewbox>
+              <TextBlock Style="{StaticResource G2SectionTitle}" Text="카메라 설정" />
+            </StackPanel>
+            <Button HorizontalAlignment="Right" Margin="0,0,9,0" Style="{StaticResource G2IconButton}" Width="30" Height="30" Foreground="{StaticResource G2Sub}" ToolTip="닫기" Click="G2CloseCameraPanel_Click"><Viewbox Width="15" Height="15"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoClose}" /></Viewbox></Button>
+          </Grid>
+          <Border DockPanel.Dock="Top" Style="{StaticResource G2Divider}" />
+          <ScrollViewer MaxHeight="560" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <local:Controler x:Name="controler1" Margin="16,12,16,14" DataContext="{Binding Source={x:Static Core:ServiceProvider.DeviceManager}}" IsEnabled="{Binding SelectedCameraDevice.IsConnected, Source={x:Static Core:ServiceProvider.DeviceManager}}" />
+          </ScrollViewer>
+        </DockPanel>
+      </Border>
+      <TextBlock Name="BarcodeText" FontSize="56" FontWeight="Bold" FontFamily="{StaticResource G2Mono}" Foreground="White" Padding="18,6" Margin="16,60,0,0" Background="#CC1F5FD6" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="Collapsed" Text="{Binding BarCodeValue, RelativeSource={RelativeSource AncestorType=Window}}">
+        <FrameworkElement.Resources>
+          <ResourceDictionary>
+            <Storyboard x:Key="Blink">
+              <DoubleAnimation Storyboard.TargetProperty="Opacity" From="1" To="0" Duration="0:0:0.4" AutoReverse="True" RepeatBehavior="Forever" />
+            </Storyboard>
+          </ResourceDictionary>
+        </FrameworkElement.Resources>
+      </TextBlock>
+    </Grid>
+
+    <!-- ===================== right panel ===================== -->
+    <Border Grid.Row="1" Grid.Column="2" Width="340" Background="{StaticResource G2Panel}" BorderBrush="{StaticResource G2Line}" BorderThickness="1,0,0,0" Visibility="{Binding ElementName=PanelButton, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter1}}">
+      <DockPanel LastChildFill="True" Margin="16,14,16,16">
+
+        <!-- capture (fixed at the bottom) -->
+        <Button DockPanel.Dock="Bottom" Name="btn_Capture" Style="{StaticResource G2PrimaryButton}" Height="48" Padding="13,0" Margin="0,10,0,0" ToolTip="{T:Translate CapturePhotoToolTip}" IsEnabled="{Binding Source={x:Static Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}" Click="CaptureOfIcon_Click">
+          <DockPanel>
+            <Grid DockPanel.Dock="Left" Width="26" Height="26" VerticalAlignment="Center">
+              <Ellipse Stroke="#E6FFFFFF" StrokeThickness="2.2" />
+              <Ellipse Width="15" Height="15" Fill="White" />
+            </Grid>
+            <TextBlock DockPanel.Dock="Right" Text="Space" FontSize="11" Opacity="0.85" VerticalAlignment="Center" Margin="8,0,0,0" />
+            <Border DockPanel.Dock="Right" CornerRadius="5" Background="#2EFFFFFF" Padding="7,2" VerticalAlignment="Center">
+              <TextBlock FontSize="11" FontWeight="SemiBold">
+                <TextBlock.Style>
+                  <Style TargetType="TextBlock">
+                    <Setter Property="Text" Value="세로" />
+                    <Style.Triggers>
+                      <DataTrigger Binding="{Binding ElementName=but_ToggleRot, Path=Content.Kind}" Value="ToggleSwitch">
+                        <Setter Property="Text" Value="가로" />
+                      </DataTrigger>
+                    </Style.Triggers>
+                  </Style>
+                </TextBlock.Style>
+              </TextBlock>
+            </Border>
+            <TextBlock Text="촬영" FontSize="17" FontWeight="Bold" Margin="12,0,0,1" VerticalAlignment="Center" />
+          </DockPanel>
+        </Button>
+
+        <!-- recent sessions (above capture) -->
+        <StackPanel DockPanel.Dock="Bottom" Margin="0,10,0,0" Visibility="{Binding Source={x:Static Core:ServiceProvider.Branding}, Path=ShowSessionPanel, Converter={StaticResource BooleanToVisibilityConverter1}}">
+          <DockPanel Margin="2,0,0,4">
+            <Button DockPanel.Dock="Right" Style="{StaticResource G2IconButton}" Foreground="{StaticResource G2Sub}" ToolTip="세션 편집" Click="Button_EditSession_Click"><Viewbox Width="16" Height="16"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoGear}" /></Viewbox></Button>
+            <TextBlock Style="{StaticResource G2SectionTitle}" Text="최근 세션" />
+            <TextBlock Margin="8,0,0,0" VerticalAlignment="Center" FontSize="11" Foreground="{StaticResource G2Sub}" Text="{Binding Path=PhotoSessions.Count, StringFormat=전체 {0}개}" />
+          </DockPanel>
+          <ListBox Name="cmb_session" Style="{StaticResource G2List}" MaxHeight="126" SelectedItem="{Binding Path=DefaultSession}" ItemsSource="{Binding Path=PhotoSessions}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                <DockPanel ToolTip="{Binding Folder}">
+                  <Ellipse DockPanel.Dock="Left" Width="6" Height="6" Fill="{StaticResource G2Line2}" Margin="0,0,8,0" VerticalAlignment="Center" />
+                  <TextBlock DockPanel.Dock="Right" Margin="8,0,0,0" FontSize="10.5" FontWeight="Normal" FontFamily="{StaticResource G2Mono}" Foreground="{StaticResource G2Sub}" VerticalAlignment="Center" Text="{Binding FilesCount, StringFormat={}{0}건}" />
+                  <TextBlock DockPanel.Dock="Left" Text="{Binding Name}" Margin="0,0,8,0" VerticalAlignment="Center" />
+                  <TextBlock FontSize="10.5" FontWeight="Normal" Foreground="{StaticResource G2Sub}" FontFamily="{StaticResource G2Mono}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" Text="{Binding DisplayFolder}" />
+                </DockPanel>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ListBox>
+          <TextBox Name="txt_CaptureName" Visibility="Collapsed" Text="{Binding Path=DefaultSession.CaptureName, UpdateSourceTrigger=PropertyChanged}" />
+          <TextBox Visibility="Collapsed" Text="{Binding Path=DefaultSession.Series}" />
+        </StackPanel>
+
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" PanningMode="VerticalOnly" Margin="0,0,-10,0" Padding="0,0,10,0">
+          <StackPanel>
+
+            <!-- lighting -->
+            <Border Height="58" Padding="12,0,10,0" CornerRadius="12" Background="{StaticResource G2Panel2}" BorderBrush="{StaticResource G2Line}" BorderThickness="1" Margin="0,0,0,14" Visibility="{Binding Source={x:Static Core:ServiceProvider.Branding}, Path=ControlLighting, Converter={StaticResource BooleanToVisibilityConverter1}}">
+              <DockPanel>
+                <Border DockPanel.Dock="Left" Width="36" Height="36" CornerRadius="18" Background="{StaticResource G2AccentSoft}" VerticalAlignment="Center">
+                  <Viewbox Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoBulb}" Stroke="{StaticResource G2Accent}" /></Viewbox>
+                </Border>
+                <Border DockPanel.Dock="Right" CornerRadius="8" Background="{StaticResource G2Panel}" BorderBrush="{StaticResource G2Line}" BorderThickness="1" Padding="2" VerticalAlignment="Center">
+                  <StackPanel Orientation="Horizontal">
+                    <Button Style="{StaticResource G2SegButton}" Foreground="{StaticResource G2Accent}" ToolTip="조명 켜기" Click="but_LightingOn_Click" Content="켜기" />
+                    <Button Style="{StaticResource G2SegButton}" Foreground="{StaticResource G2Sub}" ToolTip="조명 끄기" Click="but_LightingOff_Click" Content="끄기" />
+                  </StackPanel>
+                </Border>
+                <StackPanel Margin="11,0,8,0" VerticalAlignment="Center">
+                  <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="조명" FontSize="16" FontWeight="Bold" VerticalAlignment="Center" />
+                    <Border Width="10" Height="10" CornerRadius="5" Margin="8,1,0,0" VerticalAlignment="Center" Cursor="Hand" ToolTip="LED 연결 상태 (클릭: 재연결)" BorderBrush="{StaticResource G2Line2}" BorderThickness="1" Background="{Binding ConnectStatus, RelativeSource={RelativeSource AncestorType=Window}}" Visibility="{Binding Source={x:Static Core:ServiceProvider.Branding}, Path=ControlLEDDimmer, Converter={StaticResource BooleanToVisibilityConverter1}}" MouseLeftButtonDown="Border_MouseLeftButtonDown" />
+                  </StackPanel>
+                  <TextBlock Text="촬영 전 조명을 확인하세요" Style="{StaticResource G2Caption}" FontSize="11" />
+                </StackPanel>
+              </DockPanel>
+            </Border>
+
+            <!-- presets -->
+            <StackPanel Name="Preset" Margin="0,0,0,12" IsEnabled="{Binding Source={x:Static Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}" Visibility="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=ShowPreset, Converter={StaticResource BooleanToVisibilityConverter1}}">
+              <DockPanel Margin="0,0,0,4">
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                  <Button Style="{StaticResource G2IconButton}" ToolTip="현재 조건으로 새 프리셋 등록" Click="btn_NewPreset_Click"><Viewbox Width="16" Height="16"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoPlus}" /></Viewbox></Button>
+                  <Button Style="{StaticResource G2IconButton}" ToolTip="선택한 프리셋 적용 (더블클릭도 적용)" Command="{Binding Path=SelectPresetCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=my:MainWindow, AncestorLevel=1}}" CommandParameter="{Binding ElementName=PresetListBox, Path=SelectedItem}"><Viewbox Width="16" Height="16"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoApply}" /></Viewbox></Button>
+                  <Button Style="{StaticResource G2IconButton}" ToolTip="프리셋 변경" Click="btn_ShowPreset_Click"><Viewbox Width="16" Height="16"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoPencil}" /></Viewbox></Button>
+                  <Button Style="{StaticResource G2IconButton}" ToolTip="선택한 프리셋 삭제" Command="{Binding Path=DeletePresetCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=my:MainWindow, AncestorLevel=1}}" CommandParameter="{Binding ElementName=PresetListBox, Path=SelectedItem}"><Viewbox Width="16" Height="16"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoTrash}" /></Viewbox></Button>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                  <TextBlock Style="{StaticResource G2SectionTitle}" Text="촬영 프리셋" />
+                  <Border Margin="8,0,0,0" Height="20" Padding="6,0" CornerRadius="5" Background="{StaticResource G2Panel2}" VerticalAlignment="Center" ToolTip="Stream Deck 키 1–5에 위에서부터 순서대로 연결">
+                    <StackPanel Orientation="Horizontal">
+                      <Viewbox Width="12" Height="12" VerticalAlignment="Center"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoDeck}" Stroke="{StaticResource G2Sub}" /></Viewbox>
+                      <TextBlock Text="SD 1–5" Margin="4,0,0,0" FontSize="10" Foreground="{StaticResource G2Sub}" VerticalAlignment="Center" />
+                    </StackPanel>
+                  </Border>
+                </StackPanel>
+              </DockPanel>
+              <TextBlock Style="{StaticResource G2Caption}" FontSize="11" Margin="2,0,0,6" Text="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=CurrentPresetName, StringFormat=적용됨 · {0}}" />
+              <ListBox Name="PresetListBox" Style="{StaticResource G2List}" MaxHeight="152" AlternationCount="1000" ItemsSource="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=CameraPresets}" MouseDoubleClick="ListBox_MouseDoubleClick">
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate>
+                    <DockPanel>
+                      <Border DockPanel.Dock="Left" Width="20" Height="20" CornerRadius="5" Background="{StaticResource G2Panel2}" Margin="0,0,9,0">
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource G2Sub}" FontFamily="{StaticResource G2Mono}" Text="{Binding (ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ListBoxItem}, Converter={StaticResource G2PlusOne}}" />
+                      </Border>
+                      <TextBlock VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Text="{Binding Name}" />
+                    </DockPanel>
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ListBox>
+              <!-- camera colour temperature / brightness: one line each, − and + -->
+              <Slider Name="slider" Visibility="Collapsed" Minimum="2500" Maximum="10000" TickFrequency="100" IsSnapToTickEnabled="True" ValueChanged="ColorTemperature_SlideValueChanged" PreviewMouseUp="Slider_MouseUp" />
+                <Border Height="44" Margin="0,8,0,0" Padding="12,0,6,0" CornerRadius="10" Background="{StaticResource G2Panel2}" BorderBrush="{StaticResource G2Line}" BorderThickness="1">
+                  <DockPanel>
+                    <Button DockPanel.Dock="Right" Style="{StaticResource G2GhostButton}" Width="34" Height="32" Padding="0" ToolTip="색온도 높이기 (더 차갑게)" Click="btn_sliderRight_Click"><Viewbox Width="16" Height="16"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoPlus}" /></Viewbox></Button>
+                    <Button DockPanel.Dock="Right" Style="{StaticResource G2GhostButton}" Width="34" Height="32" Padding="0" Margin="0,0,6,0" ToolTip="색온도 낮추기 (더 따뜻하게)" Click="btn_sliderLeft_Click"><Viewbox Width="16" Height="16"><Path Style="{StaticResource G2IconPath}" Data="M5,12 H19" /></Viewbox></Button>
+                    <TextBlock DockPanel.Dock="Left" VerticalAlignment="Center" FontSize="13" FontWeight="SemiBold" Text="색온도" />
+                    <TextBlock Margin="10,0,8,0" VerticalAlignment="Center" FontFamily="{StaticResource G2Mono}" FontSize="13" Foreground="{StaticResource G2Sub}" TextTrimming="CharacterEllipsis"><Run Text="{Binding Source={x:Static Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.ColorTemperature.Value, Mode=OneWay}" /><Run Text=" K" /></TextBlock>
+                  </DockPanel>
+                </Border>
+                <Border Height="44" Margin="0,8,0,0" Padding="12,0,6,0" CornerRadius="10" Background="{StaticResource G2Panel2}" BorderBrush="{StaticResource G2Line}" BorderThickness="1">
+                  <DockPanel>
+                    <Button DockPanel.Dock="Right" Style="{StaticResource G2GhostButton}" Width="34" Height="32" Padding="0" ToolTip="밝게 (조리개 열기)" Click="btn_ApertureLeft_Click"><Viewbox Width="16" Height="16"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoPlus}" /></Viewbox></Button>
+                    <Button DockPanel.Dock="Right" Style="{StaticResource G2GhostButton}" Width="34" Height="32" Padding="0" Margin="0,0,6,0" ToolTip="어둡게 (조리개 조이기)" Click="btn_ApertureRight_Click"><Viewbox Width="16" Height="16"><Path Style="{StaticResource G2IconPath}" Data="M5,12 H19" /></Viewbox></Button>
+                    <TextBlock DockPanel.Dock="Left" VerticalAlignment="Center" FontSize="13" FontWeight="SemiBold" Text="밝기" />
+                    <TextBlock Margin="10,0,8,0" VerticalAlignment="Center" FontFamily="{StaticResource G2Mono}" FontSize="13" Foreground="{StaticResource G2Sub}" TextTrimming="CharacterEllipsis"><Run Text="f/" /><Run Text="{Binding Source={x:Static Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.FNumber.Value, Mode=OneWay}" /></TextBlock>
+                  </DockPanel>
+                </Border>
+            </StackPanel>
+
+            <Border Style="{StaticResource G2Divider}" Margin="0,0,0,12" />
+
+            <!-- capture face: F / B / D (normal mode) -->
+            <StackPanel Name="FrontBack" Margin="0,0,0,12" Visibility="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=ShowFrontBack, Converter={StaticResource BooleanToVisibilityConverter1}}">
+              <StackPanel Visibility="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=ShowRemoveBg, Mode=OneWay, Converter={StaticResource ZeroOrFalseToVisibleConverter}}">
+                <DockPanel Margin="0,0,0,8">
+                  <TextBlock Style="{StaticResource G2SectionTitle}" Text="촬영 면" />
+                </DockPanel>
+                <UniformGrid Rows="1">
+                  <Button Style="{StaticResource G2TileButton}" Margin="0,0,4,0" ToolTip="앞면 촬영 (_F · 미감개선 ON: _PR_F · 하자 ON: _D)" Click="But_FrontCapture_Click">
+                    <StackPanel>
+                      <TextBlock Text="F" HorizontalAlignment="Center" FontSize="22" FontWeight="SemiBold" Foreground="{StaticResource G2Accent}" FontFamily="{StaticResource G2Mono}" />
+                      <TextBlock Text="앞면" HorizontalAlignment="Center" FontSize="12" FontWeight="SemiBold" />
+                    </StackPanel>
+                  </Button>
+                  <Button Style="{StaticResource G2TileButton}" Margin="4,0" ToolTip="뒷면 촬영 (_B · 미감개선 ON: _PR_B)" Visibility="{Binding IsChecked, ElementName=Check_Defect, Converter={StaticResource InverseBooleanToVisibilityConverter}}" Click="But_BackCapture_Click">
+                    <StackPanel>
+                      <TextBlock Text="B" HorizontalAlignment="Center" FontSize="22" FontWeight="SemiBold" Foreground="{StaticResource G2Accent}" FontFamily="{StaticResource G2Mono}" />
+                      <TextBlock Text="뒷면" HorizontalAlignment="Center" FontSize="12" FontWeight="SemiBold" />
+                    </StackPanel>
+                  </Button>
+                  <CheckBox Name="Check_Defect" Margin="4,0,0,0" Height="70" Cursor="Hand" ToolTip="하자 촬영 (켜면 앞면 버튼으로 _D 저장)" IsChecked="{Binding IsDefect}" Visibility="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=UseDefectCapture, Converter={StaticResource BooleanToVisibilityConverter1}}">
+                    <CheckBox.Style>
+                      <Style TargetType="CheckBox">
+                        <Setter Property="Template">
+                          <Setter.Value>
+                            <ControlTemplate TargetType="CheckBox">
+                              <Border x:Name="bd" CornerRadius="12" Background="{StaticResource G2Panel2}" BorderBrush="{StaticResource G2Line}" BorderThickness="1">
+                                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                  <TextBlock x:Name="letter" Text="D" HorizontalAlignment="Center" FontSize="22" FontWeight="SemiBold" Foreground="{StaticResource G2Sub}" FontFamily="{StaticResource G2Mono}" />
+                                  <TextBlock x:Name="lbl" Text="하자" HorizontalAlignment="Center" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource G2Text}" />
+                                </StackPanel>
+                              </Border>
+                              <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                  <Setter TargetName="bd" Property="Background" Value="{StaticResource G2Hover}" />
+                                </Trigger>
+                                <Trigger Property="IsChecked" Value="True">
+                                  <Setter TargetName="bd" Property="Background" Value="{StaticResource G2AccentSoft}" />
+                                  <Setter TargetName="bd" Property="BorderBrush" Value="{StaticResource G2Accent}" />
+                                  <Setter TargetName="bd" Property="BorderThickness" Value="2" />
+                                  <Setter TargetName="letter" Property="Foreground" Value="{StaticResource G2Accent}" />
+                                  <Setter TargetName="lbl" Property="Text" Value="하자 ON" />
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                  <Setter Property="Opacity" Value="0.5" />
+                                </Trigger>
+                              </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                          </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                          <DataTrigger Binding="{Binding isBtnPressed}" Value="True">
+                            <Setter Property="IsEnabled" Value="False" />
+                          </DataTrigger>
+                          <DataTrigger Binding="{Binding ThumbailLoaded}" Value="False">
+                            <Setter Property="IsEnabled" Value="False" />
+                          </DataTrigger>
+                        </Style.Triggers>
+                      </Style>
+                    </CheckBox.Style>
+                  </CheckBox>
+                </UniformGrid>
+                <UniformGrid Rows="1" Margin="0,10,0,0">
+                  <CheckBox Name="Check_AestheticImprovement" Content="미감개선" Height="42" Margin="0,0,4,0" Cursor="Hand"
+                            IsChecked="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=IsAestheticImprovement, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            IsEnabled="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=CanChangeAestheticImprovement}"
+                            Visibility="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=UseAestheticImprovement, Converter={StaticResource BooleanToVisibilityConverter1}}"
+                            ToolTip="ON: 앞면 _PR_F / 뒷면 _PR_B · 하자 _D 유지. 촬영·저장이 끝나면 전환할 수 있습니다.">
+                    <CheckBox.Template>
+                      <ControlTemplate TargetType="CheckBox">
+                        <Border x:Name="ModeSurface" CornerRadius="10" Background="{StaticResource G2Panel2}" BorderBrush="{StaticResource G2Line}" BorderThickness="1" Padding="11,0,8,0">
+                          <DockPanel>
+                            <Border x:Name="pill" DockPanel.Dock="Right" Width="36" Height="21" CornerRadius="10.5" Background="{StaticResource G2SwitchOff}" Padding="2.5" VerticalAlignment="Center">
+                              <Ellipse x:Name="knob" Width="16" Height="16" Fill="White" HorizontalAlignment="Left" />
+                            </Border>
+                            <TextBlock x:Name="ModeMark" Text="미감개선" VerticalAlignment="Center" FontSize="13" FontWeight="SemiBold" Foreground="{StaticResource G2Text}" />
+                          </DockPanel>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                          <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="ModeSurface" Property="Background" Value="{StaticResource G2PrBg}" />
+                            <Setter TargetName="ModeSurface" Property="BorderBrush" Value="{StaticResource G2Pr}" />
+                            <Setter TargetName="ModeMark" Property="Foreground" Value="{StaticResource G2Pr}" />
+                            <Setter TargetName="pill" Property="Background" Value="{StaticResource G2Pr}" />
+                            <Setter TargetName="knob" Property="HorizontalAlignment" Value="Right" />
+                          </Trigger>
+                          <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.55" />
+                          </Trigger>
+                        </ControlTemplate.Triggers>
+                      </ControlTemplate>
+                    </CheckBox.Template>
+                  </CheckBox>
+                  <Button Name="but_ToggleRot" Height="42" Margin="4,0,0,0" Cursor="Hand" ToolTip="{T:Translate LabelToggleRotateToolTip}" Click="but_ToggleRot_Click">
+                    <Button.Template>
+                      <ControlTemplate TargetType="Button">
+                        <Border x:Name="bd" CornerRadius="10" BorderThickness="1" Padding="11,0,8,0">
+                          <Border.Style>
+                            <Style TargetType="Border">
+                              <Setter Property="Background" Value="{StaticResource G2Panel2}" />
+                              <Setter Property="BorderBrush" Value="{StaticResource G2Line}" />
+                              <Style.Triggers>
+                                <DataTrigger Binding="{Binding Content.Kind, RelativeSource={RelativeSource AncestorType=Button}}" Value="ToggleSwitch">
+                                  <Setter Property="Background" Value="{StaticResource G2AccentSoft}" />
+                                  <Setter Property="BorderBrush" Value="{StaticResource G2Accent}" />
+                                </DataTrigger>
+                              </Style.Triggers>
+                            </Style>
+                          </Border.Style>
+                          <DockPanel>
+                            <Viewbox DockPanel.Dock="Left" Width="24" Height="24" Margin="0,0,9,0">
+                              <Path Width="24" Height="24" Stretch="None" StrokeThickness="1.8" StrokeLineJoin="Round" StrokeStartLineCap="Round" StrokeEndLineCap="Round">
+                                <Path.Style>
+                                  <Style TargetType="Path">
+                                    <Setter Property="Stroke" Value="{StaticResource G2Text}" />
+                                    <Setter Property="Data" Value="{StaticResource G2IcoPortrait}" />
+                                    <Style.Triggers>
+                                      <DataTrigger Binding="{Binding Content.Kind, RelativeSource={RelativeSource AncestorType=Button}}" Value="ToggleSwitch">
+                                        <Setter Property="Stroke" Value="{StaticResource G2Accent}" />
+                                        <Setter Property="Data" Value="{StaticResource G2IcoLandscape}" />
+                                      </DataTrigger>
+                                    </Style.Triggers>
+                                  </Style>
+                                </Path.Style>
+                              </Path>
+                            </Viewbox>
+                            <TextBlock VerticalAlignment="Center" FontSize="13" FontWeight="SemiBold" Foreground="{StaticResource G2Text}">
+                              <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                  <Setter Property="Text" Value="세로 촬영" />
+                                  <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Content.Kind, RelativeSource={RelativeSource AncestorType=Button}}" Value="ToggleSwitch">
+                                      <Setter Property="Text" Value="가로 촬영" />
+                                    </DataTrigger>
+                                  </Style.Triggers>
+                                </Style>
+                              </TextBlock.Style>
+                            </TextBlock>
+                          </DockPanel>
+                        </Border>
+                      </ControlTemplate>
+                    </Button.Template>
+                    <materialDesign:PackIcon Kind="ToggleSwitchOutline" Width="0" Height="0" />
+                  </Button>
+                </UniformGrid>
+              </StackPanel>
+            </StackPanel>
+
+            <!-- capture face: background-removal mode -->
+            <StackPanel Name="RemoveBg" Margin="0,0,0,12" Visibility="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=ShowRemoveBg, Converter={StaticResource BooleanToVisibilityConverter1}}">
+              <DockPanel Margin="0,0,0,8">
+                <Button DockPanel.Dock="Right" Style="{StaticResource G2ButtonBase}" Height="24" Padding="6,0" FontSize="11" Foreground="{StaticResource G2Accent}" Click="SwitchToNormal_Click" Content="일반 촬영으로 전환" />
+                <TextBlock Style="{StaticResource G2SectionTitle}" Text="{T:Translate LabelRemoveBgExpander}" />
+              </DockPanel>
+              <Grid>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="*" />
+                  <ColumnDefinition Width="Auto" />
+                  <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Style="{StaticResource G2TileButton}" Margin="0,0,4,0" ToolTip="앞면 · 배경 제거 촬영" Click="But_FrontCaptureBG_Click">
+                  <StackPanel>
+                    <TextBlock Text="F" HorizontalAlignment="Center" FontSize="22" FontWeight="SemiBold" Foreground="{StaticResource G2Accent}" FontFamily="{StaticResource G2Mono}" />
+                    <TextBlock Text="앞면 · 배경" HorizontalAlignment="Center" FontSize="12" FontWeight="SemiBold" />
+                  </StackPanel>
+                </Button>
+                <Button Grid.Column="1" Style="{StaticResource G2TileButton}" Width="58" Margin="4,0" ToolTip="{T:Translate LabelRemoveBgEdit}" Click="But_CreatRemoveBG_Click">
+                  <StackPanel>
+                    <Viewbox Width="20" Height="20" HorizontalAlignment="Center"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoLayers}" /></Viewbox>
+                    <TextBlock Text="편집" HorizontalAlignment="Center" FontSize="11" Margin="0,4,0,0" />
+                  </StackPanel>
+                </Button>
+                <Button Grid.Column="2" Style="{StaticResource G2TileButton}" Margin="4,0,0,0" ToolTip="뒷면 · 배경 제거 촬영" Click="But_BackCaptureBG_Click">
+                  <StackPanel>
+                    <TextBlock Text="B" HorizontalAlignment="Center" FontSize="22" FontWeight="SemiBold" Foreground="{StaticResource G2Accent}" FontFamily="{StaticResource G2Mono}" />
+                    <TextBlock Text="뒷면 · 배경" HorizontalAlignment="Center" FontSize="12" FontWeight="SemiBold" />
+                  </StackPanel>
+                </Button>
+              </Grid>
+              <DockPanel Margin="0,10,0,0">
+                <Border DockPanel.Dock="Right" CornerRadius="8" Background="{StaticResource G2Panel2}" Padding="2">
+                  <StackPanel Orientation="Horizontal">
+                    <RadioButton Name="ModeA" Style="{StaticResource G2Segment}" GroupName="ModeGroup" IsChecked="True" Content="1회 촬영" />
+                    <RadioButton Name="ModeB" Style="{StaticResource G2Segment}" GroupName="ModeGroup" Content="2회 촬영" />
+                  </StackPanel>
+                </Border>
+                <CheckBox Name="Bg_Auto" Content="{T:Translate LabelAuto}" VerticalAlignment="Center" />
+              </DockPanel>
+            </StackPanel>
+
+            <!-- camera settings -->
+            <Border Style="{StaticResource G2Divider}" />
+            <ToggleButton x:Name="G2CamToggle" Style="{StaticResource G2ButtonBase}" Height="36" Padding="2,0,4,0" HorizontalContentAlignment="Stretch" ToolTip="카메라 촬영 조건을 떠 있는 창에서 조정합니다">
+              <DockPanel>
+                <Viewbox DockPanel.Dock="Right" Width="17" Height="17"><Path Style="{StaticResource G2IconPath}" Stroke="{StaticResource G2Sub}" Data="{StaticResource G2IcoChevronR}" /></Viewbox>
+                <TextBlock Style="{StaticResource G2SectionTitle}" Text="카메라 설정" />
+              </DockPanel>
+            </ToggleButton>
+            <Border Style="{StaticResource G2Divider}" />
+            <Expander Style="{StaticResource G2Expander}" Header="미리보기 · 히스토그램">
+              <StackPanel Margin="0,2,0,4">
+                <Border CornerRadius="10" Background="{StaticResource G2Panel2}" Padding="8" Margin="0,0,0,8" Visibility="{Binding Source={x:Static Core:ServiceProvider.Branding}, Path=ShowPreviewPanel, Converter={StaticResource BooleanToVisibilityConverter1}}">
+                  <Grid Height="170">
+                    <Image Name="PreviewImage" Source="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=SelectedBitmap.Preview}">
+                      <FrameworkElement.LayoutTransform>
+                        <RotateTransform Angle="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=SelectedBitmap.FileItem.RotationAngle}" />
+                      </FrameworkElement.LayoutTransform>
+                    </Image>
+                    <zoomAndPan:ZoomAndPanViewBox Name="PreviewPanel" Background="#661F5FD6" DataContext="{Binding ElementName=ZoomAndPanControl}" />
+                  </Grid>
+                </Border>
+                <Border CornerRadius="10" Background="{StaticResource G2Panel2}" Padding="8" DataContext="{Binding Source={x:Static Core:ServiceProvider.Settings}}" Visibility="{Binding Source={x:Static Core:ServiceProvider.Branding}, Path=ShowHistogram, Converter={StaticResource BooleanToVisibilityConverter1}}">
+                  <StackPanel>
+                    <Grid Height="80">
+                      <Polygon Stretch="Fill" Fill="#FFA9B0BA" Opacity="0.55" Points="{Binding Path=SelectedBitmap.LuminanceHistogramPoints}" />
+                      <Polygon Stretch="Fill" Stroke="#FFD64545" Opacity="0.6" Points="{Binding Path=SelectedBitmap.RedColorHistogramPoints}" />
+                      <Polygon Stretch="Fill" Stroke="#FF2E9E5B" Opacity="0.6" Points="{Binding Path=SelectedBitmap.GreenColorHistogramPoints}" />
+                      <Polygon Stretch="Fill" Stroke="#FF1F5FD6" Opacity="0.6" Points="{Binding Path=SelectedBitmap.BlueColorHistogramPoints}" />
+                      <Ellipse Width="20" Height="20" StrokeThickness="2.5" Stroke="{StaticResource G2Accent}" StrokeDashArray="3 2" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding Path=ImageLoading, Converter={StaticResource BooleanToVisibilityConverter1}}" />
+                    </Grid>
+                    <DockPanel Margin="0,6,0,0">
+                      <CheckBox DockPanel.Dock="Left" FontSize="11" Content="어두운 영역" IsChecked="{Binding Path=HighlightUnderExp}" />
+                      <CheckBox DockPanel.Dock="Right" FontSize="11" Content="밝은 영역" IsChecked="{Binding Path=HighlightOverExp}" />
+                      <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="10.5" FontFamily="{StaticResource G2Mono}" Foreground="{StaticResource G2Sub}" Text="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=SelectedBitmap.InfoLabel}" />
+                    </DockPanel>
+                  </StackPanel>
+                </Border>
+              </StackPanel>
+            </Expander>
+            <Border Style="{StaticResource G2Divider}" />
+            <Expander Style="{StaticResource G2Expander}" Header="폴더 · 자동 내보내기">
+              <StackPanel Margin="0,2,0,4">
+                <StackPanel Margin="0,0,0,10" Visibility="{Binding Path=DefaultSession.AlowFolderChange, Converter={StaticResource BooleanToVisibilityConverter1}}">
+                  <TextBlock Style="{StaticResource G2RowLabel}" Margin="0,0,0,4" Text="{T:Translate LabelFolderSelector}" />
+                  <Panels:DirectorySelectorControl MaxHeight="200" SelectedPath="{Binding Path=DefaultSession.Folder, Mode=TwoWay}" />
+                </StackPanel>
+                <StackPanel Visibility="{Binding Source={x:Static Core:ServiceProvider.Branding}, Path=ShowAutoExportPanel, Converter={StaticResource BooleanToVisibilityConverter1}}">
+                  <TextBlock Style="{StaticResource G2RowLabel}" Margin="0,0,0,4" Text="{T:Translate LabelAutoExportPlugins}" />
+                  <ListBox Style="{StaticResource G2List}" MaxHeight="180" dragDrop:DragDrop.IsDragSource="True" dragDrop:DragDrop.IsDropTarget="True" ItemsSource="{Binding DefaultSession.AutoExportPluginConfigs}">
+                    <ItemsControl.ItemTemplate>
+                      <DataTemplate>
+                        <DockPanel IsEnabled="{Binding IsRedy}">
+                          <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                            <Button Style="{StaticResource G2IconButton}" Width="24" Height="24" ToolTip="실행" Command="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=DefaultSession.ApplyPluginCommand}" CommandParameter="{Binding}"><Viewbox Width="13" Height="13"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoPlay}" /></Viewbox></Button>
+                            <Button Style="{StaticResource G2IconButton}" Width="24" Height="24" ToolTip="설정" Command="{Binding ConfigurePluginCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:MainWindow}}}" CommandParameter="{Binding}"><Viewbox Width="13" Height="13"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoGear}" /></Viewbox></Button>
+                            <Button Style="{StaticResource G2IconButton}" Width="24" Height="24" ToolTip="삭제" Command="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=DefaultSession.RemovePluginCommand}" CommandParameter="{Binding}"><Viewbox Width="13" Height="13"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoTrash}" /></Viewbox></Button>
+                          </StackPanel>
+                          <CheckBox Content="{Binding DisplayName}" IsChecked="{Binding IsEnabled}" />
+                        </DockPanel>
+                      </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                  </ListBox>
+                  <ToggleButton x:Name="DownButton" Style="{StaticResource G2ButtonBase}" Height="30" Margin="0,6,0,0" HorizontalContentAlignment="Left" Padding="8,0" Background="{StaticResource G2Panel2}">
+                    <StackPanel Orientation="Horizontal">
+                      <Viewbox Width="14" Height="14" VerticalAlignment="Center"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoPlus}" /></Viewbox>
+                      <TextBlock Margin="6,0,0,0" VerticalAlignment="Center" Text="{T:Translate LabelAddPlugin}" />
+                    </StackPanel>
+                  </ToggleButton>
+                  <Popup PlacementTarget="{Binding ElementName=DownButton}" Placement="Bottom" StaysOpen="False" AllowsTransparency="True" VerticalOffset="4" IsOpen="{Binding IsChecked, ElementName=DownButton, Mode=TwoWay}">
+                    <Border Style="{StaticResource G2Popup}" Padding="5">
+                      <ItemsControl ItemsSource="{Binding Source={x:Static Core:ServiceProvider.PluginManager}, Path=AutoExportPlugins}">
+                        <ItemsControl.ItemTemplate>
+                          <DataTemplate>
+                            <Button Style="{StaticResource G2ButtonBase}" Height="30" MinWidth="200" HorizontalContentAlignment="Left" Padding="10,0" Content="{Binding Name}" Command="{Binding AddPluginCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:MainWindow}}}" CommandParameter="{Binding}" Click="G2ClosePluginPopup_Click" />
+                          </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                      </ItemsControl>
+                    </Border>
+                  </Popup>
+                </StackPanel>
+              </StackPanel>
+            </Expander>
+            <Border Style="{StaticResource G2Divider}" />
+            <Expander Style="{StaticResource G2Expander}" Header="{T:Translate LabelImageProperties}" Visibility="{Binding Source={x:Static Core:ServiceProvider.Branding}, Path=ShowImagePropertiesPanel, Converter={StaticResource BooleanToVisibilityConverter1}}">
+              <Panels:ImagePropertiesControl Height="250" DataContext="{Binding Source={x:Static Core:ServiceProvider.Settings}}" />
+            </Expander>
+            <Expander Style="{StaticResource G2Expander}" Header="{T:Translate LabelMetadata}" Visibility="{Binding Source={x:Static Core:ServiceProvider.Branding}, Path=ShowMetadataPanel, Converter={StaticResource BooleanToVisibilityConverter1}}">
+              <Panels:MetadataControl Height="250" HorizontalContentAlignment="Stretch" DataContext="{Binding Source={x:Static Core:ServiceProvider.Settings}}" />
+            </Expander>
+          </StackPanel>
+        </ScrollViewer>
+      </DockPanel>
+    </Border>
+
+    <materialDesign:Snackbar Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Panel.ZIndex="10" IsActive="{Binding Source={x:Static Devices:StaticHelper.Instance}, Path=IsActive}">
+      <materialDesign:SnackbarMessage Content="{Binding Source={x:Static Devices:StaticHelper.Instance}, Path=SystemMessage}" />
+    </materialDesign:Snackbar>
+  </Grid>
+</Controls:MetroWindow>

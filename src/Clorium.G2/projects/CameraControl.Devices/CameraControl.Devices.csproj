@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <AssemblyName>CameraControl.Devices</AssemblyName>
+    <PlatformTarget>x64</PlatformTarget>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
+    <LangVersion>14.0</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <AutomaticallyUseReferenceAssemblyPackages>false</AutomaticallyUseReferenceAssemblyPackages>
+    <FrameworkPathOverride>$(MSBuildThisFileDirectory)../../framework-refs/net48/.NETFramework/v4.8</FrameworkPathOverride>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System.Runtime.InteropServices.WindowsRuntime"><HintPath>../../framework-refs/winrt-devices/System.Runtime.InteropServices.WindowsRuntime/System.Runtime.InteropServices.WindowsRuntime.dll</HintPath><Private>False</Private><Aliases>WinInterop</Aliases></Reference>
+    <Reference Include="Windows"><HintPath>../../dependencies/BuildSupport/Windows.AsyncOnly.winmd</HintPath><Private>False</Private></Reference>
+    <Reference Include="Windows.Foundation.UniversalApiContract"><HintPath>../../framework-refs/winrt-devices/Windows.Foundation.UniversalApiContract/Windows.Foundation.UniversalApiContract.winmd</HintPath><Private>False</Private></Reference>
+    <Reference Include="System.Runtime"><HintPath>../../framework-refs/net48/.NETFramework/v4.8/Facades/System.Runtime.dll</HintPath><Private>False</Private></Reference>
+    <Reference Include="netstandard"><HintPath>../../framework-refs/net48/.NETFramework/v4.8/Facades/netstandard.dll</HintPath><Private>False</Private></Reference>
+    <Reference Include="System.Runtime.WindowsRuntime"><HintPath>../../framework-refs/winrt-devices/System.Runtime.WindowsRuntime/System.Runtime.WindowsRuntime.dll</HintPath><Private>False</Private></Reference>
+    <Reference Include="mscorlib"><HintPath>../../framework-refs/net48/.NETFramework/v4.8/mscorlib.dll</HintPath><Private>False</Private></Reference>
+    <Reference Include="System"><HintPath>../../framework-refs/net48/.NETFramework/v4.8/System.dll</HintPath><Private>False</Private></Reference>
+    <Reference Include="System.Xml.Linq"><HintPath>../../framework-refs/net48/.NETFramework/v4.8/System.Xml.Linq.dll</HintPath><Private>False</Private></Reference>
+    <Reference Include="websocket-sharp"><HintPath>../../dependencies/Managed/websocket-sharp.dll</HintPath><Private>False</Private></Reference>
+    <Reference Include="Newtonsoft.Json"><HintPath>../../dependencies/Managed/Newtonsoft.Json.dll</HintPath><Private>False</Private></Reference>
+    <Reference Include="Accord.Video.DirectShow"><HintPath>../../dependencies/Managed/Accord.Video.DirectShow.dll</HintPath><Private>False</Private></Reference>
+    <Reference Include="System.Management"><HintPath>../../framework-refs/net48/.NETFramework/v4.8/System.Management.dll</HintPath><Private>False</Private></Reference>
+    <Reference Include="System.Core"><HintPath>../../framework-refs/net48/.NETFramework/v4.8/System.Core.dll</HintPath><Private>False</Private></Reference>
+    <Reference Include="System.Xml"><HintPath>../../framework-refs/net48/.NETFramework/v4.8/System.Xml.dll</HintPath><Private>False</Private></Reference>
+    <Reference Include="System.Net.Http"><HintPath>../../framework-refs/net48/.NETFramework/v4.8/System.Net.Http.dll</HintPath><Private>False</Private></Reference>
+    <Reference Include="Rssdp.Native"><HintPath>../../dependencies/Managed/Rssdp.Native.dll</HintPath><Private>False</Private></Reference>
+    <Reference Include="System.Drawing"><HintPath>../../framework-refs/net48/.NETFramework/v4.8/System.Drawing.dll</HintPath><Private>False</Private></Reference>
+    <Reference Include="Accord.Video.FFMPEG.x64"><HintPath>../../dependencies/Managed/Accord.Video.FFMPEG.x64.dll</HintPath><Private>False</Private></Reference>
+    <Reference Include="Accord.Video"><HintPath>../../dependencies/Managed/Accord.Video.dll</HintPath><Private>False</Private></Reference>
+    <Reference Include="WindowsBase"><HintPath>../../framework-refs/net48/.NETFramework/v4.8/WindowsBase.dll</HintPath><Private>False</Private></Reference>
+    <Reference Include="PresentationFramework"><HintPath>../../framework-refs/net48/.NETFramework/v4.8/PresentationFramework.dll</HintPath><Private>False</Private></Reference>
+    <Reference Include="Microsoft.CSharp"><HintPath>../../framework-refs/net48/.NETFramework/v4.8/Microsoft.CSharp.dll</HintPath><Private>False</Private></Reference>
+    <Reference Include="Accord"><HintPath>../../dependencies/Managed/Accord.dll</HintPath><Private>False</Private></Reference>
+  <ProjectReference Include="../PortableDeviceLib/PortableDeviceLib.csproj" /><ProjectReference Include="../Canon.Eos.Framework/Canon.Eos.Framework.csproj" /></ItemGroup>
+</Project>

@@ -1,0 +1,5 @@
+Core WPF helper preserved; all non-helper method IL unchanged.
+WIA metadata compatibility pass applied
+Restored interop types=10, methods=12; non-WMPLib IL unchanged
+Verified interop types=10, methods=12
+Development runtime prepared: C:\Users\user\Documents\ChatGPT\클로리움G2\.local\g2-runtime

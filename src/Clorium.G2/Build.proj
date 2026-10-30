@@ -1,0 +1,42 @@
+<Project DefaultTargets="Build">
+  <PropertyGroup>
+    <Configuration Condition="'$(Configuration)' == ''">Release</Configuration>
+    <BuildAllVariants Condition="'$(BuildAllVariants)' == ''">false</BuildAllVariants>
+    <DotNetHost Condition="'$(DotNetHost)' == ''">dotnet</DotNetHost>
+    <Solution>Clorium.sln</Solution>
+    <Solution Condition="'$(BuildAllVariants)' == 'true'">Clorium.AllVariants.sln</Solution>
+    <OutputFolder>$(MSBuildThisFileDirectory)build-output/installed/</OutputFolder>
+  </PropertyGroup>
+  <ItemGroup>
+    <BuildTools Include="tools/InteropMetadataRestore/InteropMetadataRestore.csproj;tools/WiaMetadataFix/WiaMetadataFix.csproj;tools/InitializeDeploymentSettings/InitializeDeploymentSettings.csproj;tools/CoreWpfCompatibility/CoreWpfCompatibility.csproj" />
+    <InstalledProjects Include="projects/CameraControl/CameraControl.csproj;projects/CameraControl.Core/CameraControl.Core.csproj;projects/CameraControl.Devices/CameraControl.Devices.csproj;projects/CameraControl.Plugins/CameraControl.Plugins.csproj;projects/Canon.Eos.Framework/Canon.Eos.Framework.csproj;projects/PortableDeviceLib/PortableDeviceLib.csproj;projects/ZoomAndPan/ZoomAndPan.csproj;projects/Clorium.AutoSizing.Installed/autosizing-installed.csproj;projects/Clorium.Centering/centering.csproj" />
+  </ItemGroup>
+  <Target Name="Build">
+    <MSBuild Projects="@(BuildTools)" Targets="Restore;Build" BuildInParallel="false" Properties="Configuration=$(Configuration);RestoreConfigFile=$(MSBuildThisFileDirectory)NuGet.Config" />
+    <MSBuild Projects="$(Solution)" Targets="Restore;Build" BuildInParallel="false" Properties="Configuration=$(Configuration);RestoreConfigFile=$(MSBuildThisFileDirectory)NuGet.Config" />
+    <MSBuild Projects="@(InstalledProjects)" Targets="GetTargetPath" BuildInParallel="false" Properties="Configuration=$(Configuration)">
+      <Output TaskParameter="TargetOutputs" ItemName="ProductOutput" />
+    </MSBuild>
+    <ItemGroup>
+      <MainRaw Include="@(ProductOutput)" Condition="'%(ProductOutput.Filename)' == 'CameraControl'" />
+      <DevicesRaw Include="@(ProductOutput)" Condition="'%(ProductOutput.Filename)' == 'CameraControl.Devices'" />
+      <OrdinaryOutput Include="@(ProductOutput)" Condition="'%(ProductOutput.Filename)' != 'CameraControl' And '%(ProductOutput.Filename)' != 'CameraControl.Devices'" />
+      <OrdinarySymbols Include="@(OrdinaryOutput->'%(RootDir)%(Directory)%(Filename).pdb')" />
+    </ItemGroup>
+    <MakeDir Directories="$(OutputFolder)" />
+    <Delete Files="$(OutputFolder)CameraControl.exe;$(OutputFolder)CameraControl.pdb;$(OutputFolder)CameraControl.Devices.dll;$(OutputFolder)CameraControl.Devices.pdb" />
+    <Copy SourceFiles="@(OrdinaryOutput)" DestinationFolder="$(OutputFolder)" />
+    <Copy SourceFiles="@(OrdinarySymbols)" DestinationFolder="$(OutputFolder)" />
+    <Exec Command="&quot;$(DotNetHost)&quot; &quot;tools/CoreWpfCompatibility/bin/$(Configuration)/net10.0/CoreWpfCompatibility.dll&quot; &quot;releases/Clorium_4.7.1.4_20261023/files/CameraControl.Core.dll&quot; &quot;$(OutputFolder)CameraControl.Core.dll&quot;" />
+    <Exec Command="&quot;$(DotNetHost)&quot; &quot;tools/WiaMetadataFix/bin/$(Configuration)/net10.0/WiaMetadataFix.dll&quot; &quot;@(DevicesRaw)&quot; &quot;$(OutputFolder)CameraControl.Devices.dll&quot;" />
+    <Exec Command="&quot;$(DotNetHost)&quot; &quot;tools/InteropMetadataRestore/bin/$(Configuration)/net10.0/InteropMetadataRestore.dll&quot; restore &quot;metadata/wmplib-metadata-spec.json&quot; &quot;@(MainRaw)&quot; &quot;$(OutputFolder)CameraControl.exe&quot;" />
+    <Exec Command="&quot;$(DotNetHost)&quot; &quot;tools/InteropMetadataRestore/bin/$(Configuration)/net10.0/InteropMetadataRestore.dll&quot; verify &quot;metadata/wmplib-metadata-spec.json&quot; &quot;$(OutputFolder)CameraControl.exe&quot;" />
+    <MSBuild Condition="'$(BuildAllVariants)' == 'true'" Projects="projects/Clorium.AutoSizing.Standalone/Clorium.AutoSizing.csproj" Targets="GetTargetPath" BuildInParallel="false" Properties="Configuration=$(Configuration)">
+      <Output TaskParameter="TargetOutputs" ItemName="StandaloneOutput" />
+    </MSBuild>
+    <MakeDir Condition="'$(BuildAllVariants)' == 'true'" Directories="build-output/standalone" />
+    <Copy Condition="'$(BuildAllVariants)' == 'true'" SourceFiles="@(StandaloneOutput)" DestinationFolder="build-output/standalone" />
+    <Copy Condition="'$(BuildAllVariants)' == 'true'" SourceFiles="@(StandaloneOutput->'%(RootDir)%(Directory)%(Filename).pdb')" DestinationFolder="build-output/standalone" />
+    <Message Importance="high" Text="Source solution built. WMPLib/WIA metadata restored in build-output/installed. No product was executed." />
+  </Target>
+</Project>

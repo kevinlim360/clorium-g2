@@ -1,0 +1,31 @@
+{
+  "captureCandidate": "superfocus-box-capture-candidate.json",
+  "build": "0 errors, 10 existing warnings from recompiled Core and application",
+  "priorCandidateCapture": "20 JPEG plus PNG, 6720x4480, fully decoded",
+  "regression": "13 groups PASS",
+  "postprocess": "WPF/WIA/WMPLib PASS",
+  "modules": [
+    {
+      "file": "CameraControl.exe",
+      "sha256": "4905d8c8503c3c6ca78c8c61d9e5787f27b8fe7ea233b421fd07f949f72716ab"
+    },
+    {
+      "file": "CameraControl.Core.dll",
+      "sha256": "636d22846774e4ae33ad5f07ba125882c81de438d29aab5abef71c44c4a9dcca"
+    },
+    {
+      "file": "CameraControl.Devices.dll",
+      "sha256": "3be30247f5d5dfc9f88e5482664671c7df1fc0debd15b62892e227333712288a"
+    },
+    {
+      "file": "Canon.Eos.Framework.dll",
+      "sha256": "a931b94d8631b341c01ee3c2f3b07997855032687cfc5242be780bb2544f13d2"
+    }
+  ],
+  "hardwareFinal": "PASS: blurred starting vase refined sharply at A0; moved box to blind without resetting A; B72 sharpness peak saved; settings window open/close preserved A0/B72 and enabled direct capture button. No full capture repeated after A refinement; prior 20-frame engine evidence retained separately.",
+  "captureEvidence": "superfocus-box-files.json",
+  "legacy": "19 checks PASS",
+  "independentReview": false,
+  "date": "2026-10-28",
+  "changesAfterPriorCapture": "A-box bidirectional contrast refinement; disconnect clears endpoints; settings hide preserves range; toolbar row span"
+}

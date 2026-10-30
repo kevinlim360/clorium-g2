@@ -1,0 +1,99 @@
+PASS: repeated CSV save retains header and first measurement
+PASS: legacy config has feature disabled
+PASS: runtime mode starts ON
+PASS: naming enable=False on=False face=0 defect=False
+PASS: naming enable=False on=False face=0 defect=True
+PASS: naming enable=False on=False face=1 defect=False
+PASS: naming enable=False on=False face=1 defect=True
+PASS: naming enable=False on=False face=2 defect=False
+PASS: naming enable=False on=False face=2 defect=True
+PASS: naming enable=False on=True face=0 defect=False
+PASS: naming enable=False on=True face=0 defect=True
+PASS: naming enable=False on=True face=1 defect=False
+PASS: naming enable=False on=True face=1 defect=True
+PASS: naming enable=False on=True face=2 defect=False
+PASS: naming enable=False on=True face=2 defect=True
+PASS: naming enable=True on=False face=0 defect=False
+PASS: naming enable=True on=False face=0 defect=True
+PASS: naming enable=True on=False face=1 defect=False
+PASS: naming enable=True on=False face=1 defect=True
+PASS: naming enable=True on=False face=2 defect=False
+PASS: naming enable=True on=False face=2 defect=True
+PASS: naming enable=True on=True face=0 defect=False
+PASS: naming enable=True on=True face=0 defect=True
+PASS: naming enable=True on=True face=1 defect=False
+PASS: naming enable=True on=True face=1 defect=True
+PASS: naming enable=True on=True face=2 defect=False
+PASS: naming enable=True on=True face=2 defect=True
+PASS: exact customer front example
+PASS: exact customer back example
+PASS: turntable 72 shots no PR/face flags multi=False face=1 defect=False
+PASS: turntable 72 shots no PR/face flags multi=False face=1 defect=True
+PASS: turntable 72 shots no PR/face flags multi=False face=2 defect=False
+PASS: turntable 72 shots no PR/face flags multi=False face=2 defect=True
+PASS: turntable 72 shots no PR/face flags multi=True face=1 defect=False
+PASS: turntable 72 shots no PR/face flags multi=True face=1 defect=True
+PASS: turntable 72 shots no PR/face flags multi=True face=2 defect=False
+PASS: turntable 72 shots no PR/face flags multi=True face=2 defect=True
+PASS: OFF immediately affects next shot
+PASS: ON immediately affects next shot
+PASS: busy attempt cannot change active capture mode
+PASS: pending thumbnail cannot change active capture mode
+PASS: turntable cannot change operator mode
+PASS: new product preserves mode False
+PASS: new product preserves mode True
+PASS: PR filename collision produces unique path
+PASS: PR collision preserves original bytes
+PASS: PR naming for extension .JPG
+PASS: defect ignores PR for extension .JPG
+PASS: PR naming for extension .jpeg
+PASS: defect ignores PR for extension .jpeg
+PASS: PR naming for extension .nef
+PASS: defect ignores PR for extension .nef
+PASS: PR naming for extension .cr2
+PASS: defect ignores PR for extension .cr2
+PASS: Unicode product path supported
+PASS: runtime mode excluded from JSON
+PASS: feature enable persisted
+PASS: JSON restart defaults ON even with stale runtime fields
+PASS: old JSON remains disabled
+PASS: XML restart defaults ON
+PASS: actual checkbox binds ON
+PASS: checked button is orange
+PASS: checkbox OFF updates shared state
+PASS: OFF button clears orange
+PASS: all image outlines OFF
+PASS: all image outlines follow ON
+PASS: actual mode control disabled while capturing
+PASS: actual mode control disabled while saving
+PASS: actual mode control disabled during turntable
+PASS: actual mode control reenabled after completion
+PASS: Custom option exists inside correct expander
+PASS: measurement file excludes PR on=False
+PASS: metadata creation leaves raw source unchanged on=False
+PASS: AutoSizing reads real JPEG metadata on=False
+PASS: actual AutoSizing barcode on=False
+PASS: AutoSizing decodes JPEG on=False
+PASS: measurement file excludes PR on=True
+PASS: metadata creation leaves raw source unchanged on=True
+PASS: AutoSizing reads real JPEG metadata on=True
+PASS: actual AutoSizing barcode on=True
+PASS: AutoSizing decodes JPEG on=True
+PASS: barcode compatibility C05_32987_001_PR_F
+PASS: barcode compatibility C05_32987_001_PR_F_M
+PASS: barcode compatibility C05_32987_001_F
+PASS: barcode compatibility C05_32987_001_F_M
+PASS: barcode compatibility C05_32987___1_001_PR_F_M
+PASS: literal barcode components preserved ITEM_PR
+PASS: literal barcode components preserved ITEM_PR_MARK
+PASS: literal barcode components preserved A_F_M_B
+PASS: literal barcode components preserved 32987_C05_CODE
+PASS: literal barcode components preserved 123_456
+PASS: literal PR inside barcode preserved
+PASS: measurement output pair excludes PR C05_32987_001_PR_F_M.jpeg
+PASS: measurement output pair excludes PR C05_32987_001_PR_F.jpg
+PASS: measurement output pair excludes PR C05_32987_001_F_M.jpeg
+PASS: measurement output pair excludes PR C05_32987_001_PR_B_M.jpeg
+PASS: repeated CSV measurement survives API data parsing
+PASS: repeated CSV retains actual measured value
+AESTHETIC_CHECKS_PASSED=98

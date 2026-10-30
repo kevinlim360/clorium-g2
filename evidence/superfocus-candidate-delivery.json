@@ -1,0 +1,33 @@
+{
+  "date": "2026-10-28",
+  "path": ".local/g2-runtime/CameraControl.exe",
+  "build": "Release x64 net48: 4 warnings, 0 errors; WPF/WIA/WMPLib postprocessing passed",
+  "functionalTest": "20261028_103543_093cb227",
+  "testedCandidate": "superfocus-candidate-final.json",
+  "changeSinceFunctionalTest": "Only SuperfocusWindow preparation help text added: body Continuous AF OFF, lens AF.",
+  "modules": [
+    {
+      "sha256": "68e83421f6641c1a48040452ee9fdd416db9be4a74d8830337401970877faf0d",
+      "name": "CameraControl.exe"
+    },
+    {
+      "sha256": "bc022d9481b459ebbc86310bd086b6bf19c52b0a3d25c647613e57e78cfdccd4",
+      "name": "CameraControl.Core.dll"
+    },
+    {
+      "sha256": "3be30247f5d5dfc9f88e5482664671c7df1fc0debd15b62892e227333712288a",
+      "name": "CameraControl.Devices.dll"
+    },
+    {
+      "sha256": "a931b94d8631b341c01ee3c2f3b07997855032687cfc5242be780bb2544f13d2",
+      "name": "Canon.Eos.Framework.dll"
+    }
+  ],
+  "cameraFinalState": "Application normally closed; body Continuous AF remains OFF as changed by user; lens AF maintained",
+  "limitations": [
+    "Development runtime only; no installer deployed.",
+    "RF24-240mm and broad scene/lens quality not verified.",
+    "Movie service remains unimplemented.",
+    "No independent review."
+  ]
+}

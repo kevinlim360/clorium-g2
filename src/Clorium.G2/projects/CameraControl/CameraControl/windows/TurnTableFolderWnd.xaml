@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Window x:Class="CameraControl.windows.TurnTableFolderWnd" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" xmlns:viewModel="clr-namespace:CameraControl.ViewModel" xmlns:local="clr-namespace:CameraControl.windows" Title="TurnTable - Create Folder/Photo Name" Height="250" Width="600" TextElement.Foreground="{DynamicResource MaterialDesignBody}" TextElement.FontWeight="Regular" TextElement.FontSize="13" TextOptions.TextFormattingMode="Ideal" TextOptions.TextRenderingMode="Auto" Background="{DynamicResource MaterialDesignPaper}" FontFamily="{DynamicResource MaterialDesignFont}" Cursor="">
+  <FrameworkElement.DataContext>
+    <viewModel:TurnTableFolderViewModel />
+  </FrameworkElement.DataContext>
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="0.2*" />
+      <ColumnDefinition Width="1*" />
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="1*" />
+      <RowDefinition Height="1*" />
+      <RowDefinition Height="1*" />
+      <RowDefinition Height="1*" />
+    </Grid.RowDefinitions>
+    <Label Grid.Column="0" Grid.Row="0" Content="Folder Name" HorizontalAlignment="Center" VerticalAlignment="Center" ToolTip="저장할 전체 폴더 이름" ToolTipService.InitialShowDelay="100" />
+    <Label Grid.Column="0" Grid.Row="1" Content="Prefix Folder" HorizontalAlignment="Center" VerticalAlignment="Center" ToolTip="접두사 - 폴더 이름" ToolTipService.InitialShowDelay="100" />
+    <Label Grid.Column="0" Grid.Row="2" Content="Prefix Photo" HorizontalAlignment="Center" VerticalAlignment="Center" ToolTip="접두사 - 사진 이름" ToolTipService.InitialShowDelay="100" />
+    <TextBox Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="480" Text="{Binding FullName}" />
+    <TextBox Name="tb_PrefixFolder" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" Width="250" Text="{Binding PrefixFolder, UpdateSourceTrigger=PropertyChanged}" TextChanged="tb_PrefixFolder_TextChanged" />
+    <TextBox Grid.Column="1" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center" Width="250" Text="{Binding PrefixImage}" />
+    <ComboBox Grid.Column="1" Grid.Row="2" HorizontalAlignment="Right" Margin="4" materialDesign:HintAssist.Hint="Capture Delay Time" Style="{StaticResource MaterialDesignFloatingHintComboBox}" SelectedIndex="{Binding DelayTimeIndex}">
+      <ComboBoxItem Content="0.5sec" />
+      <ComboBoxItem Content="1sec" />
+      <ComboBoxItem Content="1.5sec" />
+      <ComboBoxItem Content="2sec" />
+    </ComboBox>
+    <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
+      <Button Name="btnStart" Width="100" Style="{StaticResource MaterialDesignRaisedButton}" Margin="150,0,0,0" Click="btnStart_Click">
+        <StackPanel Orientation="Horizontal">
+          <materialDesign:PackIcon Kind="Restart" Height="25" Width="20" />
+          <TextBlock Text="Run" Margin="5" VerticalAlignment="Center" />
+        </StackPanel>
+      </Button>
+      <Button Name="BtnCancel" Width="100" Style="{StaticResource MaterialDesignRaisedButton}" Margin="100,0,0,0" Click="btnCancel_Click">
+        <StackPanel Orientation="Horizontal">
+          <materialDesign:PackIcon Kind="CancelBoxOutline" Height="25" Width="20" />
+          <TextBlock Text="Cancle" Margin="5" VerticalAlignment="Center" />
+        </StackPanel>
+      </Button>
+    </StackPanel>
+  </Grid>
+</Window>

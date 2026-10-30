@@ -1,0 +1,3 @@
+THEMED HOST 40x22 Text=25
+PASS actual WPF: high25/medium17/low8, every typed2..25, invalid/empty input, refresh/caret settings
+PASS actual WPF: A/B immediate opposite button, queued immutable ROI, B-first and cancellation

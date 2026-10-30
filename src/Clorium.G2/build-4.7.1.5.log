@@ -1,0 +1,82 @@
+
+.NET 10.0을(를) 시작합니다.
+---------------------
+SDK 버전: 10.0.400
+
+----------------
+첫 번째 앱 작성: https://aka.ms/dotnet-hello-world
+새로운 기능 확인: https://aka.ms/dotnet-whats-new
+설명서 살펴보기: https://aka.ms/dotnet-docs
+GitHub에서 문제 보고 및 소스 찾기: https://github.com/dotnet/core
+사용 가능한 명령을 보려면 'dotnet --help'를 사용하거나 https://aka.ms/dotnet-cli를 방문하세요.
+--------------------------------------------------------------------------------------
+msbuild 버전 18.9.6+14fbf8d52(.NET용)
+  복원할 프로젝트를 확인하는 중...
+  C:\Users\user\Documents\ChatGPT\오토사이징\c4715\tools\InteropMetadataRestore\InteropMetadataRestore.csproj을(를) 65밀리초 동안 복원했습니다.
+  InteropMetadataRestore -> C:\Users\user\Documents\ChatGPT\오토사이징\c4715\tools\InteropMetadataRestore\bin\Release\net10.0\InteropMetadataRestore.dll
+  복원할 프로젝트를 확인하는 중...
+  C:\Users\user\Documents\ChatGPT\오토사이징\c4715\tools\WiaMetadataFix\WiaMetadataFix.csproj을(를) 5밀리초 동안 복원했습니다.
+  WiaMetadataFix -> C:\Users\user\Documents\ChatGPT\오토사이징\c4715\tools\WiaMetadataFix\bin\Release\net10.0\WiaMetadataFix.dll
+  복원할 프로젝트를 확인하는 중...
+  C:\Users\user\Documents\ChatGPT\오토사이징\c4715\tools\InitializeDeploymentSettings\InitializeDeploymentSettings.csproj을(를) 1밀리초 동안 복원했습니다.
+  InitializeDeploymentSettings -> C:\Users\user\Documents\ChatGPT\오토사이징\c4715\tools\InitializeDeploymentSettings\bin\Release\net10.0\InitializeDeploymentSettings.dll
+  복원할 프로젝트를 확인하는 중...
+  C:\Users\user\Documents\ChatGPT\오토사이징\c4715\tools\CoreWpfCompatibility\CoreWpfCompatibility.csproj을(를) 1밀리초 동안 복원했습니다.
+  CoreWpfCompatibility -> C:\Users\user\Documents\ChatGPT\오토사이징\c4715\tools\CoreWpfCompatibility\bin\Release\net10.0\CoreWpfCompatibility.dll
+  복원할 프로젝트를 확인하는 중...
+  C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\ZoomAndPan\ZoomAndPan.csproj을(를) 2밀리초 동안 복원했습니다.
+  C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\Clorium.AutoSizing.Installed\autosizing-installed.csproj을(를) 2밀리초 동안 복원했습니다.
+  C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\Canon.Eos.Framework\Canon.Eos.Framework.csproj을(를) 2밀리초 동안 복원했습니다.
+  C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\PortableDeviceLib\PortableDeviceLib.csproj을(를) 2밀리초 동안 복원했습니다.
+  C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\Clorium.AutoSizing.Standalone\Clorium.AutoSizing.csproj을(를) 26밀리초 동안 복원했습니다.
+  C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl.Devices\CameraControl.Devices.csproj을(를) 28밀리초 동안 복원했습니다.
+  C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\Clorium.Centering\centering.csproj을(를) 29밀리초 동안 복원했습니다.
+  C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl\CameraControl.csproj을(를) 28밀리초 동안 복원했습니다.
+  C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl.Plugins\CameraControl.Plugins.csproj을(를) 28밀리초 동안 복원했습니다.
+  C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl.Core\CameraControl.Core.csproj을(를) 28밀리초 동안 복원했습니다.
+  PortableDeviceLib -> C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\PortableDeviceLib\bin\Release\net48\PortableDeviceLib.dll
+  Canon.Eos.Framework -> C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\Canon.Eos.Framework\bin\Release\net48\Canon.Eos.Framework.dll
+C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl.Devices\PanonoTest\PanonoCamera.cs(184,15): warning CS8632: nullable 참조 형식에 대한 주석은 코드에서 '#nullable' 주석 컨텍스트 내에만 사용되어야 합니다. [C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl.Devices\CameraControl.Devices.csproj]
+C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl.Devices\PanonoTest\PanonoCamera.cs(195,15): warning CS8632: nullable 참조 형식에 대한 주석은 코드에서 '#nullable' 주석 컨텍스트 내에만 사용되어야 합니다. [C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl.Devices\CameraControl.Devices.csproj]
+C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl.Devices\CameraControl\Devices\Classes\AsyncObservableCollection.cs(75,13): warning CS8632: nullable 참조 형식에 대한 주석은 코드에서 '#nullable' 주석 컨텍스트 내에만 사용되어야 합니다. [C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl.Devices\CameraControl.Devices.csproj]
+C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl.Devices\CameraControl\Devices\Others\GoProBaseCamera.cs(84,21): warning CS8632: nullable 참조 형식에 대한 주석은 코드에서 '#nullable' 주석 컨텍스트 내에만 사용되어야 합니다. [C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl.Devices\CameraControl.Devices.csproj]
+C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl.Devices\CameraControl\Devices\StaticHelper.cs(215,8): warning CS0219: 'num' 할당되었지만 사용되지 않았습니다. [C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl.Devices\CameraControl.Devices.csproj]
+C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl.Devices\CameraControl\Devices\Others\GoProBaseCamera.cs(163,25): warning CS8632: nullable 참조 형식에 대한 주석은 코드에서 '#nullable' 주석 컨텍스트 내에만 사용되어야 합니다. [C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl.Devices\CameraControl.Devices.csproj]
+C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl.Devices\CameraControl\Devices\Others\GoProBaseCamera.cs(166,29): warning CS8632: nullable 참조 형식에 대한 주석은 코드에서 '#nullable' 주석 컨텍스트 내에만 사용되어야 합니다. [C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl.Devices\CameraControl.Devices.csproj]
+C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl.Devices\CameraControl\Devices\Others\GoPro9Camera.cs(22,42): warning CS8632: nullable 참조 형식에 대한 주석은 코드에서 '#nullable' 주석 컨텍스트 내에만 사용되어야 합니다. [C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl.Devices\CameraControl.Devices.csproj]
+C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl.Devices\CameraControl\Devices\Others\GoPro9Camera.cs(103,23): warning CS8632: nullable 참조 형식에 대한 주석은 코드에서 '#nullable' 주석 컨텍스트 내에만 사용되어야 합니다. [C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl.Devices\CameraControl.Devices.csproj]
+C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl.Devices\CameraControl\Devices\Others\GoPro9Camera.cs(106,27): warning CS8632: nullable 참조 형식에 대한 주석은 코드에서 '#nullable' 주석 컨텍스트 내에만 사용되어야 합니다. [C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl.Devices\CameraControl.Devices.csproj]
+C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl.Devices\CameraControl\Devices\Others\GoProBaseCamera.cs(359,25): warning CS8632: nullable 참조 형식에 대한 주석은 코드에서 '#nullable' 주석 컨텍스트 내에만 사용되어야 합니다. [C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl.Devices\CameraControl.Devices.csproj]
+C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl.Devices\CameraControl\Devices\Others\GoProBaseCamera.cs(362,27): warning CS8632: nullable 참조 형식에 대한 주석은 코드에서 '#nullable' 주석 컨텍스트 내에만 사용되어야 합니다. [C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl.Devices\CameraControl.Devices.csproj]
+C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl.Devices\CameraControl\Devices\Others\GoProBaseCamera.cs(390,18): warning CS8632: nullable 참조 형식에 대한 주석은 코드에서 '#nullable' 주석 컨텍스트 내에만 사용되어야 합니다. [C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl.Devices\CameraControl.Devices.csproj]
+C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl.Devices\CameraControl\Devices\Others\GoProBaseCamera.cs(393,20): warning CS8632: nullable 참조 형식에 대한 주석은 코드에서 '#nullable' 주석 컨텍스트 내에만 사용되어야 합니다. [C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl.Devices\CameraControl.Devices.csproj]
+C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl.Devices\CameraControl\Devices\Nikon\NikonBase.cs(2408,8): warning CS0219: 'flag' 할당되었지만 사용되지 않았습니다. [C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl.Devices\CameraControl.Devices.csproj]
+  CameraControl.Devices -> C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl.Devices\bin\Release\net48\CameraControl.Devices.dll
+C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl.Core\CameraControl\Core\Classes\PhotoSession.cs(710,11): warning CS0219: 'pathname' 할당되었지만 사용되지 않았습니다. [C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl.Core\CameraControl.Core_v2faxffs_wpftmp.csproj]
+C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl.Core\CameraControl\Core\Classes\PhotoSession.cs(890,9): warning CS0219: 'noneSelected' 할당되었지만 사용되지 않았습니다. [C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl.Core\CameraControl.Core_v2faxffs_wpftmp.csproj]
+C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl.Core\CameraControl\Core\Classes\PhotoSession.cs(918,9): warning CS0219: 'noneSelected' 할당되었지만 사용되지 않았습니다. [C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl.Core\CameraControl.Core_v2faxffs_wpftmp.csproj]
+C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl.Core\CameraControl\Core\Classes\PhotoSession.cs(710,11): warning CS0219: 'pathname' 할당되었지만 사용되지 않았습니다. [C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl.Core\CameraControl.Core.csproj]
+C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl.Core\CameraControl\Core\Classes\PhotoSession.cs(890,9): warning CS0219: 'noneSelected' 할당되었지만 사용되지 않았습니다. [C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl.Core\CameraControl.Core.csproj]
+C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl.Core\CameraControl\Core\Classes\PhotoSession.cs(918,9): warning CS0219: 'noneSelected' 할당되었지만 사용되지 않았습니다. [C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl.Core\CameraControl.Core.csproj]
+  CameraControl.Core -> C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl.Core\bin\Release\net48\CameraControl.Core.dll
+  ZoomAndPan -> C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\ZoomAndPan\bin\Release\Editable\net48\ZoomAndPan.dll
+C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl\CameraControl\Layouts\LayoutBase.cs(215,9): warning CS0219: 'delete' 할당되었지만 사용되지 않았습니다. [C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl\CameraControl_fvcxtrhn_wpftmp.csproj]
+C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl\CameraControl\Classes\HttpServerAndroid.cs(84,5): warning CS4014: 이 호출이 대기되지 않으므로 호출이 완료되기 전에 현재 메서드가 계속 실행됩니다. 호출 결과에 'await' 연산자를 적용해 보세요. [C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl\CameraControl_fvcxtrhn_wpftmp.csproj]
+C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl\CameraControl\Classes\HttpServerAndroid.cs(84,5): warning CS4014: 이 호출이 대기되지 않으므로 호출이 완료되기 전에 현재 메서드가 계속 실행됩니다. 호출 결과에 'await' 연산자를 적용해 보세요. [C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl\CameraControl.csproj]
+C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl\CameraControl\Layouts\LayoutBase.cs(215,9): warning CS0219: 'delete' 할당되었지만 사용되지 않았습니다. [C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl\CameraControl.csproj]
+  CameraControl -> C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl\bin\Release\net48\CameraControl.exe
+  CameraControl.Plugins -> C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\CameraControl.Plugins\bin\Release\net48\CameraControl.Plugins.dll
+C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\Clorium.AutoSizing.Installed\CloriumAutoSizing\Form2.Designer.cs(14,28): warning CS0649: 'Form2.components' 필드에는 할당되지 않으므로 항상 null 기본값을 사용합니다. [C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\Clorium.AutoSizing.Installed\autosizing-installed.csproj]
+C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\Clorium.AutoSizing.Installed\CloriumAutoSizing\Form4.Designer.cs(16,28): warning CS0649: 'Form4.components' 필드에는 할당되지 않으므로 항상 null 기본값을 사용합니다. [C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\Clorium.AutoSizing.Installed\autosizing-installed.csproj]
+C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\Clorium.AutoSizing.Installed\CloriumAutoSizing\Form3.Designer.cs(12,28): warning CS0649: 'Form3.components' 필드에는 할당되지 않으므로 항상 null 기본값을 사용합니다. [C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\Clorium.AutoSizing.Installed\autosizing-installed.csproj]
+  autosizing-installed -> C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\Clorium.AutoSizing.Installed\bin\Release\net472\Clorium AutoSizing.exe
+C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\Clorium.AutoSizing.Standalone\CloriumAutoSizing\Form2.Designer.cs(14,28): warning CS0649: 'Form2.components' 필드에는 할당되지 않으므로 항상 null 기본값을 사용합니다. [C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\Clorium.AutoSizing.Standalone\Clorium.AutoSizing.csproj]
+C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\Clorium.AutoSizing.Standalone\CloriumAutoSizing\Form4.Designer.cs(16,28): warning CS0649: 'Form4.components' 필드에는 할당되지 않으므로 항상 null 기본값을 사용합니다. [C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\Clorium.AutoSizing.Standalone\Clorium.AutoSizing.csproj]
+C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\Clorium.AutoSizing.Standalone\CloriumAutoSizing\Form3.Designer.cs(12,28): warning CS0649: 'Form3.components' 필드에는 할당되지 않으므로 항상 null 기본값을 사용합니다. [C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\Clorium.AutoSizing.Standalone\Clorium.AutoSizing.csproj]
+  Clorium.AutoSizing -> C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\Clorium.AutoSizing.Standalone\bin\Release\net472\Clorium AutoSizing.exe
+  centering -> C:\Users\user\Documents\ChatGPT\오토사이징\c4715\projects\Clorium.Centering\bin\Release\Editable\net48\Clorium Centering.exe
+  Core WPF helper preserved; all non-helper method IL unchanged.
+  WIA metadata compatibility pass applied
+  Restored interop types=10, methods=12; non-WMPLib IL unchanged
+  Verified interop types=10, methods=12
+  Source solution built. WMPLib/WIA metadata restored in build-output/installed. No product was executed.

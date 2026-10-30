@@ -1,0 +1,17 @@
+.local/
+**/.local/
+**/bin/
+**/obj/
+**/.build-home/
+preview/preview-error.txt
+
+# Agent tooling upgrade backups (not product source; may contain local config)
+.abbys-upgrade-*/
+
+# GitHub: source-centred repository (2026-10-31). Kept locally only:
+# untouched 4.7.1.5 baseline, ModeVid reverse-engineering material (third-party binaries),
+# packaged deliveries and design-preview ZIPs.
+/baseline/
+/research/
+/delivery/
+/Clorium_G2_*.zip

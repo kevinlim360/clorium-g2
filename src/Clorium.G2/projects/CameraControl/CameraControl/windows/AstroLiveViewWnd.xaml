@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Window x:Class="CameraControl.windows.AstroLiveViewWnd" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro" xmlns:T="clr-namespace:CameraControl.Core.Translation;assembly=CameraControl.Core" xmlns:viewModel="clr-namespace:CameraControl.ViewModel" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" Title="AstroLiveViewWnd" Height="455" Width="634" TextElement.Foreground="{DynamicResource MaterialDesignBody}" TextElement.FontWeight="Regular" TextElement.FontSize="13" TextOptions.TextFormattingMode="Ideal" TextOptions.TextRenderingMode="Auto" Background="{DynamicResource MaterialDesignPaper}" FontFamily="{DynamicResource MaterialDesignFont}" xmlns:windows="clr-namespace:CameraControl.windows" Closing="MetroWindow_Closing">
+  <FrameworkElement.DataContext>
+    <viewModel:AstroLiveViewViewModel />
+  </FrameworkElement.DataContext>
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="438*" />
+      <ColumnDefinition Width="5" />
+      <ColumnDefinition Width="175" />
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="*" />
+      <RowDefinition Height="AUto" />
+    </Grid.RowDefinitions>
+    <GridSplitter Grid.Column="1" Grid.RowSpan="2" HorizontalAlignment="Stretch" />
+    <Image Name="live_view_image" Stretch="Uniform" Margin="10" Source="{Binding Bitmap}" MouseDown="live_view_image_MouseDown" />
+    <StackPanel VerticalAlignment="Bottom" Height="45" HorizontalAlignment="Center" Margin="70,0" Orientation="Horizontal" Background="#35000000" IsEnabled="{Binding FocusingEnabled}">
+      <Button Margin="1" Width="40" Content="&lt;&lt;&lt;" FontWeight="Bold" ToolTip="-500" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding FocusMMMCommand}" />
+      <Button Margin="1" Width="40" Content="&lt;&lt;" FontWeight="Bold" ToolTip="-100" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding FocusMMCommand}" />
+      <Button Margin="1" Width="40" Content="&lt;" FontWeight="Bold" ToolTip="-10" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding FocusMCommand}" />
+      <Button Margin="1" Width="40" Content="&gt;" FontWeight="Bold" ToolTip="10" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding FocusPCommand}" />
+      <Button Margin="1" Width="40" Content="&gt;&gt;" FontWeight="Bold" ToolTip="100" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding FocusPPCommand}" />
+      <Button Margin="1" Width="40" Content="&gt;&gt;&gt;" FontWeight="Bold" ToolTip="500" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding FocusPPPCommand}" />
+      <ToggleButton Height="40" Width="40" Margin="0" Style="{DynamicResource MetroCircleToggleButtonStyle}" ToolTip="{T:Translate LabelEdgeDetection}" IsChecked="{Binding EdgeDetection}">
+        <materialDesign:PackIcon Kind="Contrast" Height="35" Width="35" />
+      </ToggleButton>
+    </StackPanel>
+    <GroupBox Name="groupBox1" Grid.Row="1" Header="Camera">
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="1*" />
+          <ColumnDefinition Width="1*" />
+          <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Button Margin="2" Content="{T:Translate LabelStartLiveView}" Command="{Binding StartLiveViewCommand}" />
+        <Button Grid.Row="0" Grid.Column="1" Margin="2" Content="{T:Translate LabelStopLiveView}" Command="{Binding StopLiveViewCommand}" />
+      </Grid>
+    </GroupBox>
+    <StackPanel Grid.Column="2" Margin="2" Grid.RowSpan="2">
+      <Label Padding="1" Content="{T:Translate LabelBrightness}" />
+      <Slider Minimum="-255" Maximum="255" Margin="4" Value="{Binding Brightness}" />
+      <Label Padding="1" Content="{T:Translate LabelContrast}" />
+      <Slider Minimum="-127" Maximum="127" Margin="4" Value="{Binding Contrast}" />
+      <Label Content="Zoom X" Padding="1" />
+      <Slider Minimum="1" Maximum="15" Margin="4" Value="{Binding ZoomFactor}" />
+      <Label Content="Star window size" Padding="1" />
+      <Slider Minimum="5" Maximum="45" Margin="4" Value="{Binding StarWindowSize}" />
+      <Label Content="Average image count" Padding="1" />
+      <Slider Minimum="0" Maximum="5" Margin="4" Value="{Binding AverageCount}" />
+      <StackPanel Orientation="Horizontal">
+        <Label HorizontalAlignment="Right" Content="{T:Translate LabelLvZoomRation}" />
+        <ComboBox Margin="4" IsEnabled="{Binding Path=CameraDevice.LiveViewImageZoomRatio.IsEnabled}" ItemsSource="{Binding Path=CameraDevice.LiveViewImageZoomRatio.Values}" SelectedItem="{Binding CameraDevice.LiveViewImageZoomRatio.Value}" />
+      </StackPanel>
+      <StackPanel Orientation="Horizontal">
+        <Label HorizontalAlignment="Right" Content="{T:Translate ButtonFreezeImage}" />
+        <ToggleButton Margin="4" IsChecked="{Binding Path=FreezeImage}" />
+      </StackPanel>
+      <StackPanel Orientation="Horizontal">
+        <Label Content="Star Size" HorizontalContentAlignment="Center" FontSize="20" />
+        <Label HorizontalContentAlignment="Center" FontSize="20" Content="{Binding StringFormat='{}{0.FN}', Path=DisplayStarSize}" />
+      </StackPanel>
+      <Image Stretch="Uniform" HorizontalAlignment="Center" Height="80" Margin="4" Source="{Binding StarWindow}" />
+      <Image Name="img_preview" Stretch="Uniform" Margin="4" Source="{Binding Preview}" MouseDown="img_preview_MouseDown" />
+    </StackPanel>
+  </Grid>
+</Window>

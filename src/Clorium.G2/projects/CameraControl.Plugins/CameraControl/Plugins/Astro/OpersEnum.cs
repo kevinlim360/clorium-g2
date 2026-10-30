@@ -1,0 +1,18 @@
+namespace CameraControl.Plugins.Astro;
+
+public enum OpersEnum
+{
+	MSG_PAUSE = 1,
+	MSG_RESUME,
+	MSG_MOVE1,
+	MSG_MOVE2,
+	MSG_MOVE3,
+	MSG_IMAGE,
+	MSG_GUIDE,
+	MSG_CAMCONNECT,
+	MSG_CAMDISCONNECT,
+	MSG_REQDIST,
+	MSG_REQFRAME,
+	MSG_MOVE4,
+	MSG_MOVE5
+}

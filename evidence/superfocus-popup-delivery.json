@@ -1,0 +1,51 @@
+{
+  "date": "2026-10-28",
+  "status": "Staged and running isolated development runtime",
+  "application": ".local/g2-runtime/CameraControl.exe",
+  "build": "0 errors; 4 existing warnings",
+  "regression": "17 groups PASS",
+  "legacy": "19 guards PASS; capture logic unchanged by final arrow font adjustment",
+  "postprocess": "WPF/WIA/WMPLib PASS",
+  "maintenance": "PASS isolated runtime guard",
+  "independentReview": false,
+  "ui": "Native live view launcher only before selection. Compact popup; title-bar drag passed. Tooltip white small text box observed. Hide/reopen preserved location and A/B. Arrow clipping corrected to font10 and visually verified in final candidate.",
+  "boxRegistration": "EOS R RF24-105: B far blind first, then move focus box to near vase and A second; B retained, both saved; high124, medium83, low41; A-to-B current start. This was the candidate before arrow-font-only adjustment.",
+  "captures": [
+    {
+      "direction": "B to A",
+      "cuts": 2,
+      "result": "2 JPEG and PNG fully decoded at 6720x4480",
+      "range": "manual A0 B5, currentB, low2",
+      "folder": "20261028_171944_1ce6fdd9"
+    },
+    {
+      "direction": "A to B",
+      "cuts": 2,
+      "result": "2 JPEG and PNG fully decoded at 6720x4480",
+      "range": "same anchors; no extra return; currentA",
+      "folder": "20261028_172028_28fd8e8f"
+    }
+  ],
+  "timeOptimization": "Start closest current endpoint; skip initial settle when already at endpoint. Retain postmove stabilization, small-step tracking and awaited original download.",
+  "leftRunning": "Final candidate live view and compact popup open. Test anchors cleared, box AF on, Medium restored. User must mark their subject endpoints.",
+  "limits": "Two-cut device checks verify sequence/download/merge, not whole-scene optical sharpness; people moved in background. Prior optical evidence remains separate. RF24-240 untested.",
+  "modules": [
+    {
+      "file": "CameraControl.exe",
+      "sha256": "819cb35cbb0c6beb9613435b4e00b19f3f30465dcdfb0d055b667b1858a5d6f3"
+    },
+    {
+      "file": "CameraControl.Core.dll",
+      "sha256": "230df557b2a693e292ee4b418e6a7315caee4092a46f6167c852c8ca6d1c6fa0"
+    },
+    {
+      "file": "CameraControl.Devices.dll",
+      "sha256": "3be30247f5d5dfc9f88e5482664671c7df1fc0debd15b62892e227333712288a"
+    },
+    {
+      "file": "Canon.Eos.Framework.dll",
+      "sha256": "a931b94d8631b341c01ee3c2f3b07997855032687cfc5242be780bb2544f13d2"
+    }
+  ],
+  "filesEvidence": "evidence/superfocus-popup-files.json"
+}

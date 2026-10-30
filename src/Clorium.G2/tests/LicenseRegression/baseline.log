@@ -1,0 +1,3 @@
+REPRODUCED: matching MAC license ignored when BIOS valid: True
+CONTROL: matching BIOS and configured key accepted
+REPRODUCED: missing launch environment rejects valid license: True

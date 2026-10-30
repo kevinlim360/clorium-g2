@@ -1,0 +1,26 @@
+// WPF와 WinForms를 함께 사용하는 원본 플러그인의 타입 이름을 명확히 고정합니다.
+global using Control = System.Windows.Controls.Control;
+global using RotateTransform = CameraControl.Plugins.ImageTransformPlugins.RotateTransform;
+global using HelpProvider = CameraControl.Core.Classes.HelpProvider;
+global using Size = System.Windows.Size;
+global using FontFamily = System.Windows.Media.FontFamily;
+global using Application = System.Windows.Application;
+global using FileDialog = Microsoft.Win32.FileDialog;
+global using MessageBox = System.Windows.MessageBox;
+global using ButtonBase = System.Windows.Controls.Primitives.ButtonBase;
+global using Color = System.Drawing.Color;
+global using CommonDialog = Microsoft.Win32.CommonDialog;
+global using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
+global using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
+global using Point = System.Windows.Point;
+global using ColorConverter = System.Windows.Media.ColorConverter;
+global using MouseEventArgs = System.Windows.Input.MouseEventArgs;
+global using Panel = System.Windows.Controls.Panel;
+global using UserControl = System.Windows.Controls.UserControl;
+global using Button = System.Windows.Controls.Button;
+global using ComboBox = System.Windows.Controls.ComboBox;
+global using Label = System.Windows.Controls.Label;
+global using CheckBox = System.Windows.Controls.CheckBox;
+global using PrintDialog = System.Windows.Controls.PrintDialog;
+global using TextBox = System.Windows.Controls.TextBox;
+global using Image = System.Windows.Controls.Image;

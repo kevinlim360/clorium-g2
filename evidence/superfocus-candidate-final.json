@@ -1,0 +1,18 @@
+[
+  {
+    "sha256": "a117a9eece0ac73a02d9a2b6babfd88b1b499481b77e7aef6d5625abe4d9ed1c",
+    "name": "CameraControl.exe"
+  },
+  {
+    "sha256": "09ff2211ec6c1ebc2f2927d4cd38c7f17850351ffb2ff9302eb1be18d9c4d344",
+    "name": "CameraControl.Core.dll"
+  },
+  {
+    "sha256": "3be30247f5d5dfc9f88e5482664671c7df1fc0debd15b62892e227333712288a",
+    "name": "CameraControl.Devices.dll"
+  },
+  {
+    "sha256": "a931b94d8631b341c01ee3c2f3b07997855032687cfc5242be780bb2544f13d2",
+    "name": "Canon.Eos.Framework.dll"
+  }
+]

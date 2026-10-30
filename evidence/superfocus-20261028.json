@@ -1,0 +1,344 @@
+{
+  "date": "2026-10-28",
+  "device": "Canon EOS R",
+  "lens": "RF24-105mm F4 L IS USM",
+  "focalLengthMm": 24,
+  "aperture": 7.1,
+  "shutter": "1/60",
+  "iso": 1000,
+  "dimensions": [
+    6720,
+    4480
+  ],
+  "application": ".local/g2-runtime/CameraControl.exe",
+  "source": "src/Clorium.G2",
+  "build": "Release x64 net48",
+  "tests": [
+    {
+      "direction": "Far",
+      "result": "captured-download-composed",
+      "folder": "D:\\CloriumImages2\\2026년10월\\27일\\test\\Superfocus\\20261028_094423_248b87d1",
+      "files": [
+        {
+          "name": "0001_304dd701ddc045a1b73f506a571c6490.JPG",
+          "bytes": 7061691,
+          "sha256": "0b54390e57c95299945b06bfb64c55207608dd1528bfaa83ac4c4c300a489d77"
+        },
+        {
+          "name": "0002_c27367a40b8740a887cf7b168c79cca2.JPG",
+          "bytes": 7040897,
+          "sha256": "0bc627fbc645d86ee0f39fdc186c65cd9eb5e34a35352fc8d8582bccb1cafd47"
+        },
+        {
+          "name": "Superfocus.png",
+          "bytes": 24503903,
+          "sha256": "41cd3750c6f283394fc9c223502848ed08dd19286ddadee91fa14e5d3e44c117"
+        }
+      ],
+      "requested": 2,
+      "id": "20261028_094423_248b87d1",
+      "amount": "Small"
+    },
+    {
+      "direction": "Near",
+      "result": "captured-download-composed",
+      "folder": "D:\\CloriumImages2\\2026년10월\\27일\\test\\Superfocus\\20261028_094620_ea56fd46",
+      "files": [
+        {
+          "name": "0001_e5b2a558d3654344a7997cc7df046733.JPG",
+          "bytes": 7045124,
+          "sha256": "5f589247faa84b564a6f2febf986a0ecb99572971577a92233e7883bba47b603"
+        },
+        {
+          "name": "0002_092462e8a3294bc7baadb78445513c59.JPG",
+          "bytes": 7063735,
+          "sha256": "138e6de017bd3108c4d74f2e6867b91b474b40b01334b039b00a18b212f5c822"
+        },
+        {
+          "name": "0003_21237cfc26f441c6bcc8d20ac2ecac7b.JPG",
+          "bytes": 7063536,
+          "sha256": "8c4508442a16b23ad7b92a864719f0e06534d46e82b5af0ae347325a23f38d40"
+        },
+        {
+          "name": "0004_7eec66b58a52471aaa2c13f48f645cf3.JPG",
+          "bytes": 7056487,
+          "sha256": "98e153c336fa412cae74622201ba5e1fa3ed9f6e9c1e87c903d0e69a80b06052"
+        },
+        {
+          "name": "0005_f1a405eccb8641b988ff59e036e99b90.JPG",
+          "bytes": 7112550,
+          "sha256": "b76bb8a6b9b552a14db39f76f08be0fb1dd1cf365c216cfd1fc4d6b7ba60b68b"
+        },
+        {
+          "name": "0006_c8776f5af61f4bf28111840e5bd71fcf.JPG",
+          "bytes": 7086821,
+          "sha256": "ed0a495013aa982047c91488bedf6be52511402bba0eb91b48b96ae5f68c8e26"
+        },
+        {
+          "name": "Superfocus.png",
+          "bytes": 27890691,
+          "sha256": "6ad233262990bbfa280b4eca8435985a826171ecf98f4dea1a94c60c9ef0db36"
+        }
+      ],
+      "requested": 6,
+      "id": "20261028_094620_ea56fd46",
+      "amount": "Medium"
+    },
+    {
+      "direction": "Near",
+      "result": "cancelled-4-originals-no-composite",
+      "folder": "D:\\CloriumImages2\\2026년10월\\27일\\test\\Superfocus\\20261028_094754_3599fba8",
+      "files": [
+        {
+          "name": "0001_e067035accce41d9bae225501317b272.JPG",
+          "bytes": 7126194,
+          "sha256": "b67cf8274f6d5d74982e5dd52c32a5e030e7a70a1a9897bb642fc8ace45c0a07"
+        },
+        {
+          "name": "0002_09214b1731da48908fcb746493739379.JPG",
+          "bytes": 7024000,
+          "sha256": "1ae19c3dc13a5bf675af2814b384ec2e7e7837eb9a2e888b2e51e7466f6afb31"
+        },
+        {
+          "name": "0003_7fcbf47ae6cb4591b1a63d2662c10bf3.JPG",
+          "bytes": 7089610,
+          "sha256": "cc7e18e8ca95f03b0a967298635097c2723943b6b9b15ba24f3e55305964c2e7"
+        },
+        {
+          "name": "0004_98489373b5a046758ae0a44bb767167b.JPG",
+          "bytes": 7046428,
+          "sha256": "d484b9df64fc7ce7e5fa74eae6420092c0aee6f04ed9f5d5f69902dfa72fc603"
+        }
+      ],
+      "requested": 6,
+      "id": "20261028_094754_3599fba8",
+      "amount": "Medium"
+    },
+    {
+      "id": "20261028_095329_9d06e81f",
+      "requested": 8,
+      "direction": "Far",
+      "amount": "Large",
+      "result": "FAILED download at frame 3; two complete JPEGs and one 2097152-byte truncated partial retained; no composition",
+      "folder": "D:/CloriumImages2/2026년10월/27일/test/Superfocus/20261028_095329_9d06e81f",
+      "candidate": {
+        "core": "5c1c096a5357cb992ee7e2f4eec18c83c1d3ac6e26103fa062ec771bb8eaba67",
+        "main": "859789b73fc8de80f657d200f776da7a5aade702aeb4f8275462da7382513a7f",
+        "devices": "65e444c1c7e7ef2cb259a2fb54de87f331f2d4266cd6fb00fc767bc05a5f548e"
+      },
+      "error": "Unexpected exception while downloading; underlying exception not logged in this candidate",
+      "hypothesis": "Native progress callback delegate lifetime is not rooted after SDK registration. Added explicit lifetime and error logging; retest pending.",
+      "files": [
+        {
+          "sha256": "d4166f7a45a7edaa3efdeb218b4791ded9ace08de86db3c10be0046a7798cc4a",
+          "bytes": 7684022,
+          "name": "0001_6c4b6c3d235a4f6896abe2d23902cd73.JPG"
+        },
+        {
+          "sha256": "30a22b5e67b9a23754da9ac22ede6ab1895ef7c15d122ba44e6bdde7fcca72cd",
+          "bytes": 7096763,
+          "name": "0002_515b758ba11c45249886c37364b1d25e.JPG"
+        },
+        {
+          "sha256": "397d5d1d5adde4416d2e50da85ef81d883715c934906b3ba6eb638b0e067c50e",
+          "bytes": 2097152,
+          "name": "0003_0fcffaa893bb4436aebf2f5127a788f9.JPG"
+        }
+      ]
+    },
+    {
+      "id": "20261028_101742_a3141440",
+      "requested": 8,
+      "direction": "Far",
+      "amount": "Large",
+      "settleMs": 700,
+      "result": "Capture/download/compose PASS; focus-range acceptance FAILED (no meaningful depth change in originals)",
+      "folder": "D:/CloriumImages2/2026년10월/27일/test/Superfocus/20261028_101742_a3141440",
+      "candidate": "superfocus-candidate-final.json",
+      "originalJpegIntegrity": "8/8 fully decoded with Pillow; 6720x4480",
+      "outputIntegrity": "PNG fully decoded; 6720x4480",
+      "observedFocus": "Near subject remains sharp and background remains blurred across all 8 originals",
+      "sharpnessDiagnostic": {
+        "farRoi": [
+          4500,
+          1600,
+          5300,
+          2400
+        ],
+        "farRange": [
+          12.78,
+          13.03
+        ],
+        "method": "Unregistered grayscale Laplacian variance, diagnostic only, no acceptance threshold",
+        "nearRoi": [
+          1400,
+          1500,
+          2400,
+          2800
+        ],
+        "nearRange": [
+          44.26,
+          49.99
+        ]
+      },
+      "files": [
+        {
+          "name": "0001_c58594faf80a4f86ba3e274aea75e121.JPG",
+          "bytes": 7654366,
+          "sha256": "d7dd76751d8db30d06afe657f9a7afacd7aa4846c2b064756c4c558fec0fb473"
+        },
+        {
+          "name": "0002_88a8932f0bee4569b859159b06440126.JPG",
+          "bytes": 7622551,
+          "sha256": "4c08b2488aecf6a867dee53783446f781b32e2ca050eb5edd1aaa3cfd2db75f3"
+        },
+        {
+          "name": "0003_09a69a0a3def45bf909cd83e5bc618c8.JPG",
+          "bytes": 7605363,
+          "sha256": "f6550e83cb8444b0d4077dc03617d806539e75c0cfd9873bd6f10b14093dc841"
+        },
+        {
+          "name": "0004_a4cd73beb7d04fa6bbccf77a4b7d96a6.JPG",
+          "bytes": 7604625,
+          "sha256": "87c5f2d0e3ba12abb0e16a5040cff9d22c1df73aa763ad6b29ffa383c3545be9"
+        },
+        {
+          "name": "0005_2a844f59016f4031a893825dfd95f47e.JPG",
+          "bytes": 7624820,
+          "sha256": "be7d553db3a39843d8405e60ee9b7b3cc4ad8d37973c9ce0cae1c2196f350f59"
+        },
+        {
+          "name": "0006_98325f2cdb7143088356fe9b2fb23871.JPG",
+          "bytes": 7575123,
+          "sha256": "c2c6c2d7f1829ca177288d09251256eaa62e58b987ecd5095b0494ecbc2f7550"
+        },
+        {
+          "name": "0007_a2b635be103f444bb2d510dca9467547.JPG",
+          "bytes": 7603531,
+          "sha256": "09ccff924b4046c38c2ce5eed68949b67f75934ea6f4ed436162777a96e57f22"
+        },
+        {
+          "name": "0008_0e2bd399035e4604b259746805573221.JPG",
+          "bytes": 7615375,
+          "sha256": "d8ced096568d31a359502c677bc81d4435cfffa3e3eb91a60f2fd2923990eb5c"
+        },
+        {
+          "name": "Superfocus.png",
+          "bytes": 30028955,
+          "sha256": "24084e35642b1691b38bc05be5f5c682b6c997968905cadabebbff562d416d60"
+        }
+      ]
+    },
+    {
+      "id": "20261028_103543_093cb227",
+      "requested": 8,
+      "direction": "Far",
+      "amount": "Large",
+      "settleMs": 700,
+      "bodyContinuousAf": "User confirmed ON and disabled it before this run",
+      "lensSwitch": "AF per requested preparation",
+      "candidate": "superfocus-candidate-final.json",
+      "result": "PASS actual focus variation, 8 JPEG downloads, complete PNG composition",
+      "scope": "Functional proof on EOS R + RF24-105 F4L at 24mm; not universal image-quality acceptance",
+      "dimensions": [
+        6720,
+        4480
+      ],
+      "nearScores": [
+        46.97,
+        10.54,
+        13.97,
+        8.24,
+        8.01,
+        8.05,
+        7.95,
+        8.03
+      ],
+      "farScores": [
+        13.08,
+        17.59,
+        105.42,
+        50.03,
+        18.83,
+        18.56,
+        18.82,
+        18.85
+      ],
+      "compositeScores": {
+        "near": 33.87,
+        "far": 78.01
+      },
+      "notes": [
+        "All 8 JPEGs and output PNG fully decoded with Pillow.",
+        "Near vase is sharp in frame 1; far background detail is sharp in frame 3; both represented in composite.",
+        "Frames 5-8 are beyond useful focus range in this scene; future shot count/step tuning required.",
+        "Transfer failure did not recur in two completed 8-frame runs after repair; exact original inner exception was not captured."
+      ],
+      "folder": "D:/CloriumImages2/2026년10월/27일/test/Superfocus/20261028_103543_093cb227",
+      "files": [
+        {
+          "name": "0001_eaf777ccc4974e6fb4dee1f9d84d43fd.JPG",
+          "bytes": 7648575,
+          "sha256": "6e5e2d43d2054a045ddc7f2ca2793bcbb3dd809935ed052e4cd0cf5a4a8e91d0"
+        },
+        {
+          "name": "0002_a9b80bb034cf4ac4ba31e16370cbb8a1.JPG",
+          "bytes": 7082337,
+          "sha256": "4888ecbccab829f020026d32d368e6d795d3f60b7d302370628faca5551832fc"
+        },
+        {
+          "name": "0003_ccc4c018190745569584c74f5f01c698.JPG",
+          "bytes": 7413446,
+          "sha256": "28c3ee0de664192fa1c3812a41be1db08344cf00d846754adb518f9b454e2b57"
+        },
+        {
+          "name": "0004_8e5e0a831f1f4e6b8dd872cbc25527e5.JPG",
+          "bytes": 6842185,
+          "sha256": "e38672219af02578cce62add9a985c830a4e500fd42dc18810fc158b4f44f3a5"
+        },
+        {
+          "name": "0005_23b56354d2404759870ec6994d37d241.JPG",
+          "bytes": 6736677,
+          "sha256": "5d9583243028ab2c4dd41dc4e4db71779b8f9d783b4963cf38e41d29680a0099"
+        },
+        {
+          "name": "0006_f2248144e11d4efd8b5802cd6a0fef54.JPG",
+          "bytes": 6736718,
+          "sha256": "cfa6aa978ac44dbfe92aa03c277f34d756ca56846a096a93972f6fd7304e0b42"
+        },
+        {
+          "name": "0007_569fc59597e945bfb4b3837906e3224b.JPG",
+          "bytes": 6734124,
+          "sha256": "dfb72938a630cbba73c3caee13bcfd8a103076d7a3ab290b640bb68819489423"
+        },
+        {
+          "name": "0008_b524dbb71cf14cb482a715a1a90ad4ab.JPG",
+          "bytes": 6740993,
+          "sha256": "a42caf24f8bb993bd4a4b16a3fff8592289183b8768a0ea2bf1d16a1a90ab0ec"
+        },
+        {
+          "name": "Superfocus.png",
+          "bytes": 28037431,
+          "sha256": "d483eab35864b9d7a73a4a359eec39179a3ae8a487bf4f2c4768ea2a72b289bb"
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Tested capture candidate preceded progress-text formatting and disconnect-event additions; final candidate retest pending.",
+    "Near subject remained outside sampled focus range; full-depth sharpness/halo/colour acceptance pending.",
+    "RF24-240mm not yet tested.",
+    "Movie integration not yet implemented.",
+    "No independent review performed."
+  ],
+  "currentState": {
+    "candidate": "superfocus-candidate-final.json",
+    "build": "Release x64 net48, 25 warnings, 0 errors; WPF/WIA/WMPLib postprocessing passed",
+    "legacyRegression": "19 checks passed on current raw .NET Framework assemblies",
+    "sequenceRegression": "8 groups passed, source unchanged since last run",
+    "hardware": "Continuous AF disabled by user; actual focus movement and near/far composite verified on RF24-105mm",
+    "currentCandidateHardwareAcceptance": "PASS bounded functional capture/download/focus/compose test. Broader image quality and RF24-240 not accepted.",
+    "rootCause": "Same binary/settings produced real focus variation after body Continuous AF was disabled; prior body AF interfered with the sweep. Earlier download inner exception remains unconfirmed.",
+    "userScope": "RF24-105mm only for current hardware tests"
+  }
+}

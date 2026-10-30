@@ -1,0 +1,45 @@
+PASS: legacy original update exact payload
+PASS: legacy original preserves unrelated settings and license
+PASS: legacy original backup exact originals
+PASS: legacy original idempotent reapply
+PASS: legacy original rollback restores original hashes and missing PDBs
+PASS: Oct19 4.7.1.4 update exact payload
+PASS: Oct19 4.7.1.4 preserves unrelated settings and license
+PASS: Oct19 4.7.1.4 backup exact originals
+PASS: Oct19 4.7.1.4 idempotent reapply
+PASS: Oct19 4.7.1.4 rollback restores original hashes and missing PDBs
+PASS: Oct22 4.7.1.4 update exact payload
+PASS: Oct22 4.7.1.4 preserves unrelated settings and license
+PASS: Oct22 4.7.1.4 backup exact originals
+PASS: Oct22 4.7.1.4 idempotent reapply
+PASS: Oct22 4.7.1.4 rollback restores original hashes and missing PDBs
+PASS: Oct23 license 4.7.1.4 update exact payload
+PASS: Oct23 license 4.7.1.4 preserves unrelated settings and license
+PASS: Oct23 license 4.7.1.4 backup exact originals
+PASS: Oct23 license 4.7.1.4 idempotent reapply
+PASS: Oct23 license 4.7.1.4 rollback restores original hashes and missing PDBs
+PASS: missing installed AutoSizing rejected
+PASS: locked AutoSizing rejected before replacing main
+PASS: locked AutoSizing leaves all six files unchanged
+PASS: memory-mapped image updated by atomic replacement
+PASS: memory-mapped update rollback exact originals
+PASS: atomic update leaves no staging files
+PASS: locked target rejected
+PASS: locked target leaves every file unchanged
+PASS: unknown same-version build rejected
+PASS: unknown build preserved
+PASS: mixed product file versions rejected
+PASS: missing product rejected
+PASS: drive root rejected
+PASS: corrupt backup rejected
+PASS: corrupt backup rejection preserves current release
+PASS: rollback refuses changed subsequent release
+PASS: foreign backup folder rejected
+PASS: backup path traversal rejected
+PASS: path traversal rejection preserves current release
+PASS: corrupted embedded payload rejected before installation
+PASS: Windows form has update and rollback buttons
+PASS: Windows form defaults to existing Clorium install path
+PASS: delivered EXE requests Windows administrator elevation
+PASS: delivered EXE version 4.7.1.4
+WINDOWS_UPDATER_CHECKS_PASSED=44

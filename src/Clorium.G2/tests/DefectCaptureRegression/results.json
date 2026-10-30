@@ -1,0 +1,608 @@
+{
+  "scope": "Exact current production method bodies, fake camera/dialogs/lighting; front/back signatures adapted async void to Task. File I/O uses synthetic payloads, not JPEG encoding.",
+  "tests": 84,
+  "passed": 84,
+  "failed": 0,
+  "results": [
+    {
+      "test": "suffix matrix mode=0, defect=False, background=False",
+      "passed": true,
+      "details": {
+        "name": "M1_12345678_002.jpg"
+      }
+    },
+    {
+      "test": "suffix matrix mode=0, defect=False, background=True",
+      "passed": true,
+      "details": {
+        "name": "M1_12345678_002_BG.jpg"
+      }
+    },
+    {
+      "test": "suffix matrix mode=0, defect=True, background=False",
+      "passed": true,
+      "details": {
+        "name": "M1_12345678_002_D.jpg"
+      }
+    },
+    {
+      "test": "suffix matrix mode=0, defect=True, background=True",
+      "passed": true,
+      "details": {
+        "name": "M1_12345678_002_D.jpg"
+      }
+    },
+    {
+      "test": "suffix matrix mode=1, defect=False, background=False",
+      "passed": true,
+      "details": {
+        "name": "M1_12345678_002_F.jpg"
+      }
+    },
+    {
+      "test": "suffix matrix mode=1, defect=False, background=True",
+      "passed": true,
+      "details": {
+        "name": "M1_12345678_002_F.jpg"
+      }
+    },
+    {
+      "test": "suffix matrix mode=1, defect=True, background=False",
+      "passed": true,
+      "details": {
+        "name": "M1_12345678_002_D.jpg"
+      }
+    },
+    {
+      "test": "suffix matrix mode=1, defect=True, background=True",
+      "passed": true,
+      "details": {
+        "name": "M1_12345678_002_D.jpg"
+      }
+    },
+    {
+      "test": "suffix matrix mode=2, defect=False, background=False",
+      "passed": true,
+      "details": {
+        "name": "M1_12345678_002_B.jpg"
+      }
+    },
+    {
+      "test": "suffix matrix mode=2, defect=False, background=True",
+      "passed": true,
+      "details": {
+        "name": "M1_12345678_002_B.jpg"
+      }
+    },
+    {
+      "test": "suffix matrix mode=2, defect=True, background=False",
+      "passed": true,
+      "details": {
+        "name": "M1_12345678_002_D.jpg"
+      }
+    },
+    {
+      "test": "suffix matrix mode=2, defect=True, background=True",
+      "passed": true,
+      "details": {
+        "name": "M1_12345678_002_D.jpg"
+      }
+    },
+    {
+      "test": "normal front",
+      "passed": true,
+      "details": {
+        "LastName": "C:\\Users\\user\\AppData\\Local\\Packages\\sandbox.{67c93896-5380-4d71-8c58-5b8534f8bf71}\\AC\\Temp\\Clorium2161-da2f2bbe3b6d4c62905c10a0054bd3b6\\M1_12345678\\M1_12345678_002_F.jpg"
+      }
+    },
+    {
+      "test": "front completion marker",
+      "passed": true,
+      "details": {
+        "IsMusinsaFrontOK": true
+      }
+    },
+    {
+      "test": "front creates measurement intent",
+      "passed": true,
+      "details": {
+        "state": "1/False/True/False"
+      }
+    },
+    {
+      "test": "normal completion clears purpose",
+      "passed": true,
+      "details": {
+        "FrontBackMode": 0
+      }
+    },
+    {
+      "test": "defect after normal front",
+      "passed": true,
+      "details": {
+        "LastName": "C:\\Users\\user\\AppData\\Local\\Packages\\sandbox.{67c93896-5380-4d71-8c58-5b8534f8bf71}\\AC\\Temp\\Clorium2161-da2f2bbe3b6d4c62905c10a0054bd3b6\\M1_12345678\\M1_12345678_003_D.jpg"
+      }
+    },
+    {
+      "test": "defect disables measurement",
+      "passed": true,
+      "details": {
+        "state": "0/True/False/False"
+      }
+    },
+    {
+      "test": "normal back",
+      "passed": true,
+      "details": {
+        "LastName": "C:\\Users\\user\\AppData\\Local\\Packages\\sandbox.{67c93896-5380-4d71-8c58-5b8534f8bf71}\\AC\\Temp\\Clorium2161-da2f2bbe3b6d4c62905c10a0054bd3b6\\M1_12345678\\M1_12345678_004_B.jpg"
+      }
+    },
+    {
+      "test": "back completion marker",
+      "passed": true,
+      "details": {
+        "IsMusinsaBackOK": true
+      }
+    },
+    {
+      "test": "defect after normal back",
+      "passed": true,
+      "details": {
+        "LastName": "C:\\Users\\user\\AppData\\Local\\Packages\\sandbox.{67c93896-5380-4d71-8c58-5b8534f8bf71}\\AC\\Temp\\Clorium2161-da2f2bbe3b6d4c62905c10a0054bd3b6\\M1_12345678\\M1_12345678_005_D.jpg"
+      }
+    },
+    {
+      "test": "front failure restores purpose and readiness",
+      "passed": true,
+      "details": {
+        "FrontBackMode": 0,
+        "GetMeasurePicture": false,
+        "isBtnPressed": false,
+        "ThumbailLoaded": true
+      }
+    },
+    {
+      "test": "front failure does not mark completed",
+      "passed": true,
+      "details": {
+        "IsMusinsaFrontOK": false,
+        "IsMusinsaBackOK": false
+      }
+    },
+    {
+      "test": "REGRESSION: defect after failed front",
+      "passed": true,
+      "details": {
+        "LastName": "C:\\Users\\user\\AppData\\Local\\Packages\\sandbox.{67c93896-5380-4d71-8c58-5b8534f8bf71}\\AC\\Temp\\Clorium2161-da2f2bbe3b6d4c62905c10a0054bd3b6\\M1_12345678\\M1_12345678_006_D.jpg"
+      }
+    },
+    {
+      "test": "no measurement contamination after failed front",
+      "passed": true,
+      "details": {
+        "state": "0/True/False/False"
+      }
+    },
+    {
+      "test": "back failure restores purpose and readiness",
+      "passed": true,
+      "details": {
+        "FrontBackMode": 0,
+        "GetMeasurePicture": false,
+        "isBtnPressed": false,
+        "ThumbailLoaded": true
+      }
+    },
+    {
+      "test": "back failure does not mark completed",
+      "passed": true,
+      "details": {
+        "IsMusinsaFrontOK": false,
+        "IsMusinsaBackOK": false
+      }
+    },
+    {
+      "test": "REGRESSION: defect after failed back",
+      "passed": true,
+      "details": {
+        "LastName": "C:\\Users\\user\\AppData\\Local\\Packages\\sandbox.{67c93896-5380-4d71-8c58-5b8534f8bf71}\\AC\\Temp\\Clorium2161-da2f2bbe3b6d4c62905c10a0054bd3b6\\M1_12345678\\M1_12345678_007_D.jpg"
+      }
+    },
+    {
+      "test": "no measurement contamination after failed back",
+      "passed": true,
+      "details": {
+        "state": "0/True/False/False"
+      }
+    },
+    {
+      "test": "disconnected front resets mode",
+      "passed": true,
+      "details": {
+        "FrontBackMode": 0
+      }
+    },
+    {
+      "test": "REGRESSION: reconnected defect",
+      "passed": true,
+      "details": {
+        "LastName": "C:\\Users\\user\\AppData\\Local\\Packages\\sandbox.{67c93896-5380-4d71-8c58-5b8534f8bf71}\\AC\\Temp\\Clorium2161-da2f2bbe3b6d4c62905c10a0054bd3b6\\M1_12345678\\M1_12345678_008_D.jpg"
+      }
+    },
+    {
+      "test": "failed defect keeps selection for retry",
+      "passed": true,
+      "details": {
+        "IsDefect": true
+      }
+    },
+    {
+      "test": "defect retry",
+      "passed": true,
+      "details": {
+        "LastName": "C:\\Users\\user\\AppData\\Local\\Packages\\sandbox.{67c93896-5380-4d71-8c58-5b8534f8bf71}\\AC\\Temp\\Clorium2161-da2f2bbe3b6d4c62905c10a0054bd3b6\\M1_12345678\\M1_12345678_009_D.jpg"
+      }
+    },
+    {
+      "test": "helper false propagates to Main",
+      "passed": true,
+      "details": {
+        "direct": false
+      }
+    },
+    {
+      "test": "delayed callback keeps front purpose",
+      "passed": true,
+      "details": {
+        "LastName": "C:\\Users\\user\\AppData\\Local\\Packages\\sandbox.{67c93896-5380-4d71-8c58-5b8534f8bf71}\\AC\\Temp\\Clorium2161-da2f2bbe3b6d4c62905c10a0054bd3b6\\M1_12345678\\M1_12345678_010_F.jpg"
+      }
+    },
+    {
+      "test": "delayed callback releases capture",
+      "passed": true,
+      "details": {
+        "shots": 1
+      }
+    },
+    {
+      "test": "nonwaiting capture remains busy until event",
+      "passed": true,
+      "details": {
+        "started": true
+      }
+    },
+    {
+      "test": "busy button ignores extra front request",
+      "passed": true,
+      "details": {
+        "shots": 1
+      }
+    },
+    {
+      "test": "late event releases pending request",
+      "passed": true,
+      "details": {
+        "shots": 1
+      }
+    },
+    {
+      "test": "timeout holds busy for late file",
+      "passed": true,
+      "details": {
+        "isBtnPressed": true
+      }
+    },
+    {
+      "test": "timeout prevents overlapping next request",
+      "passed": true,
+      "details": {
+        "shots": 1
+      }
+    },
+    {
+      "test": "late timed out file retains original purpose",
+      "passed": true,
+      "details": {
+        "LastName": "C:\\Users\\user\\AppData\\Local\\Packages\\sandbox.{67c93896-5380-4d71-8c58-5b8534f8bf71}\\AC\\Temp\\Clorium2161-da2f2bbe3b6d4c62905c10a0054bd3b6\\M1_12345678\\M1_12345678_012_F.jpg"
+      }
+    },
+    {
+      "test": "rotated front",
+      "passed": true,
+      "details": {
+        "LastName": "C:\\Users\\user\\AppData\\Local\\Packages\\sandbox.{67c93896-5380-4d71-8c58-5b8534f8bf71}\\AC\\Temp\\Clorium2161-da2f2bbe3b6d4c62905c10a0054bd3b6\\M1_12345678\\M1_12345678_013_F.jpg"
+      }
+    },
+    {
+      "test": "rotated defect neutralizes stale flags",
+      "passed": true,
+      "details": {
+        "LastName": "C:\\Users\\user\\AppData\\Local\\Packages\\sandbox.{67c93896-5380-4d71-8c58-5b8534f8bf71}\\AC\\Temp\\Clorium2161-da2f2bbe3b6d4c62905c10a0054bd3b6\\M1_12345678\\M1_12345678_014_D.jpg"
+      }
+    },
+    {
+      "test": "rotated defect no measurement intent",
+      "passed": true,
+      "details": {
+        "state": "0/True/False/False"
+      }
+    },
+    {
+      "test": "one exposure background mode front",
+      "passed": true,
+      "details": {
+        "LastName": "C:\\Users\\user\\AppData\\Local\\Packages\\sandbox.{67c93896-5380-4d71-8c58-5b8534f8bf71}\\AC\\Temp\\Clorium2161-da2f2bbe3b6d4c62905c10a0054bd3b6\\M1_12345678\\M1_12345678_015_F.jpg"
+      }
+    },
+    {
+      "test": "one exposure mode completion",
+      "passed": true,
+      "details": {
+        "shots": 1
+      }
+    },
+    {
+      "test": "two exposure background mode",
+      "passed": true,
+      "details": {
+        "shots": 2,
+        "LastName": "C:\\Users\\user\\AppData\\Local\\Packages\\sandbox.{67c93896-5380-4d71-8c58-5b8534f8bf71}\\AC\\Temp\\Clorium2161-da2f2bbe3b6d4c62905c10a0054bd3b6\\M1_12345678\\M1_12345678_016_BG.jpeg"
+      }
+    },
+    {
+      "test": "background second failure is not completed",
+      "passed": true,
+      "details": {
+        "shots": 2
+      }
+    },
+    {
+      "test": "multi-camera defect naming",
+      "passed": true,
+      "details": {
+        "LastName": "C:\\Users\\user\\AppData\\Local\\Packages\\sandbox.{67c93896-5380-4d71-8c58-5b8534f8bf71}\\AC\\Temp\\Clorium2161-da2f2bbe3b6d4c62905c10a0054bd3b6\\M1_12345678\\M1_A_12345678_019_D.jpg"
+      }
+    },
+    {
+      "test": "mixed sequence shot 1",
+      "passed": true,
+      "details": {
+        "LastName": "C:\\Users\\user\\AppData\\Local\\Packages\\sandbox.{67c93896-5380-4d71-8c58-5b8534f8bf71}\\AC\\Temp\\Clorium2161-da2f2bbe3b6d4c62905c10a0054bd3b6\\M1_12345678\\M1_12345678_020_F.jpg"
+      }
+    },
+    {
+      "test": "mixed sequence shot 2",
+      "passed": true,
+      "details": {
+        "LastName": "C:\\Users\\user\\AppData\\Local\\Packages\\sandbox.{67c93896-5380-4d71-8c58-5b8534f8bf71}\\AC\\Temp\\Clorium2161-da2f2bbe3b6d4c62905c10a0054bd3b6\\M1_12345678\\M1_12345678_021_B.jpg"
+      }
+    },
+    {
+      "test": "mixed sequence shot 3",
+      "passed": true,
+      "details": {
+        "LastName": "C:\\Users\\user\\AppData\\Local\\Packages\\sandbox.{67c93896-5380-4d71-8c58-5b8534f8bf71}\\AC\\Temp\\Clorium2161-da2f2bbe3b6d4c62905c10a0054bd3b6\\M1_12345678\\M1_12345678_022_D.jpg"
+      }
+    },
+    {
+      "test": "mixed sequence shot 4",
+      "passed": true,
+      "details": {
+        "LastName": "C:\\Users\\user\\AppData\\Local\\Packages\\sandbox.{67c93896-5380-4d71-8c58-5b8534f8bf71}\\AC\\Temp\\Clorium2161-da2f2bbe3b6d4c62905c10a0054bd3b6\\M1_12345678\\M1_12345678_023_F.jpg"
+      }
+    },
+    {
+      "test": "mixed sequence shot 5",
+      "passed": true,
+      "details": {
+        "LastName": "C:\\Users\\user\\AppData\\Local\\Packages\\sandbox.{67c93896-5380-4d71-8c58-5b8534f8bf71}\\AC\\Temp\\Clorium2161-da2f2bbe3b6d4c62905c10a0054bd3b6\\M1_12345678\\M1_12345678_024_B.jpg"
+      }
+    },
+    {
+      "test": "mixed sequence shot 6",
+      "passed": true,
+      "details": {
+        "LastName": "C:\\Users\\user\\AppData\\Local\\Packages\\sandbox.{67c93896-5380-4d71-8c58-5b8534f8bf71}\\AC\\Temp\\Clorium2161-da2f2bbe3b6d4c62905c10a0054bd3b6\\M1_12345678\\M1_12345678_025_D.jpg"
+      }
+    },
+    {
+      "test": "mixed sequence shot 7",
+      "passed": true,
+      "details": {
+        "LastName": "C:\\Users\\user\\AppData\\Local\\Packages\\sandbox.{67c93896-5380-4d71-8c58-5b8534f8bf71}\\AC\\Temp\\Clorium2161-da2f2bbe3b6d4c62905c10a0054bd3b6\\M1_12345678\\M1_12345678_026_F.jpg"
+      }
+    },
+    {
+      "test": "mixed sequence shot 8",
+      "passed": true,
+      "details": {
+        "LastName": "C:\\Users\\user\\AppData\\Local\\Packages\\sandbox.{67c93896-5380-4d71-8c58-5b8534f8bf71}\\AC\\Temp\\Clorium2161-da2f2bbe3b6d4c62905c10a0054bd3b6\\M1_12345678\\M1_12345678_027_B.jpg"
+      }
+    },
+    {
+      "test": "mixed sequence shot 9",
+      "passed": true,
+      "details": {
+        "LastName": "C:\\Users\\user\\AppData\\Local\\Packages\\sandbox.{67c93896-5380-4d71-8c58-5b8534f8bf71}\\AC\\Temp\\Clorium2161-da2f2bbe3b6d4c62905c10a0054bd3b6\\M1_12345678\\M1_12345678_028_D.jpg"
+      }
+    },
+    {
+      "test": "mixed sequence shot 10",
+      "passed": true,
+      "details": {
+        "LastName": "C:\\Users\\user\\AppData\\Local\\Packages\\sandbox.{67c93896-5380-4d71-8c58-5b8534f8bf71}\\AC\\Temp\\Clorium2161-da2f2bbe3b6d4c62905c10a0054bd3b6\\M1_12345678\\M1_12345678_029_F.jpg"
+      }
+    },
+    {
+      "test": "mixed sequence shot 11",
+      "passed": true,
+      "details": {
+        "LastName": "C:\\Users\\user\\AppData\\Local\\Packages\\sandbox.{67c93896-5380-4d71-8c58-5b8534f8bf71}\\AC\\Temp\\Clorium2161-da2f2bbe3b6d4c62905c10a0054bd3b6\\M1_12345678\\M1_12345678_030_B.jpg"
+      }
+    },
+    {
+      "test": "mixed sequence shot 12",
+      "passed": true,
+      "details": {
+        "LastName": "C:\\Users\\user\\AppData\\Local\\Packages\\sandbox.{67c93896-5380-4d71-8c58-5b8534f8bf71}\\AC\\Temp\\Clorium2161-da2f2bbe3b6d4c62905c10a0054bd3b6\\M1_12345678\\M1_12345678_031_D.jpg"
+      }
+    },
+    {
+      "test": "mixed sequence shot 13",
+      "passed": true,
+      "details": {
+        "LastName": "C:\\Users\\user\\AppData\\Local\\Packages\\sandbox.{67c93896-5380-4d71-8c58-5b8534f8bf71}\\AC\\Temp\\Clorium2161-da2f2bbe3b6d4c62905c10a0054bd3b6\\M1_12345678\\M1_12345678_032_F.jpg"
+      }
+    },
+    {
+      "test": "mixed sequence shot 14",
+      "passed": true,
+      "details": {
+        "LastName": "C:\\Users\\user\\AppData\\Local\\Packages\\sandbox.{67c93896-5380-4d71-8c58-5b8534f8bf71}\\AC\\Temp\\Clorium2161-da2f2bbe3b6d4c62905c10a0054bd3b6\\M1_12345678\\M1_12345678_033_B.jpg"
+      }
+    },
+    {
+      "test": "mixed sequence shot 15",
+      "passed": true,
+      "details": {
+        "LastName": "C:\\Users\\user\\AppData\\Local\\Packages\\sandbox.{67c93896-5380-4d71-8c58-5b8534f8bf71}\\AC\\Temp\\Clorium2161-da2f2bbe3b6d4c62905c10a0054bd3b6\\M1_12345678\\M1_12345678_034_D.jpg"
+      }
+    },
+    {
+      "test": "mixed sequence shot 16",
+      "passed": true,
+      "details": {
+        "LastName": "C:\\Users\\user\\AppData\\Local\\Packages\\sandbox.{67c93896-5380-4d71-8c58-5b8534f8bf71}\\AC\\Temp\\Clorium2161-da2f2bbe3b6d4c62905c10a0054bd3b6\\M1_12345678\\M1_12345678_035_F.jpg"
+      }
+    },
+    {
+      "test": "mixed sequence shot 17",
+      "passed": true,
+      "details": {
+        "LastName": "C:\\Users\\user\\AppData\\Local\\Packages\\sandbox.{67c93896-5380-4d71-8c58-5b8534f8bf71}\\AC\\Temp\\Clorium2161-da2f2bbe3b6d4c62905c10a0054bd3b6\\M1_12345678\\M1_12345678_036_B.jpg"
+      }
+    },
+    {
+      "test": "mixed sequence shot 18",
+      "passed": true,
+      "details": {
+        "LastName": "C:\\Users\\user\\AppData\\Local\\Packages\\sandbox.{67c93896-5380-4d71-8c58-5b8534f8bf71}\\AC\\Temp\\Clorium2161-da2f2bbe3b6d4c62905c10a0054bd3b6\\M1_12345678\\M1_12345678_037_D.jpg"
+      }
+    },
+    {
+      "test": "mixed sequence shot 19",
+      "passed": true,
+      "details": {
+        "LastName": "C:\\Users\\user\\AppData\\Local\\Packages\\sandbox.{67c93896-5380-4d71-8c58-5b8534f8bf71}\\AC\\Temp\\Clorium2161-da2f2bbe3b6d4c62905c10a0054bd3b6\\M1_12345678\\M1_12345678_038_F.jpg"
+      }
+    },
+    {
+      "test": "mixed sequence shot 20",
+      "passed": true,
+      "details": {
+        "LastName": "C:\\Users\\user\\AppData\\Local\\Packages\\sandbox.{67c93896-5380-4d71-8c58-5b8534f8bf71}\\AC\\Temp\\Clorium2161-da2f2bbe3b6d4c62905c10a0054bd3b6\\M1_12345678\\M1_12345678_039_B.jpg"
+      }
+    },
+    {
+      "test": "mixed sequence shot 21",
+      "passed": true,
+      "details": {
+        "LastName": "C:\\Users\\user\\AppData\\Local\\Packages\\sandbox.{67c93896-5380-4d71-8c58-5b8534f8bf71}\\AC\\Temp\\Clorium2161-da2f2bbe3b6d4c62905c10a0054bd3b6\\M1_12345678\\M1_12345678_040_D.jpg"
+      }
+    },
+    {
+      "test": "mixed sequence shot 22",
+      "passed": true,
+      "details": {
+        "LastName": "C:\\Users\\user\\AppData\\Local\\Packages\\sandbox.{67c93896-5380-4d71-8c58-5b8534f8bf71}\\AC\\Temp\\Clorium2161-da2f2bbe3b6d4c62905c10a0054bd3b6\\M1_12345678\\M1_12345678_041_F.jpg"
+      }
+    },
+    {
+      "test": "mixed sequence shot 23",
+      "passed": true,
+      "details": {
+        "LastName": "C:\\Users\\user\\AppData\\Local\\Packages\\sandbox.{67c93896-5380-4d71-8c58-5b8534f8bf71}\\AC\\Temp\\Clorium2161-da2f2bbe3b6d4c62905c10a0054bd3b6\\M1_12345678\\M1_12345678_042_B.jpg"
+      }
+    },
+    {
+      "test": "mixed sequence shot 24",
+      "passed": true,
+      "details": {
+        "LastName": "C:\\Users\\user\\AppData\\Local\\Packages\\sandbox.{67c93896-5380-4d71-8c58-5b8534f8bf71}\\AC\\Temp\\Clorium2161-da2f2bbe3b6d4c62905c10a0054bd3b6\\M1_12345678\\M1_12345678_043_D.jpg"
+      }
+    },
+    {
+      "test": "mixed sequence shot 25",
+      "passed": true,
+      "details": {
+        "LastName": "C:\\Users\\user\\AppData\\Local\\Packages\\sandbox.{67c93896-5380-4d71-8c58-5b8534f8bf71}\\AC\\Temp\\Clorium2161-da2f2bbe3b6d4c62905c10a0054bd3b6\\M1_12345678\\M1_12345678_044_F.jpg"
+      }
+    },
+    {
+      "test": "mixed sequence shot 26",
+      "passed": true,
+      "details": {
+        "LastName": "C:\\Users\\user\\AppData\\Local\\Packages\\sandbox.{67c93896-5380-4d71-8c58-5b8534f8bf71}\\AC\\Temp\\Clorium2161-da2f2bbe3b6d4c62905c10a0054bd3b6\\M1_12345678\\M1_12345678_045_B.jpg"
+      }
+    },
+    {
+      "test": "mixed sequence shot 27",
+      "passed": true,
+      "details": {
+        "LastName": "C:\\Users\\user\\AppData\\Local\\Packages\\sandbox.{67c93896-5380-4d71-8c58-5b8534f8bf71}\\AC\\Temp\\Clorium2161-da2f2bbe3b6d4c62905c10a0054bd3b6\\M1_12345678\\M1_12345678_046_D.jpg"
+      }
+    },
+    {
+      "test": "mixed sequence shot 28",
+      "passed": true,
+      "details": {
+        "LastName": "C:\\Users\\user\\AppData\\Local\\Packages\\sandbox.{67c93896-5380-4d71-8c58-5b8534f8bf71}\\AC\\Temp\\Clorium2161-da2f2bbe3b6d4c62905c10a0054bd3b6\\M1_12345678\\M1_12345678_047_F.jpg"
+      }
+    },
+    {
+      "test": "mixed sequence shot 29",
+      "passed": true,
+      "details": {
+        "LastName": "C:\\Users\\user\\AppData\\Local\\Packages\\sandbox.{67c93896-5380-4d71-8c58-5b8534f8bf71}\\AC\\Temp\\Clorium2161-da2f2bbe3b6d4c62905c10a0054bd3b6\\M1_12345678\\M1_12345678_048_B.jpg"
+      }
+    },
+    {
+      "test": "mixed sequence shot 30",
+      "passed": true,
+      "details": {
+        "LastName": "C:\\Users\\user\\AppData\\Local\\Packages\\sandbox.{67c93896-5380-4d71-8c58-5b8534f8bf71}\\AC\\Temp\\Clorium2161-da2f2bbe3b6d4c62905c10a0054bd3b6\\M1_12345678\\M1_12345678_049_D.jpg"
+      }
+    },
+    {
+      "test": "existing file gets unique counter",
+      "passed": true,
+      "details": {
+        "first": "C:\\Users\\user\\AppData\\Local\\Packages\\sandbox.{67c93896-5380-4d71-8c58-5b8534f8bf71}\\AC\\Temp\\Clorium2161-da2f2bbe3b6d4c62905c10a0054bd3b6\\M1_12345678\\M1_12345678_050.jpg",
+        "next": "C:\\Users\\user\\AppData\\Local\\Packages\\sandbox.{67c93896-5380-4d71-8c58-5b8534f8bf71}\\AC\\Temp\\Clorium2161-da2f2bbe3b6d4c62905c10a0054bd3b6\\M1_12345678\\M1_12345678_051.jpg"
+      }
+    },
+    {
+      "test": "counterless template handles collision",
+      "passed": true,
+      "details": {
+        "first": "C:\\Users\\user\\AppData\\Local\\Packages\\sandbox.{67c93896-5380-4d71-8c58-5b8534f8bf71}\\AC\\Temp\\Clorium2161-da2f2bbe3b6d4c62905c10a0054bd3b6\\M1_12345678\\M1_12345678.jpg",
+        "next": "C:\\Users\\user\\AppData\\Local\\Packages\\sandbox.{67c93896-5380-4d71-8c58-5b8534f8bf71}\\AC\\Temp\\Clorium2161-da2f2bbe3b6d4c62905c10a0054bd3b6\\M1_12345678\\M1_12345678_0.jpg"
+      }
+    },
+    {
+      "test": "overwrite option keeps path",
+      "passed": true,
+      "details": {
+        "first": "C:\\Users\\user\\AppData\\Local\\Packages\\sandbox.{67c93896-5380-4d71-8c58-5b8534f8bf71}\\AC\\Temp\\Clorium2161-da2f2bbe3b6d4c62905c10a0054bd3b6\\M1_12345678\\M1_12345678_050.jpg",
+        "next": "C:\\Users\\user\\AppData\\Local\\Packages\\sandbox.{67c93896-5380-4d71-8c58-5b8534f8bf71}\\AC\\Temp\\Clorium2161-da2f2bbe3b6d4c62905c10a0054bd3b6\\M1_12345678\\M1_12345678_050.jpg"
+      }
+    },
+    {
+      "test": "synthetic stored files readable",
+      "passed": true,
+      "details": {
+        "stored": 48
+      }
+    }
+  ]
+}

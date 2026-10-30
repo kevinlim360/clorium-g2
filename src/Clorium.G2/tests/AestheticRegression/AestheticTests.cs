@@ -1,0 +1,87 @@
+﻿using System;
+using System.IO;
+using System.Linq;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Runtime.Serialization;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Markup;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Threading;
+using System.Xml;
+using CameraControl.Core;
+using CameraControl.Core.Classes;
+using CameraControl.Devices;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+class AestheticTests {
+ static int count;static string root,temp;static Type autoType;static object auto,info;
+ static void Check(string name,bool value){if(!value)throw new Exception("FAIL: "+name);Console.WriteLine("PASS: "+name);count++;}
+ static object Call(object target,string name,params object[] args){return target.GetType().GetMethod(name,BindingFlags.NonPublic|BindingFlags.Public|BindingFlags.Instance).Invoke(target,args);}
+ static void Set(object target,string name,object value){target.GetType().GetField(name,BindingFlags.Instance|BindingFlags.Public|BindingFlags.NonPublic).SetValue(target,value);}
+ static void Pump(){Dispatcher.CurrentDispatcher.Invoke(DispatcherPriority.DataBind,new Action(delegate{}));}
+ static PhotoSession Session(string folder){var s=(PhotoSession)FormatterServices.GetUninitializedObject(typeof(PhotoSession));typeof(PhotoSession).GetField("_locker",BindingFlags.NonPublic|BindingFlags.Instance).SetValue(s,new object());s.Folder=folder;s.RawExtensions=new List<string>{".cr2",".nef"};s.FileNameTemplate="Barcode_[Counter 3 digit]";return s;}
+ static XmlElement Element(string file,string name){var doc=new XmlDocument();doc.Load(Path.Combine(root,"projects/CameraControl/CameraControl",file));var e=(XmlElement)doc.SelectSingleNode("//*[@Name='"+name+"']");if(e==null)throw new Exception(name);return e;}
+ static object Parse(XmlElement source){source.SetAttribute("xmlns","http://schemas.microsoft.com/winfx/2006/xaml/presentation");source.SetAttribute("xmlns:x","http://schemas.microsoft.com/winfx/2006/xaml");source.SetAttribute("xmlns:Core","clr-namespace:CameraControl.Core;assembly=CameraControl.Core");return XamlReader.Parse(source.OuterXml);}
+ static void SavePng(FrameworkElement element,string name){element.Measure(new Size(550,350));element.Arrange(new Rect(0,0,550,350));element.UpdateLayout();var bitmap=new RenderTargetBitmap(550,350,96,96,PixelFormats.Pbgra32);bitmap.Render(element);var encoder=new PngBitmapEncoder();encoder.Frames.Add(BitmapFrame.Create(bitmap));using(var stream=File.Create(Path.Combine(root,"tests/AestheticRegression",name)))encoder.Save(stream);}
+ static object[] CsvData(){var assembly=autoType.Assembly;var user=FormatterServices.GetUninitializedObject(assembly.GetType("CloriumAutoSizing.UserRect"));var boxType=assembly.GetType("CloriumAutoSizing.UserRect+UserBox");var box=Activator.CreateInstance(boxType);Set(box,"Type","상의");Set(box,"TypeID","7");Set(box,"TypeItem","총장");var line=boxType.GetField("measureLine").GetValue(box);Set(line,"measure_Len","55.50");var array=Array.CreateInstance(boxType,1);array.SetValue(box,0);Set(user,"mArrayMaxNo",1);Set(user,"userBoxs",array);Set(auto,"userBox",user);return new[]{user,box};}
+ [STAThread] static int Main(string[] args){root=args[0];AppDomain.CurrentDomain.AssemblyResolve+=delegate(object sender,ResolveEventArgs e){string name=new AssemblyName(e.Name).Name+".dll";foreach(string dir in new[]{Path.Combine(root,"build-output/installed"),Path.Combine(root,"dependencies/Managed"),"C:\\Program Files (x86)\\Clorium"}){string file=Path.Combine(dir,name);if(File.Exists(file))return Assembly.LoadFrom(file);}return null;};
+ temp=Path.Combine(Path.GetTempPath(),"CA-"+Guid.NewGuid().ToString("N").Substring(0,8));Directory.CreateDirectory(temp);
+ try{Run(args);Console.WriteLine("AESTHETIC_CHECKS_PASSED="+count);return 0;}catch(Exception e){Console.Error.WriteLine(e);return 1;}finally{if(Path.GetFileName(temp).StartsWith("CA-"))Directory.Delete(temp,true);}}
+ [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.NoInlining)] static void Run(string[] args){
+  var autoAssembly=Assembly.LoadFrom(Path.Combine(root,"build-output/installed/Clorium AutoSizing.exe"));autoType=autoAssembly.GetType("CloriumAutoSizing.F_Measure",true);auto=FormatterServices.GetUninitializedObject(autoType);info=Activator.CreateInstance(autoType.GetNestedType("ImageInfo",BindingFlags.NonPublic));Set(info,"cameraID","C05_");Set(auto,"imageInfo",info);
+  CsvData();string csv=Path.Combine(temp,"csv-test.csv");Call(auto,"WriteCSV",csv);Call(auto,"WriteCSV",csv);
+  if(args.Contains("--csv-baseline")){bool reproduced=File.ReadAllLines(csv).Length==1;Check("REPRODUCED: repeated CSV save drops header",reproduced);return;}
+  Check("repeated CSV save retains header and first measurement",File.ReadAllLines(csv).Length==2&&File.ReadLines(csv).First().StartsWith("타입,"));
+  ServiceProvider.Branding=(Branding)FormatterServices.GetUninitializedObject(typeof(Branding));ServiceProvider.FilenameTemplateManager=new FilenameTemplateManager();
+  var s=new Settings();ServiceProvider.Settings=s;s.CloriumID="C05_";s.CameraProperties=new CameraPropertyEnumerator();s.ThumbailLoaded=true;
+  Check("legacy config has feature disabled",!s.UseAestheticImprovement&&!s.IsAestheticImprovementActive);Check("runtime mode starts ON",s.IsAestheticImprovement);
+  var camera=new BaseCameraDevice{SerialNumber="SYNTHETIC"};string folder=Path.Combine(temp,"C05_32987");Directory.CreateDirectory(folder);
+  foreach(bool enabled in new[]{false,true})foreach(bool mode in new[]{false,true})foreach(int face in new[]{0,1,2})foreach(bool defect in new[]{false,true}){
+   s.UseAestheticImprovement=enabled;s.IsAestheticImprovement=mode;s.FrontBackMode=face;s.IsDefect=defect;s.Background=false;var session=Session(folder);string actual=session.GetNextFileName("IMG.jpg",camera,"");string suffix=defect?"_D.jpg":face==1?(enabled&&mode?"_PR_F.jpg":"_F.jpg"):face==2?(enabled&&mode?"_PR_B.jpg":"_B.jpg"):"_001.jpg";
+   Check("naming enable="+enabled+" on="+mode+" face="+face+" defect="+defect,actual.EndsWith(suffix));
+  }
+  s.UseAestheticImprovement=true;s.IsAestheticImprovement=true;s.FrontBackMode=1;s.IsDefect=false;
+  Check("exact customer front example",Path.GetFileName(Session(folder).GetNextFileName("IMG.jpg",camera,""))=="C05_32987_001_PR_F.jpg");s.FrontBackMode=2;Check("exact customer back example",Path.GetFileName(Session(folder).GetNextFileName("IMG.jpg",camera,""))=="C05_32987_001_PR_B.jpg");
+  foreach(bool multi in new[]{false,true})foreach(int face in new[]{1,2})foreach(bool defect in new[]{false,true}){s.TurnTableShot=true;ServiceProvider.Branding.ControlMultiCamera=multi;s.FrontBackMode=face;s.IsDefect=defect;s.CameraAlias="CAM2";s.TurnTableShot_PathName=folder;bool valid=true;for(int shot=1;shot<=72;shot++){s.TurnTableShot_FileName="PRODUCT-L1-"+shot.ToString("00");var n=Session(folder).GetNextFileName("IMG.jpg",camera,"");valid&=n==folder+"\\C05"+(multi?"CAM2_":"")+s.TurnTableShot_FileName+".jpg";}Check("turntable 72 shots no PR/face flags multi="+multi+" face="+face+" defect="+defect,valid);}
+  s.TurnTableShot=false;ServiceProvider.Branding.ControlMultiCamera=false;s.IsDefect=false;s.FrontBackMode=1;
+  s.IsAestheticImprovement=false;Check("OFF immediately affects next shot",Session(folder).GetNextFileName("IMG.jpg",camera,"").EndsWith("_F.jpg"));s.IsAestheticImprovement=true;Check("ON immediately affects next shot",Session(folder).GetNextFileName("IMG.jpg",camera,"").EndsWith("_PR_F.jpg"));
+  s.isBtnPressed=true;s.IsAestheticImprovement=false;Check("busy attempt cannot change active capture mode",s.IsAestheticImprovement);s.isBtnPressed=false;s.ThumbailLoaded=false;s.IsAestheticImprovement=false;Check("pending thumbnail cannot change active capture mode",s.IsAestheticImprovement);s.ThumbailLoaded=true;s.TurnTableShot=true;s.IsAestheticImprovement=false;Check("turntable cannot change operator mode",s.IsAestheticImprovement);s.TurnTableShot=false;
+  var main=Assembly.LoadFrom(Path.Combine(root,"build-output/installed/CameraControl.exe"));var menu=main.GetType("CameraControl.ViewModel.MainMenuViewModel");typeof(Settings).GetField("_defaultSession",BindingFlags.Instance|BindingFlags.NonPublic).SetValue(s,Session(folder));var reset=menu.GetMethod("ResetCapturePurposeForNewSession",BindingFlags.Static|BindingFlags.NonPublic);
+  foreach(bool state in new[]{false,true}){s.IsAestheticImprovement=state;reset.Invoke(null,null);Check("new product preserves mode "+state,s.IsAestheticImprovement==state);}
+  s.UseAestheticImprovement=true;s.IsAestheticImprovement=true;s.IsDefect=false;s.FrontBackMode=1;
+  var collision=Session(folder);var first=collision.GetNextFileName("IMG.jpg",camera,"");File.WriteAllText(first,"preserve original");collision.Counter--;var second=collision.GetNextFileName("IMG.jpg",camera,"");Check("PR filename collision produces unique path",first!=second);Check("PR collision preserves original bytes",File.ReadAllText(first)=="preserve original");File.Delete(first);
+  foreach(string ext in new[]{".JPG",".jpeg",".nef",".cr2"}){s.FrontBackMode=1;s.IsDefect=false;string name=Session(folder).GetNextFileName("IMG"+ext,camera,"");Check("PR naming for extension "+ext,name.EndsWith("_PR_F"+ext,StringComparison.OrdinalIgnoreCase));s.IsDefect=true;name=Session(folder).GetNextFileName("IMG"+ext,camera,"");Check("defect ignores PR for extension "+ext,name.EndsWith("_D"+ext,StringComparison.OrdinalIgnoreCase));}
+  s.IsDefect=false;s.FrontBackMode=1;string unicodeFolder=Path.Combine(temp,"C05_상품_테스트");Directory.CreateDirectory(unicodeFolder);Check("Unicode product path supported",Session(unicodeFolder).GetNextFileName("IMG.jpg",camera,"").EndsWith("_PR_F.jpg"));  var export=new JObject{{"UseAestheticImprovement",true},{"IsAestheticImprovement",false},{"IsAestheticImprovementActive",false}};
+  s.IsAestheticImprovement=false;var contract=(Newtonsoft.Json.Serialization.JsonObjectContract)new Newtonsoft.Json.Serialization.DefaultContractResolver().ResolveContract(typeof(Settings));Check("runtime mode excluded from JSON",contract.Properties["IsAestheticImprovement"].Ignored&&contract.Properties["IsAestheticImprovementActive"].Ignored);Check("feature enable persisted",!contract.Properties["UseAestheticImprovement"].Ignored);
+  var loaded=JsonConvert.DeserializeObject<Settings>(export.ToString());Check("JSON restart defaults ON even with stale runtime fields",loaded.UseAestheticImprovement&&loaded.IsAestheticImprovement&&loaded.IsAestheticImprovementActive);var legacy=JsonConvert.DeserializeObject<Settings>("{}");Check("old JSON remains disabled",!legacy.UseAestheticImprovement&&legacy.IsAestheticImprovement);
+  var serializer=new System.Xml.Serialization.XmlSerializer(typeof(Settings));using(var reader=new StringReader("<Settings><UseAestheticImprovement>true</UseAestheticImprovement><IsAestheticImprovement>false</IsAestheticImprovement></Settings>")){var xml=(Settings)serializer.Deserialize(reader);Check("XML restart defaults ON",xml.UseAestheticImprovement&&xml.IsAestheticImprovement);}
+  ServiceProvider.Settings=s;s.UseAestheticImprovement=true;s.IsAestheticImprovement=true;
+  var checkXml=Element("MainWindow.xaml","Check_AestheticImprovement");checkXml.RemoveAttribute("Visibility");checkXml.RemoveAttribute("ToolTip");var check=(CheckBox)Parse(checkXml);check.ApplyTemplate();Pump();Check("actual checkbox binds ON",check.IsChecked==true);
+  var surface=(Border)check.Template.FindName("ModeSurface",check);Check("checked button is orange",((SolidColorBrush)surface.Background).Color==Color.FromRgb(255,138,0));
+  check.IsChecked=false;Pump();Check("checkbox OFF updates shared state",!s.IsAestheticImprovementActive);Check("OFF button clears orange",((SolidColorBrush)surface.Background).Color!=Color.FromRgb(255,138,0));
+  var panel=new StackPanel{Background=Brushes.White};panel.Children.Add(check);var borders=new List<Border>();foreach(var entry in new[]{new[]{"Layouts/LayoutNormal.xaml","MainAestheticImageBorder"},new[]{"windows/LiveViewWnd.xaml","LiveAestheticImageBorder"},new[]{"windows/PreviewWnd.xaml","PreviewAestheticImageBorder"},new[]{"windows/PreviewWnd.xaml","PreviewAestheticImageOBorder"}}){var e=Element(entry[0],entry[1]);foreach(XmlNode child in e.ChildNodes.Cast<XmlNode>().Where(n=>n.LocalName!="Border.Style").ToArray())e.RemoveChild(child);e.RemoveAttribute("IsHitTestVisible");var b=(Border)Parse(e);b.Width=260;b.Height=45;b.Margin=new Thickness(3);b.Child=new TextBlock{Text=entry[1],Foreground=Brushes.Black,VerticalAlignment=VerticalAlignment.Center};borders.Add(b);panel.Children.Add(b);}
+  Pump();Check("all image outlines OFF",borders.All(b=>((SolidColorBrush)b.BorderBrush).Color==Colors.Transparent));SavePng(panel,"ui-off.png");check.IsChecked=true;Pump();Check("all image outlines follow ON",borders.All(b=>((SolidColorBrush)b.BorderBrush).Color==Color.FromRgb(255,138,0)));SavePng(panel,"ui-on.png");
+  s.isBtnPressed=true;Pump();Check("actual mode control disabled while capturing",!check.IsEnabled);s.isBtnPressed=false;s.ThumbailLoaded=false;Pump();Check("actual mode control disabled while saving",!check.IsEnabled);s.ThumbailLoaded=true;s.TurnTableShot=true;Pump();Check("actual mode control disabled during turntable",!check.IsEnabled);s.TurnTableShot=false;Pump();Check("actual mode control reenabled after completion",check.IsEnabled);
+  var setting=Element("windows/SettingsWnd.xaml","EnableAestheticImprovement");Check("Custom option exists inside correct expander",setting.Ancestors().Any(n=>n is XmlElement&&((XmlElement)n).GetAttribute("Name")=="ExpanderCustoms"));
+  var mainType=main.GetType("CameraControl.MainWindow");var mainWindow=FormatterServices.GetUninitializedObject(mainType);
+  foreach(bool state in new[]{false,true}){
+   s.IsAestheticImprovement=state;s.FrontBackMode=1;s.IsDefect=false;string raw=Session(folder).GetNextFileName("IMG.jpg",camera,"");var metadata=new BitmapMetadata("jpg");metadata.Title="C05_";var pixels=new byte[80*60*3];for(int i=0;i<pixels.Length;i++)pixels[i]=(byte)(i%251);var source=BitmapSource.Create(80,60,96,96,PixelFormats.Rgb24,null,pixels,80*3);var encoder=new JpegBitmapEncoder();encoder.Frames.Add(BitmapFrame.Create(source,null,metadata,null));using(var output=File.Create(raw))encoder.Save(output);
+   string before=Convert.ToBase64String(File.ReadAllBytes(raw));string measure=(string)Call(mainWindow,"WriteMetadata",raw,"C05_","0.25","https://test.invalid");Check("measurement file excludes PR on="+state,Path.GetFileName(measure)=="C05_32987_001_F_M.jpeg");Check("metadata creation leaves raw source unchanged on="+state,before==Convert.ToBase64String(File.ReadAllBytes(raw)));var parameters=new object[]{measure,null,0d,null};Call(auto,"ReadMetadata",parameters);Check("AutoSizing reads real JPEG metadata on="+state,(string)parameters[1]=="C05_"&&(double)parameters[2]==0.25&&(string)parameters[3]=="https://test.invalid");Check("actual AutoSizing barcode on="+state,(string)Call(auto,"GetBarcodeID",Path.GetFileNameWithoutExtension(measure))=="32987");using(var bitmap=(System.Drawing.Bitmap)Call(auto,"LoadImageWithOrientation",measure)){Check("AutoSizing decodes JPEG on="+state,bitmap.Width==80&&bitmap.Height==60);}
+  }
+  foreach(string stem in new[]{"C05_32987_001_PR_F","C05_32987_001_PR_F_M","C05_32987_001_F","C05_32987_001_F_M","C05_32987___1_001_PR_F_M"})Check("barcode compatibility "+stem,(string)Call(auto,"GetBarcodeID",stem)=="32987");
+  foreach(string barcode in new[]{"ITEM_PR", "ITEM_PR_MARK", "A_F_M_B", "32987_C05_CODE", "123_456"})Check("literal barcode components preserved "+barcode,(string)Call(auto,"GetBarcodeID","C05_"+barcode+"_001_PR_F_M")==barcode);
+  Set(info,"cameraID","C05_");Check("literal PR inside barcode preserved",(string)Call(auto,"GetBarcodeID","C05_ITEM_PR_MARK_001_PR_F_M")=="ITEM_PR_MARK");
+  foreach(string inputName in new[]{"C05_32987_001_PR_F_M.jpeg","C05_32987_001_PR_F.jpg","C05_32987_001_F_M.jpeg","C05_32987_001_PR_B_M.jpeg"}){
+   Call(auto,"SetMeasurementOutputPaths",Path.Combine(temp,inputName));
+   var csvName=(string)autoType.GetField("CSVfilename",BindingFlags.Instance|BindingFlags.NonPublic).GetValue(auto);
+   var imageName=(string)autoType.GetField("Measurefilename",BindingFlags.Instance|BindingFlags.NonPublic).GetValue(auto);
+   Check("measurement output pair excludes PR "+inputName,!Path.GetFileName(csvName).Contains("_PR")&&!Path.GetFileName(imageName).Contains("_PR")&&Path.GetDirectoryName(csvName)==temp&&Path.GetDirectoryName(imageName)==temp);
+  }
+  Call(auto,"InitArray");Call(auto,"ReadCSV",csv);var data=autoType.GetField("Data_MeasureInform",BindingFlags.Instance|BindingFlags.NonPublic).GetValue(auto);var group=data.GetType().GetProperty("measureItemGroup").GetValue(data,null);var items=(Array)group.GetType().GetProperty("items").GetValue(group,null);Check("repeated CSV measurement survives API data parsing",items.Length==1);
+  var item=items.GetValue(0);Check("repeated CSV retains actual measured value",Convert.ToDouble(item.GetType().GetProperty("value").GetValue(item,null))==55.5);
+ }
+}
+static class XmlParents{public static IEnumerable<XmlNode> Ancestors(this XmlNode node){for(var p=node.ParentNode;p!=null;p=p.ParentNode)yield return p;}}

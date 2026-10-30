@@ -1,0 +1,354 @@
+PASS design-1-gray ON front
+PASS design-1-gray ON back
+PASS design-1-gray defect
+PASS design-1-gray OFF
+PASS design-1-gray theme preserves OFF
+PASS design-1-gray product retains OFF
+PASS design-1-gray Custom persists
+PASS design-1-black dark heading contrast
+PASS design-1-black ON front
+PASS design-1-black ON back
+PASS design-1-black defect
+PASS design-1-black OFF
+PASS design-1-black theme preserves OFF
+PASS design-1-black product retains OFF
+PASS design-1-black Custom persists
+PASS design-2-gray ON front
+PASS design-2-gray ON back
+PASS design-2-gray defect
+PASS design-2-gray OFF
+PASS design-2-gray theme preserves OFF
+PASS design-2-gray product retains OFF
+PASS design-2-gray Custom persists
+PASS design-2-black dark heading contrast
+PASS design-2-black ON front
+PASS design-2-black ON back
+PASS design-2-black defect
+PASS design-2-black OFF
+PASS design-2-black theme preserves OFF
+PASS design-2-black product retains OFF
+PASS design-2-black Custom persists
+PASS design-3-gray ON front
+PASS design-3-gray ON back
+PASS design-3-gray defect
+PASS design-3-gray OFF
+PASS design-3-gray theme preserves OFF
+PASS design-3-gray product retains OFF
+PASS design-3-gray Custom persists
+PASS design-3-black dark heading contrast
+PASS design-3-black ON front
+PASS design-3-black ON back
+PASS design-3-black defect
+PASS design-3-black OFF
+PASS design-3-black theme preserves OFF
+PASS design-3-black product retains OFF
+PASS design-3-black Custom persists
+PASS layout change retains defect
+PASS busy prevents layout/theme change
+PASS ratio 1/False/1440/0/FrameMain
+PASS ratio 1/False/1440/0/FramePreview
+PASS ratio 1/False/1440/0/FrameThumbF
+PASS ratio 1/False/1440/0/FrameThumbB
+PASS ratio 1/False/1440/0/FrameThumbD
+PASS ratio 1/False/1440/1/FrameMain
+PASS ratio 1/False/1440/1/FramePreview
+PASS ratio 1/False/1440/1/FrameThumbF
+PASS ratio 1/False/1440/1/FrameThumbB
+PASS ratio 1/False/1440/1/FrameThumbD
+PASS ratio 1/False/1440/2/FrameMain
+PASS ratio 1/False/1440/2/FramePreview
+PASS ratio 1/False/1440/2/FrameThumbF
+PASS ratio 1/False/1440/2/FrameThumbB
+PASS ratio 1/False/1440/2/FrameThumbD
+PASS ratio 1/False/1440/3/FrameMain
+PASS ratio 1/False/1440/3/FramePreview
+PASS ratio 1/False/1440/3/FrameThumbF
+PASS ratio 1/False/1440/3/FrameThumbB
+PASS ratio 1/False/1440/3/FrameThumbD
+PASS ratio 1/False/1440/4/FrameMain
+PASS ratio 1/False/1440/4/FramePreview
+PASS ratio 1/False/1440/4/FrameThumbF
+PASS ratio 1/False/1440/4/FrameThumbB
+PASS ratio 1/False/1440/4/FrameThumbD
+PASS ratio 1/False/1200/0/FrameMain
+PASS ratio 1/False/1200/0/FramePreview
+PASS ratio 1/False/1200/0/FrameThumbF
+PASS ratio 1/False/1200/0/FrameThumbB
+PASS ratio 1/False/1200/0/FrameThumbD
+PASS ratio 1/False/1200/1/FrameMain
+PASS ratio 1/False/1200/1/FramePreview
+PASS ratio 1/False/1200/1/FrameThumbF
+PASS ratio 1/False/1200/1/FrameThumbB
+PASS ratio 1/False/1200/1/FrameThumbD
+PASS ratio 1/False/1200/2/FrameMain
+PASS ratio 1/False/1200/2/FramePreview
+PASS ratio 1/False/1200/2/FrameThumbF
+PASS ratio 1/False/1200/2/FrameThumbB
+PASS ratio 1/False/1200/2/FrameThumbD
+PASS ratio 1/False/1200/3/FrameMain
+PASS ratio 1/False/1200/3/FramePreview
+PASS ratio 1/False/1200/3/FrameThumbF
+PASS ratio 1/False/1200/3/FrameThumbB
+PASS ratio 1/False/1200/3/FrameThumbD
+PASS ratio 1/False/1200/4/FrameMain
+PASS ratio 1/False/1200/4/FramePreview
+PASS ratio 1/False/1200/4/FrameThumbF
+PASS ratio 1/False/1200/4/FrameThumbB
+PASS ratio 1/False/1200/4/FrameThumbD
+PASS ratio 1/True/1440/0/FrameMain
+PASS ratio 1/True/1440/0/FramePreview
+PASS ratio 1/True/1440/0/FrameThumbF
+PASS ratio 1/True/1440/0/FrameThumbB
+PASS ratio 1/True/1440/0/FrameThumbD
+PASS ratio 1/True/1440/1/FrameMain
+PASS ratio 1/True/1440/1/FramePreview
+PASS ratio 1/True/1440/1/FrameThumbF
+PASS ratio 1/True/1440/1/FrameThumbB
+PASS ratio 1/True/1440/1/FrameThumbD
+PASS ratio 1/True/1440/2/FrameMain
+PASS ratio 1/True/1440/2/FramePreview
+PASS ratio 1/True/1440/2/FrameThumbF
+PASS ratio 1/True/1440/2/FrameThumbB
+PASS ratio 1/True/1440/2/FrameThumbD
+PASS ratio 1/True/1440/3/FrameMain
+PASS ratio 1/True/1440/3/FramePreview
+PASS ratio 1/True/1440/3/FrameThumbF
+PASS ratio 1/True/1440/3/FrameThumbB
+PASS ratio 1/True/1440/3/FrameThumbD
+PASS ratio 1/True/1440/4/FrameMain
+PASS ratio 1/True/1440/4/FramePreview
+PASS ratio 1/True/1440/4/FrameThumbF
+PASS ratio 1/True/1440/4/FrameThumbB
+PASS ratio 1/True/1440/4/FrameThumbD
+PASS ratio 1/True/1200/0/FrameMain
+PASS ratio 1/True/1200/0/FramePreview
+PASS ratio 1/True/1200/0/FrameThumbF
+PASS ratio 1/True/1200/0/FrameThumbB
+PASS ratio 1/True/1200/0/FrameThumbD
+PASS ratio 1/True/1200/1/FrameMain
+PASS ratio 1/True/1200/1/FramePreview
+PASS ratio 1/True/1200/1/FrameThumbF
+PASS ratio 1/True/1200/1/FrameThumbB
+PASS ratio 1/True/1200/1/FrameThumbD
+PASS ratio 1/True/1200/2/FrameMain
+PASS ratio 1/True/1200/2/FramePreview
+PASS ratio 1/True/1200/2/FrameThumbF
+PASS ratio 1/True/1200/2/FrameThumbB
+PASS ratio 1/True/1200/2/FrameThumbD
+PASS ratio 1/True/1200/3/FrameMain
+PASS ratio 1/True/1200/3/FramePreview
+PASS ratio 1/True/1200/3/FrameThumbF
+PASS ratio 1/True/1200/3/FrameThumbB
+PASS ratio 1/True/1200/3/FrameThumbD
+PASS ratio 1/True/1200/4/FrameMain
+PASS ratio 1/True/1200/4/FramePreview
+PASS ratio 1/True/1200/4/FrameThumbF
+PASS ratio 1/True/1200/4/FrameThumbB
+PASS ratio 1/True/1200/4/FrameThumbD
+PASS ratio 2/False/1440/0/FrameMain
+PASS ratio 2/False/1440/0/FramePreview
+PASS ratio 2/False/1440/0/FrameThumbF
+PASS ratio 2/False/1440/0/FrameThumbB
+PASS ratio 2/False/1440/0/FrameThumbD
+PASS ratio 2/False/1440/1/FrameMain
+PASS ratio 2/False/1440/1/FramePreview
+PASS ratio 2/False/1440/1/FrameThumbF
+PASS ratio 2/False/1440/1/FrameThumbB
+PASS ratio 2/False/1440/1/FrameThumbD
+PASS ratio 2/False/1440/2/FrameMain
+PASS ratio 2/False/1440/2/FramePreview
+PASS ratio 2/False/1440/2/FrameThumbF
+PASS ratio 2/False/1440/2/FrameThumbB
+PASS ratio 2/False/1440/2/FrameThumbD
+PASS ratio 2/False/1440/3/FrameMain
+PASS ratio 2/False/1440/3/FramePreview
+PASS ratio 2/False/1440/3/FrameThumbF
+PASS ratio 2/False/1440/3/FrameThumbB
+PASS ratio 2/False/1440/3/FrameThumbD
+PASS ratio 2/False/1440/4/FrameMain
+PASS ratio 2/False/1440/4/FramePreview
+PASS ratio 2/False/1440/4/FrameThumbF
+PASS ratio 2/False/1440/4/FrameThumbB
+PASS ratio 2/False/1440/4/FrameThumbD
+PASS ratio 2/False/1200/0/FrameMain
+PASS ratio 2/False/1200/0/FramePreview
+PASS ratio 2/False/1200/0/FrameThumbF
+PASS ratio 2/False/1200/0/FrameThumbB
+PASS ratio 2/False/1200/0/FrameThumbD
+PASS ratio 2/False/1200/1/FrameMain
+PASS ratio 2/False/1200/1/FramePreview
+PASS ratio 2/False/1200/1/FrameThumbF
+PASS ratio 2/False/1200/1/FrameThumbB
+PASS ratio 2/False/1200/1/FrameThumbD
+PASS ratio 2/False/1200/2/FrameMain
+PASS ratio 2/False/1200/2/FramePreview
+PASS ratio 2/False/1200/2/FrameThumbF
+PASS ratio 2/False/1200/2/FrameThumbB
+PASS ratio 2/False/1200/2/FrameThumbD
+PASS ratio 2/False/1200/3/FrameMain
+PASS ratio 2/False/1200/3/FramePreview
+PASS ratio 2/False/1200/3/FrameThumbF
+PASS ratio 2/False/1200/3/FrameThumbB
+PASS ratio 2/False/1200/3/FrameThumbD
+PASS ratio 2/False/1200/4/FrameMain
+PASS ratio 2/False/1200/4/FramePreview
+PASS ratio 2/False/1200/4/FrameThumbF
+PASS ratio 2/False/1200/4/FrameThumbB
+PASS ratio 2/False/1200/4/FrameThumbD
+PASS ratio 2/True/1440/0/FrameMain
+PASS ratio 2/True/1440/0/FramePreview
+PASS ratio 2/True/1440/0/FrameThumbF
+PASS ratio 2/True/1440/0/FrameThumbB
+PASS ratio 2/True/1440/0/FrameThumbD
+PASS ratio 2/True/1440/1/FrameMain
+PASS ratio 2/True/1440/1/FramePreview
+PASS ratio 2/True/1440/1/FrameThumbF
+PASS ratio 2/True/1440/1/FrameThumbB
+PASS ratio 2/True/1440/1/FrameThumbD
+PASS ratio 2/True/1440/2/FrameMain
+PASS ratio 2/True/1440/2/FramePreview
+PASS ratio 2/True/1440/2/FrameThumbF
+PASS ratio 2/True/1440/2/FrameThumbB
+PASS ratio 2/True/1440/2/FrameThumbD
+PASS ratio 2/True/1440/3/FrameMain
+PASS ratio 2/True/1440/3/FramePreview
+PASS ratio 2/True/1440/3/FrameThumbF
+PASS ratio 2/True/1440/3/FrameThumbB
+PASS ratio 2/True/1440/3/FrameThumbD
+PASS ratio 2/True/1440/4/FrameMain
+PASS ratio 2/True/1440/4/FramePreview
+PASS ratio 2/True/1440/4/FrameThumbF
+PASS ratio 2/True/1440/4/FrameThumbB
+PASS ratio 2/True/1440/4/FrameThumbD
+PASS ratio 2/True/1200/0/FrameMain
+PASS ratio 2/True/1200/0/FramePreview
+PASS ratio 2/True/1200/0/FrameThumbF
+PASS ratio 2/True/1200/0/FrameThumbB
+PASS ratio 2/True/1200/0/FrameThumbD
+PASS ratio 2/True/1200/1/FrameMain
+PASS ratio 2/True/1200/1/FramePreview
+PASS ratio 2/True/1200/1/FrameThumbF
+PASS ratio 2/True/1200/1/FrameThumbB
+PASS ratio 2/True/1200/1/FrameThumbD
+PASS ratio 2/True/1200/2/FrameMain
+PASS ratio 2/True/1200/2/FramePreview
+PASS ratio 2/True/1200/2/FrameThumbF
+PASS ratio 2/True/1200/2/FrameThumbB
+PASS ratio 2/True/1200/2/FrameThumbD
+PASS ratio 2/True/1200/3/FrameMain
+PASS ratio 2/True/1200/3/FramePreview
+PASS ratio 2/True/1200/3/FrameThumbF
+PASS ratio 2/True/1200/3/FrameThumbB
+PASS ratio 2/True/1200/3/FrameThumbD
+PASS ratio 2/True/1200/4/FrameMain
+PASS ratio 2/True/1200/4/FramePreview
+PASS ratio 2/True/1200/4/FrameThumbF
+PASS ratio 2/True/1200/4/FrameThumbB
+PASS ratio 2/True/1200/4/FrameThumbD
+PASS ratio 3/False/1440/0/FrameMain
+PASS ratio 3/False/1440/0/FramePreview
+PASS ratio 3/False/1440/0/FrameThumbF
+PASS ratio 3/False/1440/0/FrameThumbB
+PASS ratio 3/False/1440/0/FrameThumbD
+PASS ratio 3/False/1440/1/FrameMain
+PASS ratio 3/False/1440/1/FramePreview
+PASS ratio 3/False/1440/1/FrameThumbF
+PASS ratio 3/False/1440/1/FrameThumbB
+PASS ratio 3/False/1440/1/FrameThumbD
+PASS ratio 3/False/1440/2/FrameMain
+PASS ratio 3/False/1440/2/FramePreview
+PASS ratio 3/False/1440/2/FrameThumbF
+PASS ratio 3/False/1440/2/FrameThumbB
+PASS ratio 3/False/1440/2/FrameThumbD
+PASS ratio 3/False/1440/3/FrameMain
+PASS ratio 3/False/1440/3/FramePreview
+PASS ratio 3/False/1440/3/FrameThumbF
+PASS ratio 3/False/1440/3/FrameThumbB
+PASS ratio 3/False/1440/3/FrameThumbD
+PASS ratio 3/False/1440/4/FrameMain
+PASS ratio 3/False/1440/4/FramePreview
+PASS ratio 3/False/1440/4/FrameThumbF
+PASS ratio 3/False/1440/4/FrameThumbB
+PASS ratio 3/False/1440/4/FrameThumbD
+PASS ratio 3/False/1200/0/FrameMain
+PASS ratio 3/False/1200/0/FramePreview
+PASS ratio 3/False/1200/0/FrameThumbF
+PASS ratio 3/False/1200/0/FrameThumbB
+PASS ratio 3/False/1200/0/FrameThumbD
+PASS ratio 3/False/1200/1/FrameMain
+PASS ratio 3/False/1200/1/FramePreview
+PASS ratio 3/False/1200/1/FrameThumbF
+PASS ratio 3/False/1200/1/FrameThumbB
+PASS ratio 3/False/1200/1/FrameThumbD
+PASS ratio 3/False/1200/2/FrameMain
+PASS ratio 3/False/1200/2/FramePreview
+PASS ratio 3/False/1200/2/FrameThumbF
+PASS ratio 3/False/1200/2/FrameThumbB
+PASS ratio 3/False/1200/2/FrameThumbD
+PASS ratio 3/False/1200/3/FrameMain
+PASS ratio 3/False/1200/3/FramePreview
+PASS ratio 3/False/1200/3/FrameThumbF
+PASS ratio 3/False/1200/3/FrameThumbB
+PASS ratio 3/False/1200/3/FrameThumbD
+PASS ratio 3/False/1200/4/FrameMain
+PASS ratio 3/False/1200/4/FramePreview
+PASS ratio 3/False/1200/4/FrameThumbF
+PASS ratio 3/False/1200/4/FrameThumbB
+PASS ratio 3/False/1200/4/FrameThumbD
+PASS ratio 3/True/1440/0/FrameMain
+PASS ratio 3/True/1440/0/FramePreview
+PASS ratio 3/True/1440/0/FrameThumbF
+PASS ratio 3/True/1440/0/FrameThumbB
+PASS ratio 3/True/1440/0/FrameThumbD
+PASS ratio 3/True/1440/1/FrameMain
+PASS ratio 3/True/1440/1/FramePreview
+PASS ratio 3/True/1440/1/FrameThumbF
+PASS ratio 3/True/1440/1/FrameThumbB
+PASS ratio 3/True/1440/1/FrameThumbD
+PASS ratio 3/True/1440/2/FrameMain
+PASS ratio 3/True/1440/2/FramePreview
+PASS ratio 3/True/1440/2/FrameThumbF
+PASS ratio 3/True/1440/2/FrameThumbB
+PASS ratio 3/True/1440/2/FrameThumbD
+PASS ratio 3/True/1440/3/FrameMain
+PASS ratio 3/True/1440/3/FramePreview
+PASS ratio 3/True/1440/3/FrameThumbF
+PASS ratio 3/True/1440/3/FrameThumbB
+PASS ratio 3/True/1440/3/FrameThumbD
+PASS ratio 3/True/1440/4/FrameMain
+PASS ratio 3/True/1440/4/FramePreview
+PASS ratio 3/True/1440/4/FrameThumbF
+PASS ratio 3/True/1440/4/FrameThumbB
+PASS ratio 3/True/1440/4/FrameThumbD
+PASS ratio 3/True/1200/0/FrameMain
+PASS ratio 3/True/1200/0/FramePreview
+PASS ratio 3/True/1200/0/FrameThumbF
+PASS ratio 3/True/1200/0/FrameThumbB
+PASS ratio 3/True/1200/0/FrameThumbD
+PASS ratio 3/True/1200/1/FrameMain
+PASS ratio 3/True/1200/1/FramePreview
+PASS ratio 3/True/1200/1/FrameThumbF
+PASS ratio 3/True/1200/1/FrameThumbB
+PASS ratio 3/True/1200/1/FrameThumbD
+PASS ratio 3/True/1200/2/FrameMain
+PASS ratio 3/True/1200/2/FramePreview
+PASS ratio 3/True/1200/2/FrameThumbF
+PASS ratio 3/True/1200/2/FrameThumbB
+PASS ratio 3/True/1200/2/FrameThumbD
+PASS ratio 3/True/1200/3/FrameMain
+PASS ratio 3/True/1200/3/FramePreview
+PASS ratio 3/True/1200/3/FrameThumbF
+PASS ratio 3/True/1200/3/FrameThumbB
+PASS ratio 3/True/1200/3/FrameThumbD
+PASS ratio 3/True/1200/4/FrameMain
+PASS ratio 3/True/1200/4/FramePreview
+PASS ratio 3/True/1200/4/FrameThumbF
+PASS ratio 3/True/1200/4/FrameThumbB
+PASS ratio 3/True/1200/4/FrameThumbD
+PASS preset load conditions
+PASS preset save
+PASS saved preset snapshot
+PASS theme/layout retains preset
+PASS empty/duplicate preset guarded
+PASS busy preset guarded
+Six main renders + twelve overlay renders + six compact renders. UI prototype only; production files untouched.

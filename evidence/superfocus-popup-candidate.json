@@ -1,0 +1,27 @@
+{
+  "date": "2026-10-28",
+  "status": "Superseded by verified staged candidate: evidence/superfocus-popup-delivery.json",
+  "build": "0 errors; 4 existing warnings",
+  "regression": "17 groups PASS",
+  "legacy": "19 guards PASS",
+  "independentReview": false,
+  "ui": "Implemented compact draggable native ToolWindow, launch on selection, tooltips, collapsed advanced settings, quality counts and selected gap/direction. Native visual/drag/tooltip checks not yet executed.",
+  "capture": "A-first and B-first; nearest endpoint start; reverse monotonic sequence; no initial settle when already at endpoint; awaited download gate retained",
+  "hardware": "New B-first autofocus and bidirectional capture not yet tested on EOS R. Prior optical/stack evidence is separate.",
+  "delivery": "Current .local/g2-runtime remains the prior quality version. No replacement while that app is running and desktop is locked.",
+  "rawModules": [
+    {
+      "file": "src/Clorium.G2/projects/CameraControl/bin/Release/net48/CameraControl.exe",
+      "sha256": "bb8c9f4375631182a01169c1f51b68379ddac0266686a2f646d1e7c86938e8c3"
+    },
+    {
+      "file": "src/Clorium.G2/projects/CameraControl.Core/bin/Release/net48/CameraControl.Core.dll",
+      "sha256": "230df557b2a693e292ee4b418e6a7315caee4092a46f6167c852c8ca6d1c6fa0"
+    }
+  ],
+  "logs": [
+    "superfocus-popup-build.log",
+    "evidence/superfocus-popup-regression.log",
+    "evidence/superfocus-popup-legacy.log"
+  ]
+}

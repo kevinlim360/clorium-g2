@@ -1,0 +1,92 @@
+[
+  {
+    "file": "CameraControl/CameraControl/MainWindow.xaml.cs",
+    "signature": "private async void CaptureOfFrontView(",
+    "line": 2054,
+    "sha256": "d27b5f3fcfc4780da7a2db96d60756849e283ecfb122fdeb3596573b8323d184"
+  },
+  {
+    "file": "CameraControl/CameraControl/MainWindow.xaml.cs",
+    "signature": "private async void CaptureOfBackView(",
+    "line": 2092,
+    "sha256": "384605b4f40c0ebacf798c89728ad3f5dbdd010f453a57cc4e608a15dbcc53d1"
+  },
+  {
+    "file": "CameraControl/CameraControl/MainWindow.xaml.cs",
+    "signature": "private async Task<bool> CaptureAsync(",
+    "line": 1970,
+    "sha256": "7af36f453ee523fce42139010ea64ef58d71240c147fc8523c5fbbc6e8b819e1"
+  },
+  {
+    "file": "CameraControl/CameraControl/MainWindow.xaml.cs",
+    "signature": "private async Task<bool> WaitForCaptureComplete(",
+    "line": 2008,
+    "sha256": "7844a82e67a152a61661d9a771d3f5ce5984bb66ee4bd1194dd42b94e7619b60"
+  },
+  {
+    "file": "CameraControl/CameraControl/MainWindow.xaml.cs",
+    "signature": "private void ResetFailedCaptureState(",
+    "line": 1958,
+    "sha256": "9bd3a0893ea3f631bc78939cd687dff65a7d40016d72ad13f685f48f868aed1e"
+  },
+  {
+    "file": "CameraControl/CameraControl/MainWindow.xaml.cs",
+    "signature": "private async Task<bool> CaptureBackground(",
+    "line": 2120,
+    "sha256": "bd74c97aca22a96876abf90b868a82ba70ccb54b7e258841022534ad5daea1d5"
+  },
+  {
+    "file": "CameraControl/CameraControl/MainWindow.xaml.cs",
+    "signature": "private void PhotoCaptured(",
+    "line": 2182,
+    "sha256": "823740dd6f358185cd72592d7f59d286c96cfe8f9fe20fc0a6f86c6d191ecb73"
+  },
+  {
+    "file": "CameraControl.Core/CameraControl/Core/Classes/PhotoSession.cs",
+    "signature": "private string FormatFileName(",
+    "line": 676,
+    "sha256": "7d74f0efece422a30f6021312b2f95e1ddd2532880488167eac6bc65310bfe3d"
+  },
+  {
+    "file": "CameraControl.Core/CameraControl/Core/Classes/PhotoSession.cs",
+    "signature": "public string GetNextFileName(",
+    "line": 627,
+    "sha256": "df3913b66b0f3a994104c62970aaa13157c1adb0d4be07df7bd0a04f874e0e98"
+  },
+  {
+    "file": "CameraControl.Core/CameraControl/Core/Classes/CameraHelper.cs",
+    "signature": "public static async Task<bool> CaptureAsync(",
+    "line": 271,
+    "sha256": "615077836afa5cee6da4b2bfc64d945762296a08a3c84403c2414f5312f689fe"
+  },
+  {
+    "file": "CameraControl.Core/CameraControl/Core/Classes/CameraHelper.cs",
+    "signature": "public static bool CaptureAsyncWithError(",
+    "line": 296,
+    "sha256": "efe4450dd0a56b911b1a683831cd0c7eb8ab02126fe697911a355b4d61d7ad43"
+  },
+  {
+    "file": "CameraControl.Core/CameraControl/Core/Classes/CameraHelper.cs",
+    "signature": "private static bool CaptureInternal(",
+    "line": 327,
+    "sha256": "48dee4b10c2289b73828d4ba06cd90d2fba2807f9c9ce11640409efbb13a8c85"
+  },
+  {
+    "file": "CameraControl/CameraControl/ViewModel/MainMenuViewModel.cs",
+    "signature": "public string CreateNewSessionFolder(",
+    "line": 530,
+    "sha256": "d3a8174df1978c1c5fe990f44e65f0047e923fbb34d7b74de154c5a2ed87c8f8"
+  },
+  {
+    "file": "CameraControl/CameraControl/ViewModel/MainMenuViewModel.cs",
+    "signature": "private bool CanStartNewCaptureSession(",
+    "line": 511,
+    "sha256": "90bcb87e4306b7ddc76b8dae6535a607dfb5ecdc0d4c00a266c3123335b2e3da"
+  },
+  {
+    "file": "CameraControl/CameraControl/ViewModel/MainMenuViewModel.cs",
+    "signature": "private static void ResetCapturePurposeForNewSession(",
+    "line": 521,
+    "sha256": "d3a70143948c4eceeca3b24a3e29e8d90196307fd6e597f7093ac3faf1d2f17e"
+  }
+]

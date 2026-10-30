@@ -1,0 +1,4 @@
+<Project Sdk="Microsoft.NET.Sdk">
+ <PropertyGroup><TargetFramework>net48</TargetFramework><AssemblyName>Clorium.Licensing.Client</AssemblyName><UseWPF>true</UseWPF><AutomaticallyUseReferenceAssemblyPackages>false</AutomaticallyUseReferenceAssemblyPackages><TargetFrameworkRootPath>../../../src/Clorium.G2/framework-refs/net48/</TargetFrameworkRootPath><LangVersion>latest</LangVersion></PropertyGroup>
+ <ItemGroup><ProjectReference Include="../Common/Common.csproj"/><Reference Include="System.Net.Http"/><Reference Include="System.Security"/><Reference Include="System.Management"/></ItemGroup>
+</Project>

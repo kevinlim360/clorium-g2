@@ -1,0 +1,27 @@
+{
+  "ui": "Canon live view verified: button disabled before endpoints, enabled at A=0 B=1, expected 2 cuts",
+  "capture": "No new exposures for this button-only change; dispatch uses previously tested A/B capture method",
+  "legacyChecks": 19,
+  "postprocess": "WPF/WIA/WMPLib PASS",
+  "change": "Visible direct Superfocus capture/start button on live view, separate settings button",
+  "modules": [
+    {
+      "file": "CameraControl.exe",
+      "sha256": "9b9bf1211f37d090a459e79a372bcadf46c2888ddfb2740dea307e348669ef24"
+    },
+    {
+      "file": "CameraControl.Core.dll",
+      "sha256": "b70edf73f6726ed72c2151d1290c3b4fd96debdf55b49b7b39fe7f5938b06271"
+    },
+    {
+      "file": "CameraControl.Devices.dll",
+      "sha256": "3be30247f5d5dfc9f88e5482664671c7df1fc0debd15b62892e227333712288a"
+    },
+    {
+      "file": "Canon.Eos.Framework.dll",
+      "sha256": "a931b94d8631b341c01ee3c2f3b07997855032687cfc5242be780bb2544f13d2"
+    }
+  ],
+  "build": "0 errors / 4 existing warnings",
+  "date": "2026-10-28"
+}

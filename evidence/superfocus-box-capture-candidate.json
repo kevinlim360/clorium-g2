@@ -1,0 +1,22 @@
+{
+  "hardware": "EOS R RF24-105; near vase A0, far blind B74; box motion preserves endpoints",
+  "postTestSourceChange": "toolbar Grid.RowSpan and explicit discarded Dispatcher operation only",
+  "modules": [
+    {
+      "sha256": "d964df464fcf5c2a5c71e73f88ebca70700ba45a7c2be554b2b71a350ca65f70",
+      "file": "CameraControl.exe"
+    },
+    {
+      "sha256": "b4f19996f9e32f21dddf314ebffb5aa0641e074107c37bd1f3bae2716354428f",
+      "file": "CameraControl.Core.dll"
+    },
+    {
+      "sha256": "3be30247f5d5dfc9f88e5482664671c7df1fc0debd15b62892e227333712288a",
+      "file": "CameraControl.Devices.dll"
+    },
+    {
+      "sha256": "a931b94d8631b341c01ee3c2f3b07997855032687cfc5242be780bb2544f13d2",
+      "file": "Canon.Eos.Framework.dll"
+    }
+  ]
+}

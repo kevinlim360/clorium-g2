@@ -1,0 +1,2 @@
+PASS actual WPF: high25/medium17/low8, every typed2..25, invalid/empty input, refresh/caret settings
+PASS actual WPF: immediate preview movement, captured B ROI, editable count while searching, B-first and cancellation

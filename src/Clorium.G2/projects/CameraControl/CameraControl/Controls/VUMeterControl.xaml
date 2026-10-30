@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<UserControl x:Class="CameraControl.Controls.VUMeterControl" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:l="clr-namespace:CameraControl.Controls">
+  <FrameworkElement.Resources>
+    <ResourceDictionary>
+      <DataTemplate x:Key="{DataTemplateKey {x:Type l:VUMeterControl}}" DataType="{x:Type l:VUMeterControl}">
+        <Rectangle Name="cell" Margin="1" MinHeight="1" />
+        <DataTemplate.Triggers>
+          <DataTrigger Value="1" Binding="{Binding Level}">
+            <Setter TargetName="cell" Property="Shape.Fill" Value="#FFFF0000" />
+          </DataTrigger>
+          <DataTrigger Value="2" Binding="{Binding Level}">
+            <Setter TargetName="cell" Property="Shape.Fill" Value="#FFFFFF00" />
+          </DataTrigger>
+          <DataTrigger Value="3" Binding="{Binding Level}">
+            <Setter TargetName="cell" Property="Shape.Fill" Value="#FF008000" />
+          </DataTrigger>
+        </DataTemplate.Triggers>
+      </DataTemplate>
+    </ResourceDictionary>
+  </FrameworkElement.Resources>
+  <ItemsControl Name="PART_ItemsPresenter" Background="{Binding Path=Background, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}" ItemsSource="{Binding}">
+    <ItemsControl.ItemsPanel>
+      <ItemsPanelTemplate>
+        <UniformGrid Columns="1" />
+      </ItemsPanelTemplate>
+    </ItemsControl.ItemsPanel>
+  </ItemsControl>
+</UserControl>

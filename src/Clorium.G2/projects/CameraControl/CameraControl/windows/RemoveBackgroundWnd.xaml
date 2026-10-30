@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Window x:Class="CameraControl.windows.RemoveBackgroundWnd" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local="clr-namespace:CameraControl.windows" Title="RemoveBackgroundWnd" Height="1195" Width="1250" WindowStartupLocation="Manual" Left="608" Top="50" TextElement.Foreground="{DynamicResource MaterialDesignBody}" TextElement.FontWeight="Regular" TextElement.FontSize="13" TextOptions.TextFormattingMode="Ideal" TextOptions.TextRenderingMode="Auto" Background="{DynamicResource MaterialDesignPaper}" FontFamily="{DynamicResource MaterialDesignFont}" Cursor="" Loaded="Window_Loaded" Closed="Window_Closed">
+  <Grid Cursor="">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="*" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*" />
+      <ColumnDefinition Width="*" />
+    </Grid.ColumnDefinitions>
+    <Border Name="DisplayBorder" Grid.Row="0" Grid.ColumnSpan="2" Margin="5">
+      <Border.Background>
+        <VisualBrush x:Name="CheckerboardBrush" TileMode="Tile" Viewport="0,0,20,20" ViewportUnits="Absolute">
+          <VisualBrush.Visual>
+            <Grid Width="20" Height="20">
+              <Rectangle Fill="#FFFFFFFF" Width="20" Height="20" />
+              <Rectangle Fill="#EEE" Width="10" Height="10" VerticalAlignment="Top" HorizontalAlignment="Left" />
+              <Rectangle Fill="#EEE" Width="10" Height="10" VerticalAlignment="Bottom" HorizontalAlignment="Right" />
+            </Grid>
+          </VisualBrush.Visual>
+        </VisualBrush>
+      </Border.Background>
+      <Image Name="ResultImage" Stretch="Uniform" />
+    </Border>
+    <Grid Row="1" Column="0" Margin="10,5,5,5">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="*" />
+      </Grid.ColumnDefinitions>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="*" />
+        <RowDefinition Height="Auto" />
+      </Grid.RowDefinitions>
+      <TextBlock Grid.Row="0" Grid.Column="0" Text="처리 이미지" FontWeight="Bold" Margin="0,0,0,10" />
+      <TextBlock Grid.Row="0" Grid.Column="1" Text="처리 모드" FontWeight="Bold" Margin="15,0,0,10" />
+      <StackPanel Grid.Row="1" Grid.Column="0" VerticalAlignment="Top">
+        <RadioButton Name="RadioSingle" Content="한개 이미지" Margin="0,5,0,8" IsChecked="True" Checked="Algorithm_Checked" />
+        <RadioButton Name="RadioDiff" Content="두개 이미지" Checked="Algorithm_Checked" />
+      </StackPanel>
+      <TextBlock Name="GuideText1" Grid.Row="2" Grid.Column="0" Text=" * 단일 모드: 제거할 바탕색 이미지를 클릭하세요." Foreground="#FFDC143C" FontSize="11" Margin="0,15,0,5" />
+      <Border Grid.Row="1" Grid.Column="0" BorderBrush="#EEE" BorderThickness="1,0,0,0" Margin="0 5 20 0 " HorizontalAlignment="Right" />
+      <StackPanel Name="SingleModeOptions" Grid.Row="1" Grid.Column="1" VerticalAlignment="Top">
+        <RadioButton Name="RadioGeneral" Content="일반     의류 (외곽 제거)" Margin="0,5,0,8" IsChecked="True" Checked="SubAlgorithm_Checked" />
+        <RadioButton Name="RadioSeeThrough" Content="씨스루 의류 (전역 제거)" Checked="SubAlgorithm_Checked" />
+      </StackPanel>
+      <TextBlock Name="GuideText2" Grid.Row="2" Grid.Column="1" Text="* 일반 의류: 외곽 배경만 지우고 내부를 보호합니다." Foreground="#FFDC143C" FontSize="11" Margin="0,15,0,5" />
+    </Grid>
+    <StackPanel Grid.Row="1" Grid.Column="1" Margin="5">
+      <TextBlock Text="배경 모드 선택" />
+      <ComboBox Name="BackgroundCombo" SelectedIndex="0" Margin="0 0 0 5" SelectionChanged="BackgroundCombo_SelectionChanged">
+        <ComboBoxItem Content="체크보드 (투명)" />
+        <ComboBoxItem Content="흰색 (White)" />
+        <ComboBoxItem Content="검은색 (Black)" />
+        <ComboBoxItem Content="회색 (Gray)" />
+        <ComboBoxItem Content="베이지 (Beige)" />
+      </ComboBox>
+      <TextBlock Name="TargetColor" Text="* 선택된 백그라운드 색" Foreground="#FFDC143C" FontSize="11" HorizontalAlignment="Center" />
+    </StackPanel>
+    <StackPanel Grid.Row="2" Grid.Column="0" Margin="5 10 0 0" VerticalAlignment="Center">
+      <Button Content="이미지 불러오기" Margin="0 0 0 0" Click="LoadImages_Click" />
+      <Button Content="투명(Png) / 배경(Jepg) 저장" Margin="0 10 0 0" Click="SaveButton_Click" />
+    </StackPanel>
+    <StackPanel Grid.Row="2" Grid.Column="1" Margin="5" VerticalAlignment="Center">
+      <DockPanel>
+        <TextBlock Text="배경 제거 강도 (Threshold)" Margin="0 15 0 0" />
+        <TextBlock HorizontalAlignment="Right" FontWeight="Bold" Foreground="#FF808080" Margin="0 15 0 0" Text="{Binding ElementName=ThresholdSlider, Path=Value, StringFormat='{}{0:F0}'}" />
+      </DockPanel>
+      <Slider Name="ThresholdSlider" Minimum="0" Maximum="255" TickFrequency="1" IsSnapToTickEnabled="True" Margin="0 0 0 10" Thumb.DragCompleted="Slider_DragCompleted" />
+      <DockPanel>
+        <TextBlock Text="경계선 부드러움 (Soft Range)" />
+        <TextBlock HorizontalAlignment="Right" FontWeight="Bold" Foreground="#FF808080" Text="{Binding ElementName=SoftRangeSlider, Path=Value, StringFormat='{}{0:F0}'}" />
+      </DockPanel>
+      <Slider Name="SoftRangeSlider" Minimum="1" Maximum="100" TickFrequency="1" IsSnapToTickEnabled="True" Thumb.DragCompleted="Slider_DragCompleted" />
+    </StackPanel>
+    <Border Grid.Row="3" Grid.ColumnSpan="2" Background="#F9F9F9" BorderBrush="#EEE" BorderThickness="0,1,0,0" Padding="10">
+      <StackPanel>
+        <ProgressBar Name="BatchProgress" Height="20" Margin="0,0,0,5" Visibility="Collapsed" />
+        <Grid Margin="0,0,0,10">
+          <TextBlock Name="StatusText" Text="준비됨" FontSize="15" FontWeight="Bold" HorizontalAlignment="Center" Foreground="#FF0078D7" />
+          <StackPanel Name="CountPanel" Orientation="Horizontal" HorizontalAlignment="Right" Visibility="Collapsed">
+            <TextBlock Name="CurrentCountText" Text="0" FontSize="14" FontWeight="Bold" />
+            <TextBlock Text=" / " FontSize="14" />
+            <TextBlock Name="TotalCountText" Text="0" FontSize="14" />
+          </StackPanel>
+        </Grid>
+        <Button Name="BatchButton" Content="여러 폴더 파일 일괄 처리" Height="40" FontSize="14" FontWeight="Bold" Click="BatchProcess_Click" />
+      </StackPanel>
+    </Border>
+    <Grid Name="LoadingOverlay" RowSpan="4" ColumnSpan="2" Background="#66000000" Visibility="Collapsed">
+      <Border Background="#FFFFFFFF" CornerRadius="10" Padding="30" HorizontalAlignment="Center" VerticalAlignment="Center" Width="350">
+        <StackPanel>
+          <ProgressBar IsIndeterminate="True" Height="10" Margin="0,0,0,20" />
+          <TextBlock Name="OverlayText" Text="이미지 분석 및 저장 중..." FontSize="18" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,10" />
+          <TextBlock Text="잠시만 기다려 주세요. 작업이 완료되면 창이 활성화됩니다." FontSize="12" Foreground="#FF808080" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" />
+        </StackPanel>
+      </Border>
+    </Grid>
+  </Grid>
+</Window>

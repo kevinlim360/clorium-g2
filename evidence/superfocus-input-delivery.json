@@ -1,0 +1,34 @@
+{
+  "date": "2026-10-28",
+  "application": ".local/g2-runtime/CameraControl.exe",
+  "build": "0 errors;10 existing warnings",
+  "postprocess": "WPF/WIA/WMPLib PASS",
+  "regression": "19 groups PASS",
+  "legacy": "19 guards PASS",
+  "maintenance": "PASS",
+  "independentReview": false,
+  "anchorBehavior": "During anchor autofocus only the opposite endpoint remains enabled; clicking queues an immutable FocusBoxContrast snapshot. Existing autofocus completes then the pending endpoint runs through the same serial camera ownership path. Same-end repeat blocked; opposite selection updates pending box. Stop/disconnect/failure discards pending. Actual lens movement remains serial, not instantaneous.",
+  "counts": "After either anchor is registered, default High is selected and its count fills textbox when both exist. Medium/Low fill their counts. Programmatic textbox updates are guarded; manual edits persist through Refresh. Type/paste digits, I-beam/focus/select-all on entry. Exact manual count from2 to High count with existing200 maximum.",
+  "wpf": "PASS actual staged SuperfocusWindow with fake frame camera: high25/medium17/low8; every manual2..25; reject1/26/empty; typed text survives refresh; editable/focus flags; A-search B-enabled; B queues immutable ROI; B-first A-enabled; cancellation clears request. Test source evidence/G2InputCheck.cs; output evidence/superfocus-input-wpf.log. Window never shown; no SDK camera session in harness.",
+  "ui": "Actual native window showed Superfocus launcher above Ghost, compact popup and default High selected. Coordinate automation was unreliable for popup child; numeric and queue behavior validated by isolated WPF test instead of claiming hardware pass.",
+  "hardware": "No new focus-stack capture performed; queued A-to-B hardware autofocus continuation not yet verified. Prior device captures remain separate.",
+  "delivery": "Staged and running. Previous app shutdown initially held Core.dll briefly; waited for no CameraControl process and repeated full staging successfully.",
+  "modules": [
+    {
+      "sha256": "1f43aaf0907607c5604a76d185559ebc3fc67665523f04525c90510ed92929b7",
+      "file": "CameraControl.exe"
+    },
+    {
+      "sha256": "5a96c37be299008003feab3ab8596aa845ffeabcb2d6678111db9e956c85680b",
+      "file": "CameraControl.Core.dll"
+    },
+    {
+      "sha256": "3be30247f5d5dfc9f88e5482664671c7df1fc0debd15b62892e227333712288a",
+      "file": "CameraControl.Devices.dll"
+    },
+    {
+      "sha256": "a931b94d8631b341c01ee3c2f3b07997855032687cfc5242be780bb2544f13d2",
+      "file": "Canon.Eos.Framework.dll"
+    }
+  ]
+}

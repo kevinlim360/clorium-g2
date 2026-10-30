@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "candidate": "main",
+  "originalInputSha256": "963cf2d7f44cacacb7e098834397d1816dd56fd599ca26b23050d8fbebad4ba3",
+  "fields": [
+    {
+      "originalMetadataTypeName": "CameraControl.ViewModel.MainMenuViewModel+SendDataInfo",
+      "fieldName": "Vendor_aip_key",
+      "environmentVariable": "CLORIUM_VENDOR_API_KEY"
+    },
+    {
+      "originalMetadataTypeName": "CameraControl.ViewModel.MainMenuViewModel+SendDataInfo",
+      "fieldName": "VendorID",
+      "environmentVariable": "CLORIUM_VENDOR_ID"
+    },
+    {
+      "originalMetadataTypeName": "CameraControl.App",
+      "fieldName": "Encryption_key",
+      "environmentVariable": "CLORIUM_MAIN_LICENSE_KEY"
+    }
+  ]
+}

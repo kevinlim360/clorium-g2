@@ -1,0 +1,796 @@
+using System;
+using System.Diagnostics;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Management;
+using System.Security.Cryptography;
+using System.Security.Principal;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Forms;
+using System.Windows.Threading;
+using CameraControl.Core;
+using CameraControl.Core.Classes;
+using CameraControl.Core.Database;
+using CameraControl.Core.Interfaces;
+using CameraControl.Core.Translation;
+using CameraControl.Devices;
+using CameraControl.Devices.Canon;
+using CameraControl.Devices.Classes;
+using CameraControl.windows;
+using ImageMagick;
+using Microsoft.Win32;
+
+namespace CameraControl;
+
+public partial class App : System.Windows.Application
+{
+	private IMainWindowPlugin _basemainwindow;
+
+	private StartUpWindow _startUpWindow;
+
+	private readonly string Encryption_key = Environment.GetEnvironmentVariable("CLORIUM_MAIN_LICENSE_KEY") ?? string.Empty;
+
+	private void Application_Startup(object sender, StartupEventArgs e)
+	{
+		bool isRestart = e.Args.Contains("/restart");
+		string procName = Process.GetCurrentProcess().ProcessName;
+		if (isRestart)
+		{
+			int retry = 0;
+			while (Process.GetProcessesByName(procName).Length > 1 && retry < 50)
+			{
+				Thread.Sleep(100);
+				retry++;
+			}
+		}
+		else if (Process.GetProcessesByName(procName).Length > 1)
+		{
+			System.Windows.MessageBox.Show("이미 실행 중입니다.");
+			System.Windows.Application.Current.Shutdown(-1);
+			return;
+		}
+		System.Windows.Application.Current.DispatcherUnhandledException += AppDispatcherUnhandledException;
+		ServiceProvider.Branding = Branding.LoadBranding();
+		ServiceProvider.Settings = new Settings();
+		ServiceProvider.Settings = ServiceProvider.Settings.Load();
+		ServiceProvider.Settings.RemoveSessionFile(ServiceProvider.Settings.SessionFileKeepDays);
+		if (!CheckLicense())
+		{
+			Environment.Exit(0);
+		}
+		if (CompareDate_Ex())
+		{
+			Environment.Exit(0);
+		}
+		if (ServiceProvider.Settings.UseWebserver)
+		{
+			RestartAsAdministrator();
+		}
+		if (!Directory.Exists("D:\\Clorium Data\\"))
+		{
+			Directory.CreateDirectory(Path.GetDirectoryName("D:\\Clorium Data\\"));
+		}
+		if (ServiceProvider.Branding.ShowStartupScreen)
+		{
+			_startUpWindow = new StartUpWindow();
+			_startUpWindow.Show();
+		}
+		Task.Factory.StartNew(InitApplication);
+	}
+
+	private void InitApplication()
+	{
+		try
+		{
+			Dispatcher.Invoke(ServiceProvider.Configure);
+			ServiceProvider.Settings.LoadSessionData();
+			TranslationManager.LoadLanguage(ServiceProvider.Settings.SelectedLanguage);
+			ServiceProvider.PluginManager.CopyPlugins();
+			Dispatcher.Invoke(InitWindowManager);
+			ServiceProvider.Analytics.Start();
+			if (ServiceProvider.Settings.DisableNativeDrivers && System.Windows.MessageBox.Show(TranslationStrings.MsgDisabledDrivers, "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+			{
+				ServiceProvider.Settings.DisableNativeDrivers = false;
+			}
+			BitmapLoader.Instance.MetaDataUpdated += Instance_MetaDataUpdated;
+			Dispatcher.Invoke(() =>
+			{
+				try
+				{
+					ServiceProvider.Settings.SessionSelected += Settings_SessionSelected;
+					ServiceProvider.DeviceManager.CameraConnected += DeviceManager_CameraConnected;
+					ServiceProvider.DeviceManager.CameraSelected += DeviceManager_CameraSelected;
+					ServiceProvider.DeviceManager.CameraDisconnected += DeviceManager_CameraDisconnected;
+					ServiceProvider.DeviceManager.DisableNativeDrivers = ServiceProvider.Settings.DisableNativeDrivers;
+					ServiceProvider.DeviceManager.LoadWiaDevices = ServiceProvider.Settings.WiaDeviceSupport;
+					ServiceProvider.DeviceManager.ConnectToCamera(ServiceProvider.Settings.UseDebugLog);
+					if (ServiceProvider.Settings.DisableHardwareAccelerationNew)
+					{
+						OpenCL.IsEnabled = false;
+					}
+				}
+				catch (Exception ex)
+				{
+					Log.Error("Unable to initialize device manager", ex);
+					if (ex.Message.Contains("0AF10CEC-2ECD-4B92-9581-34F6AE0637F3"))
+					{
+						System.Windows.MessageBox.Show("Unable to initialize device manager !\nMissing some components! Please install latest Windows Media Player!");
+						System.Windows.Application.Current.Shutdown(1);
+					}
+				}
+			});
+			ServiceProvider.Database.StartEvent(EventType.App);
+		}
+		catch (Exception exception)
+		{
+			Log.Error("App : Fatal error ", exception);
+		}
+		Dispatcher.BeginInvoke((Action)(() =>
+		{
+			StartApplication();
+			if (_startUpWindow != null)
+			{
+				_startUpWindow.Close();
+			}
+		}));
+	}
+
+	private void InitWindowManager()
+	{
+		ServiceProvider.WindowsManager = new WindowsManager();
+		ServiceProvider.PluginManager.LoadPlugins(Path.Combine(Settings.ApplicationFolder, "Plugins"));
+		ServiceProvider.PluginManager.LoadPlugins(Path.Combine(Settings.ApplicationFolder, "Branding", "Plugins"));
+		_basemainwindow = new MainWindow();
+		ServiceProvider.PluginManager.MainWindowPlugins.Add(_basemainwindow);
+		try
+		{
+			ServiceProvider.WindowsManager.Event += WindowsManager_Event;
+			ServiceProvider.WindowsManager.ApplyTheme();
+			ServiceProvider.WindowsManager.Add(new LiveViewManager());
+			ServiceProvider.WindowsManager.Add(new FullScreenWnd());
+			ServiceProvider.WindowsManager.Add(new BrowseWnd());
+			ServiceProvider.WindowsManager.Add(new CameraPropertyWnd());
+			ServiceProvider.WindowsManager.Add(new MultipleCameraWnd());
+			ServiceProvider.WindowsManager.Add(new MultipleLiveView());
+			ServiceProvider.WindowsManager.Add(new TurnTableWnd());
+			ServiceProvider.WindowsManager.RegisterKnowCommands();
+			ServiceProvider.Settings.SyncActions(ServiceProvider.WindowsManager.WindowCommands);
+			ServiceProvider.PluginManager.ToolPlugins.Add(new ScriptWnd());
+			foreach (IPlugin plugin in ServiceProvider.PluginManager.Plugins)
+			{
+				plugin.Init();
+			}
+		}
+		catch (Exception exception)
+		{
+			Log.Error("Error to load plugins ", exception);
+		}
+	}
+
+	private void StartApplication()
+	{
+		IMainWindowPlugin mainWindowPlugin = _basemainwindow;
+		foreach (IMainWindowPlugin windowPlugin in ServiceProvider.PluginManager.MainWindowPlugins)
+		{
+			if (windowPlugin.DisplayName == ServiceProvider.Settings.SelectedMainForm)
+			{
+				mainWindowPlugin = windowPlugin;
+			}
+		}
+		ServiceProvider.PluginManager.SelectedWindow = mainWindowPlugin;
+		mainWindowPlugin.Show();
+		if (mainWindowPlugin is Window)
+		{
+			((Window)mainWindowPlugin).Activate();
+		}
+	}
+
+	private void WindowsManager_Event(string cmd, object o)
+	{
+		try
+		{
+			Log.Debug("App : Window command received -> " + cmd);
+			if (cmd != "Next_Image" && cmd != "Prev_Image" && cmd != "Select_Image" && !cmd.StartsWith("Zoom"))
+			{
+				ServiceProvider.Analytics.Command(cmd, o as string);
+			}
+			if (cmd == "All_Close")
+			{
+				if (ServiceProvider.Settings != null)
+				{
+					ServiceProvider.Settings.Save(ServiceProvider.Settings.DefaultSession);
+					ServiceProvider.Settings.Save();
+				}
+				ServiceProvider.Trigger.Stop();
+				ServiceProvider.Analytics.Stop();
+				ServiceProvider.ScriptManager.Stop();
+				ServiceProvider.Database.EndEvent(EventType.App);
+				ServiceProvider.DeviceManager.CloseAll();
+				ServiceProvider.WindowsManager.Event -= WindowsManager_Event;
+				Thread.Sleep(1000);
+				Environment.Exit(0);
+			}
+			if (!(cmd == "NextSeries"))
+			{
+				if (cmd == "PrevSeries" && ServiceProvider.Settings != null && ServiceProvider.Settings.DefaultSession.Series > 0)
+				{
+					ServiceProvider.Settings.DefaultSession.Series--;
+				}
+			}
+			else if (ServiceProvider.Settings != null)
+			{
+				ServiceProvider.Settings.DefaultSession.Series++;
+			}
+			ICameraDevice device = ServiceProvider.DeviceManager.SelectedCameraDevice;
+			if (device == null || !device.IsConnected)
+			{
+				return;
+			}
+			switch (cmd)
+			{
+			case "Capture":
+			{
+				Thread thread = new Thread((ThreadStart)CameraHelper.Capture);
+				thread.Start();
+				break;
+			}
+			case "CaptureAll":
+				CameraHelper.CaptureAll(0);
+				break;
+			case "CaptureNoAf":
+				CameraHelper.CaptureNoAf();
+				break;
+			case "StartBulb":
+				if (ServiceProvider.DeviceManager.SelectedCameraDevice.GetCapability(CapabilityEnum.Bulb))
+				{
+					ServiceProvider.DeviceManager.LastCapturedImage[ServiceProvider.DeviceManager.SelectedCameraDevice] = "-";
+					ServiceProvider.DeviceManager.SelectedCameraDevice.IsBusy = true;
+					ServiceProvider.DeviceManager.SelectedCameraDevice.LockCamera();
+					ServiceProvider.DeviceManager.SelectedCameraDevice.StartBulbMode();
+					break;
+				}
+				throw new Exception(TranslationStrings.MsgBulbModeNotSupported);
+			case "EndBulb":
+				ServiceProvider.DeviceManager.SelectedCameraDevice.EndBulbMode();
+				break;
+			case "NextAperture":
+				device.FNumber?.NextValue();
+				break;
+			case "PrevAperture":
+				device.FNumber?.PrevValue();
+				break;
+			case "NextIso":
+				device.IsoNumber?.NextValue();
+				break;
+			case "PrevIso":
+				device.IsoNumber?.PrevValue();
+				break;
+			case "NextShutter":
+				device.ShutterSpeed?.NextValue();
+				break;
+			case "PrevShutter":
+				device.ShutterSpeed?.PrevValue();
+				break;
+			case "NextWhiteBalance":
+				device.WhiteBalance?.NextValue();
+				break;
+			case "PrevWhiteBalance":
+				device.WhiteBalance?.PrevValue();
+				break;
+			case "NextExposureCompensation":
+				device.ExposureCompensation?.NextValue();
+				break;
+			case "PrevExposureCompensation":
+				device.ExposureCompensation?.PrevValue();
+				break;
+			case "ColorTemperature_Plus":
+				device.ColorTemperature?.NextValue();
+				break;
+			case "ColorTemperature_Minus":
+				device.ColorTemperature?.PrevValue();
+				break;
+			case "NextCamera":
+				ServiceProvider.DeviceManager.SelectNextCamera();
+				break;
+			case "PrevCamera":
+				ServiceProvider.DeviceManager.SelectPrevCamera();
+				break;
+			case "StartZoomIn":
+				device.StartZoom(ZoomDirection.In);
+				break;
+			case "StopZoomIn":
+				device.StopZoom(ZoomDirection.In);
+				break;
+			}
+		}
+		catch (Exception exception)
+		{
+			Log.Error("Error processing comand", exception);
+		}
+	}
+
+	private void Instance_MetaDataUpdated(object sender, FileItem item)
+	{
+		try
+		{
+			if (ServiceProvider.Settings.UseDatabase)
+			{
+				ServiceProvider.Database.SaveFile(item);
+			}
+		}
+		catch (Exception exception)
+		{
+			Log.Error("Instance_MetaDataUpdated", exception);
+		}
+	}
+
+	private void Settings_SessionSelected(PhotoSession oldvalue, PhotoSession newvalue)
+	{
+		if (oldvalue != newvalue)
+		{
+			if (oldvalue != null && ServiceProvider.Settings.PhotoSessions.Contains(oldvalue))
+			{
+				ServiceProvider.Settings.Save(oldvalue);
+			}
+			ServiceProvider.QueueManager.Clear();
+			if (ServiceProvider.DeviceManager.SelectedCameraDevice.IsConnected)
+			{
+				ServiceProvider.DeviceManager.SelectedCameraDevice.AttachedPhotoSession = newvalue;
+			}
+		}
+	}
+
+	private void DeviceManager_CameraSelected(ICameraDevice oldcameraDevice, ICameraDevice newcameraDevice)
+	{
+		Thread thread = new Thread(() =>
+		{
+			CameraProperty cameraProperty = newcameraDevice.LoadProperties();
+			if (newcameraDevice.AttachedPhotoSession == null)
+			{
+				newcameraDevice.AttachedPhotoSession = ServiceProvider.Settings.GetSession(cameraProperty.PhotoSessionName);
+			}
+			if (newcameraDevice.AttachedPhotoSession != null)
+			{
+				ServiceProvider.Settings.DefaultSession = (PhotoSession)newcameraDevice.AttachedPhotoSession;
+			}
+		});
+		thread.Start();
+		Log.Debug("App : DeviceManager_CameraSelected", ServiceProvider.Settings.UseDebugLog);
+	}
+
+	private void DeviceManager_CameraConnected(ICameraDevice cameraDevice)
+	{
+		cameraDevice.CameraInitDone += cameraDevice_CameraInitDone;
+		Log.Debug("App : DeviceManager_CameraConnected", ServiceProvider.Settings.UseDebugLog);
+	}
+
+	private void DeviceManager_CameraDisconnected(ICameraDevice cameraDevice)
+	{
+		cameraDevice.CameraInitDone -= cameraDevice_CameraInitDone;
+		GC.Collect();
+		GC.WaitForPendingFinalizers();
+		Log.Debug("App : DeviceManager_CameraDisconnected", ServiceProvider.Settings.UseDebugLog);
+	}
+
+	private void cameraDevice_CameraInitDone(ICameraDevice cameraDevice)
+	{
+		CameraProperty property = cameraDevice.LoadProperties();
+		CameraPreset preset = ServiceProvider.Settings.GetPreset(property.DefaultPresetName);
+		if (preset != null)
+		{
+			Thread thread = new Thread(() =>
+			{
+				try
+				{
+					Thread.Sleep(1500);
+					cameraDevice.WaitForCamera(5000);
+					preset.Set(cameraDevice);
+				}
+				catch (Exception exception)
+				{
+					Log.Error("Unable to load default preset", exception);
+				}
+			});
+			thread.Start();
+			Log.Debug("App : CameraDevice_CameraInitDone() Preset");
+		}
+		ServiceProvider.Analytics.CameraConnected(cameraDevice);
+		if ((cameraDevice is CanonSDKBase && ServiceProvider.Settings.LoadCanonTransferMode) || !(cameraDevice is CanonSDKBase))
+		{
+			cameraDevice.CaptureInSdRam = property.CaptureInSdRam;
+		}
+	}
+
+	private void AppDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+	{
+		ShowUnhandeledException(e);
+	}
+
+	private void ShowUnhandeledException(DispatcherUnhandledExceptionEventArgs e)
+	{
+		e.Handled = true;
+		Log.Error("Unhandled error ", e.Exception);
+		ServiceProvider.Analytics?.Error(e.Exception);
+		string errorMessage = string.Format(TranslationStrings.LabelUnHandledError, e.Exception.Message + ((e.Exception.InnerException != null) ? ("\n" + e.Exception.InnerException.Message) : null));
+		if (e.Exception.GetType() == typeof(MissingMethodException))
+		{
+			Log.Error("Damaged installation. Application exiting ");
+			System.Windows.MessageBox.Show("Application crash !! Damaged installation!\nPlease unintall aplication from control panel and reinstall it!");
+			System.Windows.Application.Current?.Shutdown();
+		}
+		if (errorMessage.Contains("{E1C5D730-7E97-4D8A-9E42-BBAE87C2059F}"))
+		{
+			System.Windows.MessageBox.Show(TranslationStrings.LabelWiaNotInstalled);
+			PhotoUtils.RunAndWait("regwia.bat", "");
+			System.Windows.MessageBox.Show(TranslationStrings.LabelRestartTheApplication);
+			System.Windows.Application.Current.Shutdown();
+			return;
+		}
+		if (e.Exception.GetType() == typeof(OutOfMemoryException))
+		{
+			Log.Error("Out of memory. Application exiting ");
+			System.Windows.MessageBox.Show(TranslationStrings.LabelOutOfMemory);
+			if (System.Windows.Application.Current != null)
+			{
+				System.Windows.Application.Current.Shutdown();
+			}
+			return;
+		}
+		if (System.Windows.MessageBox.Show(TranslationStrings.LabelAskSendLogFile, TranslationStrings.LabelApplicationError, MessageBoxButton.YesNo, MessageBoxImage.Hand) == MessageBoxResult.Yes)
+		{
+			ErrorReportWnd wnd = new ErrorReportWnd("Application crash " + e.Exception.Message, e.Exception.StackTrace);
+			wnd.ShowDialog();
+		}
+		if (System.Windows.MessageBox.Show(errorMessage, TranslationStrings.LabelApplicationError, MessageBoxButton.YesNo, MessageBoxImage.Hand) == MessageBoxResult.No && System.Windows.Application.Current != null)
+		{
+			System.Windows.Application.Current.Shutdown();
+		}
+	}
+
+	private bool CheckLicense()
+	{
+		try
+		{
+			string unique_code = "";
+			string whoesID = "";
+			string information = "";
+			switch (unique_code)
+			{
+			default:
+				if (!(unique_code == "N/A"))
+				{
+					break;
+				}
+				goto case "";
+			case "":
+			case "Default string":
+			case "To be filled by OEM":
+				unique_code = GetBiosId();
+				whoesID = "Bios ID";
+				break;
+			}
+			switch (unique_code)
+			{
+			default:
+				if (!(unique_code == "N/A"))
+				{
+					break;
+				}
+				goto case "";
+			case "":
+			case "Default string":
+			case "To be filled by OEM":
+				unique_code = GetMacAddress();
+				whoesID = "Mac Address ID";
+				break;
+			}
+			switch (unique_code)
+			{
+			default:
+				if (!(unique_code == "N/A"))
+				{
+					break;
+				}
+				goto case "";
+			case "":
+			case "Default string":
+			case "To be filled by OEM":
+				unique_code = GetMainBoardId();
+				whoesID = "Main Board ID";
+				break;
+			}
+			switch (unique_code)
+			{
+			default:
+				if (!(unique_code == "N/A"))
+				{
+					break;
+				}
+				goto case "";
+			case "":
+			case "Default string":
+			case "To be filled by OEM":
+				unique_code = GetDiskDriveId();
+				whoesID = "Disk Drive ID";
+				break;
+			}
+			switch (unique_code)
+			{
+			default:
+				if (!(unique_code == "N/A"))
+				{
+					information = "[" + whoesID + "] " + unique_code;
+					string sEncrypt = Encrypt(unique_code, Encryption_key);
+					sEncrypt = RemoveSpecialCharacters(sEncrypt);
+					string sPath = "D:\\" + sEncrypt + ".lock";
+					if (!File.Exists(sPath))
+					{
+						System.Windows.MessageBox.Show("\ud83d\udea8 라이센스키가 필요합니다.\n\n\ud83d\udea8 클로리움(주)에 ID 코드를 알려주고 키파일을 받으세요...\ud83d\udea8\n\n" + information, "알림", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+						return false;
+					}
+					AttributesHide(sPath);
+					return true;
+				}
+				goto case "";
+			case "":
+			case "Default string":
+			case "To be filled by OEM":
+				System.Windows.MessageBox.Show("\ud83d\udea8 본 PC는 라이센스를 발급할 수 없는 PC입니다.", "에러", MessageBoxButton.OK, MessageBoxImage.Hand);
+				return false;
+			}
+		}
+		catch
+		{
+			System.Windows.MessageBox.Show("\ud83d\udea8 라이센스키 확인 중 에러가 발생했습니다.", "에러", MessageBoxButton.OK, MessageBoxImage.Hand);
+			return false;
+		}
+	}
+
+	private void AttributesHide(string filePath)
+	{
+		FileAttributes currentAttributes = File.GetAttributes(filePath);
+		FileAttributes newAttributes = currentAttributes | FileAttributes.Hidden;
+		File.SetAttributes(filePath, newAttributes);
+		SetShowHiddenFiles(showHidden: false);
+	}
+
+	private void SetShowHiddenFiles(bool showHidden)
+	{
+		string keyPath = "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced";
+		string valueName = "Hidden";
+		int value = (showHidden ? 1 : 2);
+		using RegistryKey key = Registry.CurrentUser.OpenSubKey(keyPath, writable: true);
+		key?.SetValue(valueName, value, RegistryValueKind.DWord);
+	}
+
+	public string Encrypt(string textToEncrypt, string key)
+	{
+		RijndaelManaged rijndaelCipher = new RijndaelManaged();
+		rijndaelCipher.Mode = CipherMode.CBC;
+		rijndaelCipher.Padding = PaddingMode.PKCS7;
+		rijndaelCipher.KeySize = 128;
+		rijndaelCipher.BlockSize = 128;
+		byte[] pwdBytes = Encoding.UTF8.GetBytes(key);
+		byte[] keyBytes = new byte[16];
+		int len = pwdBytes.Length;
+		if (len > keyBytes.Length)
+		{
+			len = keyBytes.Length;
+		}
+		Array.Copy(pwdBytes, keyBytes, len);
+		rijndaelCipher.Key = keyBytes;
+		rijndaelCipher.IV = keyBytes;
+		ICryptoTransform transform = rijndaelCipher.CreateEncryptor();
+		byte[] plainText = Encoding.UTF8.GetBytes(textToEncrypt);
+		return Convert.ToBase64String(transform.TransformFinalBlock(plainText, 0, plainText.Length));
+	}
+
+	public string Decrypt(string textToDecrypt, string key)
+	{
+		RijndaelManaged rijndaelCipher = new RijndaelManaged();
+		rijndaelCipher.Mode = CipherMode.CBC;
+		rijndaelCipher.Padding = PaddingMode.PKCS7;
+		rijndaelCipher.KeySize = 128;
+		rijndaelCipher.BlockSize = 128;
+		byte[] encryptedData = Convert.FromBase64String(textToDecrypt);
+		byte[] pwdBytes = Encoding.UTF8.GetBytes(key);
+		byte[] keyBytes = new byte[16];
+		int len = pwdBytes.Length;
+		if (len > keyBytes.Length)
+		{
+			len = keyBytes.Length;
+		}
+		Array.Copy(pwdBytes, keyBytes, len);
+		rijndaelCipher.Key = keyBytes;
+		rijndaelCipher.IV = keyBytes;
+		byte[] plainText = rijndaelCipher.CreateDecryptor().TransformFinalBlock(encryptedData, 0, encryptedData.Length);
+		return Encoding.UTF8.GetString(plainText);
+	}
+
+	public string RemoveSpecialCharacters(string str)
+	{
+		char[] buffer = new char[str.Length];
+		int idx = 0;
+		foreach (char c in str)
+		{
+			if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || c == '.' || c == '_')
+			{
+				buffer[idx] = c;
+				idx++;
+			}
+		}
+		return new string(buffer, 0, idx);
+	}
+
+	public string GetBiosId()
+	{
+		string biosId = string.Empty;
+		ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT SerialNumber FROM Win32_BIOS");
+		using (ManagementObjectCollection.ManagementObjectEnumerator managementObjectEnumerator = searcher.Get().GetEnumerator())
+		{
+			if (managementObjectEnumerator.MoveNext())
+			{
+				ManagementBaseObject obj = managementObjectEnumerator.Current;
+				ManagementObject managementObject = (ManagementObject)obj;
+				biosId = managementObject["SerialNumber"].ToString();
+			}
+		}
+		return biosId;
+	}
+
+	public string GetMacAddress()
+	{
+		string macAddress = string.Empty;
+		ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT MACAddress, IPEnabled FROM Win32_NetworkAdapterConfiguration");
+		foreach (ManagementBaseObject obj in searcher.Get())
+		{
+			ManagementObject managementObject = (ManagementObject)obj;
+			if (managementObject["IPEnabled"] != null && (bool)managementObject["IPEnabled"])
+			{
+				macAddress = managementObject["MACAddress"].ToString();
+				break;
+			}
+		}
+		return macAddress;
+	}
+
+	public string GetMainBoardId()
+	{
+		string boardId = string.Empty;
+		ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT SerialNumber FROM Win32_BaseBoard");
+		using (ManagementObjectCollection.ManagementObjectEnumerator managementObjectEnumerator = searcher.Get().GetEnumerator())
+		{
+			if (managementObjectEnumerator.MoveNext())
+			{
+				ManagementBaseObject obj = managementObjectEnumerator.Current;
+				ManagementObject managementObject = (ManagementObject)obj;
+				boardId = managementObject["SerialNumber"].ToString();
+			}
+		}
+		return boardId;
+	}
+
+	public string GetDiskDriveId()
+	{
+		string diskId = string.Empty;
+		ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT SerialNumber FROM Win32_DiskDrive");
+		foreach (ManagementBaseObject obj in searcher.Get())
+		{
+			ManagementObject managementObject = (ManagementObject)obj;
+			if (managementObject["SerialNumber"] != null)
+			{
+				diskId = managementObject["SerialNumber"].ToString().Trim();
+				break;
+			}
+		}
+		return diskId;
+	}
+
+	public bool CompareDate_Ex()
+	{
+		if (!ServiceProvider.Settings.UseCompareDateMode)
+		{
+			return false;
+		}
+		DateTime Dday = GetD_Day() ?? DateTime.MinValue;
+		int remainday = (Dday - DateTime.Today).Days;
+		if (remainday > 0 && remainday < 30)
+		{
+			ServiceProvider.Settings.D_DayBefore = true;
+			System.Windows.MessageBox.Show("\ud83d\udea8 시스템 이상 감지되었습니다.\n\n\ud83d\udea8 프로그램이 정상 동작하지 않을 수 있습니다.\n\ud83d\udea8 클로리움(주) 담당자에게 연락 주시기 바랍니다.", "알림", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+		}
+		else
+		{
+			ServiceProvider.Settings.D_DayBefore = false;
+		}
+		if (remainday <= 0)
+		{
+			if (remainday < -365)
+			{
+				System.Windows.MessageBox.Show("⚠\ufe0f 시스템 일부 파일이 손상되었습니다.\n\n⚠\ufe0f 클로리움(주) 담당자에게 연락 주시기 바랍니다.", "알림", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+				return true;
+			}
+			try
+			{
+				string[] files = Directory.GetFiles("D:\\", "*.lock");
+				string[] array = files;
+				foreach (string file in array)
+				{
+					string newFile = "KF" + Path.GetFileNameWithoutExtension(file) + "fk";
+					string newFilePath = Path.Combine("D:\\", newFile + ".lock");
+					File.Move(file, newFilePath);
+				}
+			}
+			catch (Exception ex)
+			{
+				System.Windows.MessageBox.Show("오류 발생: " + ex.Message);
+			}
+			return true;
+		}
+		return false;
+	}
+
+	public DateTime? GetD_Day()
+	{
+		string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+		string filePath = Path.Combine(baseDir, "logo_small.jpg");
+		if (!File.Exists(filePath))
+		{
+			return null;
+		}
+		using MagickImage image = new MagickImage(filePath);
+		IExifProfile profile = image.GetExifProfile();
+		if (profile == null)
+		{
+			return null;
+		}
+		IExifValue<byte[]> exifDateValue = profile.GetValue(ExifTag.ExifVersion);
+		if (exifDateValue == null)
+		{
+			return null;
+		}
+		byte[] rawBytes = exifDateValue.Value;
+		int lengthToDecode = Math.Min(rawBytes.Length, 19);
+		string exifDateString = Encoding.ASCII.GetString(rawBytes, 0, lengthToDecode);
+		if (DateTime.TryParseExact(exifDateString, "yyyy:MM:dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out var dDay))
+		{
+			return dDay;
+		}
+		return null;
+	}
+
+	public void RestartAsAdministrator()
+	{
+		if (!IsRunningAsAdministrator())
+		{
+			System.Windows.MessageBox.Show("웹서버 가동을 위해서는 관리자 권한이 필요합니다. 프로그램을 재시작합니다.");
+			ProcessStartInfo processInfo = new ProcessStartInfo
+			{
+				FileName = System.Windows.Forms.Application.ExecutablePath,
+				UseShellExecute = true,
+				Verb = "runas",
+				Arguments = "/restart"
+			};
+			try
+			{
+				Process.Start(processInfo);
+				Environment.Exit(0);
+			}
+			catch (Exception)
+			{
+				System.Windows.MessageBox.Show("관리자 권한 승인이 거부되어 웹서버를 시작할 수 없습니다.");
+			}
+		}
+	}
+
+	private bool IsRunningAsAdministrator()
+	{
+		using WindowsIdentity identity = WindowsIdentity.GetCurrent();
+		WindowsPrincipal principal = new WindowsPrincipal(identity);
+		return principal.IsInRole(WindowsBuiltInRole.Administrator);
+	}
+}

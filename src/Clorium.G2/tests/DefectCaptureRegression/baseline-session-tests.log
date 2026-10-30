@@ -1,0 +1,34 @@
+
+.NET 10.0을(를) 시작합니다.
+---------------------
+SDK 버전: 10.0.400
+
+----------------
+첫 번째 앱 작성: https://aka.ms/dotnet-hello-world
+새로운 기능 확인: https://aka.ms/dotnet-whats-new
+설명서 살펴보기: https://aka.ms/dotnet-docs
+GitHub에서 문제 보고 및 소스 찾기: https://github.com/dotnet/core
+사용 가능한 명령을 보려면 'dotnet --help'를 사용하거나 https://aka.ms/dotnet-cli를 방문하세요.
+--------------------------------------------------------------------------------------
+C:\Users\user\Documents\Codex\c4714r2\tests\DefectCaptureRegression\Program.cs(110,11): warning CS0219: 'pathname' 할당되었지만 사용되지 않았습니다. [C:\Users\user\Documents\Codex\c4714r2\tests\DefectCaptureRegression\DefectHarness.csproj]
+C:\Users\user\Documents\Codex\c4714r2\tests\DefectCaptureRegression\Program.cs(423,227): warning CS0414: 'Program.oneFailure' 필드가 할당되었지만 사용되지 않았습니다. [C:\Users\user\Documents\Codex\c4714r2\tests\DefectCaptureRegression\DefectHarness.csproj]
+C:\Users\user\Documents\Codex\c4714r2\tests\DefectCaptureRegression\Program.cs(184,24): warning CS0414: 'MainCapture.isCalibrationMode' 필드가 할당되었지만 사용되지 않았습니다. [C:\Users\user\Documents\Codex\c4714r2\tests\DefectCaptureRegression\DefectHarness.csproj]
+FAIL: new product after defect fail=True clears purpose
+FAIL: new product front NEXT_defect_FAILED
+FAIL: new product clears every stale capture flag
+FAIL: busy product switch rejected
+FAIL: thumbnail-pending switch rejected
+FAIL: thumbnail-complete switch clears defect
+FAIL: timeout switch rejected until event settles
+FAIL: duplicate product session gets unique folder and clears purpose
+FAIL: default session load also clears defect
+FAIL: default session template front
+FAIL: batch product 1 front
+FAIL: batch product 2 front
+FAIL: batch product 3 front
+FAIL: batch product 4 front
+FAIL: batch product 5 front
+FAIL: batch product 6 front
+FAIL: batch product 7 front
+FAIL: batch product 8 front
+{"tests":163,"passed":145,"failed":18,"resultPath":"C:\\Users\\user\\Documents\\Codex\\c4714r2\\tests\\DefectCaptureRegression\\bin\\Debug\\net10.0\\results.json"}

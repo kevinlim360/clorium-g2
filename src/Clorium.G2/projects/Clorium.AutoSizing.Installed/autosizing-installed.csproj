@@ -1,0 +1,57 @@
+<Project Sdk="Microsoft.NET.Sdk">
+<PropertyGroup>
+<TargetFramework>net472</TargetFramework>
+<AssemblyName>Clorium AutoSizing</AssemblyName>
+<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+<AutomaticallyUseReferenceAssemblyPackages>false</AutomaticallyUseReferenceAssemblyPackages>
+<TargetFrameworkRootPath>$(MSBuildThisFileDirectory)../../framework-refs/net472/</TargetFrameworkRootPath>
+<EnableFrameworkPathOverride>false</EnableFrameworkPathOverride>
+<NoStdLib>true</NoStdLib>
+<LangVersion>14.0</LangVersion>
+<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+<CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+<PlatformTarget>AnyCPU</PlatformTarget>
+<EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
+<RootNamespace />
+<OutputType>WinExe</OutputType>
+<ApplicationIcon>app.ico</ApplicationIcon>
+<UseWindowsForms>true</UseWindowsForms>
+<Prefer32Bit>true</Prefer32Bit>
+</PropertyGroup>
+<ItemGroup>
+<Reference Include="mscorlib"><HintPath>../../framework-refs/net472/.NETFramework/v4.7.2/mscorlib.dll</HintPath><Private>false</Private></Reference>
+<Reference Include="System.Windows.Forms"><HintPath>../../framework-refs/net472/.NETFramework/v4.7.2/System.Windows.Forms.dll</HintPath><Private>false</Private></Reference>
+<Reference Include="System.Drawing"><HintPath>../../framework-refs/net472/.NETFramework/v4.7.2/System.Drawing.dll</HintPath><Private>false</Private></Reference>
+<Reference Include="System"><HintPath>../../framework-refs/net472/.NETFramework/v4.7.2/System.dll</HintPath><Private>false</Private></Reference>
+<Reference Include="PresentationCore"><HintPath>../../framework-refs/net472/.NETFramework/v4.7.2/PresentationCore.dll</HintPath><Private>false</Private></Reference>
+<Reference Include="System.Text.Json"><HintPath>../../dependencies/AutoSizing.Installed/system.text.json.dll</HintPath><Private>false</Private></Reference>
+<Reference Include="System.Management"><HintPath>../../framework-refs/net472/.NETFramework/v4.7.2/System.Management.dll</HintPath><Private>false</Private></Reference>
+<Reference Include="System.Core"><HintPath>../../framework-refs/net472/.NETFramework/v4.7.2/System.Core.dll</HintPath><Private>false</Private></Reference>
+<Reference Include="System.Memory"><HintPath>../../dependencies/AutoSizing.Installed/system.memory.dll</HintPath><Private>false</Private></Reference>
+<EmbeddedResource Include="../../resources/AutoSizing.Installed/CloriumAutoSizing.F_Measure.resources" LogicalName="CloriumAutoSizing.F_Measure.resources" />
+<EmbeddedResource Include="../../resources/AutoSizing.Installed/CloriumAutoSizing.Form2.resources" LogicalName="CloriumAutoSizing.Form2.resources" />
+<EmbeddedResource Include="../../resources/AutoSizing.Installed/CloriumAutoSizing.Form3.resources" LogicalName="CloriumAutoSizing.Form3.resources" />
+<EmbeddedResource Include="../../resources/AutoSizing.Installed/CloriumAutoSizing.Form4.resources" LogicalName="CloriumAutoSizing.Form4.resources" />
+<EmbeddedResource Include="../../resources/AutoSizing.Installed/CloriumAutoSizing.Properties.Resources.resources" LogicalName="CloriumAutoSizing.Properties.Resources.resources" />
+<EmbeddedResource Include="../../resources/AutoSizing.Installed/costura.costura.dll.compressed" LogicalName="costura.costura.dll.compressed" />
+<EmbeddedResource Include="../../resources/AutoSizing.Installed/costura.costura.pdb.compressed" LogicalName="costura.costura.pdb.compressed" />
+<EmbeddedResource Include="../../resources/AutoSizing.Installed/costura.dotimaging.bitmapsourceinterop.dll.compressed" LogicalName="costura.dotimaging.bitmapsourceinterop.dll.compressed" />
+<EmbeddedResource Include="../../resources/AutoSizing.Installed/costura.dotimaging.genericimage.dll.compressed" LogicalName="costura.dotimaging.genericimage.dll.compressed" />
+<EmbeddedResource Include="../../resources/AutoSizing.Installed/costura.dotimaging.primitives2d.dll.compressed" LogicalName="costura.dotimaging.primitives2d.dll.compressed" />
+<EmbeddedResource Include="../../resources/AutoSizing.Installed/costura.microsoft.bcl.asyncinterfaces.dll.compressed" LogicalName="costura.microsoft.bcl.asyncinterfaces.dll.compressed" />
+<EmbeddedResource Include="../../resources/AutoSizing.Installed/costura.system.buffers.dll.compressed" LogicalName="costura.system.buffers.dll.compressed" />
+<EmbeddedResource Include="../../resources/AutoSizing.Installed/costura.system.codedom.dll.compressed" LogicalName="costura.system.codedom.dll.compressed" />
+<EmbeddedResource Include="../../resources/AutoSizing.Installed/costura.system.diagnostics.diagnosticsource.dll.compressed" LogicalName="costura.system.diagnostics.diagnosticsource.dll.compressed" />
+<EmbeddedResource Include="../../resources/AutoSizing.Installed/costura.system.drawing.common.dll.compressed" LogicalName="costura.system.drawing.common.dll.compressed" />
+<EmbeddedResource Include="../../resources/AutoSizing.Installed/costura.system.io.pipelines.dll.compressed" LogicalName="costura.system.io.pipelines.dll.compressed" />
+<EmbeddedResource Include="../../resources/AutoSizing.Installed/costura.system.memory.dll.compressed" LogicalName="costura.system.memory.dll.compressed" />
+<EmbeddedResource Include="../../resources/AutoSizing.Installed/costura.system.numerics.vectors.dll.compressed" LogicalName="costura.system.numerics.vectors.dll.compressed" />
+<EmbeddedResource Include="../../resources/AutoSizing.Installed/costura.system.runtime.compilerservices.unsafe.dll.compressed" LogicalName="costura.system.runtime.compilerservices.unsafe.dll.compressed" />
+<EmbeddedResource Include="../../resources/AutoSizing.Installed/costura.system.text.encodings.web.dll.compressed" LogicalName="costura.system.text.encodings.web.dll.compressed" />
+<EmbeddedResource Include="../../resources/AutoSizing.Installed/costura.system.text.json.dll.compressed" LogicalName="costura.system.text.json.dll.compressed" />
+<EmbeddedResource Include="../../resources/AutoSizing.Installed/costura.system.threading.tasks.extensions.dll.compressed" LogicalName="costura.system.threading.tasks.extensions.dll.compressed" />
+<EmbeddedResource Include="../../resources/AutoSizing.Installed/costura.system.valuetuple.dll.compressed" LogicalName="costura.system.valuetuple.dll.compressed" />
+<EmbeddedResource Include="../../resources/AutoSizing.Installed/costura.metadata" LogicalName="costura.metadata" />
+<Reference Include="WindowsBase"><HintPath>../../framework-refs/net472/.NETFramework/v4.7.2/WindowsBase.dll</HintPath><Private>false</Private></Reference>
+</ItemGroup>
+</Project>

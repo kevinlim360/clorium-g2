@@ -1,0 +1,17 @@
+PASS no camera/state access: LiveViewViewModel.StartFocusStacking
+PASS no camera/state access: LiveViewViewModel.StartSimpleFocusStacking
+PASS no camera/state access: LiveViewViewModel.PreviewFocusStacking
+PASS no camera/state access: LiveViewViewModel.PreviewSimpleFocusStacking
+PASS no camera/state access: LiveViewViewModel.GenerateFocusStackingImage
+PASS no camera/state access: LiveViewViewModel.RecordMovie
+PASS no camera/state access: LiveViewViewModel.RecordMovieThread
+PASS no camera/state access: LiveViewViewModel.RecordMovie_Turntable
+PASS no camera/state access: LiveViewViewModel.FocusStackingTimer_Elapsed
+PASS no camera/state access: TurnTableViewModel.RecordMovie_Start
+PASS no camera/state access: TurnTableViewModel.ThreadRecordMovie_Start
+PASS no camera/state access: SimpleLiveViewViewModel.RecordMovie
+PASS no camera/state access: SimpleLiveViewViewModel.RecordMovieThread
+PASS no camera/state access: MultipleLiveViewViewModel.StartRecord
+PASS no camera/state access: MultipleLiveViewViewModel.StartRecordThread
+PASS no camera/state access: WebCamViewModel.ExecuteRecord
+PASS device-level rejection; total checks: 19

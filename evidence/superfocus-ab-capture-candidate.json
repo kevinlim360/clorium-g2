@@ -1,0 +1,25 @@
+{
+  "tested": "A/B capture candidate before toolbar closed-state and settings header contrast fixes",
+  "modules": [
+    {
+      "sha256": "e1ddfb69b737a0d1f565d8e90adeacf58eec33b2c37845c126da227a6452d2d5",
+      "file": "CameraControl.exe",
+      "bytes": 3461120
+    },
+    {
+      "sha256": "b70edf73f6726ed72c2151d1290c3b4fd96debdf55b49b7b39fe7f5938b06271",
+      "file": "CameraControl.Core.dll",
+      "bytes": 462848
+    },
+    {
+      "sha256": "3be30247f5d5dfc9f88e5482664671c7df1fc0debd15b62892e227333712288a",
+      "file": "CameraControl.Devices.dll",
+      "bytes": 351232
+    },
+    {
+      "sha256": "a931b94d8631b341c01ee3c2f3b07997855032687cfc5242be780bb2544f13d2",
+      "file": "Canon.Eos.Framework.dll",
+      "bytes": 81920
+    }
+  ]
+}

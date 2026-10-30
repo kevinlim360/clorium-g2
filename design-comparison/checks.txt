@@ -1,0 +1,48 @@
+PASS design-1-gray ON front
+PASS design-1-gray ON back
+PASS design-1-gray defect
+PASS design-1-gray OFF
+PASS design-1-gray theme preserves OFF
+PASS design-1-gray product retains OFF
+PASS design-1-gray Custom persists
+PASS design-1-black dark heading contrast
+PASS design-1-black ON front
+PASS design-1-black ON back
+PASS design-1-black defect
+PASS design-1-black OFF
+PASS design-1-black theme preserves OFF
+PASS design-1-black product retains OFF
+PASS design-1-black Custom persists
+PASS design-2-gray ON front
+PASS design-2-gray ON back
+PASS design-2-gray defect
+PASS design-2-gray OFF
+PASS design-2-gray theme preserves OFF
+PASS design-2-gray product retains OFF
+PASS design-2-gray Custom persists
+PASS design-2-black dark heading contrast
+PASS design-2-black ON front
+PASS design-2-black ON back
+PASS design-2-black defect
+PASS design-2-black OFF
+PASS design-2-black theme preserves OFF
+PASS design-2-black product retains OFF
+PASS design-2-black Custom persists
+PASS design-3-gray ON front
+PASS design-3-gray ON back
+PASS design-3-gray defect
+PASS design-3-gray OFF
+PASS design-3-gray theme preserves OFF
+PASS design-3-gray product retains OFF
+PASS design-3-gray Custom persists
+PASS design-3-black dark heading contrast
+PASS design-3-black ON front
+PASS design-3-black ON back
+PASS design-3-black defect
+PASS design-3-black OFF
+PASS design-3-black theme preserves OFF
+PASS design-3-black product retains OFF
+PASS design-3-black Custom persists
+PASS layout change retains defect
+PASS busy prevents layout/theme change
+Six main renders + twelve overlay renders + six compact renders. UI prototype only; production files untouched.

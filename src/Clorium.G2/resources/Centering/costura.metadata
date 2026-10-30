@@ -1,0 +1,8 @@
+costura.controlzex.dll.compressed|4.0.0.0|ControlzEx, Version=4.0.0.0, Culture=neutral, PublicKeyToken=69f1c32f803d307e|ControlzEx.dll|31FB981CC429CD24066363160E49C85FD74DF8DB|250432
+costura.controlzex.pdb.compressed|||ControlzEx.pdb|92C0896C60437E5A3655214ED8EC507C21B8B372|843264
+costura.costura.dll.compressed|6.0.0.0|Costura, Version=6.0.0.0, Culture=neutral, PublicKeyToken=9919ef960d84173d|Costura.dll|028E9832F421F11F9497C610F1734E0F3D868037|5120
+costura.costura.pdb.compressed|||Costura.pdb|806F4C19B2D7FD9E3B836269EC07647019A29E95|7960
+costura.microsoft.windowsapicodepack.dll.compressed|1.1.0.0|Microsoft.WindowsAPICodePack, Version=1.1.0.0, Culture=neutral, PublicKeyToken=null|Microsoft.WindowsAPICodePack.dll|00B857F09DCF0C71DAB40C1A8C4C54D411FDB197|104960
+costura.microsoft.windowsapicodepack.shell.dll.compressed|1.1.0.0|Microsoft.WindowsAPICodePack.Shell, Version=1.1.0.0, Culture=neutral, PublicKeyToken=null|Microsoft.WindowsAPICodePack.Shell.dll|970B783A697D893ECD4916DD86B5FF7574896C9E|542208
+costura.microsoft.xaml.behaviors.dll.compressed|1.1.0.0|Microsoft.Xaml.Behaviors, Version=1.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a|Microsoft.Xaml.Behaviors.dll|3D1CB9CF59000012734901A35BAEB3D9C1DD5DB3|146360
+costura.microsoft.xaml.behaviors.pdb.compressed|||Microsoft.Xaml.Behaviors.pdb|92993E1F4CC2B573DB2255B7DBF67BEDD149E6DA|482816

@@ -1,0 +1,305 @@
+{
+  "folder": "D:\\CloriumImages2\\2026년10월\\27일\\test\\Superfocus\\20261028_113503_135434aa",
+  "rois": {
+    "near_vase": [
+      80,
+      1500,
+      610,
+      2750
+    ],
+    "far_fan": [
+      3450,
+      1830,
+      3970,
+      2490
+    ]
+  },
+  "files": [
+    {
+      "file": "0001_9e45f0f5b96e4d379f19bd02568e73af.JPG",
+      "dimensions": [
+        6720,
+        4480
+      ],
+      "bytes": 7207824,
+      "sha256": "133d7fd2339b25a49f13b5b54a55bb78464ac128f58297ba29194a907ac1663d",
+      "sharpness": {
+        "near_vase": 16.696,
+        "far_fan": 13.183
+      }
+    },
+    {
+      "file": "0002_938d9bb559e14fe1b4580eff3edd830f.JPG",
+      "dimensions": [
+        6720,
+        4480
+      ],
+      "bytes": 7224538,
+      "sha256": "bef095ef0822d7f60963f5213ef8d33a14dcaa9da6dac3688fde4cf79ec2336c",
+      "sharpness": {
+        "near_vase": 16.509,
+        "far_fan": 13.253
+      }
+    },
+    {
+      "file": "0003_f128eedfbd9c4f89ad7a89b205e32602.JPG",
+      "dimensions": [
+        6720,
+        4480
+      ],
+      "bytes": 7218443,
+      "sha256": "c081aa6e6b04cc7dd333100385d6b927aeb0a2b4f736112f0f03cf45cd16ae70",
+      "sharpness": {
+        "near_vase": 16.459,
+        "far_fan": 13.67
+      }
+    },
+    {
+      "file": "0004_21f97f3a41f94eb0955f8d32842a9ebd.JPG",
+      "dimensions": [
+        6720,
+        4480
+      ],
+      "bytes": 7202078,
+      "sha256": "fe62f1a22a49139a5499746c8ffe119b5542b60d900b2e4951c2c5ddfd2d4149",
+      "sharpness": {
+        "near_vase": 16.334,
+        "far_fan": 14.09
+      }
+    },
+    {
+      "file": "0005_9f3c8ee0f1404b11b19d5b8fe81e1b9c.JPG",
+      "dimensions": [
+        6720,
+        4480
+      ],
+      "bytes": 7177048,
+      "sha256": "9cf96ae3fe4f924e633b89aa2ab9b8699a157a76c5fd744ba1e918bdfc3bf8d2",
+      "sharpness": {
+        "near_vase": 16.148,
+        "far_fan": 14.161
+      }
+    },
+    {
+      "file": "0006_d00f7fe151c5426783f4508410bca087.JPG",
+      "dimensions": [
+        6720,
+        4480
+      ],
+      "bytes": 7149643,
+      "sha256": "7e788a66519329db7393c6425152512e77169d86757ac16f40216802a8477d45",
+      "sharpness": {
+        "near_vase": 15.983,
+        "far_fan": 14.71
+      }
+    },
+    {
+      "file": "0007_6fa4bbd51860409eaac0e440de39a4fa.JPG",
+      "dimensions": [
+        6720,
+        4480
+      ],
+      "bytes": 7149731,
+      "sha256": "89412d6ebc910a2b2141819c166df00c95054f121baaca497e13d3ac6cd4f625",
+      "sharpness": {
+        "near_vase": 16.056,
+        "far_fan": 15.21
+      }
+    },
+    {
+      "file": "0008_c7500c7494334d4db58c294940dd0443.JPG",
+      "dimensions": [
+        6720,
+        4480
+      ],
+      "bytes": 7146576,
+      "sha256": "2829f78b7ab7e41cc21536ce207ca397e00bc5df782e2e8e8969e190e8f8ec49",
+      "sharpness": {
+        "near_vase": 15.936,
+        "far_fan": 16.133
+      }
+    },
+    {
+      "file": "0009_d1d99abb28a14ebd8750a2b83d44820c.JPG",
+      "dimensions": [
+        6720,
+        4480
+      ],
+      "bytes": 7140880,
+      "sha256": "44d41a99b76b9f8a00299eb7fa948cac9b1064bb717fd16cd37352e0054a449c",
+      "sharpness": {
+        "near_vase": 15.906,
+        "far_fan": 17.214
+      }
+    },
+    {
+      "file": "0010_ad971657d042465e9686258bc482517b.JPG",
+      "dimensions": [
+        6720,
+        4480
+      ],
+      "bytes": 7124242,
+      "sha256": "e7c76b26b0cc16537fb00792cf4af66e9900f188d210754d53676ba0a65ebf80",
+      "sharpness": {
+        "near_vase": 15.696,
+        "far_fan": 18.576
+      }
+    },
+    {
+      "file": "0011_dd6c73a27b7e40879d280fafe27a8244.JPG",
+      "dimensions": [
+        6720,
+        4480
+      ],
+      "bytes": 7115619,
+      "sha256": "4768fbff11334c418302ee63c351c20f07979741dfa947831226f8181fd1c27f",
+      "sharpness": {
+        "near_vase": 15.647,
+        "far_fan": 20.149
+      }
+    },
+    {
+      "file": "0012_d509ffe101cc4e9690b1ca7679c8076f.JPG",
+      "dimensions": [
+        6720,
+        4480
+      ],
+      "bytes": 7126084,
+      "sha256": "8e1a6da10b232a0b42ff231df7042981d9215d0a24cde8ec4bb375bc9f7a7adf",
+      "sharpness": {
+        "near_vase": 15.6,
+        "far_fan": 22.478
+      }
+    },
+    {
+      "file": "0013_1bcdf7a4312e440a95d1db45c41daa82.JPG",
+      "dimensions": [
+        6720,
+        4480
+      ],
+      "bytes": 7153918,
+      "sha256": "1a6118a30e495044387eaeb6594fdb02b49fb7064fc4dd6ba59524eda9f34cd4",
+      "sharpness": {
+        "near_vase": 15.631,
+        "far_fan": 26.197
+      }
+    },
+    {
+      "file": "0014_f84cb70444994c85b005842397e29551.JPG",
+      "dimensions": [
+        6720,
+        4480
+      ],
+      "bytes": 7167257,
+      "sha256": "62933052f5c9c8c4b893c2db1bc01e0d4e0b8ac659893d3d733b64426b8bd5fe",
+      "sharpness": {
+        "near_vase": 15.517,
+        "far_fan": 29.092
+      }
+    },
+    {
+      "file": "0015_d0b53f87471b4a088c5374f17bcb3a82.JPG",
+      "dimensions": [
+        6720,
+        4480
+      ],
+      "bytes": 7218596,
+      "sha256": "2727cea067727f83776b7ad4c976048acae2c4239c60a503c0ba89e2be9f73e2",
+      "sharpness": {
+        "near_vase": 15.404,
+        "far_fan": 34.375
+      }
+    },
+    {
+      "file": "0016_92be4612697048a6b6edee69ca2fd0b6.JPG",
+      "dimensions": [
+        6720,
+        4480
+      ],
+      "bytes": 7268555,
+      "sha256": "22c9b7496a638b75cfaab5d63f0067464c8349c984509e64a5798bd5d9177921",
+      "sharpness": {
+        "near_vase": 15.296,
+        "far_fan": 41.147
+      }
+    },
+    {
+      "file": "0017_7a4c281797374b5f842b22aae9e85521.JPG",
+      "dimensions": [
+        6720,
+        4480
+      ],
+      "bytes": 7345072,
+      "sha256": "57c4f3963c9f2414fcc9984b461cc34922c0474e39ecb9ed1985665d407f5dec",
+      "sharpness": {
+        "near_vase": 15.223,
+        "far_fan": 52.425
+      }
+    },
+    {
+      "file": "0018_cb54b7e419f149828a143d1d4728a22f.JPG",
+      "dimensions": [
+        6720,
+        4480
+      ],
+      "bytes": 7418645,
+      "sha256": "1370b48b531e7c7a86bbd5ae882234cf871d3920ea2fc7d44c6ddce18ea19a0b",
+      "sharpness": {
+        "near_vase": 14.983,
+        "far_fan": 71.05
+      }
+    },
+    {
+      "file": "0019_56d2f417b1714b16974e389ff1a067cb.JPG",
+      "dimensions": [
+        6720,
+        4480
+      ],
+      "bytes": 7417213,
+      "sha256": "dacfb508d7f5954c86095ef5983d6269ce5bf0535081a6fe65ac8799793fb46a",
+      "sharpness": {
+        "near_vase": 14.765,
+        "far_fan": 102.373
+      }
+    },
+    {
+      "file": "0020_e3d2842946e64324a69ba410942d5b82.JPG",
+      "dimensions": [
+        6720,
+        4480
+      ],
+      "bytes": 7517288,
+      "sha256": "a0729e4897194f9c2d7954eb0d16a093d1c77d1690bf968f9035e6a52ca14ca4",
+      "sharpness": {
+        "near_vase": 15.082,
+        "far_fan": 162.264
+      }
+    },
+    {
+      "file": "0021_954e5bad0b184fec95a5cb7df1705cd6.JPG",
+      "dimensions": [
+        6720,
+        4480
+      ],
+      "bytes": 7535480,
+      "sha256": "73fd04c59e0243d91f53a57e35b9c02ea3b4c828a87e8669aba45802fd39033e",
+      "sharpness": {
+        "near_vase": 14.932,
+        "far_fan": 255.86
+      }
+    },
+    {
+      "file": "Superfocus.png",
+      "dimensions": [
+        6720,
+        4480
+      ],
+      "bytes": 29237130,
+      "sha256": "9bd3e34cd381b6af2154e7ccfa3d1702dc9941c6bc3df6e99d0d120c22e43df9",
+      "sharpness": {
+        "near_vase": 20.813,
+        "far_fan": 206.689
+      }
+    }
+  ]
+}

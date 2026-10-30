@@ -1,0 +1,10 @@
+PASS ON front
+PASS ON back
+PASS defect has no PR
+PASS OFF front
+PASS defect hides back button
+PASS defect capture label
+PASS new product retains OFF and resets defect
+PASS empty barcode retains product
+PASS Custom disabled
+7 native WPF renders. UI-only checks; not production capture/storage tests.

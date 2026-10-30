@@ -1,0 +1,5 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><TargetFrameworks>net48;net10.0</TargetFrameworks><AssemblyName>Clorium.Licensing.Protocol</AssemblyName><LangVersion>latest</LangVersion><Nullable>disable</Nullable></PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net48'"><AutomaticallyUseReferenceAssemblyPackages>false</AutomaticallyUseReferenceAssemblyPackages><TargetFrameworkRootPath>../../../src/Clorium.G2/framework-refs/net48/</TargetFrameworkRootPath></PropertyGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net48'"><Reference Include="System.Runtime.Serialization"/><Reference Include="System.Security"/></ItemGroup>
+</Project>

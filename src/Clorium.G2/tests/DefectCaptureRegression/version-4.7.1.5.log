@@ -1,0 +1,52 @@
+PASS: actual Core suffix mode=0 defect=False
+PASS: actual Core suffix mode=0 defect=True
+PASS: actual Core suffix mode=1 defect=False
+PASS: actual Core suffix mode=1 defect=True
+PASS: actual Core suffix mode=2 defect=False
+PASS: actual Core suffix mode=2 defect=True
+PASS: actual Core duplicate path differs
+PASS: actual Core preserves existing file
+PASS: actual Settings emits four state notifications
+PASS: WPF defect enabled at idle
+PASS: WPF defect disabled while busy
+PASS: WPF defect disabled while thumbnail pending
+PASS: WPF defect reenabled after completion
+PASS: Main file version 4.7.1.5
+PASS: Main assembly compatibility preserved
+PASS: Core file version 4.7.1.5
+PASS: Core assembly compatibility preserved
+PASS: Main product version 4.7.1.5
+PASS: Core product version 4.7.1.5
+PASS: actual Main clears all previous-product capture flags
+PASS: actual Main reset then next product F
+PASS: actual Main reset then next product B
+PASS: actual next product D overrides back
+PASS: actual Main permits new session when idle
+PASS: actual Core turntable 72 shots x 3 inputs multi=False mode=0 defect=False BG=False
+PASS: actual Core turntable 72 shots x 3 inputs multi=False mode=0 defect=False BG=True
+PASS: actual Core turntable 72 shots x 3 inputs multi=False mode=0 defect=True BG=False
+PASS: actual Core turntable 72 shots x 3 inputs multi=False mode=0 defect=True BG=True
+PASS: actual Core turntable 72 shots x 3 inputs multi=False mode=1 defect=False BG=False
+PASS: actual Core turntable 72 shots x 3 inputs multi=False mode=1 defect=False BG=True
+PASS: actual Core turntable 72 shots x 3 inputs multi=False mode=1 defect=True BG=False
+PASS: actual Core turntable 72 shots x 3 inputs multi=False mode=1 defect=True BG=True
+PASS: actual Core turntable 72 shots x 3 inputs multi=False mode=2 defect=False BG=False
+PASS: actual Core turntable 72 shots x 3 inputs multi=False mode=2 defect=False BG=True
+PASS: actual Core turntable 72 shots x 3 inputs multi=False mode=2 defect=True BG=False
+PASS: actual Core turntable 72 shots x 3 inputs multi=False mode=2 defect=True BG=True
+PASS: actual Core turntable 72 shots x 3 inputs multi=True mode=0 defect=False BG=False
+PASS: actual Core turntable 72 shots x 3 inputs multi=True mode=0 defect=False BG=True
+PASS: actual Core turntable 72 shots x 3 inputs multi=True mode=0 defect=True BG=False
+PASS: actual Core turntable 72 shots x 3 inputs multi=True mode=0 defect=True BG=True
+PASS: actual Core turntable 72 shots x 3 inputs multi=True mode=1 defect=False BG=False
+PASS: actual Core turntable 72 shots x 3 inputs multi=True mode=1 defect=False BG=True
+PASS: actual Core turntable 72 shots x 3 inputs multi=True mode=1 defect=True BG=False
+PASS: actual Core turntable 72 shots x 3 inputs multi=True mode=1 defect=True BG=True
+PASS: actual Core turntable 72 shots x 3 inputs multi=True mode=2 defect=False BG=False
+PASS: actual Core turntable 72 shots x 3 inputs multi=True mode=2 defect=False BG=True
+PASS: actual Core turntable 72 shots x 3 inputs multi=True mode=2 defect=True BG=False
+PASS: actual Core turntable 72 shots x 3 inputs multi=True mode=2 defect=True BG=True
+PASS: ordinary F suffix after turntable
+PASS: ordinary B suffix after turntable
+PASS: ordinary D suffix after turntable
+BINARY_CHECKS_PASSED=51

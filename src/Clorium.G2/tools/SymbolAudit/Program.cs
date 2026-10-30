@@ -1,0 +1,13 @@
+using System.Reflection.Metadata;
+using System.Reflection.PortableExecutable;
+using System.Text.Json;
+if(args.Length!=3)return 2;
+using var peStream=File.OpenRead(args[0]);using var pe=new PEReader(peStream);
+var entries=pe.ReadDebugDirectory();var entry=entries.Single(e=>e.Type==DebugDirectoryEntryType.CodeView);
+var cv=pe.ReadCodeViewDebugDirectoryData(entry);
+using var pdbStream=File.OpenRead(args[1]);using var provider=MetadataReaderProvider.FromPortablePdbStream(pdbStream);var md=provider.GetMetadataReader();
+var id=md.DebugMetadataHeader!.Id.ToArray();var guid=new Guid(id.AsSpan(0,16));var stamp=BitConverter.ToUInt32(id,16);
+var documents=md.Documents.Select(h=>md.GetString(md.GetDocument(h).Name)).ToArray();
+var report=new {codeViewGuid=cv.Guid,pdbGuid=guid,guidMatch=cv.Guid==guid,stampMatch=entry.Stamp==stamp,codeViewAge=cv.Age,documentCount=documents.Length,absoluteDocumentPaths=documents.Count(s=>s.StartsWith("/")||s.StartsWith(@"\\")||(s.Length>2&&char.IsLetter(s[0])&&s[1]==':'&&(s[2]=='\\'||s[2]=='/'))),sourceDocumentContentsPrinted=false};
+File.WriteAllText(args[2],JsonSerializer.Serialize(report,new JsonSerializerOptions{WriteIndented=true}));
+Console.WriteLine($"Symbols: GUID match {report.guidMatch}, stamp match {report.stampMatch}, {report.documentCount} documents.");return report.guidMatch&&report.stampMatch?0:1;

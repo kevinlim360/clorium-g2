@@ -1,0 +1,33 @@
+msbuild 버전 18.9.6+14fbf8d52(.NET용)
+  복원할 프로젝트를 확인하는 중...
+  복원할 모든 프로젝트가 최신 상태입니다.
+  InteropMetadataRestore -> C:\Users\user\Documents\ChatGPT\오토사이징\c4714a\tools\InteropMetadataRestore\bin\Release\net10.0\InteropMetadataRestore.dll
+  복원할 프로젝트를 확인하는 중...
+  복원할 모든 프로젝트가 최신 상태입니다.
+  WiaMetadataFix -> C:\Users\user\Documents\ChatGPT\오토사이징\c4714a\tools\WiaMetadataFix\bin\Release\net10.0\WiaMetadataFix.dll
+  복원할 프로젝트를 확인하는 중...
+  복원할 모든 프로젝트가 최신 상태입니다.
+  InitializeDeploymentSettings -> C:\Users\user\Documents\ChatGPT\오토사이징\c4714a\tools\InitializeDeploymentSettings\bin\Release\net10.0\InitializeDeploymentSettings.dll
+  복원할 프로젝트를 확인하는 중...
+  복원할 모든 프로젝트가 최신 상태입니다.
+  CoreWpfCompatibility -> C:\Users\user\Documents\ChatGPT\오토사이징\c4714a\tools\CoreWpfCompatibility\bin\Release\net10.0\CoreWpfCompatibility.dll
+  복원할 프로젝트를 확인하는 중...
+  복원할 모든 프로젝트가 최신 상태입니다.
+  PortableDeviceLib -> C:\Users\user\Documents\ChatGPT\오토사이징\c4714a\projects\PortableDeviceLib\bin\Release\net48\PortableDeviceLib.dll
+  Canon.Eos.Framework -> C:\Users\user\Documents\ChatGPT\오토사이징\c4714a\projects\Canon.Eos.Framework\bin\Release\net48\Canon.Eos.Framework.dll
+  CameraControl.Devices -> C:\Users\user\Documents\ChatGPT\오토사이징\c4714a\projects\CameraControl.Devices\bin\Release\net48\CameraControl.Devices.dll
+  CameraControl.Core -> C:\Users\user\Documents\ChatGPT\오토사이징\c4714a\projects\CameraControl.Core\bin\Release\net48\CameraControl.Core.dll
+  ZoomAndPan -> C:\Users\user\Documents\ChatGPT\오토사이징\c4714a\projects\ZoomAndPan\bin\Release\Editable\net48\ZoomAndPan.dll
+  CameraControl -> C:\Users\user\Documents\ChatGPT\오토사이징\c4714a\projects\CameraControl\bin\Release\net48\CameraControl.exe
+  CameraControl.Plugins -> C:\Users\user\Documents\ChatGPT\오토사이징\c4714a\projects\CameraControl.Plugins\bin\Release\net48\CameraControl.Plugins.dll
+C:\Users\user\Documents\ChatGPT\오토사이징\c4714a\projects\Clorium.AutoSizing.Installed\CloriumAutoSizing\Form2.Designer.cs(14,28): warning CS0649: 'Form2.components' 필드에는 할당되지 않으므로 항상 null 기본값을 사용합니다. [C:\Users\user\Documents\ChatGPT\오토사이징\c4714a\projects\Clorium.AutoSizing.Installed\autosizing-installed.csproj]
+C:\Users\user\Documents\ChatGPT\오토사이징\c4714a\projects\Clorium.AutoSizing.Installed\CloriumAutoSizing\Form3.Designer.cs(12,28): warning CS0649: 'Form3.components' 필드에는 할당되지 않으므로 항상 null 기본값을 사용합니다. [C:\Users\user\Documents\ChatGPT\오토사이징\c4714a\projects\Clorium.AutoSizing.Installed\autosizing-installed.csproj]
+C:\Users\user\Documents\ChatGPT\오토사이징\c4714a\projects\Clorium.AutoSizing.Installed\CloriumAutoSizing\Form4.Designer.cs(16,28): warning CS0649: 'Form4.components' 필드에는 할당되지 않으므로 항상 null 기본값을 사용합니다. [C:\Users\user\Documents\ChatGPT\오토사이징\c4714a\projects\Clorium.AutoSizing.Installed\autosizing-installed.csproj]
+  autosizing-installed -> C:\Users\user\Documents\ChatGPT\오토사이징\c4714a\projects\Clorium.AutoSizing.Installed\bin\Release\net472\Clorium AutoSizing.exe
+  Clorium.AutoSizing -> C:\Users\user\Documents\ChatGPT\오토사이징\c4714a\projects\Clorium.AutoSizing.Standalone\bin\Release\net472\Clorium AutoSizing.exe
+  centering -> C:\Users\user\Documents\ChatGPT\오토사이징\c4714a\projects\Clorium.Centering\bin\Release\Editable\net48\Clorium Centering.exe
+  Core WPF helper already present.
+  WIA metadata compatibility pass applied
+  Restored interop types=10, methods=12; non-WMPLib IL unchanged
+  Verified interop types=10, methods=12
+  Source solution built. WMPLib/WIA metadata restored in build-output/installed. No product was executed.

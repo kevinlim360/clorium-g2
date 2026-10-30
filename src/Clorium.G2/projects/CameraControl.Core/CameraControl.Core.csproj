@@ -1,0 +1,153 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>CameraControl.Core</AssemblyName>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>True</UseWindowsForms>
+    <TargetFramework>net48</TargetFramework>
+    <AutomaticallyUseReferenceAssemblyPackages>false</AutomaticallyUseReferenceAssemblyPackages>
+    <TargetFrameworkRootPath>$(MSBuildThisFileDirectory)../../framework-refs/net48/</TargetFrameworkRootPath>
+    <EnableFrameworkPathOverride>false</EnableFrameworkPathOverride>
+    <NoStdLib>true</NoStdLib>
+    <PlatformTarget>x64</PlatformTarget>
+    <EnableDefaultPageItems>false</EnableDefaultPageItems>
+    <EnableDefaultApplicationDefinition>false</EnableDefaultApplicationDefinition>
+    <EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
+  <DefineConstants>$(DefineConstants);DEBUG</DefineConstants></PropertyGroup>
+  <PropertyGroup>
+    <LangVersion>14.0</LangVersion>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+  </PropertyGroup>
+  <PropertyGroup />
+  <ItemGroup>
+    <Page Remove="CameraControl/Controls/AdvancedSlider.xaml" />
+    <Page Remove="CameraControl/Core/Scripting/ScriptCommands/BulbCaptureControl.xaml" />
+    <Page Remove="CameraControl/Core/Scripting/ScriptCommands/PHDGuidingControl.xaml" />
+    <Page Remove="CameraControl/Core/Scripting/ScriptCommands/WaitCommandControl.xaml" />
+    <Page Remove="CameraControl/Core/Wpf/Colorpicker.xaml" />
+    <Page Remove="CameraControl/Core/Wpf/ProgressWindow.xaml" />
+    <Page Include="CameraControl/Controls/AdvancedSlider.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="wpf/advancedslider.xaml" />
+    <Page Include="CameraControl/Core/Scripting/ScriptCommands/BulbCaptureControl.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="scripting/scriptcommands/bulbcapturecontrol.xaml" />
+    <Page Include="CameraControl/Core/Scripting/ScriptCommands/PHDGuidingControl.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="scripting/scriptcommands/phdguidingcontrol.xaml" />
+    <Page Include="CameraControl/Core/Scripting/ScriptCommands/WaitCommandControl.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="scripting/scriptcommands/waitcommandcontrol.xaml" />
+    <Page Include="CameraControl/Core/Wpf/Colorpicker.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="wpf/colorpicker.xaml" />
+    <Page Include="CameraControl/Core/Wpf/ProgressWindow.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="wpf/progresswindow.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    </ItemGroup>
+  <ItemGroup>
+    <Reference Include="MahApps.Metro"><HintPath>../../dependencies/Managed/MahApps.Metro.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="mscorlib">
+      <HintPath>../../framework-refs/net48/.NETFramework/v4.8/mscorlib.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>../../dependencies/Managed/log4net.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="ICSharpCode.AvalonEdit">
+      <HintPath>../../dependencies/Managed/ICSharpCode.AvalonEdit.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="System.Xml">
+      <HintPath>../../framework-refs/net48/.NETFramework/v4.8/System.Xml.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="WriteableBitmapEx.Wpf">
+      <HintPath>../../dependencies/Managed/WriteableBitmapEx.Wpf.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Eagle">
+      <HintPath>../../dependencies/Managed/Eagle.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="System.Core">
+      <HintPath>../../framework-refs/net48/.NETFramework/v4.8/System.Core.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="SQLite-net">
+      <HintPath>../../dependencies/Managed/SQLite-net.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="MeasurementProtocolClient">
+      <HintPath>../../dependencies/Managed/MeasurementProtocolClient.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>../../dependencies/Managed/Newtonsoft.Json.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Magick.NET-Q8-x64">
+      <HintPath>../../dependencies/Managed/Magick.NET-Q8-x64.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Magick.NET.Core">
+      <HintPath>../../dependencies/Managed/Magick.NET.Core.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="DotNetZip">
+      <HintPath>../../dependencies/Managed/DotNetZip.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="System.Management">
+      <HintPath>../../framework-refs/net48/.NETFramework/v4.8/System.Management.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="MaterialDesignColors">
+      <HintPath>../../dependencies/Managed/MaterialDesignColors.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Griffin.WebServer">
+      <HintPath>../../dependencies/Managed/Griffin.WebServer.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="MaterialDesignThemes.Wpf">
+      <HintPath>../../dependencies/Managed/MaterialDesignThemes.Wpf.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp">
+      <HintPath>../../framework-refs/net48/.NETFramework/v4.8/Microsoft.CSharp.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualBasic">
+      <HintPath>../../framework-refs/net48/.NETFramework/v4.8/Microsoft.VisualBasic.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Griffin.Networking.Protocol.Http">
+      <HintPath>../../dependencies/Managed/Griffin.Networking.Protocol.Http.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="PresentationFramework">
+      <HintPath>../../framework-refs/net48/.NETFramework/v4.8/PresentationFramework.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="PresentationCore">
+      <HintPath>../../framework-refs/net48/.NETFramework/v4.8/PresentationCore.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="WindowsBase">
+      <HintPath>../../framework-refs/net48/.NETFramework/v4.8/WindowsBase.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="System.Xaml">
+      <HintPath>../../framework-refs/net48/.NETFramework/v4.8/System.Xaml.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="ReachFramework">
+      <HintPath>../../framework-refs/net48/.NETFramework/v4.8/ReachFramework.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="System.Printing">
+      <HintPath>../../framework-refs/net48/.NETFramework/v4.8/System.Printing.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  <ProjectReference Include="../CameraControl.Devices/CameraControl.Devices.csproj" /></ItemGroup>
+  <ItemGroup>
+    <Compile Remove="CameraControl/Core/Classes/Exiv2Data.cs" />
+    <Compile Remove="CameraControl/Core/Classes/FocusPointDefinition.cs" />
+    <Compile Remove="CameraControl/Core/Classes/FocusPointType.cs" />
+    <Compile Remove="CameraControl/Core/Classes/KeyboardHookEventArgs.cs" />
+    <Compile Remove="CameraControl/Core/TclScripting/OutputEventHandler.cs" />
+  </ItemGroup>
+</Project>

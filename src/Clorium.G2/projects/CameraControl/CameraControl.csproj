@@ -1,0 +1,473 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>CameraControl</AssemblyName>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+    <OutputType>WinExe</OutputType>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>True</UseWindowsForms>
+    <TargetFramework>net48</TargetFramework>
+    <AutomaticallyUseReferenceAssemblyPackages>false</AutomaticallyUseReferenceAssemblyPackages>
+    <TargetFrameworkRootPath>$(MSBuildThisFileDirectory)../../framework-refs/net48/</TargetFrameworkRootPath>
+    <EnableFrameworkPathOverride>false</EnableFrameworkPathOverride>
+    <NoStdLib>true</NoStdLib>
+    <PlatformTarget>x64</PlatformTarget>
+    <EnableDefaultPageItems>false</EnableDefaultPageItems>
+    <EnableDefaultApplicationDefinition>false</EnableDefaultApplicationDefinition>
+    <EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
+  <DefineConstants>$(DefineConstants);DEBUG</DefineConstants></PropertyGroup>
+  <PropertyGroup>
+    <LangVersion>14.0</LangVersion>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>app.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <ItemGroup>
+    <ApplicationDefinition Remove="CameraControl/App.xaml" />
+    <ApplicationDefinition Include="CameraControl/App.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="app.xaml" />
+    <Page Remove="CameraControl/Controls/CameraItem.xaml" />
+    <Page Remove="CameraControl/Controls/Controler.xaml" />
+    <Page Remove="CameraControl/Controls/ControlerSimple.xaml" />
+    <Page Remove="CameraControl/Controls/ExposureStatusControl.xaml" />
+    <Page Remove="CameraControl/Controls/LiveViewControlerSimple.xaml" />
+    <Page Remove="CameraControl/Controls/TimeControl.xaml" />
+    <Page Remove="CameraControl/Controls/VUMeterControl.xaml" />
+    <Page Remove="CameraControl/Layouts/LayoutGrid.xaml" />
+    <Page Remove="CameraControl/Layouts/LayoutGridRight.xaml" />
+    <Page Remove="CameraControl/Layouts/LayoutNormal.xaml" />
+    <Page Remove="CameraControl/MainWindow.xaml" />
+    <Page Remove="CameraControl/Panels/DirectorySelectorControl.xaml" />
+    <Page Remove="CameraControl/Panels/ImagePropertiesControl.xaml" />
+    <Page Remove="CameraControl/Panels/MetadataControl.xaml" />
+    <Page Remove="CameraControl/Panels/SelectionControl.xaml" />
+    <Page Remove="CameraControl/Panels/SessionControl.xaml" />
+    <Page Remove="CameraControl/StartUpWindow.xaml" />
+    <Page Remove="CameraControl/windows/AboutWnd.xaml" />
+    <Page Remove="CameraControl/windows/AIRemoveBackgroundWnd.xaml" />
+    <Page Remove="CameraControl/windows/AstroLiveViewWnd.xaml" />
+    <Page Remove="CameraControl/windows/AutoExportPluginEdit.xaml" />
+    <Page Remove="CameraControl/windows/BarcodeWnd.xaml" />
+    <Page Remove="CameraControl/windows/BluetoothView.xaml" />
+    <Page Remove="CameraControl/windows/BraketingWnd.xaml" />
+    <Page Remove="CameraControl/windows/BrowseWnd.xaml" />
+    <Page Remove="CameraControl/windows/BulbWnd.xaml" />
+    <Page Remove="CameraControl/windows/CameraPropertyWnd.xaml" />
+    <Page Remove="CameraControl/windows/ColorCompensationWnd.xaml" />
+    <Page Remove="CameraControl/windows/DownloadPhotosWnd.xaml" />
+    <Page Remove="CameraControl/windows/EditSession.xaml" />
+    <Page Remove="CameraControl/windows/EditTagWnd.xaml" />
+    <Page Remove="CameraControl/windows/ErrorReportWnd.xaml" />
+    <Page Remove="CameraControl/windows/FileNameTemplateEditorWnd.xaml" />
+    <Page Remove="CameraControl/windows/FullScreenWnd.xaml" />
+    <Page Remove="CameraControl/windows/GetIpWnd.xaml" />
+    <Page Remove="CameraControl/windows/LightControlWnd.xaml" />
+    <Page Remove="CameraControl/windows/LiveViewFullScreenWnd.xaml" />
+    <Page Remove="CameraControl/windows/LiveViewWnd.xaml" />
+    <Page Remove="CameraControl/windows/MultipleCameraWnd.xaml" />
+    <Page Remove="CameraControl/windows/MultipleLiveView.xaml" />
+    <Page Remove="CameraControl/windows/NewVersionWnd.xaml" />
+    <Page Remove="CameraControl/windows/PresetEditWnd.xaml" />
+    <Page Remove="CameraControl/windows/PreviewWnd.xaml" />
+    <Page Remove="CameraControl/windows/PrintWnd.xaml" />
+    <Page Remove="CameraControl/windows/PropertyWnd.xaml" />
+    <Page Remove="CameraControl/windows/QrCodeWnd.xaml" />
+    <Page Remove="CameraControl/windows/RemoveBackgroundWnd.xaml" />
+    <Page Remove="CameraControl/windows/SavePresetWnd.xaml" />
+    <Page Remove="CameraControl/windows/ScriptCommandEdit.xaml" />
+    <Page Remove="CameraControl/windows/ScriptWnd.xaml" />
+    <Page Remove="CameraControl/windows/SelectorWnd.xaml" />
+    <Page Remove="CameraControl/windows/SettingsWnd.xaml" />
+    <Page Remove="CameraControl/windows/StatisticsWnd.xaml" />
+    <Page Remove="CameraControl/windows/TagSelectorWnd.xaml" />
+    <Page Remove="CameraControl/windows/TimeLapseWnd.xaml" />
+    <Page Remove="CameraControl/windows/TurnTableFolderWnd.xaml" />
+    <Page Remove="CameraControl/windows/TurnTableWnd.xaml" />
+    <Page Remove="CameraControl/windows/WebCamWnd.xaml" />
+    <Page Remove="CameraControl/windows/Welcome.xaml" />
+    <Page Remove="layouts/layoutbaseresource.xaml" />
+    <Page Remove="resources/astroaccent.xaml" />
+    <Page Remove="resources/astrotheme.xaml" />
+    <Page Remove="resources/moreicons.xaml" />
+    <Page Remove="styles/customcontrols.xaml" />
+    <Page Remove="styles/expanderex.xaml" />
+    <Page Include="CameraControl/Controls/CameraItem.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="controls/cameraitem.xaml" />
+    <Page Include="CameraControl/Controls/Controler.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="controls/controler.xaml" />
+    <Page Include="CameraControl/Controls/ControlerSimple.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="controls/controlersimple.xaml" />
+    <Page Include="CameraControl/Controls/ExposureStatusControl.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="controls/exposurestatuscontrol.xaml" />
+    <Page Include="CameraControl/Controls/LiveViewControlerSimple.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="controls/liveviewcontrolersimple.xaml" />
+    <Page Include="CameraControl/Controls/TimeControl.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="controls/timecontrol.xaml" />
+    <Page Include="CameraControl/Controls/VUMeterControl.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="controls/vumetercontrol.xaml" />
+    <Page Include="CameraControl/Layouts/LayoutGrid.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="layouts/layoutgrid.xaml" />
+    <Page Include="CameraControl/Layouts/LayoutGridRight.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="layouts/layoutgridright.xaml" />
+    <Page Include="CameraControl/Layouts/LayoutNormal.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="layouts/layoutnormal.xaml" />
+    <Page Include="CameraControl/MainWindow.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="mainwindow.xaml" />
+    <Page Include="CameraControl/Panels/DirectorySelectorControl.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="panels/directoryselectorcontrol.xaml" />
+    <Page Include="CameraControl/Panels/ImagePropertiesControl.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="panels/imagepropertiescontrol.xaml" />
+    <Page Include="CameraControl/Panels/MetadataControl.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="panels/metadatacontrol.xaml" />
+    <Page Include="CameraControl/Panels/SelectionControl.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="panels/selectioncontrol.xaml" />
+    <Page Include="CameraControl/Panels/SessionControl.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="panels/sessioncontrol.xaml" />
+    <Page Include="CameraControl/StartUpWindow.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="startupwindow.xaml" />
+    <Page Include="CameraControl/windows/AboutWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/aboutwnd.xaml" />
+    <Page Include="CameraControl/windows/AIRemoveBackgroundWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/airemovebackgroundwnd.xaml" />
+    <Page Include="CameraControl/windows/AstroLiveViewWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/astroliveviewwnd.xaml" />
+    <Page Include="CameraControl/windows/AutoExportPluginEdit.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/autoexportpluginedit.xaml" />
+    <Page Include="CameraControl/windows/BarcodeWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/barcodewnd.xaml" />
+    <Page Include="CameraControl/windows/BluetoothView.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/bluetoothview.xaml" />
+    <Page Include="CameraControl/windows/BraketingWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/braketingwnd.xaml" />
+    <Page Include="CameraControl/windows/BrowseWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/browsewnd.xaml" />
+    <Page Include="CameraControl/windows/BulbWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/bulbwnd.xaml" />
+    <Page Include="CameraControl/windows/CameraPropertyWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/camerapropertywnd.xaml" />
+    <Page Include="CameraControl/windows/ColorCompensationWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/colorcompensationwnd.xaml" />
+    <Page Include="CameraControl/windows/DownloadPhotosWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/downloadphotoswnd.xaml" />
+    <Page Include="CameraControl/windows/EditSession.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/editsession.xaml" />
+    <Page Include="CameraControl/windows/EditTagWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/edittagwnd.xaml" />
+    <Page Include="CameraControl/windows/ErrorReportWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/errorreportwnd.xaml" />
+    <Page Include="CameraControl/windows/FileNameTemplateEditorWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/filenametemplateeditorwnd.xaml" />
+    <Page Include="CameraControl/windows/FullScreenWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/fullscreenwnd.xaml" />
+    <Page Include="CameraControl/windows/GetIpWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/getipwnd.xaml" />
+    <Page Include="CameraControl/windows/LightControlWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/lightcontrolwnd.xaml" />
+    <Page Include="CameraControl/windows/LiveViewFullScreenWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/liveviewfullscreenwnd.xaml" />
+    <Page Include="CameraControl/windows/LiveViewWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/liveviewwnd.xaml" />
+    <Page Include="CameraControl/windows/MultipleCameraWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/multiplecamerawnd.xaml" />
+    <Page Include="CameraControl/windows/MultipleLiveView.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/multipleliveview.xaml" />
+    <Page Include="CameraControl/windows/NewVersionWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/newversionwnd.xaml" />
+    <Page Include="CameraControl/windows/PresetEditWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/preseteditwnd.xaml" />
+    <Page Include="CameraControl/windows/PreviewWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/previewwnd.xaml" />
+    <Page Include="CameraControl/windows/PrintWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/printwnd.xaml" />
+    <Page Include="CameraControl/windows/PropertyWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/propertywnd.xaml" />
+    <Page Include="CameraControl/windows/QrCodeWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/qrcodewnd.xaml" />
+    <Page Include="CameraControl/windows/RemoveBackgroundWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/removebackgroundwnd.xaml" />
+    <Page Include="CameraControl/windows/SavePresetWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/savepresetwnd.xaml" />
+    <Page Include="CameraControl/windows/ScriptCommandEdit.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/scriptcommandedit.xaml" />
+    <Page Include="CameraControl/windows/ScriptWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/scriptwnd.xaml" />
+    <Page Include="CameraControl/windows/SelectorWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/selectorwnd.xaml" />
+    <Page Include="CameraControl/windows/SettingsWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/settingswnd.xaml" />
+    <Page Include="CameraControl/windows/StatisticsWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/statisticswnd.xaml" />
+    <Page Include="CameraControl/windows/TagSelectorWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/tagselectorwnd.xaml" />
+    <Page Include="CameraControl/windows/TimeLapseWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/timelapsewnd.xaml" />
+    <Page Include="CameraControl/windows/TurnTableFolderWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/turntablefolderwnd.xaml" />
+    <Page Include="CameraControl/windows/TurnTableWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/turntablewnd.xaml" />
+    <Page Include="CameraControl/windows/WebCamWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/webcamwnd.xaml" />
+    <Page Include="CameraControl/windows/Welcome.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/welcome.xaml" />
+    <Page Include="layouts/layoutbaseresource.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="layouts/layoutbaseresource.xaml" />
+    <Page Include="resources/astroaccent.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="resources/astroaccent.xaml" />
+    <Page Include="resources/astrotheme.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="resources/astrotheme.xaml" />
+    <Page Include="resources/moreicons.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="resources/moreicons.xaml" />
+    <Page Include="styles/customcontrols.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="styles/customcontrols.xaml" />
+    <Page Include="styles/expanderex.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="styles/expanderex.xaml" />
+    <!-- G2 UI: shared design-A theme and embedded fonts (Noto Sans KR, JetBrains Mono · SIL OFL 1.1, see fonts/) -->
+    <Page Include="styles/g2theme.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="styles/g2theme.xaml" />
+    <!-- G2 colour correction window (engine: CameraControl/Classes/G2ImageAdjust.cs, Magick.NET) -->
+    <Page Include="CameraControl/windows/G2ColorAdjustWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/g2coloradjustwnd.xaml" />
+    <Resource Remove="fonts/notosanskr-regular.otf" />
+    <Resource Include="fonts/notosanskr-regular.otf" LogicalName="fonts/notosanskr-regular.otf" />
+    <Resource Remove="fonts/notosanskr-medium.otf" />
+    <Resource Include="fonts/notosanskr-medium.otf" LogicalName="fonts/notosanskr-medium.otf" />
+    <Resource Remove="fonts/notosanskr-bold.otf" />
+    <Resource Include="fonts/notosanskr-bold.otf" LogicalName="fonts/notosanskr-bold.otf" />
+    <Resource Remove="fonts/jetbrainsmono-regular.ttf" />
+    <Resource Include="fonts/jetbrainsmono-regular.ttf" LogicalName="fonts/jetbrainsmono-regular.ttf" />
+    <Resource Remove="fonts/jetbrainsmono-medium.ttf" />
+    <Resource Include="fonts/jetbrainsmono-medium.ttf" LogicalName="fonts/jetbrainsmono-medium.ttf" />
+    <Resource Remove="fonts/jetbrainsmono-semibold.ttf" />
+    <Resource Include="fonts/jetbrainsmono-semibold.ttf" LogicalName="fonts/jetbrainsmono-semibold.ttf" />
+    <Resource Remove="images/about.png" />
+    <Resource Remove="images/cameraproperties.png" />
+    <Resource Remove="images/ccw.png" />
+    <Resource Remove="images/ccwstep.png" />
+    <Resource Remove="images/color.png" />
+    <Resource Remove="images/cw.png" />
+    <Resource Remove="images/cwstep.png" />
+    <Resource Remove="images/diskdrive.png" />
+    <Resource Remove="images/flickr-icon.png" />
+    <Resource Remove="images/folder.png" />
+    <Resource Remove="images/jeanback.png" />
+    <Resource Remove="images/jeanbackbg.jpg" />
+    <Resource Remove="images/jeanfront.png" />
+    <Resource Remove="images/jeanfrontbg.jpg" />
+    <Resource Remove="images/lightoff.png" />
+    <Resource Remove="images/lighton.png" />
+    <Resource Remove="images/logo.png" />
+    <Resource Remove="images/logo_big.png" />
+    <Resource Remove="images/noimage.png" />
+    <Resource Remove="images/properties.png" />
+    <Resource Remove="images/settings.png" />
+    <Resource Remove="images/tshirtback.png" />
+    <Resource Remove="images/tshirtbackbg.jpg" />
+    <Resource Remove="images/tshirtfront.png" />
+    <Resource Remove="images/tshirtfrontbg.jpg" />
+    <Resource Remove="images/two.png" />
+    <Resource Remove="logo.ico" />
+    <Resource Include="images/about.png" LogicalName="images/about.png" />
+    <Resource Include="images/cameraproperties.png" LogicalName="images/cameraproperties.png" />
+    <Resource Include="images/ccw.png" LogicalName="images/ccw.png" />
+    <Resource Include="images/ccwstep.png" LogicalName="images/ccwstep.png" />
+    <Resource Include="images/color.png" LogicalName="images/color.png" />
+    <Resource Include="images/cw.png" LogicalName="images/cw.png" />
+    <Resource Include="images/cwstep.png" LogicalName="images/cwstep.png" />
+    <Resource Include="images/diskdrive.png" LogicalName="images/diskdrive.png" />
+    <Resource Include="images/flickr-icon.png" LogicalName="images/flickr-icon.png" />
+    <Resource Include="images/folder.png" LogicalName="images/folder.png" />
+    <Resource Include="images/jeanback.png" LogicalName="images/jeanback.png" />
+    <Resource Include="images/jeanbackbg.jpg" LogicalName="images/jeanbackbg.jpg" />
+    <Resource Include="images/jeanfront.png" LogicalName="images/jeanfront.png" />
+    <Resource Include="images/jeanfrontbg.jpg" LogicalName="images/jeanfrontbg.jpg" />
+    <Resource Include="images/lightoff.png" LogicalName="images/lightoff.png" />
+    <Resource Include="images/lighton.png" LogicalName="images/lighton.png" />
+    <Resource Include="images/logo.png" LogicalName="images/logo.png" />
+    <Resource Include="images/logo_big.png" LogicalName="images/logo_big.png" />
+    <Resource Include="images/noimage.png" LogicalName="images/noimage.png" />
+    <Resource Include="images/properties.png" LogicalName="images/properties.png" />
+    <Resource Include="images/settings.png" LogicalName="images/settings.png" />
+    <Resource Include="images/tshirtback.png" LogicalName="images/tshirtback.png" />
+    <Resource Include="images/tshirtbackbg.jpg" LogicalName="images/tshirtbackbg.jpg" />
+    <Resource Include="images/tshirtfront.png" LogicalName="images/tshirtfront.png" />
+    <Resource Include="images/tshirtfrontbg.jpg" LogicalName="images/tshirtfrontbg.jpg" />
+    <Resource Include="images/two.png" LogicalName="images/two.png" />
+    <Resource Include="logo.ico" LogicalName="logo.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="XamlGeneratedNamespace/GeneratedInternalTypeHelper.cs" />
+    <Reference Include="mscorlib">
+      <HintPath>../../framework-refs/net48/.NETFramework/v4.8/mscorlib.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin">
+      <HintPath>../../dependencies/Managed/Microsoft.Owin.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <ProjectReference Include="../CameraControl.Core/CameraControl.Core.csproj"><Private>false</Private></ProjectReference>
+    <Reference Include="System.Management">
+      <HintPath>../../framework-refs/net48/.NETFramework/v4.8/System.Management.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Magick.NET-Q8-x64">
+      <HintPath>../../dependencies/Managed/Magick.NET-Q8-x64.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Magick.NET.Core">
+      <HintPath>../../dependencies/Managed/Magick.NET.Core.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="GongSolutions.Wpf.DragDrop"><HintPath>../../dependencies/Managed/GongSolutions.Wpf.DragDrop.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="MahApps.Metro">
+      <HintPath>../../dependencies/Managed/MahApps.Metro.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Hardcodet.NotifyIcon.Wpf">
+      <HintPath>../../dependencies/Managed/Hardcodet.NotifyIcon.Wpf.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="MaterialDesignThemes.Wpf">
+      <HintPath>../../dependencies/Managed/MaterialDesignThemes.Wpf.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualBasic">
+      <HintPath>../../framework-refs/net48/.NETFramework/v4.8/Microsoft.VisualBasic.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="System.Core">
+      <HintPath>../../framework-refs/net48/.NETFramework/v4.8/System.Core.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="System.Xml">
+      <HintPath>../../framework-refs/net48/.NETFramework/v4.8/System.Xml.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Gma.QrCodeNet.Encoding">
+      <HintPath>../../dependencies/Managed/Gma.QrCodeNet.Encoding.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="ICSharpCode.AvalonEdit">
+      <HintPath>../../dependencies/Managed/ICSharpCode.AvalonEdit.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="GalaSoft.MvvmLight">
+      <HintPath>../../dependencies/Managed/GalaSoft.MvvmLight.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="System.Net.Http">
+      <HintPath>../../framework-refs/net48/.NETFramework/v4.8/System.Net.Http.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Accord.Imaging">
+      <HintPath>../../dependencies/Managed/Accord.Imaging.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="WriteableBitmapEx.Wpf">
+      <HintPath>../../dependencies/Managed/WriteableBitmapEx.Wpf.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Windows.Foundation.UniversalApiContract">
+      <Private>false</Private>
+      <HintPath>../../framework-refs/winrt/Windows.Foundation.UniversalApiContract.winmd</HintPath>
+    </Reference>
+    <Reference Include="System.Text.Json">
+      <HintPath>../../dependencies/Managed/System.Text.Json.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="LibMJPEGServer">
+      <HintPath>../../dependencies/Managed/LibMJPEGServer.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="WebEye.StreamPlayerControl">
+      <HintPath>../../dependencies/Managed/WebEye.StreamPlayerControl.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Accord.Vision">
+      <HintPath>../../dependencies/Managed/Accord.Vision.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="ReachFramework">
+      <HintPath>../../framework-refs/net48/.NETFramework/v4.8/ReachFramework.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Quartz">
+      <HintPath>../../dependencies/Managed/Quartz.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="FubarDev.FtpServer">
+      <HintPath>../../dependencies/Managed/FubarDev.FtpServer.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="FubarDev.FtpServer.FileSystem.DotNet">
+      <HintPath>../../dependencies/Managed/FubarDev.FtpServer.FileSystem.DotNet.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="FubarDev.FtpServer.Abstractions">
+      <HintPath>../../dependencies/Managed/FubarDev.FtpServer.Abstractions.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions">
+      <HintPath>../../dependencies/Managed/Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection">
+      <HintPath>../../dependencies/Managed/Microsoft.Extensions.DependencyInjection.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xaml.Behaviors">
+      <HintPath>../../dependencies/Managed/Microsoft.Xaml.Behaviors.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="HttpMultipartParser">
+      <HintPath>../../dependencies/Managed/HttpMultipartParser.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Owin">
+      <HintPath>../../dependencies/Managed/Owin.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.Core">
+      <HintPath>../../dependencies/Managed/Microsoft.AspNet.SignalR.Core.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.FileSystems">
+      <HintPath>../../dependencies/Managed/Microsoft.Owin.FileSystems.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.StaticFiles">
+      <HintPath>../../dependencies/Managed/Microsoft.Owin.StaticFiles.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp">
+      <HintPath>../../framework-refs/net48/.NETFramework/v4.8/Microsoft.CSharp.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="System.Text.Encodings.Web">
+      <HintPath>../../dependencies/Managed/System.Text.Encodings.Web.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Accord.Math">
+      <HintPath>../../dependencies/Managed/Accord.Math.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Accord.Statistics">
+      <HintPath>../../dependencies/Managed/Accord.Statistics.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Accord">
+      <HintPath>../../dependencies/Managed/Accord.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="System.Printing">
+      <HintPath>../../framework-refs/net48/.NETFramework/v4.8/System.Printing.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Cors">
+      <HintPath>../../dependencies/Managed/Microsoft.Owin.Cors.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Hosting">
+      <HintPath>../../dependencies/Managed/Microsoft.Owin.Hosting.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Windows.Foundation.FoundationContract">
+      <Private>false</Private>
+      <HintPath>../../framework-refs/winrt/Windows.Foundation.FoundationContract.winmd</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.WindowsRuntime">
+      <Private>false</Private>
+      <HintPath>../../framework-refs/winrt/v46/System.Runtime.WindowsRuntime.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Options">
+      <HintPath>../../dependencies/Managed/Microsoft.Extensions.Options.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="PresentationFramework">
+      <HintPath>../../framework-refs/net48/.NETFramework/v4.8/PresentationFramework.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="PresentationCore">
+      <HintPath>../../framework-refs/net48/.NETFramework/v4.8/PresentationCore.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="WindowsBase">
+      <HintPath>../../framework-refs/net48/.NETFramework/v4.8/WindowsBase.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="System.Xaml">
+      <HintPath>../../framework-refs/net48/.NETFramework/v4.8/System.Xaml.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces">
+      <HintPath>../../dependencies/Managed/Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="SQLite-net">
+      <HintPath>../../dependencies/Managed/SQLite-net.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="System.Memory">
+      <HintPath>../../dependencies/Managed/System.Memory.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Windows">
+      <HintPath>../../framework-refs/winrt/Windows.WinMD</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="GalaSoft.MvvmLight.Extras">
+      <HintPath>../../dependencies/Managed/GalaSoft.MvvmLight.Extras.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  <ProjectReference Include="../CameraControl.Devices/CameraControl.Devices.csproj" /><ProjectReference Include="../ZoomAndPan/ZoomAndPan.csproj" /></ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="RecoveredResources/CameraControl.Properties.Resources.resources" LogicalName="CameraControl.Properties.Resources.resources" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(CloriumLegacyLicenseKeyFile)' != ''">
+    <EmbeddedResource Include="$(CloriumLegacyLicenseKeyFile)" LogicalName="Clorium.LegacyLicenseKey" />
+  </ItemGroup>
+  <PropertyGroup Condition="'$(CloriumManagedLicenseConfig)' != ''">
+    <DefineConstants>$(DefineConstants);CLORIUM_MANAGED_LICENSE</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../../../modules/Clorium.Licensing/Client/Client.csproj" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(CloriumManagedLicenseConfig)' != ''">
+    <EmbeddedResource Include="$(CloriumManagedLicenseConfig)" LogicalName="Clorium.ManagedLicenseConfig" />
+  </ItemGroup>
+</Project>

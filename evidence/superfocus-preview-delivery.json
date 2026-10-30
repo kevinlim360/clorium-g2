@@ -1,0 +1,36 @@
+{
+  "date": "2026-10-28",
+  "status": "Implemented and staged; awaiting user confirmation of actual typing and camera preview movement",
+  "application": ".local/g2-runtime/CameraControl.exe",
+  "build": "0 errors;10 existing warnings",
+  "regression": "19 groups PASS",
+  "legacy": "19 guards PASS",
+  "maintenance": "PASS",
+  "postprocess": "WPF/WIA/WMPLib PASS",
+  "independentReview": false,
+  "root": "LiveViewViewModel.SetFocusPos discarded all focus-point movement when G2FocusCamera.IsOwned. Previous button-only queue change missed this call path.",
+  "previewFix": "Before ownership guard, record immutable software preview ROI during anchor search; renderer uses software coordinates immediately; A autofocus retains its original ROI; B uses software ROI snapshot. No competing SDK focus-point command during A search. Thread-safe window registry.",
+  "inputFix": "Allow cuts and quality selection during anchor search. Remove handled mouse-down focus interception; use standard textbox activation/caret, defer select-all until keyboard focus is acquired. Existing numeric bounds unchanged. Actual cause of physical typing failure not conclusively isolated; prior TextBox.Text setter checks were insufficient.",
+  "checks": "Actual staged WPF window with fake frame camera plus actual LiveViewViewModel.SetFocusPos entry: preview coordinates change during registration; no hardware Focus call; B snapshot preserved; editable count while searching; B-first/cancel; high25/medium17/low8 and every typed2..25. Themed old TextBox content host40x22 rules out zero-size styling hypothesis.",
+  "modevid": "Read recovered forms and pseudocode, not original developer source or executable runtime. See evidence/superfocus-modevid-comparison.md. No ModeVid/ModeStack execution or token operations.",
+  "blockedTest": "Standalone real-keyboard harness launch: Computer Use app approval timed out. Product native input repeatedly failed with coordinate geometry/outside captured monitor errors. No simulated or field-set check labelled actual physical typing success.",
+  "userCheck": "Async question pending: manually type12 and move live-view box during A autofocus in new candidate.",
+  "modules": [
+    {
+      "sha256": "324c37e470a1ce3d9fbc1c3725b6e673e8716810522f697d8389c8e0aa3755ff",
+      "file": "CameraControl.exe"
+    },
+    {
+      "sha256": "97f2c68e2bcf4717af7ad5490782a9910f8f2596c6f71d4d921f2c1681fbfd33",
+      "file": "CameraControl.Core.dll"
+    },
+    {
+      "sha256": "3be30247f5d5dfc9f88e5482664671c7df1fc0debd15b62892e227333712288a",
+      "file": "CameraControl.Devices.dll"
+    },
+    {
+      "sha256": "a931b94d8631b341c01ee3c2f3b07997855032687cfc5242be780bb2544f13d2",
+      "file": "Canon.Eos.Framework.dll"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "postprocess": "WPF/WIA/WMPLib PASS",
+  "date": "2026-10-28",
+  "maintenance": "Isolated runtime marker guard PASS under .NET Framework",
+  "qualityRules": "High=span+1 at one unit; Medium=round(High*2/3); Low=round(High/3); minimum2; inclusive A/B; balanced integer gaps",
+  "legacy": "19 checks PASS",
+  "build": "0 errors, 10 existing warnings",
+  "independentReview": false,
+  "application": ".local/g2-runtime/CameraControl.exe",
+  "ui": "EOS R live view A0 B5: High6 gap1, Medium4 gap1-2, Low2 gap5; high/low clicked on live view; medium clicked in settings; A/B retained and choices synchronized on close",
+  "modules": [
+    {
+      "file": "CameraControl.exe",
+      "sha256": "430f8aed1bcdd7f1ca1265260e189ab2518b73cb740c2e37e7792101b1202ec7"
+    },
+    {
+      "file": "CameraControl.Core.dll",
+      "sha256": "82fc743605affd05165fb16656dd0bfc04262ea0dbceb95ff44ca4ca70f39e7d"
+    },
+    {
+      "file": "CameraControl.Devices.dll",
+      "sha256": "3be30247f5d5dfc9f88e5482664671c7df1fc0debd15b62892e227333712288a"
+    },
+    {
+      "file": "Canon.Eos.Framework.dll",
+      "sha256": "a931b94d8631b341c01ee3c2f3b07997855032687cfc5242be780bb2544f13d2"
+    }
+  ],
+  "hardwareCapture": "No new exposures; planned capture order verified by injected camera, previous optical evidence retained separately",
+  "default": "Medium",
+  "regression": "15 groups PASS"
+}

@@ -1,0 +1,1 @@
+<Project><PropertyGroup><Deterministic>true</Deterministic><PathMap Condition="'$(PortableSymbols)' == 'true'">$(MSBuildThisFileDirectory)=/CloriumSource/</PathMap></PropertyGroup></Project>

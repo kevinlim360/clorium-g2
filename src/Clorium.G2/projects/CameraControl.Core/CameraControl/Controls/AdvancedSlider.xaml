@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<UserControl x:Class="CameraControl.Controls.AdvancedSlider" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:controls="clr-namespace:CameraControl.Controls;assembly=CameraControl.Core">
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="25" />
+      <ColumnDefinition Width="202*" />
+      <ColumnDefinition Width="58" />
+      <ColumnDefinition Width="25" />
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="30*" />
+      <RowDefinition Height="23*" />
+    </Grid.RowDefinitions>
+    <Slider Name="slider" Grid.ColumnSpan="2" Grid.Row="1" Grid.Column="1" Margin="3" VerticalAlignment="Center" Value="{Binding Value}" Maximum="{Binding Maximum}" Minimum="{Binding Minimum}" />
+    <TextBox Name="textBox" Grid.Column="2" VerticalContentAlignment="Center" Padding="0" Panel.ZIndex="1" Margin="1" Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" />
+    <Label Name="label" VerticalContentAlignment="Center" Padding="0" Grid.Column="1" Margin="2" Content="{Binding Label}" />
+    <Button Name="btn_m" Content="-" Margin="2,5" Grid.RowSpan="2" Click="btn_m_Click" />
+    <Button Name="btn_p" Content="+" Grid.Column="3" Margin="2,5" Grid.RowSpan="2" IsTabStop="False" Click="btn_p_Click" />
+  </Grid>
+</UserControl>

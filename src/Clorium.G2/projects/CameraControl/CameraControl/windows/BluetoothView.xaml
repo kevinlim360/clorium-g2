@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Window x:Class="CameraControl.windows.BluetoothView" xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local1="clr-namespace:CameraControl.ViewModel" xmlns:T="clr-namespace:CameraControl.Core.Translation;assembly=CameraControl.Core" Height="350" Width="400" TextElement.Foreground="{DynamicResource MaterialDesignBody}" TextElement.FontWeight="Regular" TextElement.FontSize="13" TextOptions.TextFormattingMode="Ideal" TextOptions.TextRenderingMode="Auto" Background="{DynamicResource MaterialDesignPaper}" FontFamily="{DynamicResource MaterialDesignFont}" xmlns:windows="clr-namespace:CameraControl.windows" Title="{T:Translate LabelConnectbluetoothdevice}">
+  <FrameworkElement.DataContext>
+    <local1:BlueToothViewModel />
+  </FrameworkElement.DataContext>
+  <Grid IsEnabled="{Binding IsNotBusy}">
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*" />
+      <ColumnDefinition Width="*" />
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="*" />
+      <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
+    <ListBox Name="lbDevices" DisplayMemberPath="DisplayName" Margin="16" ItemsSource="{Binding GoProBluetoothHelper.Devices}" SelectedItem="{Binding SelectedItem}" />
+    <StackPanel Grid.Column="1">
+      <Button Margin="4" Content="ReScan" Command="{Binding ReScanCommand}" />
+      <Button Margin="4" Content="Pair" Command="{Binding PairCommand}" IsEnabled="{Binding IsSelected}" />
+      <Button Margin="4" Content="Connect" Command="{Binding ConnectCommand}" IsEnabled="{Binding IsSelected}" />
+    </StackPanel>
+    <TextBlock Margin="4" Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding GoProBluetoothHelper.Message}" />
+  </Grid>
+</Window>

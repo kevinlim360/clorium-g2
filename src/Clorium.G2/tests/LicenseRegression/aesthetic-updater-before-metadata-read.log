@@ -1,0 +1,30 @@
+PASS: legacy original update exact payload
+PASS: legacy original preserves unrelated settings and license
+PASS: legacy original backup exact originals
+PASS: legacy original idempotent reapply
+PASS: legacy original rollback restores original hashes and missing PDBs
+PASS: Oct19 4.7.1.4 update exact payload
+PASS: Oct19 4.7.1.4 preserves unrelated settings and license
+PASS: Oct19 4.7.1.4 backup exact originals
+PASS: Oct19 4.7.1.4 idempotent reapply
+PASS: Oct19 4.7.1.4 rollback restores original hashes and missing PDBs
+PASS: Oct22 4.7.1.4 update exact payload
+PASS: Oct22 4.7.1.4 preserves unrelated settings and license
+PASS: Oct22 4.7.1.4 backup exact originals
+PASS: Oct22 4.7.1.4 idempotent reapply
+System.AggregateException: 하나 이상의 오류가 발생했습니다. ---> System.IO.IOException: 바꿀 파일을 제거할 수 없습니다.
+
+   위치: System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+   위치: System.IO.File.InternalReplace(String sourceFileName, String destinationFileName, String destinationBackupFileName, Boolean ignoreMetadataErrors)
+   위치: CloriumUpdate.UpdateEngine.ReplaceFileContents(String target, Byte[] bytes)
+   위치: CloriumUpdate.UpdateEngine.RestoreRecords(String root, String backup, IEnumerable`1 records, IEnumerable`1 names)
+   --- 내부 예외 스택 추적의 끝 ---
+   위치: CloriumUpdate.UpdateEngine.RestoreRecords(String root, String backup, IEnumerable`1 records, IEnumerable`1 names)
+   위치: WindowsUpdaterTests.Main(String[] args)
+---> (내부 예외 #0) System.IO.IOException: 바꿀 파일을 제거할 수 없습니다.
+
+   위치: System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+   위치: System.IO.File.InternalReplace(String sourceFileName, String destinationFileName, String destinationBackupFileName, Boolean ignoreMetadataErrors)
+   위치: CloriumUpdate.UpdateEngine.ReplaceFileContents(String target, Byte[] bytes)
+   위치: CloriumUpdate.UpdateEngine.RestoreRecords(String root, String backup, IEnumerable`1 records, IEnumerable`1 names)<---
+

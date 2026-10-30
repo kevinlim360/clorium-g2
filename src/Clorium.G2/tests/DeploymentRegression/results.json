@@ -1,0 +1,87 @@
+﻿{
+    "results":  [
+                    {
+                        "test":  "original-install update hashes",
+                        "passed":  true
+                    },
+                    {
+                        "test":  "original-install preserves unrelated settings",
+                        "passed":  true
+                    },
+                    {
+                        "test":  "original-install creates one backup",
+                        "passed":  true
+                    },
+                    {
+                        "test":  "original-install identical payload no-op",
+                        "passed":  true
+                    },
+                    {
+                        "test":  "original-install rollback restores exact base",
+                        "passed":  true
+                    },
+                    {
+                        "test":  "previous-4.7.1.4 update hashes",
+                        "passed":  true
+                    },
+                    {
+                        "test":  "previous-4.7.1.4 preserves unrelated settings",
+                        "passed":  true
+                    },
+                    {
+                        "test":  "previous-4.7.1.4 creates one backup",
+                        "passed":  true
+                    },
+                    {
+                        "test":  "previous-4.7.1.4 identical payload no-op",
+                        "passed":  true
+                    },
+                    {
+                        "test":  "previous-4.7.1.4 rollback restores exact base",
+                        "passed":  true
+                    },
+                    {
+                        "test":  "corrupt payload rejected",
+                        "passed":  true
+                    },
+                    {
+                        "test":  "corrupt payload leaves target intact",
+                        "passed":  true
+                    },
+                    {
+                        "test":  "unknown 4.7.1.4 revision rejected",
+                        "passed":  true
+                    },
+                    {
+                        "test":  "unknown revision remains untouched",
+                        "passed":  true
+                    },
+                    {
+                        "test":  "damaged backup rejected before restore",
+                        "passed":  true
+                    },
+                    {
+                        "test":  "damaged backup does not modify current files",
+                        "passed":  true
+                    },
+                    {
+                        "test":  "locked symbol file reports failed update",
+                        "passed":  true
+                    },
+                    {
+                        "test":  "partial update automatically restores binaries",
+                        "passed":  true
+                    },
+                    {
+                        "test":  "mixed existing versions rejected",
+                        "passed":  true
+                    },
+                    {
+                        "test":  "mixed versions remain untouched",
+                        "passed":  true
+                    }
+                ],
+    "tests":  20,
+    "failed":  0,
+    "passed":  20
+}

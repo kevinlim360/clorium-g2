@@ -1,0 +1,1 @@
+PASS module installer copies signed-license build and preserves prior executable in isolated test; production installation untouched

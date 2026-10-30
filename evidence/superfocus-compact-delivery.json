@@ -1,0 +1,21 @@
+{
+  "date": "2026-10-28",
+  "application": ".local/g2-runtime/CameraControl.exe",
+  "build": "0 errors; 4 existing warnings",
+  "postprocess": "WPF/WIA/WMPLib PASS",
+  "scope": "UI only. Focus range, quality counts, capture sequencing and stacking logic unchanged.",
+  "layout": "Three control rows: focus arrows/A/B/reset; Quality high/medium/low + count textbox + focus-box checkbox; capture/stop/result/settings. Standalone third count/plan row removed. Quality labels only, count and gap in tooltip. Anchor state in button colors and tooltips; selected plan/direction in count/capture tooltips. Disabled controls now show tooltip.",
+  "ui": "Observed final candidate no clipping at 410 DIP width, compact popup rendered 399x154 bounded screenshot. Parent crop intermittently fails outside captured monitor; accessibility verified H/M/L labels and tooltip text. No anchor registration or new exposures; numeric live count tooltip not optically checked in this run.",
+  "verification": "Build + actual UI inspection; no new regression tests for layout-only edits. Prior 18 capture/plan groups retained separately.",
+  "independentReview": false,
+  "modules": [
+    {
+      "file": "CameraControl.exe",
+      "sha256": "d50e5963ea122f8bcc535e72afc8a7ab3247f011ee75645a3248b6d50497471b"
+    },
+    {
+      "file": "CameraControl.Core.dll",
+      "sha256": "ca99f19e4af14c125976af03f28489033fd4a06766992f988445034982e67bc4"
+    }
+  ]
+}

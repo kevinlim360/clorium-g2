@@ -1,0 +1,86 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <AssemblyName>CameraControl.Plugins</AssemblyName>
+    <PlatformTarget>x64</PlatformTarget>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
+    <LangVersion>14.0</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <AutomaticallyUseReferenceAssemblyPackages>false</AutomaticallyUseReferenceAssemblyPackages>
+    <TargetFrameworkRootPath>$(MSBuildThisFileDirectory)../../framework-refs/net48/</TargetFrameworkRootPath>
+    <EnableFrameworkPathOverride>false</EnableFrameworkPathOverride>
+    <NoStdLib>true</NoStdLib>
+    <UseWPF>true</UseWPF>
+    <EnableDefaultPageItems>false</EnableDefaultPageItems>
+    <EnableDefaultApplicationDefinition>false</EnableDefaultApplicationDefinition>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="MaterialDesignThemes.Wpf"><HintPath>../../dependencies/Managed/MaterialDesignThemes.Wpf.dll</HintPath><Private>False</Private></Reference>
+    <Reference Include="De.TorstenMandelkow.MetroChart"><HintPath>../../dependencies/Managed/De.TorstenMandelkow.MetroChart.dll</HintPath><Private>False</Private></Reference>
+    <Reference Include="SQLite-net"><HintPath>../../dependencies/Managed/SQLite-net.dll</HintPath><Private>False</Private></Reference>
+    <Reference Include="mscorlib"><HintPath>../../framework-refs/net48/.NETFramework/v4.8/mscorlib.dll</HintPath><Private>False</Private></Reference>
+    <ProjectReference Include="../CameraControl.Devices/CameraControl.Devices.csproj" />
+    <Reference Include="PresentationCore"><HintPath>../../framework-refs/net48/.NETFramework/v4.8/PresentationCore.dll</HintPath><Private>False</Private></Reference>
+    <Reference Include="GalaSoft.MvvmLight"><HintPath>../../dependencies/Managed/GalaSoft.MvvmLight.dll</HintPath><Private>False</Private></Reference>
+    <Reference Include="PresentationFramework"><HintPath>../../framework-refs/net48/.NETFramework/v4.8/PresentationFramework.dll</HintPath><Private>False</Private></Reference>
+    <Reference Include="System.Xaml"><HintPath>../../framework-refs/net48/.NETFramework/v4.8/System.Xaml.dll</HintPath><Private>False</Private></Reference>
+    <Reference Include="System"><HintPath>../../framework-refs/net48/.NETFramework/v4.8/System.dll</HintPath><Private>False</Private></Reference>
+    <Reference Include="System.Core"><HintPath>../../framework-refs/net48/.NETFramework/v4.8/System.Core.dll</HintPath><Private>False</Private></Reference>
+    <Reference Include="WindowsBase"><HintPath>../../framework-refs/net48/.NETFramework/v4.8/WindowsBase.dll</HintPath><Private>False</Private></Reference>
+    <Reference Include="Gif.Components"><HintPath>../../dependencies/Managed/Gif.Components.dll</HintPath><Private>False</Private></Reference>
+    <Reference Include="Magick.NET-Q8-x64"><HintPath>../../dependencies/Managed/Magick.NET-Q8-x64.dll</HintPath><Private>False</Private></Reference>
+    <Reference Include="System.Windows.Forms"><HintPath>../../framework-refs/net48/.NETFramework/v4.8/System.Windows.Forms.dll</HintPath><Private>False</Private></Reference>
+    <Reference Include="ICSharpCode.AvalonEdit"><HintPath>../../dependencies/Managed/ICSharpCode.AvalonEdit.dll</HintPath><Private>False</Private></Reference>
+    <Reference Include="Kaliko.ImageLibrary"><HintPath>../../dependencies/Managed/Kaliko.ImageLibrary.dll</HintPath><Private>False</Private></Reference>
+    <Reference Include="Magick.NET.Core"><HintPath>../../dependencies/Managed/Magick.NET.Core.dll</HintPath><Private>False</Private></Reference>
+    <Reference Include="System.Drawing"><HintPath>../../framework-refs/net48/.NETFramework/v4.8/System.Drawing.dll</HintPath><Private>False</Private></Reference>
+    <Reference Include="MahApps.Metro"><HintPath>../../dependencies/Managed/MahApps.Metro.dll</HintPath><Private>False</Private></Reference>
+    <Reference Include="zxing"><HintPath>../../dependencies/Managed/zxing.dll</HintPath><Private>False</Private></Reference>
+    <Reference Include="DotNetZip"><HintPath>../../dependencies/Managed/DotNetZip.dll</HintPath><Private>False</Private></Reference>
+    <Reference Include="DropNet"><HintPath>../../dependencies/Managed/DropNet.dll</HintPath><Private>False</Private></Reference>
+    <Reference Include="System.Net.FtpClient"><HintPath>../../dependencies/Managed/System.Net.FtpClient.dll</HintPath><Private>False</Private></Reference>
+    <Reference Include="ReachFramework"><HintPath>../../framework-refs/net48/.NETFramework/v4.8/ReachFramework.dll</HintPath><Private>False</Private></Reference>
+    <Reference Include="Newtonsoft.Json"><HintPath>../../dependencies/Managed/Newtonsoft.Json.dll</HintPath><Private>False</Private></Reference>
+    <Reference Include="Microsoft.CSharp"><HintPath>../../framework-refs/net48/.NETFramework/v4.8/Microsoft.CSharp.dll</HintPath><Private>False</Private></Reference>
+    <Reference Include="Magick.NET.SystemDrawing"><HintPath>../../dependencies/Managed/Magick.NET.SystemDrawing.dll</HintPath><Private>False</Private></Reference>
+    <Reference Include="System.Printing"><HintPath>../../framework-refs/net48/.NETFramework/v4.8/System.Printing.dll</HintPath><Private>False</Private></Reference>
+  <ProjectReference Include="../CameraControl.Core/CameraControl.Core.csproj" /></ItemGroup>
+  
+  <ItemGroup>
+    <Page Include="CameraControl/Plugins/Astro/PHDWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="astro/phdwnd.xaml" />
+    <Page Include="CameraControl/Plugins/AutoExportPlugins/CopyFilePluginConfig.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="autoexportplugins/copyfilepluginconfig.xaml" />
+    <Page Include="CameraControl/Plugins/AutoExportPlugins/DropboxConfig.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="autoexportplugins/dropboxconfig.xaml" />
+    <Page Include="CameraControl/Plugins/AutoExportPlugins/ExecuteFilePluginConfig.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="autoexportplugins/executefilepluginconfig.xaml" />
+    <Page Include="CameraControl/Plugins/AutoExportPlugins/FtpPluginConfig.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="autoexportplugins/ftppluginconfig.xaml" />
+    <Page Include="CameraControl/Plugins/AutoExportPlugins/PrintPluginConfig.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="autoexportplugins/printpluginconfig.xaml" />
+    <Page Include="CameraControl/Plugins/AutoExportPlugins/SendEmailPluginConfig.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="autoexportplugins/sendemailpluginconfig.xaml" />
+    <Page Include="CameraControl/Plugins/AutoExportPlugins/TransformPluginConfig.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="autoexportplugins/transformpluginconfig.xaml" />
+    <Page Include="CameraControl/Plugins/ExternalDevices/ArduinoShutterReleaseConfig.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="externaldevices/arduinoshutterreleaseconfig.xaml" />
+    <Page Include="CameraControl/Plugins/ExternalDevices/DCCUSBShutterReleaseConfig.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="externaldevices/dccusbshutterreleaseconfig.xaml" />
+    <Page Include="CameraControl/Plugins/ExternalDevices/HidUsbRelayConfig.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="externaldevices/hidusbrelayconfig.xaml" />
+    <Page Include="CameraControl/Plugins/ExternalDevices/SerialPortShutterReleaseConfig.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="externaldevices/serialportshutterreleaseconfig.xaml" />
+    <Page Include="CameraControl/Plugins/ExternalDevices/UsbRelayReleaseConfig.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="externaldevices/usbrelayreleaseconfig.xaml" />
+    <Page Include="CameraControl/Plugins/ImageTransformPlugins/ChromakeyView.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="imagetransformplugins/chromakeyview.xaml" />
+    <Page Include="CameraControl/Plugins/ImageTransformPlugins/CropTransformView.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="imagetransformplugins/croptransformview.xaml" />
+    <Page Include="CameraControl/Plugins/ImageTransformPlugins/EffectView.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="imagetransformplugins/effectview.xaml" />
+    <Page Include="CameraControl/Plugins/ImageTransformPlugins/EnhanceView.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="imagetransformplugins/enhanceview.xaml" />
+    <Page Include="CameraControl/Plugins/ImageTransformPlugins/OverlayTransformView.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="imagetransformplugins/overlaytransformview.xaml" />
+    <Page Include="CameraControl/Plugins/ImageTransformPlugins/PixelBinningView.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="imagetransformplugins/pixelbinningview.xaml" />
+    <Page Include="CameraControl/Plugins/ImageTransformPlugins/ResizeTransformView.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="imagetransformplugins/resizetransformview.xaml" />
+    <Page Include="CameraControl/Plugins/ImageTransformPlugins/RotateTransformView.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="imagetransformplugins/rotatetransformview.xaml" />
+    <Page Include="CameraControl/Plugins/ImageTransformPlugins/TransformPluginEditView.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="imagetransformplugins/transformplugineditview.xaml" />
+    <Page Include="CameraControl/Plugins/MainWindowPlugins/SimpleMainWindow.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="mainwindowplugins/simplemainwindow.xaml" />
+    <Page Include="CameraControl/Plugins/PanelPlugins/OpenInExternalViewerControl.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="panelplugins/openinexternalviewercontrol.xaml" />
+    <Page Include="CameraControl/Plugins/ToolPlugins/ArduinoCommandWindow.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="toolplugins/arduinocommandwindow.xaml" />
+    <Page Include="CameraControl/Plugins/ToolPlugins/ArduinoWindow.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="toolplugins/arduinowindow.xaml" />
+    <Page Include="CameraControl/Plugins/ToolPlugins/CombineZpWindow.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="toolplugins/combinezpwindow.xaml" />
+    <Page Include="CameraControl/Plugins/ToolPlugins/EnfusePluginWindow.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="toolplugins/enfusepluginwindow.xaml" />
+    <Page Include="CameraControl/Plugins/ToolPlugins/GenMovieWindow.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="toolplugins/genmoviewindow.xaml" />
+    <Page Include="CameraControl/Plugins/ToolPlugins/GenThumbWindow.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="toolplugins/genthumbwindow.xaml" />
+    <Page Include="CameraControl/Plugins/ToolPlugins/ImageSequencerWindow.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="toolplugins/imagesequencerwindow.xaml" />
+    <Page Include="CameraControl/Plugins/ToolPlugins/StatisticsWindow.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="toolplugins/statisticswindow.xaml" />
+  </ItemGroup>
+</Project>

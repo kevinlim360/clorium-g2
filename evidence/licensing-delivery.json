@@ -1,0 +1,22 @@
+{
+  "Candidate": "C:\\Users\\user\\Documents\\ChatGPT\\클로리움G2\\delivery\\Clorium-Licensing-20261028-231526",
+  "ClientConfig": "Loopback local verification; production HTTPS URL pending",
+  "ApiIntegration": 33,
+  "Restore": 4,
+  "CameraGuardEntries": 48,
+  "ExternalShutterGuard": "PASS",
+  "WpfAdmin": "Actual server connection/search/device-history/private-backup PASS",
+  "LegacyCaptureRegression": 19,
+  "SuperfocusRegression": "PASS (no new physical exposures)",
+  "HostIdentity": "Actual WMI/registry stable PASS",
+  "Acl": "Server and private backups PASS; customer ACL isolated installer test PASS",
+  "Installer": "Isolated module replacement and original backup PASS",
+  "DistributionFiles": 29,
+  "PrivateKeysInDistribution": false,
+  "ProductionDeployment": "Pending server domain/TLS/customer installation",
+  "ExistingInstalledRuntime": "Unchanged",
+  "Zip": "C:\\Users\\user\\Documents\\ChatGPT\\클로리움G2\\delivery\\Clorium-Licensing-20261028-231526.zip",
+  "ZipSHA256": "D35EB9E02BE9E503047C0C736BD21BB821F2C3691F0F39638F706E5D4CF586DD",
+  "IndependentReview": "PASS latest29-file local candidate; independent source/evidence review, not independent test execution",
+  "LocalApps": "Company manager window and license server process verified running outside sandbox"
+}

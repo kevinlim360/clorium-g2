@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Window x:Class="CameraControl.windows.CameraPropertyWnd" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:my="clr-namespace:CameraControl.windows" xmlns:ontrols="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro" xmlns:T="clr-namespace:CameraControl.Core.Translation;assembly=CameraControl.Core" xmlns:Core="clr-namespace:CameraControl.Core;assembly=CameraControl.Core" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" xmlns:viewModel="clr-namespace:CameraControl.ViewModel" Height="600" Width="484" WindowStartupLocation="CenterScreen" WindowStyle="ToolWindow" UseLayoutRounding="False" TextElement.Foreground="{DynamicResource MaterialDesignBody}" TextElement.FontWeight="Regular" TextElement.FontSize="14" TextOptions.TextFormattingMode="Ideal" TextOptions.TextRenderingMode="Auto" Background="{DynamicResource MaterialDesignPaper}" FontFamily="{DynamicResource MaterialDesignFont}" Cursor="" Title="{T:Translate MenuCameraProperty}" Closing="Window_Closing">
+  <FrameworkElement.DataContext>
+    <viewModel:CameraPropertyViewModel />
+  </FrameworkElement.DataContext>
+  <FrameworkElement.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.ComboBox.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.TextBox.xaml" />
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </FrameworkElement.Resources>
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="*" />
+      <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="4">
+      <materialDesign:Card Margin="4" Background="{DynamicResource MaterialDesignBackground}">
+        <StackPanel>
+          <Expander HorizontalAlignment="Stretch" IsExpanded="True">
+            <HeaderedContentControl.Header>
+              <TextBlock FontWeight="Bold" Text="{T:Translate MenuCameraProperty}" />
+            </HeaderedContentControl.Header>
+            <StackPanel Orientation="Vertical" Margin="24,8,24,16">
+              <TextBox IsReadOnly="True" Margin="4" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Text="{Binding CameraProperty.SerialNumber}" materialDesign:HintAssist.Hint="{T:Translate LabelSerialNumber}" />
+              <TextBox Margin="4" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Text="{Binding CameraProperty.DeviceName}" materialDesign:HintAssist.Hint="{T:Translate LabelCameraname}" />
+              <ComboBox Margin="4" Style="{StaticResource MaterialDesignFloatingHintComboBox}" ItemsSource="{Binding PhotoSessionNames}" SelectedItem="{Binding CameraProperty.PhotoSessionName}" materialDesign:HintAssist.Hint="{T:Translate LabelDefaultSession}" />
+              <ComboBox Margin="4" Style="{StaticResource MaterialDesignFloatingHintComboBox}" ItemsSource="{Binding CameraPresets}" SelectedItem="{Binding CameraProperty.DefaultPresetName}" materialDesign:HintAssist.Hint="{T:Translate LabelDefaultPreset}" />
+              <TextBox Margin="4" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Text="{Binding CameraProperty.SortOrder}" materialDesign:HintAssist.Hint="{T:Translate LabelSortOrder}" />
+              <TextBox Margin="4" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Text="{Binding CameraProperty.Counter}" materialDesign:HintAssist.Hint="{T:Translate LabelCounter}" />
+              <TextBox Margin="4" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Text="{Binding CameraProperty.CounterInc}" materialDesign:HintAssist.Hint="{T:Translate LabelCounterIncrementer}" />
+              <TextBox Margin="4" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Text="{Binding CameraProperty.Delay}" materialDesign:HintAssist.Hint="{T:Translate LabelCaptureDelay}" />
+              <CheckBox VerticalAlignment="Center" Margin="4" Content="{T:Translate LabelSaveLiveviewWindow}" IsChecked="{Binding CameraProperty.SaveLiveViewWindow}" />
+            </StackPanel>
+          </Expander>
+          <Border Background="{DynamicResource MaterialDesignDivider}" Height="1" HorizontalAlignment="Stretch" SnapsToDevicePixels="True" />
+          <Expander HorizontalAlignment="Stretch" IsExpanded="False">
+            <HeaderedContentControl.Header>
+              <TextBlock FontWeight="Bold" Text="{T:Translate LabelExternalShutterRelease}" />
+            </HeaderedContentControl.Header>
+            <StackPanel Orientation="Vertical" Margin="24,8,24,16">
+              <CheckBox Margin="4" IsChecked="{Binding CameraProperty.UseExternalShutter}" Content="{T:Translate LabelUseExternalShutterRelease}" />
+              <ComboBox Margin="4" DisplayMemberPath="Name" Style="{StaticResource MaterialDesignFloatingHintComboBox}" ItemsSource="{Binding Source={x:Static Core:ServiceProvider.ExternalDeviceManager}, Path=ExternalShutters}" SelectedItem="{Binding CameraProperty.SelectedConfig}" materialDesign:HintAssist.Hint="{T:Translate LabelUseConfiguration}" />
+            </StackPanel>
+          </Expander>
+          <Border Background="{DynamicResource MaterialDesignDivider}" Height="1" HorizontalAlignment="Stretch" SnapsToDevicePixels="True" />
+          <Expander HorizontalAlignment="Stretch" IsExpanded="False">
+            <HeaderedContentControl.Header>
+              <TextBlock FontWeight="Bold" Text="{T:Translate LabelKeyboardTrigger}" />
+            </HeaderedContentControl.Header>
+            <StackPanel Orientation="Vertical" Margin="24,8,24,16">
+              <CheckBox Content="Alt" Margin="5" IsChecked="{Binding Path=CameraProperty.KeyTrigger.Alt, RelativeSource={RelativeSource FindAncestor, AncestorType=my:CameraPropertyWnd, AncestorLevel=1}}" />
+              <CheckBox Content="Ctrl" Margin="5" IsChecked="{Binding Path=CameraProperty.KeyTrigger.Ctrl, RelativeSource={RelativeSource FindAncestor, AncestorType=my:CameraPropertyWnd, AncestorLevel=1}}" />
+              <ComboBox Margin="2" SelectedItem="{Binding Path=CameraProperty.KeyTrigger.Key, RelativeSource={RelativeSource FindAncestor, AncestorType=my:CameraPropertyWnd, AncestorLevel=1}}" ItemsSource="{Binding Path=AvailableKeys, RelativeSource={RelativeSource FindAncestor, AncestorType=my:CameraPropertyWnd, AncestorLevel=1}}" />
+            </StackPanel>
+          </Expander>
+          <Expander HorizontalAlignment="Stretch" IsExpanded="False">
+            <HeaderedContentControl.Header>
+              <TextBlock FontWeight="Bold" Text="{T:Translate LabelKeyboardTriggerNoAF}" />
+            </HeaderedContentControl.Header>
+            <StackPanel Orientation="Vertical" Margin="24,8,24,16">
+              <CheckBox Content="Alt" Margin="5" IsChecked="{Binding Path=CameraProperty.KeyTriggerNoAF.Alt, RelativeSource={RelativeSource FindAncestor, AncestorType=my:CameraPropertyWnd, AncestorLevel=1}}" />
+              <CheckBox Content="Ctrl" Margin="5" IsChecked="{Binding Path=CameraProperty.KeyTriggerNoAF.Ctrl, RelativeSource={RelativeSource FindAncestor, AncestorType=my:CameraPropertyWnd, AncestorLevel=1}}" />
+              <ComboBox Margin="2" SelectedItem="{Binding Path=CameraProperty.KeyTriggerNoAF.Key, RelativeSource={RelativeSource FindAncestor, AncestorType=my:CameraPropertyWnd, AncestorLevel=1}}" ItemsSource="{Binding Path=AvailableKeys, RelativeSource={RelativeSource FindAncestor, AncestorType=my:CameraPropertyWnd, AncestorLevel=1}}" />
+            </StackPanel>
+          </Expander>
+        </StackPanel>
+      </materialDesign:Card>
+    </ScrollViewer>
+    <Button Name="btn_save" Grid.Row="1" Content="Save" HorizontalAlignment="Left" Margin="8" Click="btn_save_Click" />
+    <Button Grid.Row="1" Content="Cancel" HorizontalAlignment="Right" Margin="8" Click="btn_cancel_Click" />
+    <Button Name="btn_dateTime" Grid.Row="1" Content="Sync camera date and time" HorizontalAlignment="Center" Margin="8" Click="btn_dateTime_Click" />
+  </Grid>
+</Window>

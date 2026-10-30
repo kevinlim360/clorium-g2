@@ -1,0 +1,28 @@
+PASS: release compatibility configuration equals hash-verified original
+PASS: any matching local hardware candidate 0
+PASS: any matching local hardware candidate 1
+PASS: any matching local hardware candidate 2
+PASS: any matching local hardware candidate 3
+PASS: any matching local hardware candidate 4
+PASS: any matching local hardware candidate 5
+PASS: other PC and arbitrary lock files rejected
+PASS: invalid files plus one valid license accepted
+PASS: hidden read-only license recognized
+PASS: wrong key rejected
+PASS: empty configuration rejected
+PASS: empty hardware list rejected
+PASS: placeholder hardware rejected
+PASS: placeholder issued-looking file not accepted N/A
+PASS: placeholder issued-looking file not accepted Default string
+PASS: placeholder issued-looking file not accepted To be filled by OEM
+PASS: historical WMI whitespace spelling preserved
+PASS: trimmed hardware identifier supported
+PASS: direct execution without launcher environment uses original compatibility key
+PASS: stale override does not hide valid legacy license
+PASS: explicit site key remains supported
+PASS: missing drive directory rejected
+PASS: duplicate identities preserve match
+PASS: host WMI enumeration completes without exposing IDs
+PASS: startup license method retained
+PASS: license attribute errors handled separately
+LICENSE_BINARY_CHECKS_PASSED=27

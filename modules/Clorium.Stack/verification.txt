@@ -1,0 +1,14 @@
+test_alignment_failure_does_not_save (test_stack.StackTests.test_alignment_failure_does_not_save) ... ok
+test_alignment_translation_rotation_scale (test_stack.StackTests.test_alignment_translation_rotation_scale) ... ok
+test_cancel_before_start (test_stack.StackTests.test_cancel_before_start) ... ok
+test_cancel_during_processing (test_stack.StackTests.test_cancel_during_processing) ... ok
+test_complementary_focus_recovers_details (test_stack.StackTests.test_complementary_focus_recovers_details) ... ok
+test_identical_colour_profile_odd_size_and_collision (test_stack.StackTests.test_identical_colour_profile_odd_size_and_collision) ... ok
+test_mismatched_profile_rejected (test_stack.StackTests.test_mismatched_profile_rejected) ... ok
+test_non8bit_rejected (test_stack.StackTests.test_non8bit_rejected) ... ok
+test_validation (test_stack.StackTests.test_validation) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 1.957s
+
+OK

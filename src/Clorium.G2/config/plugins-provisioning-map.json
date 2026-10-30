@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "candidate": "plugins",
+  "originalInputSha256": "92d06005c5c003bb4c3f0f4a5ef02dda62255c1f8e1467c8a4ff45aa2715e1cc",
+  "fields": [
+    {
+      "originalMetadataTypeName": "CameraControl.Plugins.AutoExportPlugins.DropboxViewModel",
+      "fieldName": "AppKey",
+      "storageKind": "metadata-string-constant",
+      "environmentVariable": "CLORIUM_DROPBOX_APP_KEY",
+      "sourceFile": "projects/CameraControl.Plugins/CameraControl/Plugins/AutoExportPlugins/DropboxViewModel.cs"
+    },
+    {
+      "originalMetadataTypeName": "CameraControl.Plugins.AutoExportPlugins.DropboxViewModel",
+      "fieldName": "AppSecret",
+      "storageKind": "metadata-string-constant",
+      "environmentVariable": "CLORIUM_DROPBOX_APP_SECRET",
+      "sourceFile": "projects/CameraControl.Plugins/CameraControl/Plugins/AutoExportPlugins/DropboxViewModel.cs"
+    }
+  ],
+  "valuesIncluded": false
+}

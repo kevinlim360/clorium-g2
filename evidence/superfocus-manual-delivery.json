@@ -1,0 +1,26 @@
+{
+  "date": "2026-10-28",
+  "application": ".local/g2-runtime/CameraControl.exe",
+  "build": "0 errors;4 existing warnings",
+  "postprocess": "WPF/WIA/WMPLib PASS",
+  "legacy": "19 guards PASS",
+  "maintenance": "PASS",
+  "independentReview": false,
+  "previousUserConfirmation": "User confirmed physical number entry and live-view focus-box movement work in preceding preview candidate.",
+  "change": "Manual arrows enabled during anchor search and manual movement. First arrow cancels active autofocus and pending endpoint, stops native AF, saves interrupted endpoint at current lens position, then drives queued small steps serially. Extra arrows append in order. Capture/download retains disabled manual arrows. Stop discards queue and cancels active move.",
+  "behavior": "Taking over early stores current focus as A/B; it does not claim autofocus peak completion. SDK command already in flight must return before manual drive begins.",
+  "test": "Actual staged SuperfocusWindow with fake camera/adapter, real DispatcherSynchronizationContext async flow: cancel first A search, native AF stop before manual movement, A0 retained, +5 then-1 => Position4,6 moves, max one adapter owner; buttons enabled during both phases; capture lock blocks drive; stop releases owner and invalidates partial range. Previous numeric/preview/queue WPF checks passed in same executable.",
+  "testSource": "evidence/G2ManualTakeoverCheck.cs",
+  "testLog": "evidence/superfocus-manual-wpf.log",
+  "device": "No additional hardware capture or focus-drive test. App restarted; native UI currently has capture/liveview disabled with no connected camera reported.",
+  "modules": [
+    {
+      "file": "CameraControl.exe",
+      "sha256": "503307cc31b9c1319ec89df16782e4de86b6694a63b2dcf030b64aaa2467442c"
+    },
+    {
+      "file": "CameraControl.Core.dll",
+      "sha256": "97f2c68e2bcf4717af7ad5490782a9910f8f2596c6f71d4d921f2c1681fbfd33"
+    }
+  ]
+}

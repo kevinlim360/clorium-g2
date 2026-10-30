@@ -1,0 +1,17 @@
+**/bin/
+**/obj/
+.local/
+**/*.local.json
+build-output/
+
+# Private runtime inputs and generated installer artifacts
+deployment/input-*/
+deployment/prerequisites/
+deployment/stage/
+deployment/seed.zip
+deployment/SetupGuard.exe
+deployment/Clorium_Setup_*.exe
+deployment/*.rsp
+deployment/owned-files.txt
+deployment/owned-hashes.txt
+__pycache__/

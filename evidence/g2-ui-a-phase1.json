@@ -1,0 +1,26 @@
+{
+  "date": "2026-10-30",
+  "change": "Main window re-laid out to design A (viewfinder): top bar (logo, product/barcode, session count, today count, work timer + start/stop/reset/alarm/stop-work, session name+path, main menu, camera model + battery, settings, panel toggle); left tool rail (liveview, photos, ruler, lighting, color compensation, AI background removal, superfocus, turntable, then existing extra buttons); center = existing layout host (StackLayout) with 'last captured image' badge and exposure info bar; right panel (lighting card, presets list + new/apply/edit/delete + color-temperature/aperture expander, front/back/rotation/defect/aesthetic card, remove-bg card, camera settings (Controler) expander, advanced expander with histogram/preview/folder/auto-export/properties/metadata, recent sessions list, capture button). Light palette scoped to the main window resources so the window stays light when the app theme is Dark.",
+  "files": ["src/Clorium.G2/projects/CameraControl/CameraControl/MainWindow.xaml"],
+  "codeBehindChanged": false,
+  "preservedNames": ["MyNotifyIcon","txt_CaptureName","PresetListBox","slider","but_ToggleRot","Bg_Auto","ModeA","ElapsedTime","but_ToggleStartStop","ToggleStartStopText","PreviewPanel","StackLayout","BarcodeText","PanelButton","Check_Defect","Window"],
+  "handlersDropped": 0,
+  "backup": ".local/claude-run/backup-ui-20261030/MainWindow.xaml.orig (sha256 6a7b2341023360e46436ad8c0751a4632e648659ec10ca959f94e5c3cde80ccb)",
+  "build": "0 errors; 4 existing warnings (LayoutBase CS0219, HttpServerAndroid CS4014)",
+  "checkRuntime": ".local/g2-check-20261030-192017 (copy of .local/g2-runtime + new build + WPF/WIA/WMPLib postprocess, verify PASS)",
+  "modules": [{"file": "CameraControl.exe", "sha256": "CEBFBB778FD10198B4FBFF60FAA96D35A956F6185235CACBC6939C2FF9BEEF60"}],
+  "regression": {
+    "superfocus": "19 groups PASS",
+    "legacyCaptureGuards": "19 PASS",
+    "wpfSuperfocusChecks": "3 groups PASS (actual staged SuperfocusWindow)",
+    "maintenanceGuard": "PASS",
+    "defectHarness": "375/375 PASS (simulated extracted snapshot)",
+    "stackPython": "9 PASS",
+    "licensing": "build PASS; integration/restore/admin UI PASS on temp server 127.0.0.1:5199"
+  },
+  "runtimeSmoke": "Isolated check app launched (no camera connected), main window rendered with design A layout, readable light theme, main menu visible. No capture, no settings change.",
+  "notRun": ["AestheticRegression / BinaryChecks / DeploymentRegression / WindowsUpdater (need build-output/installed)", "real camera capture and file naming F/B/D/PR on device", "AutoSizing / API end-to-end"],
+  "devRuntimeChanged": false,
+  "installedRuntimeChanged": false,
+  "pendingDesignA": ["single-click preset apply + rename + Stream Deck keys 1-5", "D button instead of defect checkbox", "rotation as vertical/horizontal labelled toggle", "tool show/hide + apparel/defect/aesthetic feature switches in settings", "recent-first session ordering + expandable list", "lighting on/off state", "next-file preview", "session-only thumbnail strip styling (LayoutG2)", "battery/lighting/exposure overlay polish"]
+}

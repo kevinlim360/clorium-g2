@@ -1,0 +1,292 @@
+{
+  "folder": "D:\\CloriumImages2\\2026년10월\\27일\\test\\Superfocus\\20261028_123912_5045285d",
+  "rois": {
+    "near_vase": [
+      1100,
+      1800,
+      2100,
+      3100
+    ],
+    "far_blind": [
+      4650,
+      1350,
+      5720,
+      2400
+    ]
+  },
+  "files": [
+    {
+      "file": "0001_95cf3e3196304918888e79ae465237af.JPG",
+      "dimensions": [
+        6720,
+        4480
+      ],
+      "bytes": 7184178,
+      "sha256": "206ce22c650caaced59e5482120a24a87682004fa8b4ac7655fbdf13933bf20f",
+      "sharpness": {
+        "near_vase": 24.833,
+        "far_blind": 11.116
+      }
+    },
+    {
+      "file": "0002_9491ed15f5f541819ff940e43d6fdd0e.JPG",
+      "dimensions": [
+        6720,
+        4480
+      ],
+      "bytes": 7059508,
+      "sha256": "bc8c21c3f505f9e7dce3423d6d9ed880310ff5d253906e828f6466249e97b332",
+      "sharpness": {
+        "near_vase": 25.242,
+        "far_blind": 11.227
+      }
+    },
+    {
+      "file": "0003_54cdab9bf39f424b96871d526a1fa560.JPG",
+      "dimensions": [
+        6720,
+        4480
+      ],
+      "bytes": 6944049,
+      "sha256": "ea3c42e51e2b716852f94078ea91eaffd20fe4873bb540d43d69590d0c255c07",
+      "sharpness": {
+        "near_vase": 20.154,
+        "far_blind": 11.338
+      }
+    },
+    {
+      "file": "0004_e3ca870b58ca42f19317f40231468b15.JPG",
+      "dimensions": [
+        6720,
+        4480
+      ],
+      "bytes": 6836088,
+      "sha256": "25f7f820cab594498efd9e97d6d59ec334034274f36228544acc0a96e595bfb5",
+      "sharpness": {
+        "near_vase": 15.429,
+        "far_blind": 11.41
+      }
+    },
+    {
+      "file": "0005_e8ebd70a8feb4bcdac983d733b4de175.JPG",
+      "dimensions": [
+        6720,
+        4480
+      ],
+      "bytes": 6800238,
+      "sha256": "6fda01e67097447207fc1a5ad6319fd8a09d1ff66ee58a50e761dbe63e6896cf",
+      "sharpness": {
+        "near_vase": 13.56,
+        "far_blind": 11.591
+      }
+    },
+    {
+      "file": "0006_85d772a634d941e0b1b81ee2d03b69e8.JPG",
+      "dimensions": [
+        6720,
+        4480
+      ],
+      "bytes": 6733033,
+      "sha256": "f838c2f6d70e2abad27aedd7ca304a9ebb5c8e298f4b94f300d0ac878ba36166",
+      "sharpness": {
+        "near_vase": 12.173,
+        "far_blind": 11.689
+      }
+    },
+    {
+      "file": "0007_f81a8a5095ce4f1ead10e009dfcaad03.JPG",
+      "dimensions": [
+        6720,
+        4480
+      ],
+      "bytes": 6697052,
+      "sha256": "49a80cf649f8fd91126e4a15f92a467d1c35632a9ffb111fcd08aa552ac42434",
+      "sharpness": {
+        "near_vase": 11.564,
+        "far_blind": 11.919
+      }
+    },
+    {
+      "file": "0008_f2948a09bbcd49b99c4db3c4c911ecfa.JPG",
+      "dimensions": [
+        6720,
+        4480
+      ],
+      "bytes": 6627249,
+      "sha256": "7fc870cee8b931fffa94a6a89e4a0021eca2d4e2d18b8f64a40e59df8916322d",
+      "sharpness": {
+        "near_vase": 10.872,
+        "far_blind": 12.275
+      }
+    },
+    {
+      "file": "0009_c56336de57ac4080989a8759eed4f57c.JPG",
+      "dimensions": [
+        6720,
+        4480
+      ],
+      "bytes": 6594393,
+      "sha256": "23ac03f670d792da384bfaba00a4b7fdcfbf032ecb87e34ac5af5257acc5b9eb",
+      "sharpness": {
+        "near_vase": 10.509,
+        "far_blind": 12.761
+      }
+    },
+    {
+      "file": "0010_60e474023dd941c3830ce8948131df79.JPG",
+      "dimensions": [
+        6720,
+        4480
+      ],
+      "bytes": 6594717,
+      "sha256": "217ae136b0e6066598de648e17e015c5f6758887d2b4f0b70e8ade08f933bf6a",
+      "sharpness": {
+        "near_vase": 10.234,
+        "far_blind": 13.327
+      }
+    },
+    {
+      "file": "0011_a3396596973744418b3e3dc37ac8cb09.JPG",
+      "dimensions": [
+        6720,
+        4480
+      ],
+      "bytes": 6563126,
+      "sha256": "0cabf339d271aee1ce75f31d0e7507a827f5ba6f92fc781fb20b6f2fdafc9a38",
+      "sharpness": {
+        "near_vase": 10.103,
+        "far_blind": 14.066
+      }
+    },
+    {
+      "file": "0012_3a8999b007164b26b92d03c2518abd7b.JPG",
+      "dimensions": [
+        6720,
+        4480
+      ],
+      "bytes": 6552122,
+      "sha256": "d9aefb9b043637314687531958b547a406cb14b2be06631b7c31330ee46a5e1b",
+      "sharpness": {
+        "near_vase": 9.992,
+        "far_blind": 15.182
+      }
+    },
+    {
+      "file": "0013_5719a9d6f3fd4645ae254ca077b394d0.JPG",
+      "dimensions": [
+        6720,
+        4480
+      ],
+      "bytes": 6523973,
+      "sha256": "b91d93ae05bf6429d1c137c3017e0a474e64c3cb59d19abadcd7c15bbbded98b",
+      "sharpness": {
+        "near_vase": 9.958,
+        "far_blind": 16.607
+      }
+    },
+    {
+      "file": "0014_8fde835c2f2f453190100956b37391fb.JPG",
+      "dimensions": [
+        6720,
+        4480
+      ],
+      "bytes": 6536506,
+      "sha256": "f68a1d971b6c34c8409bde8d75c6a4c32392aa55ed645310b94a971423f0a999",
+      "sharpness": {
+        "near_vase": 9.84,
+        "far_blind": 19.376
+      }
+    },
+    {
+      "file": "0015_1cde551191594b779d5ef5e71a9c3eda.JPG",
+      "dimensions": [
+        6720,
+        4480
+      ],
+      "bytes": 6572500,
+      "sha256": "f688a6c59e46459bf742b93ca923e98b05a6a0b307c5d9263c031cf4b9a9eb07",
+      "sharpness": {
+        "near_vase": 9.745,
+        "far_blind": 23.326
+      }
+    },
+    {
+      "file": "0016_69da0562ef164f6aa96b51e69f659dff.JPG",
+      "dimensions": [
+        6720,
+        4480
+      ],
+      "bytes": 6611780,
+      "sha256": "7f6ddc8915926dddd4cbfacecb84e8cf746671f9988c701cf35b66ce83ef7c7e",
+      "sharpness": {
+        "near_vase": 9.617,
+        "far_blind": 28.703
+      }
+    },
+    {
+      "file": "0017_f2fe2d298f574d7bbf6c295a751ed848.JPG",
+      "dimensions": [
+        6720,
+        4480
+      ],
+      "bytes": 6684795,
+      "sha256": "4cdbbead559347215df05ecc37228a5a2c7fe2a932d49d850ecdbf3da92fed85",
+      "sharpness": {
+        "near_vase": 9.468,
+        "far_blind": 36.48
+      }
+    },
+    {
+      "file": "0018_324d0ca6f7034d1984144299f1cab08a.JPG",
+      "dimensions": [
+        6720,
+        4480
+      ],
+      "bytes": 6675363,
+      "sha256": "9ddef836412731538bc94ddc485907df57bee42e04b5f7bd1236b42ac4e80d82",
+      "sharpness": {
+        "near_vase": 9.33,
+        "far_blind": 52.021
+      }
+    },
+    {
+      "file": "0019_1b9b84dabe5948c7b187039252735b4c.JPG",
+      "dimensions": [
+        6720,
+        4480
+      ],
+      "bytes": 6650503,
+      "sha256": "3a65ee638c0946407dcd6d42bdcd093c848f35831468f93fff81053c61f7a97a",
+      "sharpness": {
+        "near_vase": 9.217,
+        "far_blind": 79.125
+      }
+    },
+    {
+      "file": "0020_d6e538dcfef34b679e77578dd41c4926.JPG",
+      "dimensions": [
+        6720,
+        4480
+      ],
+      "bytes": 6589565,
+      "sha256": "050edc07ecf2c3badbdfecfbea0f355a8aa175af390b063dc295b617c4b51181",
+      "sharpness": {
+        "near_vase": 9.139,
+        "far_blind": 109.47
+      }
+    },
+    {
+      "file": "Superfocus.png",
+      "dimensions": [
+        6720,
+        4480
+      ],
+      "bytes": 27535176,
+      "sha256": "a714c855234a49fcc9478c8dccf56217836ba21e4f3d95ab1f2c979fe2a5b53e",
+      "sharpness": {
+        "near_vase": 20.313,
+        "far_blind": 75.379
+      }
+    }
+  ]
+}

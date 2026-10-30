@@ -1,0 +1,15 @@
+C:\Users\user\Documents\ChatGPT\클로리움G2\src\Clorium.G2\projects\CameraControl\CameraControl\Layouts\LayoutBase.cs(215,9): warning CS0219: 'delete' 할당되었지만 사용되지 않았습니다. [C:\Users\user\Documents\ChatGPT\클로리움G2\src\Clorium.G2\projects\CameraControl\CameraControl_tt2llzyu_wpftmp.csproj]
+C:\Users\user\Documents\ChatGPT\클로리움G2\src\Clorium.G2\projects\CameraControl\CameraControl\Classes\HttpServerAndroid.cs(84,5): warning CS4014: 이 호출이 대기되지 않으므로 호출이 완료되기 전에 현재 메서드가 계속 실행됩니다. 호출 결과에 'await' 연산자를 적용해 보세요. [C:\Users\user\Documents\ChatGPT\클로리움G2\src\Clorium.G2\projects\CameraControl\CameraControl_tt2llzyu_wpftmp.csproj]
+C:\Users\user\Documents\ChatGPT\클로리움G2\src\Clorium.G2\projects\CameraControl\CameraControl\Layouts\LayoutBase.cs(215,9): warning CS0219: 'delete' 할당되었지만 사용되지 않았습니다. [C:\Users\user\Documents\ChatGPT\클로리움G2\src\Clorium.G2\projects\CameraControl\CameraControl.csproj]
+C:\Users\user\Documents\ChatGPT\클로리움G2\src\Clorium.G2\projects\CameraControl\CameraControl\Classes\HttpServerAndroid.cs(84,5): warning CS4014: 이 호출이 대기되지 않으므로 호출이 완료되기 전에 현재 메서드가 계속 실행됩니다. 호출 결과에 'await' 연산자를 적용해 보세요. [C:\Users\user\Documents\ChatGPT\클로리움G2\src\Clorium.G2\projects\CameraControl\CameraControl.csproj]
+
+빌드했습니다.
+
+C:\Users\user\Documents\ChatGPT\클로리움G2\src\Clorium.G2\projects\CameraControl\CameraControl\Layouts\LayoutBase.cs(215,9): warning CS0219: 'delete' 할당되었지만 사용되지 않았습니다. [C:\Users\user\Documents\ChatGPT\클로리움G2\src\Clorium.G2\projects\CameraControl\CameraControl_tt2llzyu_wpftmp.csproj]
+C:\Users\user\Documents\ChatGPT\클로리움G2\src\Clorium.G2\projects\CameraControl\CameraControl\Classes\HttpServerAndroid.cs(84,5): warning CS4014: 이 호출이 대기되지 않으므로 호출이 완료되기 전에 현재 메서드가 계속 실행됩니다. 호출 결과에 'await' 연산자를 적용해 보세요. [C:\Users\user\Documents\ChatGPT\클로리움G2\src\Clorium.G2\projects\CameraControl\CameraControl_tt2llzyu_wpftmp.csproj]
+C:\Users\user\Documents\ChatGPT\클로리움G2\src\Clorium.G2\projects\CameraControl\CameraControl\Layouts\LayoutBase.cs(215,9): warning CS0219: 'delete' 할당되었지만 사용되지 않았습니다. [C:\Users\user\Documents\ChatGPT\클로리움G2\src\Clorium.G2\projects\CameraControl\CameraControl.csproj]
+C:\Users\user\Documents\ChatGPT\클로리움G2\src\Clorium.G2\projects\CameraControl\CameraControl\Classes\HttpServerAndroid.cs(84,5): warning CS4014: 이 호출이 대기되지 않으므로 호출이 완료되기 전에 현재 메서드가 계속 실행됩니다. 호출 결과에 'await' 연산자를 적용해 보세요. [C:\Users\user\Documents\ChatGPT\클로리움G2\src\Clorium.G2\projects\CameraControl\CameraControl.csproj]
+    경고 4개
+    오류 0개
+
+경과 시간: 00:00:27.96

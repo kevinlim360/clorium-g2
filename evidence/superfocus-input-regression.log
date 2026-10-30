@@ -1,0 +1,19 @@
+PASS focus-box peak return, flat rejection, plateau, cancellation
+PASS A-box focus search from either side of the target
+PASS A/B count, endpoints, remainder, negative origin, invalid range, 200-frame limit
+PASS quality ratios, rounding, inclusive endpoints, even gaps, negative origin, minimum and limit
+PASS three-unit presets, remainder, custom count, nearest direction and invalid counts
+PASS editable count from2 through high maximum, inclusive exact counts and200 cap
+PASS download gate + ordered sequence
+PASS cancel during download + late original
+PASS timeout + no continuation
+PASS download failure
+PASS focus failure
+PASS disconnect
+PASS missing download
+PASS duplicate file + original preservation
+PASS return-to-A, inclusive B capture, failure invalidates endpoints
+PASS quality plan capture order and preflight rejection
+PASS A-first/B-first, reverse capture, opposite signed endpoints and nearest-start optimization
+PASS immediate endpoint capture and zigzag plan preflight rejection
+PASS A/B download gate and cancellation with late original
