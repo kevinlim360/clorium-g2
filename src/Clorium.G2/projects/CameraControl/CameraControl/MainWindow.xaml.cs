@@ -242,6 +242,18 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 		DeletePresetCommand = new RelayCommand<CameraPreset>(DeletePreset, (CameraPreset o) => ServiceProvider.Settings.CameraPresets.Count > 0);
 		LoadInAllPresetCommand = new RelayCommand<CameraPreset>(LoadInAllPreset);
 		VerifyPresetCommand = new RelayCommand<CameraPreset>(VerifyPreset);
+		// G2 UI: publish text/layout sizes before the window is built, then follow the "큰 글자 보기" setting.
+		G2TextScale.Apply(ServiceProvider.Settings != null && ServiceProvider.Settings.UseLargeText);
+		if (ServiceProvider.Settings != null)
+		{
+			ServiceProvider.Settings.PropertyChanged += (s, e) =>
+			{
+				if (e.PropertyName == "UseLargeText")
+				{
+					Dispatcher.BeginInvoke(new Action(() => G2TextScale.Apply(ServiceProvider.Settings.UseLargeText)));
+				}
+			};
+		}
 		InitializeComponent();
 		if (!string.IsNullOrEmpty(ServiceProvider.Branding.ApplicationTitle))
 		{

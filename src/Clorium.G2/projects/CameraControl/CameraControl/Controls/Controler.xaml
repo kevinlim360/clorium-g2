@@ -12,7 +12,7 @@
         <TextBlock Text="{Binding Converter={StaticResource converter}}" />
       </DataTemplate>
       <Style x:Key="G2RowLabel" TargetType="TextBlock">
-        <Setter Property="FontSize" Value="11.5" />
+        <Setter Property="FontSize" Value="{DynamicResource G2Fs11_5}" />
         <Setter Property="Foreground" Value="{StaticResource G2Sub}" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="TextTrimming" Value="CharacterEllipsis" />

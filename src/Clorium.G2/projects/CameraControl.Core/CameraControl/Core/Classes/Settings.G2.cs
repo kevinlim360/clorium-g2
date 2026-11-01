@@ -15,4 +15,18 @@ public partial class Settings
             NotifyPropertyChanged("UseSuperfocus");
         }
     }
+
+    private bool _useLargeText;
+
+    // G2 UI: 큰 글자 보기 — main screen text x1.35 (product name excluded). Persisted; default off.
+    public bool UseLargeText
+    {
+        get => _useLargeText;
+        set
+        {
+            if (_useLargeText == value) return;
+            _useLargeText = value;
+            NotifyPropertyChanged("UseLargeText");
+        }
+    }
 }

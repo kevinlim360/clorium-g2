@@ -110,13 +110,13 @@
     <Setter Property="FontFamily" Value="{StaticResource G2Mono}" />
   </Style>
   <Style x:Key="G2SectionTitle" TargetType="TextBlock">
-    <Setter Property="FontSize" Value="13.5" />
+    <Setter Property="FontSize" Value="{DynamicResource G2Fs13_5}" />
     <Setter Property="FontWeight" Value="Bold" />
     <Setter Property="Foreground" Value="{StaticResource G2Text}" />
     <Setter Property="VerticalAlignment" Value="Center" />
   </Style>
   <Style x:Key="G2Caption" TargetType="TextBlock">
-    <Setter Property="FontSize" Value="11.5" />
+    <Setter Property="FontSize" Value="{DynamicResource G2Fs11_5}" />
     <Setter Property="Foreground" Value="{StaticResource G2Sub}" />
   </Style>
 
@@ -147,7 +147,7 @@
     <Setter Property="BorderThickness" Value="0" />
     <Setter Property="Foreground" Value="{StaticResource G2Text}" />
     <Setter Property="FontFamily" Value="{StaticResource G2Font}" />
-    <Setter Property="FontSize" Value="12.5" />
+    <Setter Property="FontSize" Value="{DynamicResource G2Fs12_5}" />
     <Setter Property="HorizontalContentAlignment" Value="Center" />
     <Setter Property="VerticalContentAlignment" Value="Center" />
     <Setter Property="Cursor" Value="Hand" />
@@ -158,11 +158,11 @@
   <!-- left rail: icon over label, 60x56 -->
   <Style x:Key="G2RailButton" TargetType="Button" BasedOn="{StaticResource G2ButtonBase}">
     <Setter Property="Tag" Value="10" />
-    <Setter Property="Width" Value="60" />
-    <Setter Property="Height" Value="56" />
+    <Setter Property="Width" Value="{DynamicResource G2RailBtnW}" />
+    <Setter Property="Height" Value="{DynamicResource G2RailBtnH}" />
     <Setter Property="Margin" Value="0,2" />
     <Setter Property="Foreground" Value="{StaticResource G2Sub}" />
-    <Setter Property="FontSize" Value="11" />
+    <Setter Property="FontSize" Value="{DynamicResource G2Fs11}" />
   </Style>
 
   <!-- small square icon button (toolbar, card headers) -->
@@ -193,11 +193,11 @@
   <!-- popup tool tile (icon + label) -->
   <Style x:Key="G2ToolTile" TargetType="Button" BasedOn="{StaticResource G2ButtonBase}">
     <Setter Property="Tag" Value="10" />
-    <Setter Property="Width" Value="76" />
-    <Setter Property="Height" Value="64" />
+    <Setter Property="Width" Value="{DynamicResource G2ToolTileW}" />
+    <Setter Property="Height" Value="{DynamicResource G2ToolTileH}" />
     <Setter Property="Margin" Value="2" />
     <Setter Property="Foreground" Value="{StaticResource G2Sub}" />
-    <Setter Property="FontSize" Value="11" />
+    <Setter Property="FontSize" Value="{DynamicResource G2Fs11}" />
   </Style>
 
   <Style x:Key="G2PrimaryButton" TargetType="Button">
@@ -241,7 +241,7 @@
     <Setter Property="FocusVisualStyle" Value="{x:Null}" />
     <Setter Property="Foreground" Value="{StaticResource G2Text}" />
     <Setter Property="FontFamily" Value="{StaticResource G2Font}" />
-    <Setter Property="FontSize" Value="12.5" />
+    <Setter Property="FontSize" Value="{DynamicResource G2Fs12_5}" />
     <Setter Property="Background" Value="Transparent" />
     <Setter Property="Template">
       <Setter.Value>
@@ -274,7 +274,7 @@
     <Setter Property="FocusVisualStyle" Value="{x:Null}" />
     <Setter Property="Foreground" Value="{StaticResource G2Sub}" />
     <Setter Property="FontFamily" Value="{StaticResource G2Font}" />
-    <Setter Property="FontSize" Value="12" />
+    <Setter Property="FontSize" Value="{DynamicResource G2Fs12}" />
     <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate TargetType="RadioButton">
@@ -302,7 +302,7 @@
     <Setter Property="FocusVisualStyle" Value="{x:Null}" />
     <Setter Property="Foreground" Value="{StaticResource G2Text}" />
     <Setter Property="FontFamily" Value="{StaticResource G2Font}" />
-    <Setter Property="FontSize" Value="12.5" />
+    <Setter Property="FontSize" Value="{DynamicResource G2Fs12_5}" />
     <Setter Property="VerticalContentAlignment" Value="Center" />
     <Setter Property="Template">
       <Setter.Value>
@@ -380,7 +380,7 @@
     <Setter Property="Padding" Value="0" />
     <Setter Property="Foreground" Value="{StaticResource G2Text}" />
     <Setter Property="FontFamily" Value="{StaticResource G2Font}" />
-    <Setter Property="FontSize" Value="12.5" />
+    <Setter Property="FontSize" Value="{DynamicResource G2Fs12_5}" />
     <Setter Property="ItemContainerStyle" Value="{StaticResource G2ListItem}" />
     <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
     <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
@@ -451,7 +451,7 @@
   <Style x:Key="G2ComboItem" TargetType="ComboBoxItem">
     <Setter Property="Foreground" Value="{StaticResource G2Text}" />
     <Setter Property="FontFamily" Value="{StaticResource G2Font}" />
-    <Setter Property="FontSize" Value="12.5" />
+    <Setter Property="FontSize" Value="{DynamicResource G2Fs12_5}" />
     <Setter Property="FocusVisualStyle" Value="{x:Null}" />
     <Setter Property="Template">
       <Setter.Value>
@@ -477,7 +477,7 @@
     <Setter Property="Background" Value="{StaticResource G2Panel2}" />
     <Setter Property="BorderBrush" Value="{StaticResource G2Line}" />
     <Setter Property="FontFamily" Value="{StaticResource G2Mono}" />
-    <Setter Property="FontSize" Value="12.5" />
+    <Setter Property="FontSize" Value="{DynamicResource G2Fs12_5}" />
     <Setter Property="Height" Value="30" />
     <Setter Property="Cursor" Value="Hand" />
     <Setter Property="FocusVisualStyle" Value="{x:Null}" />
@@ -537,7 +537,7 @@
     <Setter Property="BorderBrush" Value="{StaticResource G2Line}" />
     <Setter Property="BorderThickness" Value="1" />
     <Setter Property="FontFamily" Value="{StaticResource G2Font}" />
-    <Setter Property="FontSize" Value="12.5" />
+    <Setter Property="FontSize" Value="{DynamicResource G2Fs12_5}" />
     <Setter Property="Padding" Value="8,0" />
     <Setter Property="MinHeight" Value="30" />
     <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -677,7 +677,7 @@
   <!-- ===== menus (logo menu, context menus) ===== -->
   <Style x:Key="G2ContextMenu" TargetType="ContextMenu">
     <Setter Property="FontFamily" Value="{StaticResource G2Font}" />
-    <Setter Property="FontSize" Value="13" />
+    <Setter Property="FontSize" Value="{DynamicResource G2Fs13}" />
     <Setter Property="Foreground" Value="{StaticResource G2Text}" />
     <Setter Property="HasDropShadow" Value="True" />
     <Setter Property="Template">
@@ -696,7 +696,7 @@
   <Style x:Key="G2MenuItem" TargetType="MenuItem">
     <Setter Property="Foreground" Value="{StaticResource G2Text}" />
     <Setter Property="FontFamily" Value="{StaticResource G2Font}" />
-    <Setter Property="FontSize" Value="13" />
+    <Setter Property="FontSize" Value="{DynamicResource G2Fs13}" />
     <Setter Property="FocusVisualStyle" Value="{x:Null}" />
     <Setter Property="Template">
       <Setter.Value>
@@ -709,7 +709,7 @@
                     <ScaleTransform ScaleX="0.6" ScaleY="0.6" />
                   </Path.LayoutTransform>
                 </Path>
-                <TextBlock x:Name="gesture" DockPanel.Dock="Right" Margin="16,0,0,0" VerticalAlignment="Center" FontFamily="{StaticResource G2Mono}" FontSize="11" Foreground="{StaticResource G2Sub}" Text="{TemplateBinding InputGestureText}" />
+                <TextBlock x:Name="gesture" DockPanel.Dock="Right" Margin="16,0,0,0" VerticalAlignment="Center" FontFamily="{StaticResource G2Mono}" FontSize="{DynamicResource G2Fs11}" Foreground="{StaticResource G2Sub}" Text="{TemplateBinding InputGestureText}" />
                 <Border x:Name="check" DockPanel.Dock="Left" Width="16" Height="16" Margin="0,0,8,0" CornerRadius="4" BorderThickness="1.5" BorderBrush="{StaticResource G2Line2}" VerticalAlignment="Center" Visibility="Collapsed">
                   <Path x:Name="mark" Data="M3.5,8 L6.5,11 L12.5,4.5" Stroke="White" StrokeThickness="2" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Visibility="Collapsed" />
                 </Border>
@@ -764,7 +764,7 @@
   <!-- ===== tool tip ===== -->
   <Style x:Key="G2ToolTip" TargetType="ToolTip">
     <Setter Property="FontFamily" Value="{StaticResource G2Font}" />
-    <Setter Property="FontSize" Value="12" />
+    <Setter Property="FontSize" Value="{DynamicResource G2Fs12}" />
     <Setter Property="Foreground" Value="White" />
     <Setter Property="Template">
       <Setter.Value>
