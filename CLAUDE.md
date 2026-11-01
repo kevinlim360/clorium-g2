@@ -1,5 +1,7 @@
 # 클로리움 G2
 
+2026-11-02 라이선스 전용 이관: Claude Code **클로리움라이선스관리**는 `projects/클로리움라이선스관리`에서 시작하며 `handoff/licensing/PRD.md`, `DEVELOPMENT_HANDOFF.md`, `CHECKS.md`, `START_HERE.txt`를 우선한다. 정식 최초 1회/같은 PC 영구 사용 및 직원 PC 고정/한국시간 달력 3개월 재인증이 최신 정책이다. AWS/DNS 상태와 미완료 운영 배포도 전용 문서에 기록했다. 루트 `Claude_클로리움라이선스관리_개발시작.cmd`로 전용 세션을 이어간다.
+
 2026-11-01 추가 이관: Claude의 **수퍼포커스개발** 프로젝트에서는 `handoff/superfocus/PRD.md`, `handoff/superfocus/DEVELOPMENT_HANDOFF.md`, `handoff/superfocus/CHECKS.md`를 우선 읽는다. 아래 프로젝트 전체 보존 조건은 유지한다. 사용자 확인으로 숫자 입력/미리보기 박스 이동은 정상이며, 최신 화살표 수동 전환은 WPF 비동기 검사 통과·실렌즈 미검증이다. 고스트 위 메뉴와 3줄 소형 팝업, 고=3단계, A0/B72=25/17/8, 직접입력2..고최대(200상한), 현재 가까운 끝점부터 양방향 촬영을 유지한다.
 
 개발 루트는 이 폴더이다. 한국어로 사용자와 작업한다.

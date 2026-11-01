@@ -215,3 +215,5 @@ USB 재연결 후: 현재 보완본 SHA256 4모듈 일치 확인. EOS R 초기�
 
 
 2026-11-01 수퍼포커스 Claude 이관: 현재 전체 개발 변경을 기존 GitHub origin/main에 보존하기 위해 점검. handoff/superfocus에 전용 PRD·인수인계·시작요청·검사기록을 추가하고 root CLAUDE/README 연결. 수퍼포커스19묶음 및 별도 라이선스 정책16 재실행 PASS(정책빌드 오류0/경고0). Claude 새 프로젝트 수퍼포커스개발 생성: https://claude.ai/project/01a1979e-d0c7-763f-a3a5-63d3889f83bd . 첨부/첫인수대화 및 푸시 최종상태는 실제 서비스 결과로 별도 확인. 기존 private local/baseline/research/delivery 제외를 유지한다. 최신 화살표 수동전환의 실렌즈 확인은 후속 과제로 보존.
+
+2026-11-02 라이선스 관리 Claude Code 이관: 사용자 요청으로 handoff/licensing에 PRD·변경 이력·개발 인수인계·검사 명령·첫 요청·실제 인수 응답을 작성했다. 기존 저장소 origin/main의 소스 기준은 2a4b6b9이며 이번에는 제품 코드를 수정하지 않았다. projects/클로리움라이선스관리에 전용 CLAUDE.md를 두고 같은 저장소 소스를 참조한다. Claude Code 2.1.312 새 영구 세션 e21eb88f-704e-441d-b3ec-2a7c154e0206(이름 클로리움라이선스관리)이 문서와 실제 소스 확인 후 인수 응답을 반환했으며 전용 실행 CMD로 재개한다. 달력 정책 16개는 새 임시 데이터로 재실행 PASS. GitHub는 기존 공개 저장소·main 보호 없음·Actions workflow 없음으로 확인했고 .local/비밀/회사 데이터/로컬 배포물은 제외한다. 회사 키 보존·정식 최초 1회 영구권·직원 PC 고정 및 KST 3개월 인증을 유지한다. AWS/DNS/TLS/운영 인증 완료는 아직 별개 미완료이다. 이 기록을 포함한 최종 커밋을 원격 main에 푸시하고 SHA 일치를 확인하는 것이 이관 전달 경계다.

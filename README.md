@@ -1,5 +1,7 @@
 # 클로리움 G2
 
+**라이선스 개발 이관(2026-11-02):** [전용 PRD](handoff/licensing/PRD.md), [개발 인수인계](handoff/licensing/DEVELOPMENT_HANDOFF.md), [검사 기록](handoff/licensing/CHECKS.md). Claude Code 전용 폴더는 `projects/클로리움라이선스관리`이며 `Claude_클로리움라이선스관리_개발시작.cmd`로 이어갑니다. 정식 최초 1회 영구권/직원 PC 고정·3개월 재인증 정책과 미완료 AWS 운영 배포를 보존합니다.
+
 기존 Clorium 4.7.1.5 촬영·저장 동작을 보존하며 Windows WPF 화면, 메뉴, 글꼴을 개선하는 별도 프로젝트입니다.
 
 현재 단계: G2 개발 소스, 수퍼포커스 순차 촬영·합성, 색보정·라이선스 및 UI 개발 후보를 보관합니다. 정식 설치 배포 완료를 의미하지 않습니다. 아래 초기 시안 설명은 이력이며 최신 상태는 개별 모듈과 evidence를 따릅니다.
