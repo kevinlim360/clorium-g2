@@ -61,9 +61,10 @@ class Program
             var g = a.CurrentGrant;
             Check("other machine denied by local verifier", LicenseSignature.Validate(g, Wire.Hash("other"), "4.7.1.5", Wire.Now, Wire.Now) != null);
             Check("unsupported major denied locally", LicenseSignature.Validate(g, g.MachineId, "5.0.0.0", Wire.Now, Wire.Now) != null);
-            Check("clock rollback denied", LicenseSignature.Validate(g, g.MachineId, "4.7.1.5", Wire.Now - 600, Wire.Now) != null);
-            Check("network grace expires", LicenseSignature.Validate(g, g.MachineId, "4.7.1.5", g.OfflineUntil + 1, Wire.Now) != null);
+            Check("paid lifetime survives corrected PC clock without server", LicenseSignature.Validate(g, g.MachineId, "4.7.1.5", Wire.Now - 600, Wire.Now + 86400*365L) == null);
+            Check("one-time perpetual remains valid 100 years without server", LicenseSignature.Validate(g, g.MachineId, "4.7.1.5", Wire.Now + 100L*366*86400, Wire.Now) == null && g.RefreshAfter == Wire.Forever && g.OfflineUntil == Wire.Forever);
             await Api<LicenseRecord>("/api/admin/licenses/" + l.Id + "/status", new StatusRequest { Blocked = true, Reason = "통합 검사" });
+            await a.RefreshAsync(); Check("perpetual performs no automatic server revalidation", a.Validate() == null);
             await Reject("explicit server block is not network grace", () => a.RefreshAsync(true)); Check("block persists locally", a.Validate() != null);
             await Api<LicenseRecord>("/api/admin/licenses/" + l.Id + "/status", new StatusRequest { Blocked = false, Reason = "복원 검사" });
             await a.RefreshAsync(true); Check("unblock restores existing device", a.Validate() == null);
@@ -95,13 +96,27 @@ class Program
             demo.Kind = "Perpetual"; demo.ExpiresAt = 0; await Api<LicenseRecord>("/api/admin/licenses/" + demo.Id, demo, "PUT");
             await d.RefreshAsync(true); Check("demo converts without reinstall/state deletion", d.Validate() == null && d.CurrentGrant.Kind == "Perpetual");
         }
+        var staff = await Api<Customer>("/api/admin/customers", new Customer { Company = "내부 직원", IsInternal = true, Email = "employee-001" });
+        var staffLicense = await Api<LicenseRecord>("/api/admin/licenses", new LicenseRecord { CustomerId = staff.Id, Kind = "Test", Seats = 1, MaxMajor = 4, RenewalMonths = 3 });
+        using (var employee = Client("employee")) {
+            await employee.ActivateAsync(staffLicense.Serial); var sg = employee.CurrentGrant;
+            long due = DateTimeOffset.FromUnixTimeSeconds(sg.IssuedAt).ToOffset(TimeSpan.FromHours(9)).AddMonths(3).ToUnixTimeSeconds();
+            Check("staff account issues exactly three KST calendar months", sg.RenewalMonths == 3 && sg.ExpiresAt == due && sg.RefreshAfter == due && sg.OfflineUntil == due && employee.Validate() == null);
+            Check("staff clock rollback remains denied", LicenseSignature.Validate(sg, sg.MachineId, "4.7.1.5", sg.IssuedAt-600, sg.IssuedAt) != null);
+            await employee.RefreshAsync(true); Check("early staff refresh preserves stored deadline", employee.CurrentGrant.ExpiresAt == due);
+            await employee.ActivateAsync(staffLicense.Serial); Check("same serial does not restart employee period", employee.CurrentGrant.ExpiresAt == due);
+            using (var r = await admin.PostAsync(url + "/api/admin/offline", new StringContent(employee.OfflineRequest(staffLicense.Serial), Encoding.UTF8, "application/json"))) Check("staff offline file activation rejected by server", r.StatusCode == HttpStatusCode.Conflict && Wire.Read<ApiReply>(await r.Content.ReadAsStringAsync()).Code == "ONLINE_REQUIRED");
+            staff.Disabled = true; await Api<Customer>("/api/admin/customers", staff);
+            await Reject("disabled staff cannot reauthenticate", () => employee.RefreshAsync(true)); Check("staff denial blocks local next capture", employee.Validate() != null);
+            staff.Disabled = false; await Api<Customer>("/api/admin/customers", staff); await employee.RefreshAsync(true); Check("staff re-enable restores current period", employee.Validate() == null && employee.CurrentGrant.ExpiresAt == due);
+        }
         var race = await Api<LicenseRecord>("/api/admin/licenses", new LicenseRecord { CustomerId = customer.Id, Kind = "Test", Seats = 1, MaxMajor = 4, ExpiresAt = Wire.Now + 86400 });
         using (var a = Client("race1")) using (var b = Client("race2")) {
             Func<LicenseClient, Task<bool>> attempt = async c => { try { await c.ActivateAsync(race.Serial); return true; } catch (InvalidDataException) { return false; } };
             var results = await Task.WhenAll(attempt(a), attempt(b)); Check("concurrent activation cannot overbook", results.Count(x => x) == 1);
         }
         using (var old = Client("bad-version", version: "5.0.0.0")) await Reject("server enforces purchased version", () => old.ActivateAsync(l.Serial));
-        using (var response = await admin.GetAsync(url + "/api/admin/export")) Check("CSV export includes customer and serial", (await response.Content.ReadAsStringAsync()).Contains(l.Serial));
+        using (var response = await admin.GetAsync(url + "/api/admin/export")) { string csv = await response.Content.ReadAsStringAsync(); Check("CSV export includes customer and serial", csv.Contains(l.Serial)); Check("CSV separates staff renewal from permanent expiry", csv.Contains("3개월 재인증") && csv.Contains("다음인증UTC") && csv.Contains(staffLicense.Serial)); }
         using (var response = await admin.GetAsync(url + "/api/admin/backup")) { File.WriteAllBytes(Path.Combine(root, "backup.zip"), await response.Content.ReadAsByteArrayAsync()); Check("full server backup saved", new FileInfo(Path.Combine(root, "backup.zip")).Length > 1000); }
         var state = await Api<Database>("/api/admin/state"); Check("audit links lifecycle to license", state.Audit.Any(x => x.Target == l.Id && x.Action == "고객 PC 반납") && state.Audit.Any(x => x.Target == l.Id && x.Action == "PC 강제 회수"));
         Wire.AtomicWrite(Path.Combine(root, "restore-client-config.json"), Wire.Json(config));

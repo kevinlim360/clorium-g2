@@ -1,5 +1,7 @@
 # 클로리움 G2
 
+2026-11-01 추가 이관: Claude의 **수퍼포커스개발** 프로젝트에서는 `handoff/superfocus/PRD.md`, `handoff/superfocus/DEVELOPMENT_HANDOFF.md`, `handoff/superfocus/CHECKS.md`를 우선 읽는다. 아래 프로젝트 전체 보존 조건은 유지한다. 사용자 확인으로 숫자 입력/미리보기 박스 이동은 정상이며, 최신 화살표 수동 전환은 WPF 비동기 검사 통과·실렌즈 미검증이다. 고스트 위 메뉴와 3줄 소형 팝업, 고=3단계, A0/B72=25/17/8, 직접입력2..고최대(200상한), 현재 가까운 끝점부터 양방향 촬영을 유지한다.
+
 개발 루트는 이 폴더이다. 한국어로 사용자와 작업한다.
 
 먼저 `handoff/PRD.md`, `handoff/DEVELOPMENT_HANDOFF.md`, 최신 `work-status.md`를 읽는다. 제품 소스는 `src/Clorium.G2`, 보존 기준은 `baseline/Clorium_Source_4.7.1.5`이다. 이전 README의 첫 시안 상태만 보고 최신 수퍼포커스/라이선스 구현을 누락하지 않는다.

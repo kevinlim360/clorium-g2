@@ -1,0 +1,25 @@
+{
+  "Candidate": "C:\\Users\\user\\Documents\\ChatGPT\\클로리움G2\\delivery\\Clorium-Licensing-20261101-104452",
+  "Zip": "C:\\Users\\user\\Documents\\ChatGPT\\클로리움G2\\delivery\\Clorium-Licensing-20261101-104452.zip",
+  "ZipSHA256": "6CB95A0FE0FDDAD3976787772457039ED9902393B594666A87F2B5C8B980D228",
+  "Policy": "Paid first auth then offline forever; internal demo/test mandatory three KST calendar months online reauth",
+  "ApiIntegration": 43,
+  "CalendarPolicyChecks": 16,
+  "FullRestoreChecks": 4,
+  "DeviceCaptureGuards": 48,
+  "ExternalShutterGuard": "PASS",
+  "WpfAdmin": "Real API view/search/staff renewal display PASS",
+  "ManifestFiles": 29,
+  "ServerPrivateStateInPackage": false,
+  "OldCustomerTokens": "One online refresh after server/module update needed",
+  "ProductionDeployment": "Not deployed; current customer build loopback URL",
+  "Configuration": "ReleasePolicy20261101",
+  "Evidence": [
+    "licensing-integration.log",
+    "licensing-calendar-policy.log",
+    "licensing-restore.log",
+    "licensing-policy-binary.log",
+    "licensing-admin-ui.log"
+  ],
+  "IndependentReview": "PASS separate source/artifact/evidence review; 29 final files; not independent reexecution"
+}

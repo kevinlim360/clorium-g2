@@ -1,0 +1,7 @@
+PASS managed mode compiled in without external config
+PASS legacy private compatibility resource excluded
+PASS public connection configuration embedded
+PASS all camera capture/bulb/movie entries reject before touching hardware (48)
+PASS external shutter blocked before touching external driver
+PASS legacy host can retain existing startup authorization
+LICENSING_BINARY_PASSED=6

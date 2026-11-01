@@ -1,0 +1,11 @@
+Claude 프로젝트: 수퍼포커스개발
+
+이 프로젝트는 기존 클로리움 G2 수퍼포커스 개발을 이어받는 작업입니다.
+저장소: https://github.com/kevinlim360/clorium-g2 (main)
+같은 PC의 개발 루트: C:\Users\user\Documents\ChatGPT\클로리움G2
+
+먼저 handoff/superfocus/PRD.md, DEVELOPMENT_HANDOFF.md, CHECKS.md와 루트 CLAUDE.md를 읽으세요. 로컬 접근이 가능하면 실제 SuperfocusWindow.cs, LiveViewViewModel.cs, FocusRangePlan.cs와 최종 evidence를 대조하세요. 연결이 없으면 소스를 읽거나 카메라를 검증한 것처럼 답하지 마세요.
+
+사용자는 숫자 직접 입력과 A 탐색 중 박스 이동이 정상임을 확인했습니다. 마지막 화살표 수정은 탐색 중에도 누를 수 있으며, 자동 탐색/예약 취소→네이티브 AF 정지→현재 A/B 저장→수동 이동 큐로 전환합니다. 비동기 WPF 검사는 통과했고 최신 코드의 실제 렌즈 전환은 미검증입니다. 고 기준은 3단계이며 A0/B72=25/17/8컷, 직접입력은2..고최대(200상한), 현재 가까운 끝점부터 양방향 촬영입니다.
+
+첫 인수에서는 읽기와 코드/기록 대조를 하고, 경로·현재 커밋·확인한 상태·가장 먼저 할 실기3개를 한국어로 간결히 보고하세요. 이어서 이 프로젝트에서 사용자 요청에 따라 개발을 계속할 수 있도록 준비하세요. 설치본·baseline·사진·API·라이선스는 보존하고 .local의 키/토큰/DB를 출력·업로드하지 마세요.

@@ -1,7 +1,10 @@
 $ErrorActionPreference = 'Stop'
+$buildConfiguration = 'Release'
+$buildMarker = Join-Path $PSScriptRoot '.local/active-build.txt'
+if (Test-Path -LiteralPath $buildMarker) { $buildConfiguration = [IO.File]::ReadAllText($buildMarker).Trim(); if ($buildConfiguration -notmatch '^[A-Za-z0-9_-]+$') { throw 'Invalid validated build configuration.' } }
 $dataDirectory = Join-Path $PSScriptRoot '.local/company-data'
 $serverExe = Join-Path $PSScriptRoot 'server/Clorium.LicenseServer.exe'
-if (-not (Test-Path -LiteralPath $serverExe)) { $serverExe = Join-Path $PSScriptRoot 'Server/bin/Release/net10.0/Clorium.LicenseServer.exe' }
+if (-not (Test-Path -LiteralPath $serverExe)) { $serverExe = Join-Path $PSScriptRoot "Server/bin/$buildConfiguration/net10.0/Clorium.LicenseServer.exe" }
 $serverUrl = 'http://127.0.0.1:5088'
 $ready = $false
 try { $ready = (Invoke-RestMethod -Uri "$serverUrl/health" -TimeoutSec 2).Status -eq 'ok' } catch { }

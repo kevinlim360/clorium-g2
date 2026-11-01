@@ -1,0 +1,17 @@
+PASS internal fixed-term demo cannot bypass staff policy
+PASS paid first online activation has no expiry or periodic contact
+PASS KST month rollover uses June1 not UTC May28
+PASS early refresh does not extend three-month deadline
+PASS same-serial reactivation does not extend deadline
+PASS release and different-PC activation keep license deadline
+PASS staff offline exchange is refused
+PASS staff local validation allows just before boundary
+PASS staff offline use stops exactly at boundary
+PASS expired signed staff token renews online for next three months
+PASS disabled employee cannot refresh
+PASS disabled employee cannot reactivate
+PASS re-enabled staff retains previous renewal deadline
+PASS calendar boundary 2030-01-31
+PASS calendar boundary 2027-11-30
+PASS next renewal deadlines survive server restart
+LICENSING_POLICY_PASSED=16

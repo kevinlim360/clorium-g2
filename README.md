@@ -2,7 +2,9 @@
 
 기존 Clorium 4.7.1.5 촬영·저장 동작을 보존하며 Windows WPF 화면, 메뉴, 글꼴을 개선하는 별도 프로젝트입니다.
 
-현재 단계: **첫 UI 시안**. 제품에 통합한 설치 버전이 아닙니다.
+현재 단계: G2 개발 소스, 수퍼포커스 순차 촬영·합성, 색보정·라이선스 및 UI 개발 후보를 보관합니다. 정식 설치 배포 완료를 의미하지 않습니다. 아래 초기 시안 설명은 이력이며 최신 상태는 개별 모듈과 evidence를 따릅니다.
+
+**수퍼포커스 개발 이관(2026-11-01):** [전용 PRD](handoff/superfocus/PRD.md), [개발 인수인계](handoff/superfocus/DEVELOPMENT_HANDOFF.md), [검사 기록](handoff/superfocus/CHECKS.md). Claude 프로젝트명은 `수퍼포커스개발`입니다. 기존 전체 G2 PRD는 [handoff/PRD.md](handoff/PRD.md)에 보존합니다.
 
 - `baseline/Clorium_Source_4.7.1.5`: 배포된 전체 소스 ZIP에서 가져온 수정하지 않은 기준 소스.
 - `preview/CloriumG2.Preview.exe`: Windows에서 직접 열 수 있는 오프라인 WPF 시안. 같은 폴더의 XAML 파일이 필요합니다.
@@ -17,9 +19,11 @@
 
 ## 촬영 기능 교체 개발 소스
 
-2026-10-27: `src/Clorium.G2`를 개발 기준으로 추가했습니다. 기존 수퍼포커스/동영상은 비활성화. 새 합성 엔진 `modules/Clorium.Stack`와 ModeVid 연구 보관 `research/modevid-feature-modules`가 추가되었습니다. 상세 상태는 [촬영기능 교체현황](촬영기능_교체현황.md)을 참고하세요. 카메라 실기 및 새 촬영 UI 연결은 아직 완료하지 않았습니다.
+2026-10-27부터 `src/Clorium.G2`를 개발 기준으로 추가했습니다. 기존 고장 난 수퍼포커스/동영상은 비활성화하고 새 순차 수퍼포커스와 `modules/Clorium.Stack`를 연결했습니다. EOS R 24–105의 특정 장면 촬영/전송/합성 실기 기록이 있으며, 최신 화살표 전환과 RF24–240 실기는 남아 있습니다. 상세 상태는 [촬영기능 교체현황](촬영기능_교체현황.md)을 참고하세요. `research/modevid-feature-modules`는 제3자 복구 참조라 로컬에만 보존하며 GitHub에서 제외합니다.
 
 ## 라이선스 관리
+
+2026-11-01 정책 변경: 정식 영구권은 최초1회 인증 후 같은 PC에서 주기 재접속 없이 사용합니다. 내부 직원 계정을 등록해 데모/테스트를 발급하면 한국시간 달력3개월마다 온라인 재인증합니다. 새 후보 `delivery/Clorium-Licensing-20261101-104452`, 근거 `evidence/licensing-policy-delivery.json`. 기존 실행 바로가기는 검증된 `ReleasePolicy20261101` 버전으로 연결했습니다. 자세한 직원 등록과 기존 토큰 전환은 아래 사용 안내를 따릅니다. 외부 인증 서버 운영 배포는 아직 준비 전입니다.
 
 2026-10-28: `modules/Clorium.Licensing`에 회사용 Windows 관리 앱·인증 서버·.NET Framework 고객 인증 모듈을 구현했습니다. `라이선스관리_실행.cmd`로 이 PC의 로컬 서버와 관리 앱을 함께 엽니다. 사용법은 [라이선스 관리 안내](modules/Clorium.Licensing/README.md)를 참고하세요.
 

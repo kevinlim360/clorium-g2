@@ -16,11 +16,14 @@ public sealed class Store : IDisposable
     private readonly FileStream exclusive;
     private readonly RSA signing;
     private Database current;
+    private readonly TimeProvider clock;
+    private long Now => clock.GetUtcNow().ToUnixTimeSeconds();
     public ServerSettings Settings { get; }
     public string BackupFolder => Path.Combine(root, "backups");
     public static readonly JsonSerializerOptions Json = new() { WriteIndented = true, PropertyNameCaseInsensitive = true };
-    public Store(string folder)
+    public Store(string folder, TimeProvider clock = null)
     {
+        this.clock = clock ?? TimeProvider.System;
         root = Path.GetFullPath(folder); Directory.CreateDirectory(root);
         string settingsPath = Path.Combine(root, "settings.json"), keyPath = Path.Combine(root, "signing-key.xml"), dbPath = Path.Combine(root, "licenses.json");
         if (!File.Exists(settingsPath) && Directory.EnumerateFileSystemEntries(root).Any(p => !new[] { "server.log", "server-error.log" }.Contains(Path.GetFileName(p))))
@@ -56,25 +59,45 @@ public sealed class Store : IDisposable
     public static void Policy(LicenseRecord l) {
         Require(l.Kind is "Perpetual" or "Demo" or "Test", "INVALID_INPUT", "라이선스 종류가 잘못되었습니다.");
         Require(l.Seats > 0 && l.Seats <= 10000 && l.MaxMajor > 0 && l.MaxMajor <= 999 && l.GraceDays >= 1 && l.GraceDays <= 365, "INVALID_INPUT", "설치 수/버전/유예기간 범위를 확인해 주세요.");
-        Require(l.Kind == "Perpetual" ? l.ExpiresAt == 0 : l.ExpiresAt > Wire.Now, "INVALID_INPUT", "영구권은 만료일 없음, 데모/테스트는 미래 만료일이어야 합니다.");
+        Require(l.RenewalMonths == 0 || (l.RenewalMonths == 3 && l.Kind != "Perpetual" && l.ExpiresAt == 0), "INVALID_INPUT", "직원용은 데모/테스트 · 3개월 재인증 · 고정만료 없음이어야 합니다.");
+        Require(l.Kind == "Perpetual" || l.RenewalMonths == 3 ? l.ExpiresAt == 0 : l.ExpiresAt > Wire.Now, "INVALID_INPUT", "고정 만료일을 확인해 주세요.");
         Require(l.Kind == "Perpetual" || !l.AllowPermanentOffline, "INVALID_INPUT", "기간제는 무기한 오프라인으로 발급할 수 없습니다.");
     }
-    private static void Usable(LicenseRecord l, string version) {
+    public static void AccountPolicy(Database d, LicenseRecord l) {
+        if (l.RenewalMonths == 3) Require(d.Customers.Any(c => c.Id == l.CustomerId && c.IsInternal), "INVALID_INPUT", "직원용 라이선스는 내부 직원 계정에만 연결할 수 있습니다.");
+        if (l.Kind != "Perpetual" && d.Customers.Any(c => c.Id == l.CustomerId && c.IsInternal)) Require(l.RenewalMonths == 3, "INVALID_POLICY", "내부 직원의 데모/테스트는 3개월 재인증으로 발급해야 합니다.");
+    }
+    private void Usable(Database d, LicenseRecord l, string version) {
         Require(l != null, "UNKNOWN_LICENSE", "시리얼번호를 확인해 주세요.");
         Require(!l.Blocked, "BLOCKED", "회사에서 차단한 라이선스입니다.");
-        Require(l.ExpiresAt == 0 || Wire.Now < l.ExpiresAt, "EXPIRED", "사용 기간이 만료되었습니다.");
+        Require(l.ExpiresAt == 0 || Now < l.ExpiresAt, "EXPIRED", "사용 기간이 만료되었습니다.");
+        if (l.RenewalMonths == 3 || (l.Kind != "Perpetual" && d.Customers.Any(c => c.Id == l.CustomerId && c.IsInternal))) {
+            Require(d.Customers.Any(c => c.Id == l.CustomerId && c.IsInternal && !c.Disabled), "ACCOUNT_DISABLED", "직원 계정이 중지되었습니다. 회사 관리자에게 문의해 주세요.");
+            AccountPolicy(d, l);
+        }
         Require(Version.TryParse(version, out var v) && v.Major <= l.MaxMajor, "VERSION_DENIED", "허용한 주요 버전을 초과했습니다.");
     }
     private ApiReply GrantFor(Database d, LicenseRecord l, Activation a, string nonce)
     {
-        long now = Wire.Now;
-        long until = a.Offline && l.AllowPermanentOffline ? 253402300799 : now + l.GraceDays * 86400L;
-        if (l.ExpiresAt > 0) until = Math.Min(until, l.ExpiresAt);
+        long now = Now;
+        long expires = l.ExpiresAt;
+        long until, refresh;
+        if (l.Kind == "Perpetual") { until = refresh = Wire.Forever; expires = 0; }
+        else if (l.RenewalMonths == 3) {
+            if (l.NextReauthAt <= now) {
+                l.NextReauthAt = DateTimeOffset.FromUnixTimeSeconds(now).ToOffset(TimeSpan.FromHours(9)).AddMonths(3).ToUnixTimeSeconds();
+                Log(d, "직원 3개월 인증", l.Id, DateTimeOffset.FromUnixTimeSeconds(l.NextReauthAt).ToOffset(TimeSpan.FromHours(9)).ToString("yyyy-MM-dd HH:mm zzz"));
+            }
+            until = refresh = expires = l.NextReauthAt;
+        } else {
+            until = now + l.GraceDays * 86400L; refresh = now + 86400;
+            if (expires > 0) until = Math.Min(until, expires);
+        }
         a.LastGrantUntil = until;
         return new ApiReply { Code = "OK", ServerTime = now, License = LicenseSignature.Sign(new Grant {
             LicenseId = l.Id, ActivationId = a.Id, Customer = d.Customers.Single(x => x.Id == l.CustomerId).Company,
-            Serial = l.Serial, MachineId = a.MachineId, Kind = l.Kind, MaxMajor = l.MaxMajor, ExpiresAt = l.ExpiresAt,
-            IssuedAt = now, RefreshAfter = now + 86400, OfflineUntil = until, Nonce = nonce
+            Serial = l.Serial, MachineId = a.MachineId, Kind = l.Kind, MaxMajor = l.MaxMajor, ExpiresAt = expires,
+            IssuedAt = now, RefreshAfter = refresh, OfflineUntil = until, Nonce = nonce, RenewalMonths = l.RenewalMonths
         }, signing) };
     }
     public ApiReply Activate(ActivationRequest r, bool offline = false) { return Change(d => {
@@ -82,7 +105,8 @@ public sealed class Store : IDisposable
         Text(r.MachineId, 64, "PC 식별값"); Require(r.MachineId.Length == 64 && r.MachineId.All(Uri.IsHexDigit), "INVALID_INPUT", "PC 식별값 형식이 잘못되었습니다.");
         Text(r.DeviceSecret, 128, "PC 인증값"); Require(r.DeviceSecret.Length >= 40, "INVALID_INPUT", "PC 인증값이 너무 짧습니다.");
         Text(r.Hostname, 200, "PC 이름"); Text(r.OsVersion, 200, "OS"); Text(r.AppVersion, 40, "버전"); Text(r.Nonce, 100, "요청 ID");
-        var l = d.Licenses.SingleOrDefault(x => x.Serial == Wire.NormalizeSerial(r.Serial)); Usable(l, r.AppVersion);
+        var l = d.Licenses.SingleOrDefault(x => x.Serial == Wire.NormalizeSerial(r.Serial)); Usable(d, l, r.AppVersion);
+        Require(!offline || l.RenewalMonths == 0, "ONLINE_REQUIRED", "직원 테스트/데모는 온라인 인증이 필요합니다.");
         var a = d.Activations.LastOrDefault(x => x.LicenseId == l.Id && x.MachineId == r.MachineId);
         Require(a == null || !a.Blocked, "DEVICE_REVOKED", "회수한 PC입니다. 회사에 재허용을 요청해 주세요.");
         if (a != null && a.Active) Require(a.SecretHash == Wire.Hash(r.DeviceSecret), "DEVICE_SECRET", "기존 PC 인증값이 다릅니다. 회사에서 이전 PC를 회수해야 합니다.");
@@ -101,7 +125,7 @@ public sealed class Store : IDisposable
         Require(a.SecretHash == Wire.Hash(r.DeviceSecret ?? ""), "DEVICE_SECRET", "PC 인증값이 일치하지 않습니다.");
         var l = d.Licenses.Single(x => x.Id == a.LicenseId);
         if (release) { a.Active = false; Log(d, "고객 PC 반납", l.Id, a.Hostname); return new ApiReply { Code = "RELEASED", ServerTime = Wire.Now }; }
-        Usable(l, r.AppVersion); Text(r.Nonce, 100, "요청 ID");
+        Usable(d, l, r.AppVersion); Text(r.Nonce, 100, "요청 ID");
         a.AppVersion = r.AppVersion; a.LastSeen = Wire.Now;
         return GrantFor(d, l, a, r.Nonce);
     }); }

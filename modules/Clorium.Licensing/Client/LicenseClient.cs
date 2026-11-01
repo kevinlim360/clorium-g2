@@ -105,7 +105,7 @@ namespace Clorium.Licensing
                 // Only our structured policy denials invalidate a cached entitlement; network/server overload does not.
                 if ((int)response.StatusCode == 409) {
                     var denied = Wire.Read<ApiReply>(text);
-                    if (invalidateCurrent && new[] { "BLOCKED", "EXPIRED", "VERSION_DENIED", "DEVICE_REVOKED", "INVALID_GRANT", "DEVICE_SECRET", "UNKNOWN_LICENSE" }.Contains(denied.Code))
+                    if (invalidateCurrent && new[] { "BLOCKED", "EXPIRED", "VERSION_DENIED", "DEVICE_REVOKED", "INVALID_GRANT", "DEVICE_SECRET", "UNKNOWN_LICENSE", "ACCOUNT_DISABLED", "INVALID_POLICY" }.Contains(denied.Code))
                         lock (gate) { state.Denied = denied.Message ?? "인증이 거부되었습니다."; Persist(); }
                     throw new InvalidDataException(denied.Message);
                 }

@@ -1,4 +1,4 @@
-param([int]$Port = 5108)
+param([int]$Port = 5108, [string]$Configuration = 'Release')
 $ErrorActionPreference = 'Stop'
 $licensingRoot = $PSScriptRoot
 $workspaceRoot = [IO.Path]::GetFullPath((Join-Path $licensingRoot '../..'))
@@ -6,8 +6,8 @@ $runRoot = Join-Path $workspaceRoot ('.local/licensing-check-' + [guid]::NewGuid
 $serverData = Join-Path $runRoot 'server'
 $clientData = Join-Path $runRoot 'client'
 New-Item -ItemType Directory -Path $serverData -Force | Out-Null
-$serverDll = Join-Path $licensingRoot 'Server/bin/Release/net10.0/Clorium.LicenseServer.dll'
-$clientExe = Join-Path $licensingRoot 'Tests/bin/Release/net48/Clorium.Licensing.Tests.exe'
+$serverDll = Join-Path $licensingRoot "Server/bin/$Configuration/net10.0/Clorium.LicenseServer.dll"
+$clientExe = Join-Path $licensingRoot "Tests/bin/$Configuration/net48/Clorium.Licensing.Tests.exe"
 $baseUrl = "http://127.0.0.1:$Port"
 $serverProcess = Start-Process -FilePath 'dotnet' -ArgumentList @(('"' + $serverDll + '"'), '--data', ('"' + $serverData + '"'), '--urls', $baseUrl) -WindowStyle Hidden -PassThru -RedirectStandardOutput (Join-Path $runRoot 'server.log') -RedirectStandardError (Join-Path $runRoot 'server-error.log')
 try {
@@ -18,7 +18,7 @@ try {
     if (-not $ready) { throw "Temporary test server did not start. Logs: $runRoot" }
     & $clientExe $baseUrl $clientData (Join-Path $serverData 'admin-token.txt') | Tee-Object -FilePath (Join-Path $workspaceRoot 'evidence/licensing-integration.log')
     if ($LASTEXITCODE -ne 0) { throw 'Licensing integration checks failed.' }
-    $adminExe = Join-Path $licensingRoot 'Admin/bin/Release/net10.0-windows/Clorium.LicenseManager.exe'
+    $adminExe = Join-Path $licensingRoot "Admin/bin/$Configuration/net10.0-windows/Clorium.LicenseManager.exe"
     $uiPng = Join-Path $workspaceRoot 'evidence/licensing-admin-connected.png'
     $uiResult = Join-Path $runRoot 'admin-ui-check.txt'
     $adminProcess = Start-Process -FilePath $adminExe -ArgumentList @('--check',$baseUrl,('"' + (Join-Path $serverData 'admin-token.txt') + '"'),('"' + $uiPng + '"'),('"' + $uiResult + '"')) -WindowStyle Hidden -PassThru -Wait

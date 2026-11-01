@@ -78,7 +78,7 @@ public class ManagerWindow : Window
         actions.Children.Add(Button("CSV 내보내기", () => Download("/api/admin/export", "clorium-licenses.csv", "CSV 파일|*.csv")));
         actions.Children.Add(Label("검색")); actions.Children.Add(search); search.TextChanged += (s, e) => Populate();
         DockPanel.SetDock(actions, Dock.Top); licensePanel.Children.Add(actions);
-        Column(licenses, "고객사", "Company", 190); Column(licenses, "시리얼번호", "Serial", 285); Column(licenses, "종류", "Kind", 80); Column(licenses, "설치 PC", "Seats", 85); Column(licenses, "허용 버전", "Version", 85); Column(licenses, "만료", "Expiry", 135); Column(licenses, "상태", "Status", 80);
+        Column(licenses, "고객사", "Company", 190); Column(licenses, "시리얼번호", "Serial", 285); Column(licenses, "종류", "Kind", 95); Column(licenses, "설치 PC", "Seats", 85); Column(licenses, "허용 버전", "Version", 85); Column(licenses, "만료 / 재인증", "Expiry", 155); Column(licenses, "상태", "Status", 80);
         licenses.SelectionChanged += (s, e) => ShowDetail();
         var split = new Grid(); split.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1.1, GridUnitType.Star) }); split.RowDefinitions.Add(new RowDefinition { Height = new GridLength(8) }); split.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
         split.Children.Add(licenses); var splitter = new GridSplitter { Height = 5, HorizontalAlignment = HorizontalAlignment.Stretch }; Grid.SetRow(splitter, 1); split.Children.Add(splitter);
@@ -89,14 +89,15 @@ public class ManagerWindow : Window
         Column(history, "일시", "At", 170); Column(history, "작업", "Action", 180); Column(history, "상세 · 사유", "Detail", 570);
         lowerTabs.Items.Add(new TabItem { Header = "설치 PC", Content = dp }); lowerTabs.Items.Add(new TabItem { Header = "변경 이력", Content = history });
         licensePanel.Children.Add(split); tabs.Items.Add(new TabItem { Header = "라이선스", Content = licensePanel });
-        var cp = new DockPanel(); var ca = new WrapPanel(); ca.Children.Add(Button("+ 고객사 등록", () => EditCustomer(false))); ca.Children.Add(Button("고객사 수정", () => EditCustomer(true))); DockPanel.SetDock(ca, Dock.Top); cp.Children.Add(ca); cp.Children.Add(customers);
+        var cp = new DockPanel(); var ca = new WrapPanel(); ca.Children.Add(Button("+ 고객사 등록", () => EditCustomer(false))); ca.Children.Add(Button("+ 직원 계정", () => EditCustomer(false, true))); ca.Children.Add(Button("고객사 · 직원 수정", () => EditCustomer(true))); DockPanel.SetDock(ca, Dock.Top); cp.Children.Add(ca); cp.Children.Add(customers);
         Column(customers, "고객사", "Company", 260); Column(customers, "담당자", "Contact", 160); Column(customers, "연락처 · 이메일", "Email", 280); Column(customers, "비고", "Notes", 350);
-        tabs.Items.Add(new TabItem { Header = "고객사", Content = cp });
+        Column(customers, "직원 계정", "IsInternal", 80); Column(customers, "계정 중지", "Disabled", 80);
+        tabs.Items.Add(new TabItem { Header = "고객사 · 직원 계정", Content = cp });
         var settings = new StackPanel { MaxWidth = 850, HorizontalAlignment = HorizontalAlignment.Left };
         settings.Children.Add(new TextBlock { Text = "운영 · 배포", FontSize = 21, Margin = new Thickness(0, 0, 0, 16) });
         settings.Children.Add(new TextBlock { Text = "고객 모듈에는 서버 주소와 공개키만 배포합니다. 관리자 인증키와 서명 개인키는 회사 서버에서만 보관합니다.\n\n백업에는 서명 개인키·관리자 인증 설정·고객 정보가 포함됩니다. 접근이 제한된 암호화 디스크에 보관하세요. 서버를 복원할 때 세 파일을 함께 복원해야 기존 고객의 인증이 유지됩니다.", TextWrapping = TextWrapping.Wrap, LineHeight = 24 });
         settings.Children.Add(Button("고객 모듈 연결 설정 내보내기", ExportConfig)); settings.Children.Add(Button("서버 전체 백업 저장", () => Download("/api/admin/backup", "clorium-license-backup.zip", "서버 백업|*.zip")));
-        settings.Children.Add(new TextBlock { Text = "회수 정책\n일반 온라인 인증은 기본 30일의 오프라인 유예를 사용합니다. 회수한 PC가 연결되지 않으면 이미 받은 확인 기한까지 실행할 수 있습니다. 무기한 오프라인 영구권은 파일 발급 이후 즉시 회수할 수 없습니다.\n\n설치 대수는 현재 활성 PC 수입니다. 만료된 라이선스·반납한 PC도 이력을 보존합니다. 데모/테스트를 정식으로 바꾸려면 정책 변경에서 종류를 영구로 바꾸고 고객 PC에서 인증 새로고침을 실행하세요.", Margin = new Thickness(0, 24, 0, 0), TextWrapping = TextWrapping.Wrap, LineHeight = 24 });
+        settings.Children.Add(new TextBlock { Text = "인증 정책\n정식 영구권은 최초 인증 후 같은 PC에서 재접속 없이 사용합니다. 발급 뒤 원격으로 즉시 회수할 수 없습니다.\n\n직원 계정에는 데모/테스트 3개월 재인증을 연결하세요. 다음 인증일은 한국시간 기준 달력 3개월입니다. 기한이 되면 인터넷으로 자동 재인증하고, 연결하지 못하면 새 촬영이 제한됩니다. 계정을 중지하면 다음 재인증을 거부합니다.\n\n설치 대수·기존 PC 반납/회수·버전 제한은 유지됩니다. 직원용 라이선스의 오프라인 파일 발급은 허용하지 않습니다.", Margin = new Thickness(0, 24, 0, 0), TextWrapping = TextWrapping.Wrap, LineHeight = 24 });
         tabs.Items.Add(new TabItem { Header = "운영 · 백업", Content = settings });
         Populate(); Closed += (s, e) => http.Dispose();
     }
@@ -128,30 +129,35 @@ public class ManagerWindow : Window
         if (licenses.SelectedItem is not LicenseRow row) { devices.ItemsSource = null; history.ItemsSource = null; return; }
         selectedId = row.Id;
         var l = data.Licenses.Single(x => x.Id == row.Id);
-        detail.Text = row.Company + "   /   " + l.Serial + "\n" + "오프라인 유예 " + l.GraceDays + "일" + (l.AllowPermanentOffline ? " · 무기한 오프라인 허용" : "") + (string.IsNullOrWhiteSpace(l.Notes) ? "" : " · " + l.Notes);
+        detail.Text = row.Company + "   /   " + l.Serial + "\n" + (l.Kind == "Perpetual" ? "최초 1회 인증 · 동일 PC 영구 사용 · 주기 접속 없음" : l.RenewalMonths == 3 ? "직원용 · 3개월 재인증 · 다음 " + (l.NextReauthAt == 0 ? "최초 등록 후 결정" : Date(l.NextReauthAt)) : "고정 만료 · 오프라인 유예 " + l.GraceDays + "일") + (string.IsNullOrWhiteSpace(l.Notes) ? "" : " · " + l.Notes);
         devices.ItemsSource = data.Activations.Where(x => x.LicenseId == row.Id).OrderByDescending(x => x.Active).Select(x => new DeviceRow(x)).ToList();
         history.ItemsSource = data.Audit.Where(x => x.Target == row.Id).OrderByDescending(x => x.At).Select(x => new { At = Date(x.At), x.Action, x.Detail }).ToList();
     }
-    private async Task EditCustomer(bool edit)
+    private async Task EditCustomer(bool edit, bool staff = false)
     {
-        Customer c = edit ? customers.SelectedItem as Customer : new Customer(); if (c == null) throw new InvalidOperationException("고객사를 선택해 주세요.");
-        var form = new FormWindow(edit ? "고객사 수정" : "고객사 등록"); var company = form.Field("고객사명", c.Company); var contact = form.Field("담당자", c.Contact); var email = form.Field("연락처 · 이메일", c.Email); var notes = form.Field("비고", c.Notes);
-        if (form.Open(this)) { using var r = await Send("/api/admin/customers", HttpMethod.Post, new Customer { Id = c.Id, Company = company.Text, Contact = contact.Text, Email = email.Text, Notes = notes.Text }); await Refresh(); }
+        Customer c = edit ? customers.SelectedItem as Customer : new Customer { IsInternal = staff }; if (c == null) throw new InvalidOperationException("고객사 / 직원을 선택해 주세요.");
+        var form = new FormWindow(edit ? "고객사 · 직원 수정" : staff ? "직원 계정 등록" : "고객사 등록"); var company = form.Field("고객사명 / 직원 이름", c.Company); var contact = form.Field("담당자 / 부서", c.Contact); var email = form.Field("연락처 / 직원 ID · 이메일", c.Email); var notes = form.Field("비고", c.Notes);
+        var internalAccount = form.Check("내부 직원 계정", c.IsInternal); var disabled = form.Check("직원 계정 중지 (다음 재인증 차단)", c.Disabled);
+        if (form.Open(this)) { using var r = await Send("/api/admin/customers", HttpMethod.Post, new Customer { Id = c.Id, Company = company.Text, Contact = contact.Text, Email = email.Text, Notes = notes.Text, IsInternal = internalAccount.IsChecked == true, Disabled = disabled.IsChecked == true }); await Refresh(); }
     }
     private async Task EditLicense(bool edit)
     {
         var l = edit ? Selected() : new LicenseRecord(); if (data.Customers.Count == 0) throw new InvalidOperationException("고객사 탭에서 고객사를 먼저 등록해 주세요.");
         var form = new FormWindow(edit ? "정책 · 기간 변경" : "라이선스 발급");
-        var customer = form.Choose("고객사", data.Customers.Select(x => x.Company).ToArray(), Math.Max(0, data.Customers.FindIndex(x => x.Id == l.CustomerId))); customer.IsEnabled = !edit;
+        var customer = form.Choose("고객사 / 직원 계정", data.Customers.Select(x => (x.IsInternal ? "[직원] " : "") + x.Company).ToArray(), Math.Max(0, data.Customers.FindIndex(x => x.Id == l.CustomerId))); customer.IsEnabled = !edit;
         var kind = form.Choose("라이선스 종류", new[] { "영구", "데모", "테스트" }, l.Kind == "Demo" ? 1 : l.Kind == "Test" ? 2 : 0);
         var seats = form.Field("설치 허용 PC 수", l.Seats.ToString()); var version = form.Field("허용 주요 버전 (예: 4 → 4.x)", l.MaxMajor.ToString());
-        var grace = form.Field("온라인 재확인 유예 (1~365일)", l.GraceDays.ToString()); var expiry = form.Field("데모 · 테스트 만료 (현지시간 yyyy-MM-dd HH:mm)", l.ExpiresAt == 0 ? DateTime.Now.AddDays(30).ToString("yyyy-MM-dd HH:mm") : DateTimeOffset.FromUnixTimeSeconds(l.ExpiresAt).LocalDateTime.ToString("yyyy-MM-dd HH:mm"));
-        var offline = form.Check("영구권의 무기한 오프라인 발급 허용", l.AllowPermanentOffline); var notes = form.Field("발급 · 변경 사유와 비고", l.Notes);
-        form.Help("일반 고객은 온라인 인증이 기본입니다. 무기한 오프라인은 회수 시 즉시 차단할 수 없습니다.");
+        var recurring = form.Check("직원용 · 달력 3개월마다 온라인 재인증", l.RenewalMonths == 3);
+        var grace = form.Field("고정 만료 데모의 오프라인 유예 (일)", l.GraceDays.ToString()); var expiry = form.Field("고정 만료 데모 · 테스트 만료 (yyyy-MM-dd HH:mm)", l.ExpiresAt == 0 ? DateTime.Now.AddDays(30).ToString("yyyy-MM-dd HH:mm") : DateTimeOffset.FromUnixTimeSeconds(l.ExpiresAt).LocalDateTime.ToString("yyyy-MM-dd HH:mm"));
+        void Mode() { bool permanent = kind.SelectedIndex == 0; bool internalCustomer = data.Customers[customer.SelectedIndex].IsInternal; recurring.IsEnabled = false; recurring.IsChecked = !permanent && internalCustomer; expiry.IsEnabled = grace.IsEnabled = !permanent && !internalCustomer; }
+        kind.SelectionChanged += (s,e) => Mode(); customer.SelectionChanged += (s,e) => { if (!edit && data.Customers[customer.SelectedIndex].IsInternal) { kind.SelectedIndex = 2; recurring.IsChecked = true; } Mode(); }; recurring.Checked += (s,e) => Mode(); recurring.Unchecked += (s,e) => Mode();
+        if (!edit && data.Customers[customer.SelectedIndex].IsInternal) { kind.SelectedIndex = 2; recurring.IsChecked = true; } Mode();
+        var notes = form.Field("발급 · 변경 사유와 비고", l.Notes);
+        form.Help("영구권: 최초 1회 인증 후 무접속 사용. 직원용: 3개월 기한마다 온라인 재인증. 직원 ID는 고객사 · 직원 계정 탭에서 등록합니다.");
         if (form.Open(this)) {
             if (!int.TryParse(seats.Text, out var s) || !int.TryParse(version.Text, out var v) || !int.TryParse(grace.Text, out var g)) throw new InvalidOperationException("설치 수·버전·유예기간은 숫자로 입력해 주세요.");
-            long expires = 0; if (kind.SelectedIndex != 0) { if (!DateTime.TryParseExact(expiry.Text, "yyyy-MM-dd HH:mm", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out var dt)) throw new InvalidOperationException("만료일 형식은 yyyy-MM-dd HH:mm 입니다."); expires = new DateTimeOffset(dt).ToUnixTimeSeconds(); }
-            var changes = new LicenseRecord { CustomerId = data.Customers[customer.SelectedIndex].Id, Kind = kind.SelectedIndex == 0 ? "Perpetual" : kind.SelectedIndex == 1 ? "Demo" : "Test", Seats = s, MaxMajor = v, GraceDays = g, ExpiresAt = expires, AllowPermanentOffline = offline.IsChecked == true, Notes = notes.Text };
+            long expires = 0; if (kind.SelectedIndex != 0 && recurring.IsChecked != true) { if (!DateTime.TryParseExact(expiry.Text, "yyyy-MM-dd HH:mm", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out var dt)) throw new InvalidOperationException("만료일 형식은 yyyy-MM-dd HH:mm 입니다."); expires = new DateTimeOffset(dt).ToUnixTimeSeconds(); }
+            var changes = new LicenseRecord { CustomerId = data.Customers[customer.SelectedIndex].Id, Kind = kind.SelectedIndex == 0 ? "Perpetual" : kind.SelectedIndex == 1 ? "Demo" : "Test", Seats = s, MaxMajor = v, GraceDays = g, ExpiresAt = expires, RenewalMonths = recurring.IsChecked == true ? 3 : 0, Notes = notes.Text };
             using var r = await Send("/api/admin/licenses" + (edit ? "/" + l.Id : ""), edit ? HttpMethod.Put : HttpMethod.Post, changes); await Refresh();
         }
     }
@@ -181,6 +187,7 @@ public class ManagerWindow : Window
         var first = (LicenseRow)licenses.Items[0]; search.Text = first.Serial;
         if (licenses.Items.Count != 1 || devices.ItemsSource == null || history.ItemsSource == null) throw new InvalidOperationException("검색/선택/상세 연결 오류");
         search.Text = "찾을수없는고객사"; if (licenses.Items.Count != 0) throw new InvalidOperationException("검색 빈 상태 오류"); search.Text = "";
+        if (data.Licenses.Any(l => l.RenewalMonths == 3) && !licenses.Items.Cast<LicenseRow>().Any(r => r.Kind.StartsWith("직원") && r.Expiry != "영구")) throw new InvalidOperationException("직원 재인증 표시 오류");
         using (var backup = await Send("/api/admin/backup")) PrivateFiles.Save(result + ".backup.zip", await backup.Content.ReadAsByteArrayAsync());
         UpdateLayout();
         var image = new RenderTargetBitmap((int)ActualWidth, (int)ActualHeight, 96, 96, PixelFormats.Pbgra32); image.Render(this);
@@ -191,7 +198,7 @@ public class ManagerWindow : Window
 public class LicenseRow
 {
     public string Id { get; } public string Company { get; } public string Serial { get; } public string Kind { get; } public string Seats { get; } public string Version { get; } public string Expiry { get; } public string Status { get; }
-    public LicenseRow(LicenseRecord l, Database d) { Id = l.Id; Company = d.Customers.FirstOrDefault(x => x.Id == l.CustomerId)?.Company; Serial = l.Serial; Kind = l.Kind == "Perpetual" ? "영구" : l.Kind == "Demo" ? "데모" : "테스트"; Seats = d.Activations.Count(x => x.LicenseId == l.Id && x.Active) + " / " + l.Seats; Version = l.MaxMajor + ".x"; Expiry = ManagerWindow.Date(l.ExpiresAt); Status = l.Blocked ? "차단" : l.ExpiresAt > 0 && Wire.Now >= l.ExpiresAt ? "만료" : "정상"; }
+    public LicenseRow(LicenseRecord l, Database d) { Id = l.Id; Company = d.Customers.FirstOrDefault(x => x.Id == l.CustomerId)?.Company; Serial = l.Serial; Kind = (l.RenewalMonths == 3 ? "직원 " : "") + (l.Kind == "Perpetual" ? "영구" : l.Kind == "Demo" ? "데모" : "테스트"); Seats = d.Activations.Count(x => x.LicenseId == l.Id && x.Active) + " / " + l.Seats; Version = l.MaxMajor + ".x"; Expiry = l.RenewalMonths == 3 ? (l.NextReauthAt == 0 ? "최초 등록 후 결정" : ManagerWindow.Date(l.NextReauthAt)) : ManagerWindow.Date(l.ExpiresAt); Status = l.Blocked ? "차단" : d.Customers.Any(c => c.Id == l.CustomerId && c.Disabled && l.RenewalMonths == 3) ? "계정 중지" : l.RenewalMonths == 3 && l.NextReauthAt > 0 && Wire.Now >= l.NextReauthAt ? "재인증 필요" : l.ExpiresAt > 0 && Wire.Now >= l.ExpiresAt ? "만료" : "정상"; }
 }
 public class DeviceRow
 {

@@ -11,6 +11,7 @@ namespace Clorium.Licensing
     public static class Wire
     {
         public const string Product = "Clorium.CameraControl";
+        public const long Forever = 253402300799;
         public static byte[] Bytes<T>(T value) { using (var s = new MemoryStream()) { new DataContractJsonSerializer(typeof(T)).WriteObject(s, value); return s.ToArray(); } }
         public static string Json<T>(T value) { return Encoding.UTF8.GetString(Bytes(value)); }
         public static T Read<T>(string json) { if (json == null || json.Length > 1048576) throw new InvalidDataException("파일 크기가 너무 큽니다."); using (var s = new MemoryStream(Encoding.UTF8.GetBytes(json))) return (T)new DataContractJsonSerializer(typeof(T)).ReadObject(s); }
@@ -61,6 +62,7 @@ namespace Clorium.Licensing
         [DataMember] public long IssuedAt { get; set; }
         [DataMember] public long ExpiresAt { get; set; }
         [DataMember] public long RefreshAfter { get; set; }
+        [DataMember] public int RenewalMonths { get; set; }
         [DataMember] public long OfflineUntil { get; set; }
         [DataMember] public string Nonce { get; set; }
     }
@@ -100,8 +102,9 @@ namespace Clorium.Licensing
         public static string Validate(Grant g, string machine, string version, long now, long lastSeen) {
             if (g.MachineId != machine) return "다른 PC에 발급된 라이선스입니다.";
             Version v; if (!Version.TryParse(version, out v) || v.Major > g.MaxMajor) return "구매한 라이선스에서 허용하지 않는 프로그램 버전입니다.";
-            if (now + 300 < Math.Max(g.IssuedAt, lastSeen)) return "PC 시간이 이전으로 변경되었습니다. 시간을 맞춘 뒤 온라인 인증해 주세요.";
-            if (g.ExpiresAt > 0 && now >= g.ExpiresAt) return "사용 기간이 만료되었습니다.";
+            bool lifetime = g.Kind == "Perpetual" && g.ExpiresAt == 0 && g.OfflineUntil == Wire.Forever && g.RefreshAfter == Wire.Forever;
+            if (!lifetime && now + 300 < Math.Max(g.IssuedAt, lastSeen)) return "PC 시간이 이전으로 변경되었습니다. 시간을 맞춘 뒤 온라인 인증해 주세요.";
+            if (g.ExpiresAt > 0 && now >= g.ExpiresAt) return g.RenewalMonths == 3 ? "직원용 3개월 인증 기한입니다. 인터넷에 연결해 재인증해 주세요." : "사용 기간이 만료되었습니다.";
             if (now >= g.OfflineUntil) return "인증 확인 기한이 지났습니다. 서버에 연결해 주세요.";
             return null;
         }

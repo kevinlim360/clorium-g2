@@ -51,19 +51,24 @@ app.MapPost("/api/admin/customers", (Customer c) => store.Change(d => {
     Store.Text(c.Company, 200, "고객사명");
     Store.Require((c.Contact?.Length ?? 0) <= 200 && (c.Email?.Length ?? 0) <= 300 && (c.Notes?.Length ?? 0) <= 2000, "INVALID_INPUT", "고객 정보가 너무 깁니다.");
     var existing = d.Customers.SingleOrDefault(x => x.Id == c.Id);
-    if (existing == null) { c.Id = Guid.NewGuid().ToString("N"); d.Customers.Add(c); } else { existing.Company = c.Company; existing.Contact = c.Contact; existing.Email = c.Email; existing.Notes = c.Notes; }
+    if (c.IsInternal) Store.Text(c.Email, 300, "직원 ID / 이메일");
+    if (existing != null && !c.IsInternal) Store.Require(!d.Licenses.Any(l => l.CustomerId == c.Id && l.RenewalMonths == 3), "INVALID_INPUT", "직원용 라이선스가 연결된 계정입니다. 계정 중지를 이용해 주세요.");
+    if (existing == null) { c.Id = Guid.NewGuid().ToString("N"); d.Customers.Add(c); } else { existing.Company = c.Company; existing.Contact = c.Contact; existing.Email = c.Email; existing.Notes = c.Notes; existing.IsInternal = c.IsInternal; existing.Disabled = c.Disabled; }
     Store.Log(d, "고객 정보 저장", c.Id, c.Company); return c;
 }));
 app.MapPost("/api/admin/licenses", (LicenseRecord l) => store.Change(d => {
     Store.Policy(l); Store.Require(d.Customers.Any(x => x.Id == l.CustomerId), "INVALID_INPUT", "고객사를 선택해 주세요.");
+    Store.AccountPolicy(d, l); l.NextReauthAt = 0;
     l.Id = Guid.NewGuid().ToString("N"); l.Serial = Wire.Serial(); l.CreatedAt = Wire.Now; l.Blocked = false;
     d.Licenses.Add(l); Store.Log(d, "라이선스 발급", l.Id, l.Kind); return l;
 }));
 app.MapPut("/api/admin/licenses/{id}", (string id, LicenseRecord changes) => store.Change(d => {
     var l = d.Licenses.SingleOrDefault(x => x.Id == id); Store.Require(l != null, "NOT_FOUND", "라이선스가 없습니다.");
     Store.Policy(changes); Store.Require(changes.Seats >= d.Activations.Count(x => x.LicenseId == id && x.Active), "SEAT_LIMIT", "현재 활성 PC보다 적게 줄일 수 없습니다.");
+    changes.CustomerId = l.CustomerId; Store.AccountPolicy(d, changes);
+    if (l.RenewalMonths != changes.RenewalMonths) l.NextReauthAt = 0;
     l.Kind = changes.Kind; l.MaxMajor = changes.MaxMajor; l.Seats = changes.Seats; l.GraceDays = changes.GraceDays; l.ExpiresAt = changes.ExpiresAt;
-    l.AllowPermanentOffline = changes.AllowPermanentOffline; l.Notes = changes.Notes;
+    l.AllowPermanentOffline = changes.AllowPermanentOffline; l.Notes = changes.Notes; l.RenewalMonths = changes.RenewalMonths;
     Store.Log(d, "라이선스 정책 변경", id, l.Kind); return l;
 }));
 app.MapPost("/api/admin/licenses/{id}/status", (string id, StatusChange r) => store.Change(d => {
@@ -79,8 +84,8 @@ app.MapPost("/api/admin/offline", async (HttpRequest r) => Reply(store.Activate(
 app.MapGet("/api/admin/backup", () => Results.File(store.Backup(), "application/zip", "clorium-license-backup-" + DateTime.UtcNow.ToString("yyyyMMdd-HHmmss") + ".zip"));
 app.MapGet("/api/admin/export", () => {
     var d = store.Snapshot(); string Cell(string s) { s ??= ""; if (s.StartsWith('=') || s.StartsWith('+') || s.StartsWith('-') || s.StartsWith('@') || s.StartsWith('\t') || s.StartsWith('\r')) s = "'" + s; return "\"" + s.Replace("\"", "\"\"") + "\""; }
-    var rows = new List<string> { "고객사,담당자,시리얼,종류,허용버전,설치허용수,활성PC수,만료UTC,차단" };
-    foreach (var l in d.Licenses) { var c = d.Customers.Single(x => x.Id == l.CustomerId); rows.Add(string.Join(",", new[] { c.Company, c.Contact, l.Serial, l.Kind, l.MaxMajor.ToString(), l.Seats.ToString(), d.Activations.Count(x => x.LicenseId == l.Id && x.Active).ToString(), l.ExpiresAt == 0 ? "영구" : DateTimeOffset.FromUnixTimeSeconds(l.ExpiresAt).ToString("O"), l.Blocked.ToString() }.Select(Cell))); }
+    var rows = new List<string> { "고객사,담당자,시리얼,종류,허용버전,설치허용수,활성PC수,만료UTC,차단,직원계정,재인증개월,다음인증UTC" };
+    foreach (var l in d.Licenses) { var c = d.Customers.Single(x => x.Id == l.CustomerId); rows.Add(string.Join(",", new[] { c.Company, c.Contact, l.Serial, l.Kind, l.MaxMajor.ToString(), l.Seats.ToString(), d.Activations.Count(x => x.LicenseId == l.Id && x.Active).ToString(), l.RenewalMonths == 3 ? "3개월 재인증" : l.ExpiresAt == 0 ? "영구" : DateTimeOffset.FromUnixTimeSeconds(l.ExpiresAt).ToString("O"), l.Blocked.ToString(), c.IsInternal.ToString(), l.RenewalMonths.ToString(), l.NextReauthAt > 0 ? DateTimeOffset.FromUnixTimeSeconds(l.NextReauthAt).ToString("O") : "" }.Select(Cell))); }
     return Results.File(System.Text.Encoding.UTF8.GetPreamble().Concat(System.Text.Encoding.UTF8.GetBytes(string.Join("\r\n", rows))).ToArray(), "text/csv", "clorium-licenses.csv");
 });
 app.Logger.LogInformation("Clorium license server ready. Admin bootstrap credential: data/admin-token.txt (keep private).");

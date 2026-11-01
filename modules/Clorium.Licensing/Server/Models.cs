@@ -10,6 +10,8 @@ public class Customer
     public string Contact { get; set; }
     public string Email { get; set; }
     public string Notes { get; set; }
+    public bool IsInternal { get; set; }
+    public bool Disabled { get; set; }
 }
 public class LicenseRecord
 {
@@ -21,6 +23,8 @@ public class LicenseRecord
     public int Seats { get; set; } = 1;
     public int GraceDays { get; set; } = 30;
     public bool AllowPermanentOffline { get; set; }
+    public int RenewalMonths { get; set; }
+    public long NextReauthAt { get; set; }
     public long ExpiresAt { get; set; }
     public long CreatedAt { get; set; } = Wire.Now;
     public bool Blocked { get; set; }
