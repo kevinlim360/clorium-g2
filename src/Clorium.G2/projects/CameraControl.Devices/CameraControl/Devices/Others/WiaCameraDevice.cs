@@ -665,7 +665,6 @@ public class WiaCameraDevice : BaseCameraDevice
 
 	public override void CapturePhotoNoAf()
 	{
-        global::CameraControl.Devices.Classes.CaptureAuthorization.AssertAllowed();
 		lock (Locker)
 		{
 			CapturePhoto();
@@ -674,7 +673,6 @@ public class WiaCameraDevice : BaseCameraDevice
 
 	public override void CapturePhoto()
 	{
-        global::CameraControl.Devices.Classes.CaptureAuthorization.AssertAllowed();
 		Monitor.Enter(Locker);
 		try
 		{

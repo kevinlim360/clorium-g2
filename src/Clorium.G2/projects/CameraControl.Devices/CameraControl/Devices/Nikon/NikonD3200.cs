@@ -19,7 +19,6 @@ public class NikonD3200 : NikonBase
 
 	public override void CapturePhoto()
 	{
-        global::CameraControl.Devices.Classes.CaptureAuthorization.AssertAllowed();
 		Monitor.Enter(Locker);
 		try
 		{
@@ -58,7 +57,6 @@ public class NikonD3200 : NikonBase
 
 	public override void StartRecordMovie()
 	{
-        global::CameraControl.Devices.Classes.CaptureAuthorization.AssertAllowed();
 		CameraControl.Devices.LegacyCapturePolicy.RequireMovieRecording();
 
 		SetProperty(4118u, new byte[1] { 1 }, 53744u);

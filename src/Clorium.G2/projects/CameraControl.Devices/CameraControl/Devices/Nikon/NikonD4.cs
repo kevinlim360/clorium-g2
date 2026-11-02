@@ -21,7 +21,6 @@ public class NikonD4 : NikonBase
 
 	public override void StartBulbMode()
 	{
-        global::CameraControl.Devices.Classes.CaptureAuthorization.AssertAllowed();
 		DeviceReady();
 		StillImageDevice.ExecuteWithNoData(37058u, 1u);
 		SetProperty(4118u, BitConverter.GetBytes((ushort)1), 20494u);
@@ -72,7 +71,6 @@ public class NikonD4 : NikonBase
 
 	public override void StartRecordMovie()
 	{
-        global::CameraControl.Devices.Classes.CaptureAuthorization.AssertAllowed();
 		CameraControl.Devices.LegacyCapturePolicy.RequireMovieRecording();
 
 		SetProperty(4118u, new byte[1] { 1 }, 53744u);

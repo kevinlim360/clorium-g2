@@ -1469,7 +1469,6 @@ public class CanonSDKBase : BaseMTPCamera
 
 	public override void CapturePhoto()
 	{
-        global::CameraControl.Devices.Classes.CaptureAuthorization.AssertAllowed();
 		Log.Debug("CanonSDK : CapturePhotoAF() - start");
 		Monitor.Enter(Locker);
 		try
@@ -1510,7 +1509,6 @@ public class CanonSDKBase : BaseMTPCamera
 
 	public override void CapturePhotoNoAf()
 	{
-        global::CameraControl.Devices.Classes.CaptureAuthorization.AssertAllowed();
 		Log.Debug("CanonSDK : CapturePhotoNoAF() - start");
 		Monitor.Enter(Locker);
 		try
@@ -1570,7 +1568,6 @@ public class CanonSDKBase : BaseMTPCamera
 
 	public override void StartRecordMovie()
 	{
-        global::CameraControl.Devices.Classes.CaptureAuthorization.AssertAllowed();
 		CameraControl.Devices.LegacyCapturePolicy.RequireMovieRecording();
 
 		lock (Locker)
@@ -1592,7 +1589,6 @@ public class CanonSDKBase : BaseMTPCamera
 
 	public override void StartBulbMode()
 	{
-        global::CameraControl.Devices.Classes.CaptureAuthorization.AssertAllowed();
 		Camera.BulbStart();
 	}
 

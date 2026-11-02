@@ -111,7 +111,6 @@ namespace CameraControl.Core.Classes
 
         public bool OpenShutter(CustomConfig config)
         {
-            CameraControl.Devices.Classes.CaptureAuthorization.AssertAllowed();
             return
                 (from device in ExternalDevices where device.Name == config.DriverName select device.OpenShutter(config))
                     .FirstOrDefault();

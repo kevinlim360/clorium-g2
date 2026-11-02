@@ -234,7 +234,6 @@ public class GoProBaseCamera : BaseCameraDevice
 
 	public override void CapturePhoto()
 	{
-        global::CameraControl.Devices.Classes.CaptureAuthorization.AssertAllowed();
 		StopLiveView();
 		_timer.Stop();
 		IsBusy = true;
@@ -273,7 +272,6 @@ public class GoProBaseCamera : BaseCameraDevice
 
 	public override void StartRecordMovie()
 	{
-        global::CameraControl.Devices.Classes.CaptureAuthorization.AssertAllowed();
 		CameraControl.Devices.LegacyCapturePolicy.RequireMovieRecording();
 
 		StopLiveView();

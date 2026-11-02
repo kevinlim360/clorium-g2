@@ -266,7 +266,6 @@ public class CanonBase : BaseMTPCamera
 
 	public override void CapturePhoto()
 	{
-        global::CameraControl.Devices.Classes.CaptureAuthorization.AssertAllowed();
 		Monitor.Enter(Locker);
 		try
 		{
@@ -309,7 +308,6 @@ public class CanonBase : BaseMTPCamera
 
 	public override void StartBulbMode()
 	{
-        global::CameraControl.Devices.Classes.CaptureAuthorization.AssertAllowed();
 		ErrorCodes.GetException(ExecuteWithNoData(37157u));
 	}
 

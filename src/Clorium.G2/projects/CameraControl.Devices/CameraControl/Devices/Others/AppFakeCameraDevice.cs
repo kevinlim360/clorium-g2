@@ -92,7 +92,6 @@ public class AppFakeCameraDevice : BaseCameraDevice
 
 	public override void CapturePhoto()
 	{
-        global::CameraControl.Devices.Classes.CaptureAuthorization.AssertAllowed();
 		if (LatestRawData != null)
 		{
 			string text = Path.GetExtension(LatestFileName ?? "").ToLower();
@@ -115,7 +114,6 @@ public class AppFakeCameraDevice : BaseCameraDevice
 
 	public override void CapturePhotoNoAf()
 	{
-        global::CameraControl.Devices.Classes.CaptureAuthorization.AssertAllowed();
 		CapturePhoto();
 	}
 

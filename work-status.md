@@ -1,5 +1,7 @@
 # 클로리움 G2 작업 기록
 
+2026-11-02 관리형 라이선스 제품 통합 롤백(사용자 요청, 나중에 다시 추가): `src/Clorium.G2`에서 ManagedLicenseRuntime/CaptureAuthorization, 촬영 가드 28개 파일, 시작 분기, 라이선스 메뉴, Client 참조를 제거했다. 레거시 CheckLicense/CompareDate_Ex는 유지했고 modules/Clorium.Licensing과 .local 데이터는 보존했다. 별도 설정 LicenseRollback20261102로 CameraControl 빌드 시 오류 0개였고 산출물에 라이선스 DLL/형식이 없음을 확인했다. SuperfocusRegression은 통과했다. 개발 실행본(.local/g2-runtime)·설치본에는 반영하지 않았고 실카메라는 확인하지 않았다. 재통합 절차는 handoff/licensing/DEVELOPMENT_HANDOFF.md에 있다.
+
 2026-11-01 라이선스 사용자 정책 변경 완료(로컬): 정식 최초1회 인증→동일PC 재접속 없이 영구 사용. 내부 직원 이름/ID·중지상태 등록, Demo/Test는3개월 온라인 재인증 필수(고정기간/오프라인 우회금지), 외부 고객 고정만료 데모는 유지. NextReauthAt 서버영속/한국시간AddMonths3, 조기refresh·activate·반납/이전으로 기한연장 방지. 기한후온라인 재인증으로 다음3개월, 미접속/중지계정은 촬영 차단. 영구권은시계수정으로재인증을요구하지않고기간제시간검사는유지. CSV직원정책/다음인증일과UI직원등록/필수정책/표시반영.
 
 독립 계획PASS→후보검토FAIL3건(직원정책우회,CSV영구오표시,영구권시계복구의접속요구)수정→소스정책PASS. API43/달력정책16/복원4/실제WPF조회검색/최종바이너리48기기진입점+외부셔터PASS. 새배포후보 `delivery/Clorium-Licensing-20261101-104452` 및ZIP, `evidence/licensing-policy-delivery.json`에해시·근거. 시간경계는격리TimeProvider로검증했고실제3개월경과관찰/실카메라노출아님. 사용자설치본/baseline/사진·설정변경없음.

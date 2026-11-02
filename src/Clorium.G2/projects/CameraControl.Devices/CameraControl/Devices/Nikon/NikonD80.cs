@@ -60,7 +60,6 @@ public class NikonD80 : NikonBase
 
 	public override void CapturePhotoNoAf()
 	{
-        global::CameraControl.Devices.Classes.CaptureAuthorization.AssertAllowed();
 		lock (Locker)
 		{
 			byte b = 0;

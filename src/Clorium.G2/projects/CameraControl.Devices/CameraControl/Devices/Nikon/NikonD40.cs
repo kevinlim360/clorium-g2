@@ -23,7 +23,6 @@ public class NikonD40 : NikonBase
 
 	public override void CapturePhoto()
 	{
-        global::CameraControl.Devices.Classes.CaptureAuthorization.AssertAllowed();
 		Monitor.Enter(Locker);
 		try
 		{

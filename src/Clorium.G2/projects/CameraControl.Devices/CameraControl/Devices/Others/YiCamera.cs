@@ -306,13 +306,11 @@ public class YiCamera : BaseCameraDevice
 
 	public override void CapturePhotoNoAf()
 	{
-        global::CameraControl.Devices.Classes.CaptureAuthorization.AssertAllowed();
 		CapturePhoto();
 	}
 
 	public override void CapturePhoto()
 	{
-        global::CameraControl.Devices.Classes.CaptureAuthorization.AssertAllowed();
 		IsBusy = true;
 		if (Mode.NumericValue == 3)
 		{
@@ -328,7 +326,6 @@ public class YiCamera : BaseCameraDevice
 
 	public override void StartRecordMovie()
 	{
-        global::CameraControl.Devices.Classes.CaptureAuthorization.AssertAllowed();
 		CameraControl.Devices.LegacyCapturePolicy.RequireMovieRecording();
 
 		Protocol.SendCommand(513);

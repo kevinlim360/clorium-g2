@@ -38,7 +38,6 @@ public class NikonD700 : NikonBase
 
 	public override void CapturePhotoNoAf()
 	{
-        global::CameraControl.Devices.Classes.CaptureAuthorization.AssertAllowed();
 		lock (Locker)
 		{
 			try

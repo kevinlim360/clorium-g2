@@ -201,7 +201,6 @@ public class OscCamera : BaseCameraDevice
 
 	public override void CapturePhoto()
 	{
-        global::CameraControl.Devices.Classes.CaptureAuthorization.AssertAllowed();
 		JObject jObject = Initialize(GetExecute(CreateJson("camera.takePicture")));
 		string id = jObject["id"].Value<string>();
 		string text = null;

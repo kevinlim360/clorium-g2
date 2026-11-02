@@ -24,7 +24,7 @@ public static class CameraHelper
 			StaticHelper.Instance.SystemMessage = ex.Message;
 			Application.Current.Dispatcher.Invoke(() =>
 			{
-				MessageBox.Show(ex is CaptureLicenseException ? ex.Message : "포커스가 맞지 않습니다.\r\n박스내 포커스를 맞추고 다시 시도해 주세요.", "알림", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+				MessageBox.Show("포커스가 맞지 않습니다.\r\n박스내 포커스를 맞추고 다시 시도해 주세요.", "알림", MessageBoxButton.OK, MessageBoxImage.Exclamation);
 				Log.Debug("포커스가 맞지 않습니다.");
 			});
 		}
@@ -32,13 +32,11 @@ public static class CameraHelper
 
 	public static void CaptureWithError(ICameraDevice device = null)
 	{
-		CaptureAuthorization.AssertAllowed();
 		CaptureInternal(device ?? ServiceProvider.DeviceManager.SelectedCameraDevice);
 	}
 
 	public static void Capture(object o)
 	{
-		CaptureAuthorization.AssertAllowed();
 		if (o != null && o is ICameraDevice camera)
 		{
 			if (G2FocusCamera.IsOwned(camera)) throw new InvalidOperationException("수퍼포커스 촬영 또는 다운로드가 진행 중입니다.");
@@ -79,7 +77,6 @@ public static class CameraHelper
 
 	public static void CaptureNoAf(object o)
 	{
-		CaptureAuthorization.AssertAllowed();
 		if (o != null && o is ICameraDevice camera)
 		{
 			if (G2FocusCamera.IsOwned(camera)) throw new InvalidOperationException("수퍼포커스 촬영 또는 다운로드가 진행 중입니다.");

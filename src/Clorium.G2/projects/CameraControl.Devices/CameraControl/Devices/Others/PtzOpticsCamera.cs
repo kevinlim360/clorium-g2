@@ -70,7 +70,6 @@ public class PtzOpticsCamera : BaseCameraDevice
 
 	public override void CapturePhoto()
 	{
-        global::CameraControl.Devices.Classes.CaptureAuthorization.AssertAllowed();
 		string text = "http://" + _address + "/snapshot.jpg";
 		PhotoCapturedEventArgs args = new PhotoCapturedEventArgs
 		{

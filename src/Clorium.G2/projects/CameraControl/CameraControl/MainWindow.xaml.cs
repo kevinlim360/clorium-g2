@@ -2293,11 +2293,6 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 		DownButton.IsChecked = false;
 	}
 
-	private void OpenManagedLicense_Click(object sender, RoutedEventArgs e)
-	{
-		ManagedLicenseRuntime.Show();
-	}
-
 	private void OpenSuperfocus_Click(object sender, RoutedEventArgs e)
 	{
 		var camera = ServiceProvider.DeviceManager.SelectedCameraDevice;

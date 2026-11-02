@@ -37,7 +37,6 @@ public class NikonD300 : NikonD3X
 
 	public override void CapturePhotoNoAf()
 	{
-        global::CameraControl.Devices.Classes.CaptureAuthorization.AssertAllowed();
 		lock (Locker)
 		{
 			MTPDataResponse mTPDataResponse = ExecuteReadDataEx(4117u, 53666u);

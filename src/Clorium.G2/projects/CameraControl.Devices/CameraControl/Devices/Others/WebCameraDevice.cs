@@ -256,13 +256,11 @@ public class WebCameraDevice : BaseCameraDevice
 
 	public override void CapturePhotoNoAf()
 	{
-        global::CameraControl.Devices.Classes.CaptureAuthorization.AssertAllowed();
 		CapturePhoto();
 	}
 
 	public override void CapturePhoto()
 	{
-        global::CameraControl.Devices.Classes.CaptureAuthorization.AssertAllowed();
 		StartLiveView();
 		_processLiveView = true;
 		GetLiveViewImage();
@@ -297,7 +295,6 @@ public class WebCameraDevice : BaseCameraDevice
 
 	public override void StartRecordMovie()
 	{
-		global::CameraControl.Devices.Classes.CaptureAuthorization.AssertAllowed();
 		StartRecordMovieLicensed();
 	}
 

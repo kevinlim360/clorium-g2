@@ -166,7 +166,6 @@ public class NikonD800 : NikonBase
 
 	public override void StartBulbMode()
 	{
-        global::CameraControl.Devices.Classes.CaptureAuthorization.AssertAllowed();
 		DeviceReady();
 		ExecuteWithNoData(37378u);
 		DeviceReady();
@@ -199,7 +198,6 @@ public class NikonD800 : NikonBase
 
 	public override void StartRecordMovie()
 	{
-        global::CameraControl.Devices.Classes.CaptureAuthorization.AssertAllowed();
 		CameraControl.Devices.LegacyCapturePolicy.RequireMovieRecording();
 
 		SetProperty(4118u, new byte[1] { 1 }, 53744u);

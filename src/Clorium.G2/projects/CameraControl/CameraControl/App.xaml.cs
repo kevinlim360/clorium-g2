@@ -58,11 +58,11 @@ public partial class App : System.Windows.Application
 		ServiceProvider.Settings = new Settings();
 		ServiceProvider.Settings = ServiceProvider.Settings.Load();
 		ServiceProvider.Settings.RemoveSessionFile(ServiceProvider.Settings.SessionFileKeepDays);
-		if (ManagedLicenseRuntime.IsManaged ? !ManagedLicenseRuntime.Initialize() : !CheckLicense())
+		if (!CheckLicense())
 		{
 			Environment.Exit(0);
 		}
-		if (!ManagedLicenseRuntime.IsManaged && CompareDate_Ex())
+		if (CompareDate_Ex())
 		{
 			Environment.Exit(0);
 		}

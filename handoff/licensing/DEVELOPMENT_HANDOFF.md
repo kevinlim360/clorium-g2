@@ -2,6 +2,8 @@
 
 2026-11-02 · 기존 GitHub `kevinlim360/clorium-g2` · 기존 소스 보존 기준 커밋 `2a4b6b92fe9079367fe11f647b8b999d4a96625d`.
 
+> **2026-11-02 제품 통합 롤백(사용자 요청, 나중에 다시 추가):** `src/Clorium.G2`에서 관리형 라이선스 연결을 제거했다. 제거 대상은 `ManagedLicenseRuntime.cs`, `CaptureAuthorization.cs`, 장치·외부 셔터·CameraHelper의 `AssertAllowed` 28개 파일, 시작 분기, "라이선스 · PC 이전" 메뉴, Client 참조와 `CloriumManagedLicenseConfig` 빌드 조건이다. 기존 4.7.1.5 레거시 검사(`CheckLicense`/`CompareDate_Ex`, `CloriumLegacyLicenseKeyFile`)는 그대로 유지한다. `modules/Clorium.Licensing`(서버·관리 앱·클라이언트·검사)와 `.local` 회사 데이터는 그대로 보존했다. 롤백 커밋을 되돌리기 전에는 `Build-Distribution.ps1`의 필수 관리 모드 고객 빌드가 성립하지 않는다. 다시 통합할 때는 이 롤백 커밋을 `git revert`하고 이후 G2 변경과의 충돌을 확인한 다음 API/달력/장치 가드 검사를 다시 실행한다. 아래 표의 제품 통합 경로는 롤백 이전 기준이다.
+
 ## 시작과 소스 위치
 
 전용 Claude Code 작업 폴더는 `projects/클로리움라이선스관리`이며 저장소 루트는 두 단계 위이다. 실제 소스는 복제하지 않고 같은 저장소의 `modules/Clorium.Licensing` 및 `src/Clorium.G2`를 사용한다. 루트 `Claude_클로리움라이선스관리_개발시작.cmd`로 같은 이름의 세션을 이어간다. Claude 웹 프로젝트와 Claude Code 로컬 작업 폴더/세션은 서로 다른 기능이다. 이번 이관 대상은 Claude Code이다.

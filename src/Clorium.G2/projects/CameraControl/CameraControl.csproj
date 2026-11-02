@@ -461,13 +461,4 @@
   <ItemGroup Condition="'$(CloriumLegacyLicenseKeyFile)' != ''">
     <EmbeddedResource Include="$(CloriumLegacyLicenseKeyFile)" LogicalName="Clorium.LegacyLicenseKey" />
   </ItemGroup>
-  <PropertyGroup Condition="'$(CloriumManagedLicenseConfig)' != ''">
-    <DefineConstants>$(DefineConstants);CLORIUM_MANAGED_LICENSE</DefineConstants>
-  </PropertyGroup>
-  <ItemGroup>
-    <ProjectReference Include="../../../../modules/Clorium.Licensing/Client/Client.csproj" />
-  </ItemGroup>
-  <ItemGroup Condition="'$(CloriumManagedLicenseConfig)' != ''">
-    <EmbeddedResource Include="$(CloriumManagedLicenseConfig)" LogicalName="Clorium.ManagedLicenseConfig" />
-  </ItemGroup>
 </Project>

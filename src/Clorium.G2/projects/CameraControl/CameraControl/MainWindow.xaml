@@ -155,7 +155,6 @@
               </MenuItem>
               <MenuItem Header="설정">
                 <MenuItem Header="클로리움 설정" Command="{Binding SettingsCommand}" Visibility="{Binding Branding.ShowSettingMenuMainWindow, Converter={StaticResource BooleanToVisibilityConverter1}}" />
-                <MenuItem Header="라이선스 · PC 이전" Click="OpenManagedLicense_Click" />
                 <Separator />
                 <MenuItem Header="{T:Translate MenuPlugins}" Visibility="{Binding Branding.ShowPluginMenu, Converter={StaticResource BooleanToVisibilityConverter1}}">
                   <MenuItem Header="{T:Translate LabelExport}" ItemsSource="{Binding ExportPlugins}">

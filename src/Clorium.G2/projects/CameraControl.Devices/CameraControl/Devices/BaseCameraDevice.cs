@@ -481,17 +481,14 @@ public class BaseCameraDevice : BaseFieldClass, ICameraDevice
 
 	public virtual void CapturePhotoNoAf()
 	{
-        global::CameraControl.Devices.Classes.CaptureAuthorization.AssertAllowed();
 	}
 
 	public virtual void CapturePhoto()
 	{
-        global::CameraControl.Devices.Classes.CaptureAuthorization.AssertAllowed();
 	}
 
 	public virtual void StartRecordMovie()
 	{
-        global::CameraControl.Devices.Classes.CaptureAuthorization.AssertAllowed();
 		CameraControl.Devices.LegacyCapturePolicy.RequireMovieRecording();
 
 	}
@@ -516,7 +513,6 @@ public class BaseCameraDevice : BaseFieldClass, ICameraDevice
 
 	public virtual void StartBulbMode()
 	{
-        global::CameraControl.Devices.Classes.CaptureAuthorization.AssertAllowed();
 	}
 
 	public virtual void LockCamera()

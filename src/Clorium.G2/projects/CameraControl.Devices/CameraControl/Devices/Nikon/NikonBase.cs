@@ -1978,7 +1978,6 @@ public class NikonBase : BaseMTPCamera
 
 	public override void CapturePhoto()
 	{
-        global::CameraControl.Devices.Classes.CaptureAuthorization.AssertAllowed();
 		SpeedUpEventTimer();
 		Monitor.Enter(Locker);
 		try
@@ -2005,7 +2004,6 @@ public class NikonBase : BaseMTPCamera
 
 	public override void CapturePhotoNoAf()
 	{
-        global::CameraControl.Devices.Classes.CaptureAuthorization.AssertAllowed();
 		SpeedUpEventTimer();
 		lock (Locker)
 		{
@@ -2214,7 +2212,6 @@ public class NikonBase : BaseMTPCamera
 
 	public override void StartRecordMovie()
 	{
-        global::CameraControl.Devices.Classes.CaptureAuthorization.AssertAllowed();
 		CameraControl.Devices.LegacyCapturePolicy.RequireMovieRecording();
 
 		base.StartRecordMovie();

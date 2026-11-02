@@ -342,13 +342,11 @@ public class SonyWifiCamera : BaseCameraDevice
 
 	public override void CapturePhotoNoAf()
 	{
-        global::CameraControl.Devices.Classes.CaptureAuthorization.AssertAllowed();
 		CapturePhoto();
 	}
 
 	public override void CapturePhoto()
 	{
-        global::CameraControl.Devices.Classes.CaptureAuthorization.AssertAllowed();
 		IsBusy = true;
 		bool flag = true;
 		List<string> list;

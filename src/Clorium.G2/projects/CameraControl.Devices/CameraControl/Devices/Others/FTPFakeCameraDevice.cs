@@ -28,7 +28,6 @@ internal class FTPFakeCameraDevice : BaseCameraDevice
 
 	public override void CapturePhoto()
 	{
-        global::CameraControl.Devices.Classes.CaptureAuthorization.AssertAllowed();
 		string[] array = new string[3] { "*.jpg", "*.jpeg", "*.mp4" };
 		List<string> list = new List<string>();
 		string[] array2 = array;
@@ -61,7 +60,6 @@ internal class FTPFakeCameraDevice : BaseCameraDevice
 
 	public override void CapturePhotoNoAf()
 	{
-        global::CameraControl.Devices.Classes.CaptureAuthorization.AssertAllowed();
 		CapturePhoto();
 	}
 
