@@ -434,16 +434,25 @@
   </DockPanel>
 </Border></StackPanel>
   </StackPanel>
-</Border><Border Style="{StaticResource G2Card}" Padding="0" Margin="0,0,0,10" Tag="치수 측정 (AutoSizing) 측정 스케일과 기준 원판 크기. 왼쪽 도구의 치수 버튼은 제품 구성에 따라 표시됩니다.">
+</Border><Border Style="{StaticResource G2Card}" Padding="0" Margin="0,0,0,10" Tag="오토사이징 치수 측정 AutoSizing 클로리움 오토사이징(Desk)으로 치수 사진을 열어 부위별 치수를 잽니다. 켜면 왼쪽 도구에 오토사이징 버튼이 나타납니다. 실행 파일 측정 스케일 기준 원판 크기">
   <StackPanel>
     <DockPanel Margin="14,12,12,4">
-      <ContentControl DockPanel.Dock="Right" Focusable="False" VerticalAlignment="Center"></ContentControl>
+      <ContentControl DockPanel.Dock="Right" Focusable="False" VerticalAlignment="Center"><CheckBox x:Name="G2Feat_autosizing" Style="{StaticResource G2Switch}" IsChecked="{Binding UseAutoSizing}" /></ContentControl>
       <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-        <TextBlock Style="{StaticResource G2SectionTitle}" Text="치수 측정 (AutoSizing)" />
-        <Border Style="{StaticResource G2Chip}" Background="#FFEEF0F3" Margin="8,0,0,0"><TextBlock Text="공통" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="#FF3A4654" /></Border>
+        <TextBlock Style="{StaticResource G2SectionTitle}" Text="오토사이징" />
+        <Border Style="{StaticResource G2Chip}" Background="#FFE3ECFB" Margin="8,0,0,0"><TextBlock Text="G2" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="#FF1F5FD6" /></Border>
       </StackPanel>
     </DockPanel>
-    <TextBlock Style="{StaticResource G2Caption}" TextWrapping="Wrap" Margin="14,0,14,10" Text="측정 스케일과 기준 원판 크기. 왼쪽 도구의 치수 버튼은 제품 구성에 따라 표시됩니다." />
+    <TextBlock Style="{StaticResource G2Caption}" TextWrapping="Wrap" Margin="14,0,14,10" Text="클로리움 오토사이징(Desk)으로 치수 사진을 열어 부위별 치수를 잽니다. 켜면 왼쪽 도구에 오토사이징 버튼이 나타나고, 선택한 사진의 치수측정 사진(_M)을 바로 엽니다. 측정 스케일은 치수 사진에 함께 기록됩니다." />
+    <StackPanel Visibility="{Binding IsChecked, ElementName=G2Feat_autosizing, Converter={StaticResource BooleanToVisibilityConverter}}"><Border Style="{StaticResource G2SetRow}" Tag="오토사이징 실행 파일 ">
+  <DockPanel>
+    <ContentControl DockPanel.Dock="Right" VerticalAlignment="Center" Margin="12,0,0,0" Focusable="False"><StackPanel Orientation="Horizontal"><TextBox Width="240" FontFamily="{StaticResource G2Mono}" Text="{Binding AutoSizingPath}" ToolTip="비워 두면 G2 폴더의 CloriumAutoSizing\Clorium AutoSizing.exe" /><Button Style="{StaticResource G2GhostButton}" Width="34" Padding="0" Margin="6,0,0,0" ToolTip="파일 선택" Click="Btn_AutoSizingPath_Click"><Viewbox Width="16" Height="16"><Path Width="24" Height="24" Stroke="{StaticResource G2Sub}" StrokeThickness="1.8" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round" Data="M3,6 H10 L12,8 H21 V19 H3 Z" /></Viewbox></Button></StackPanel></ContentControl>
+    <StackPanel VerticalAlignment="Center">
+      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="오토사이징 실행 파일" /></StackPanel>
+      <TextBlock Style="{StaticResource G2Caption}" TextWrapping="Wrap" Text="비워 두면 G2 폴더의 CloriumAutoSizing 폴더를 사용합니다." />
+    </StackPanel>
+  </DockPanel>
+</Border></StackPanel>
     <StackPanel ><Border Style="{StaticResource G2SetRow}" Tag="측정 스케일 ">
   <DockPanel>
     <ContentControl DockPanel.Dock="Right" VerticalAlignment="Center" Margin="12,0,0,0" Focusable="False"><TextBox Width="120" Text="{Binding MetaScale}" FontFamily="{StaticResource G2Mono}" /></ContentControl>

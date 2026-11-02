@@ -82,6 +82,17 @@ public partial class SettingsWnd : Window, IComponentConnector
 		}
 	}
 
+	private void Btn_AutoSizingPath_Click(object sender, RoutedEventArgs e)
+	{
+		Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog();
+		dialog.Filter = "Clorium AutoSizing.exe|Clorium AutoSizing.exe;Clorium Measure.exe|프로그램 (*.exe)|*.exe";
+		dialog.FileName = ServiceProvider.Settings.AutoSizingPath;
+		if (dialog.ShowDialog() == true)
+		{
+			ServiceProvider.Settings.AutoSizingPath = dialog.FileName;
+		}
+	}
+
 	private void Btn_add_device_Click(object sender, RoutedEventArgs e)
 	{
 		if (ServiceProvider.ExternalDeviceManager.ExternalDevices.Count == 0)

@@ -60,6 +60,36 @@ public partial class Settings
         }
     }
 
+    private bool _useAutoSizing;
+
+    // G2: 오토사이징 — Clorium AutoSizing Desk (garment measurement app). Replaces the removed legacy
+    // "C:\Program Files (x86)\Clorium\Clorium AutoSizing.exe" launcher; ON shows the left-rail 오토사이징 button.
+    // MetaScale/DiskSize (치수측정\*_M.jpeg Subject scale) are unchanged. Persisted; default off.
+    public bool UseAutoSizing
+    {
+        get => _useAutoSizing;
+        set
+        {
+            if (_useAutoSizing == value) return;
+            _useAutoSizing = value;
+            NotifyPropertyChanged("UseAutoSizing");
+        }
+    }
+
+    private string _autoSizingPath = "";
+
+    // Empty = <G2 folder>\CloriumAutoSizing\Clorium AutoSizing.exe
+    public string AutoSizingPath
+    {
+        get => _autoSizingPath;
+        set
+        {
+            if (_autoSizingPath == value) return;
+            _autoSizingPath = value ?? "";
+            NotifyPropertyChanged("AutoSizingPath");
+        }
+    }
+
     // Main screen 조명 켜기/끄기 panel: the light app and/or the USB LED dimmer.
     [System.Xml.Serialization.XmlIgnore]
     [Newtonsoft.Json.JsonIgnore]

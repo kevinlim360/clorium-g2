@@ -17,7 +17,7 @@ using CameraControl.Devices;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 class AestheticTests {
- static int count;static string root,temp;static Type autoType;static object auto,info;
+ static int count;static string root,temp;
  static void Check(string name,bool value){if(!value)throw new Exception("FAIL: "+name);Console.WriteLine("PASS: "+name);count++;}
  static object Call(object target,string name,params object[] args){return target.GetType().GetMethod(name,BindingFlags.NonPublic|BindingFlags.Public|BindingFlags.Instance).Invoke(target,args);}
  static void Set(object target,string name,object value){target.GetType().GetField(name,BindingFlags.Instance|BindingFlags.Public|BindingFlags.NonPublic).SetValue(target,value);}
@@ -26,15 +26,12 @@ class AestheticTests {
  static XmlElement Element(string file,string name){var doc=new XmlDocument();doc.Load(Path.Combine(root,"projects/CameraControl/CameraControl",file));var e=(XmlElement)doc.SelectSingleNode("//*[@Name='"+name+"']");if(e==null)throw new Exception(name);return e;}
  static object Parse(XmlElement source){source.SetAttribute("xmlns","http://schemas.microsoft.com/winfx/2006/xaml/presentation");source.SetAttribute("xmlns:x","http://schemas.microsoft.com/winfx/2006/xaml");source.SetAttribute("xmlns:Core","clr-namespace:CameraControl.Core;assembly=CameraControl.Core");return XamlReader.Parse(source.OuterXml);}
  static void SavePng(FrameworkElement element,string name){element.Measure(new Size(550,350));element.Arrange(new Rect(0,0,550,350));element.UpdateLayout();var bitmap=new RenderTargetBitmap(550,350,96,96,PixelFormats.Pbgra32);bitmap.Render(element);var encoder=new PngBitmapEncoder();encoder.Frames.Add(BitmapFrame.Create(bitmap));using(var stream=File.Create(Path.Combine(root,"tests/AestheticRegression",name)))encoder.Save(stream);}
- static object[] CsvData(){var assembly=autoType.Assembly;var user=FormatterServices.GetUninitializedObject(assembly.GetType("CloriumAutoSizing.UserRect"));var boxType=assembly.GetType("CloriumAutoSizing.UserRect+UserBox");var box=Activator.CreateInstance(boxType);Set(box,"Type","상의");Set(box,"TypeID","7");Set(box,"TypeItem","총장");var line=boxType.GetField("measureLine").GetValue(box);Set(line,"measure_Len","55.50");var array=Array.CreateInstance(boxType,1);array.SetValue(box,0);Set(user,"mArrayMaxNo",1);Set(user,"userBoxs",array);Set(auto,"userBox",user);return new[]{user,box};}
  [STAThread] static int Main(string[] args){root=args[0];AppDomain.CurrentDomain.AssemblyResolve+=delegate(object sender,ResolveEventArgs e){string name=new AssemblyName(e.Name).Name+".dll";foreach(string dir in new[]{Path.Combine(root,"build-output/installed"),Path.Combine(root,"dependencies/Managed"),"C:\\Program Files (x86)\\Clorium"}){string file=Path.Combine(dir,name);if(File.Exists(file))return Assembly.LoadFrom(file);}return null;};
  temp=Path.Combine(Path.GetTempPath(),"CA-"+Guid.NewGuid().ToString("N").Substring(0,8));Directory.CreateDirectory(temp);
  try{Run(args);Console.WriteLine("AESTHETIC_CHECKS_PASSED="+count);return 0;}catch(Exception e){Console.Error.WriteLine(e);return 1;}finally{if(Path.GetFileName(temp).StartsWith("CA-"))Directory.Delete(temp,true);}}
  [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.NoInlining)] static void Run(string[] args){
-  var autoAssembly=Assembly.LoadFrom(Path.Combine(root,"build-output/installed/Clorium AutoSizing.exe"));autoType=autoAssembly.GetType("CloriumAutoSizing.F_Measure",true);auto=FormatterServices.GetUninitializedObject(autoType);info=Activator.CreateInstance(autoType.GetNestedType("ImageInfo",BindingFlags.NonPublic));Set(info,"cameraID","C05_");Set(auto,"imageInfo",info);
-  CsvData();string csv=Path.Combine(temp,"csv-test.csv");Call(auto,"WriteCSV",csv);Call(auto,"WriteCSV",csv);
-  if(args.Contains("--csv-baseline")){bool reproduced=File.ReadAllLines(csv).Length==1;Check("REPRODUCED: repeated CSV save drops header",reproduced);return;}
-  Check("repeated CSV save retains header and first measurement",File.ReadAllLines(csv).Length==2&&File.ReadLines(csv).First().StartsWith("타입,"));
+  // 2026-11-03: the legacy Clorium AutoSizing.exe (CSV/barcode/API checks) was removed from G2; its replacement,
+  // Clorium AutoSizing Desk, reads the same _M.jpeg Subject scale (checked below and by tests/AutoSizingRegression).
   ServiceProvider.Branding=(Branding)FormatterServices.GetUninitializedObject(typeof(Branding));ServiceProvider.FilenameTemplateManager=new FilenameTemplateManager();
   var s=new Settings();ServiceProvider.Settings=s;s.CloriumID="C05_";s.CameraProperties=new CameraPropertyEnumerator();s.ThumbailLoaded=true;
   Check("legacy config has feature disabled",!s.UseAestheticImprovement&&!s.IsAestheticImprovementActive);Check("runtime mode starts ON",s.IsAestheticImprovement);
@@ -69,19 +66,8 @@ class AestheticTests {
   var mainType=main.GetType("CameraControl.MainWindow");var mainWindow=FormatterServices.GetUninitializedObject(mainType);
   foreach(bool state in new[]{false,true}){
    s.IsAestheticImprovement=state;s.FrontBackMode=1;s.IsDefect=false;string raw=Session(folder).GetNextFileName("IMG.jpg",camera,"");var metadata=new BitmapMetadata("jpg");metadata.Title="C05_";var pixels=new byte[80*60*3];for(int i=0;i<pixels.Length;i++)pixels[i]=(byte)(i%251);var source=BitmapSource.Create(80,60,96,96,PixelFormats.Rgb24,null,pixels,80*3);var encoder=new JpegBitmapEncoder();encoder.Frames.Add(BitmapFrame.Create(source,null,metadata,null));using(var output=File.Create(raw))encoder.Save(output);
-   string before=Convert.ToBase64String(File.ReadAllBytes(raw));string measure=(string)Call(mainWindow,"WriteMetadata",raw,"C05_","0.25","https://test.invalid");Check("measurement file excludes PR on="+state,Path.GetFileName(measure)=="C05_32987_001_F_M.jpeg");Check("metadata creation leaves raw source unchanged on="+state,before==Convert.ToBase64String(File.ReadAllBytes(raw)));var parameters=new object[]{measure,null,0d,null};Call(auto,"ReadMetadata",parameters);Check("AutoSizing reads real JPEG metadata on="+state,(string)parameters[1]=="C05_"&&(double)parameters[2]==0.25&&(string)parameters[3]=="https://test.invalid");Check("actual AutoSizing barcode on="+state,(string)Call(auto,"GetBarcodeID",Path.GetFileNameWithoutExtension(measure))=="32987");using(var bitmap=(System.Drawing.Bitmap)Call(auto,"LoadImageWithOrientation",measure)){Check("AutoSizing decodes JPEG on="+state,bitmap.Width==80&&bitmap.Height==60);}
+   string before=Convert.ToBase64String(File.ReadAllBytes(raw));string measure=(string)Call(mainWindow,"WriteMetadata",raw,"C05_","0.25","https://test.invalid");Check("measurement file excludes PR on="+state,Path.GetFileName(measure)=="C05_32987_001_F_M.jpeg");Check("metadata creation leaves raw source unchanged on="+state,before==Convert.ToBase64String(File.ReadAllBytes(raw)));BitmapMetadata written;using(var stream=File.OpenRead(measure)){var frame=BitmapDecoder.Create(stream,BitmapCreateOptions.PreservePixelFormat,BitmapCacheOption.OnLoad).Frames[0];written=(BitmapMetadata)frame.Metadata;Check("measurement JPEG decodes on="+state,frame.PixelWidth==80&&frame.PixelHeight==60);}Check("AutoSizing Desk metadata (Title/Subject mm per pixel/Comment) on="+state,written.Title=="C05_"&&written.Subject=="0.25"&&written.Comment=="https://test.invalid");
   }
-  foreach(string stem in new[]{"C05_32987_001_PR_F","C05_32987_001_PR_F_M","C05_32987_001_F","C05_32987_001_F_M","C05_32987___1_001_PR_F_M"})Check("barcode compatibility "+stem,(string)Call(auto,"GetBarcodeID",stem)=="32987");
-  foreach(string barcode in new[]{"ITEM_PR", "ITEM_PR_MARK", "A_F_M_B", "32987_C05_CODE", "123_456"})Check("literal barcode components preserved "+barcode,(string)Call(auto,"GetBarcodeID","C05_"+barcode+"_001_PR_F_M")==barcode);
-  Set(info,"cameraID","C05_");Check("literal PR inside barcode preserved",(string)Call(auto,"GetBarcodeID","C05_ITEM_PR_MARK_001_PR_F_M")=="ITEM_PR_MARK");
-  foreach(string inputName in new[]{"C05_32987_001_PR_F_M.jpeg","C05_32987_001_PR_F.jpg","C05_32987_001_F_M.jpeg","C05_32987_001_PR_B_M.jpeg"}){
-   Call(auto,"SetMeasurementOutputPaths",Path.Combine(temp,inputName));
-   var csvName=(string)autoType.GetField("CSVfilename",BindingFlags.Instance|BindingFlags.NonPublic).GetValue(auto);
-   var imageName=(string)autoType.GetField("Measurefilename",BindingFlags.Instance|BindingFlags.NonPublic).GetValue(auto);
-   Check("measurement output pair excludes PR "+inputName,!Path.GetFileName(csvName).Contains("_PR")&&!Path.GetFileName(imageName).Contains("_PR")&&Path.GetDirectoryName(csvName)==temp&&Path.GetDirectoryName(imageName)==temp);
-  }
-  Call(auto,"InitArray");Call(auto,"ReadCSV",csv);var data=autoType.GetField("Data_MeasureInform",BindingFlags.Instance|BindingFlags.NonPublic).GetValue(auto);var group=data.GetType().GetProperty("measureItemGroup").GetValue(data,null);var items=(Array)group.GetType().GetProperty("items").GetValue(group,null);Check("repeated CSV measurement survives API data parsing",items.Length==1);
-  var item=items.GetValue(0);Check("repeated CSV retains actual measured value",Convert.ToDouble(item.GetType().GetProperty("value").GetValue(item,null))==55.5);
  }
 }
 static class XmlParents{public static IEnumerable<XmlNode> Ancestors(this XmlNode node){for(var p=node.ParentNode;p!=null;p=p.ParentNode)yield return p;}}

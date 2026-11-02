@@ -17,8 +17,7 @@ foreach(var r in center.Resources.OfType<EmbeddedResource>().Where(r=>r.Name.Sta
  if(!SHA256.HashData(source).SequenceEqual(SHA256.HashData(r.GetResourceData())))throw new Exception("Changed embedded dependency: "+r.Name);
 }
 Console.WriteLine("PASS: rebuilt Centering initializes embedded loader before UI; all embedded vendor resources match supplied source files.");
-foreach(var f in new[]{"CameraControl.exe","CameraControl.Core.dll","CameraControl.Devices.dll","CameraControl.Plugins.dll","Canon.Eos.Framework.dll","PortableDeviceLib.dll","ZoomAndPan.dll","Clorium AutoSizing.exe","Clorium Centering.exe"}){
+foreach(var f in new[]{"CameraControl.exe","CameraControl.Core.dll","CameraControl.Devices.dll","CameraControl.Plugins.dll","Canon.Eos.Framework.dll","PortableDeviceLib.dll","ZoomAndPan.dll","Clorium Centering.exe"}){
  if(!File.Exists(Path.Combine(root,"build-output/installed",f)))throw new Exception("Missing output: "+f);
 }
-if(!File.Exists(Path.Combine(root,"build-output/standalone/Clorium AutoSizing.exe")))throw new Exception("Missing standalone variant");
-Console.WriteLine("PASS: all 9 installed outputs and separate AutoSizing variant present. Products were not executed.");
+Console.WriteLine("PASS: all 8 installed outputs present (legacy AutoSizing removed 2026-11-03). Products were not executed.");

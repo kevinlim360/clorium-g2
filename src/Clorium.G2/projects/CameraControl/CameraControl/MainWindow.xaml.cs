@@ -712,12 +712,8 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 	private void but_Ruler_Click(object sender, RoutedEventArgs e)
 	{
 		Log.Debug("Main ICON : AutoSizing Click");
-		Process[] myProc = Process.GetProcessesByName("Clorium AutoSizing");
-		if (myProc.Length < 1)
-		{
-			string processname = "C:\\\\Program Files (x86)\\\\Clorium\\Clorium AutoSizing.exe";
-			Process.Start(processname);
-		}
+		// G2: Clorium AutoSizing Desk — open the selected photo's 치수측정\_M.jpeg (or the photo / its folder).
+		CloriumAutoSizing.Open(CloriumAutoSizing.ResolveTarget(ServiceProvider.Settings?.SelectedBitmap?.FileItem?.FileName));
 	}
 
 	private void but_Lighting_Click(object sender, RoutedEventArgs e)
@@ -822,18 +818,7 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 
 	private void ExternProcess_Close()
 	{
-		Process[] processList1 = Process.GetProcessesByName("Clorium AutoSizing");
-		if (processList1.Length != 0)
-		{
-			Process[] array = processList1;
-			foreach (Process proc in array)
-			{
-				if (!proc.HasExited)
-				{
-					proc.Kill();
-				}
-			}
-		}
+		// The legacy AutoSizing was killed here. Clorium AutoSizing Desk is left open: it may hold unsaved measurements.
 		Process[] processList2 = Process.GetProcessesByName("Clorium Centering");
 		if (processList2.Length != 0)
 		{

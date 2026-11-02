@@ -82,6 +82,7 @@ public partial class SettingsWnd
 			"UseAestheticImprovement",
 			"UseAlarm",
 			"UseAlwaysBackup",
+			"UseAutoSizing",
 			"UseBarcodeScanner",
 			"UseCloriumLight",
 			"UseDatabase",

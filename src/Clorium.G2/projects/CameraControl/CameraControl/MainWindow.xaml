@@ -354,10 +354,10 @@
               <TextBlock Text="사진" HorizontalAlignment="Center" Margin="0,4,0,0" />
             </StackPanel>
           </Button>
-          <Button Name="but_Ruler" Style="{StaticResource G2RailButton}" ToolTip="{T:Translate LabelRuler}" Click="but_Ruler_Click" Visibility="{Binding Source={x:Static Core:ServiceProvider.Branding}, Path=ControlAutoSizing, Converter={StaticResource BooleanToVisibilityConverter1}}">
+          <Button Name="but_Ruler" Style="{StaticResource G2RailButton}" ToolTip="오토사이징 (치수 측정)" Click="but_Ruler_Click" Visibility="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=UseAutoSizing, Converter={StaticResource BooleanToVisibilityConverter1}}">
             <StackPanel>
               <Viewbox Width="22" Height="22" HorizontalAlignment="Center"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoRuler}" /></Viewbox>
-              <TextBlock Text="치수" HorizontalAlignment="Center" Margin="0,4,0,0" />
+              <TextBlock Text="오토사이징" HorizontalAlignment="Center" Margin="0,4,0,0" />
             </StackPanel>
           </Button>
           <Button Name="but_Lighting" Style="{StaticResource G2RailButton}" ToolTip="{T:Translate LabelLighting}" Click="but_Lighting_Click" Visibility="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=UseCloriumLight, Converter={StaticResource BooleanToVisibilityConverter1}}">
