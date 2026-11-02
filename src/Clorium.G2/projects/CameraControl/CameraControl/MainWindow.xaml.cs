@@ -701,12 +701,8 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 	private void but_AIRemoveBg_Click(object sender, RoutedEventArgs e)
 	{
 		Log.Debug("Main ICON : RemoveBg Click");
-		Process[] myProc = Process.GetProcessesByName("PhotoScissors");
-		if (myProc.Length < 1)
-		{
-			string processname = "C:\\\\Program Files (x86)\\\\Clorium\\PhotoScissors.exe";
-			Process.Start(processname);
-		}
+		// G2: Clorium 배경제거 (Matting Studio) — open the selected photo, or its folder, in the local studio.
+		CloriumBackgroundRemoval.Open(CloriumBackgroundRemoval.ResolveTarget(ServiceProvider.Settings?.SelectedBitmap?.FileItem?.FileName));
 	}
 
 	private void but_Ruler_Click(object sender, RoutedEventArgs e)
@@ -831,19 +827,7 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 				}
 			}
 		}
-		Process[] processList3 = Process.GetProcessesByName("PhotoScissors");
-		if (processList3.Length == 0)
-		{
-			return;
-		}
-		Process[] array3 = processList3;
-		foreach (Process proc3 in array3)
-		{
-			if (!proc3.HasExited)
-			{
-				proc3.Kill();
-			}
-		}
+		// The legacy PhotoScissors was killed here. The Matting Studio server is left running: a batch may still be saving.
 	}
 
 	private void but_timelapse_Click(object sender, RoutedEventArgs e)
@@ -1823,11 +1807,11 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 		{
 			if (!isToggleRot)
 			{
-				CaptureOfFrontView(rotate270: false, removeBG: false);
+				CaptureOfFrontView(rotate270: false);
 			}
 			else
 			{
-				CaptureOfFrontView(rotate270: true, removeBG: false);
+				CaptureOfFrontView(rotate270: true);
 			}
 		}
 	}
@@ -1838,56 +1822,14 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 		{
 			if (!isToggleRot)
 			{
-				CaptureOfBackView(rotate270: false, removeBG: false);
+				CaptureOfBackView(rotate270: false);
 			}
 			else
 			{
-				CaptureOfBackView(rotate270: true, removeBG: false);
+				CaptureOfBackView(rotate270: true);
 			}
 			StopBlink();
 			BarcodeText.Visibility = Visibility.Collapsed;
-		}
-	}
-
-	private void But_FrontCaptureBG_Click(object sender, RoutedEventArgs e)
-	{
-		if (IsMusinsaOK())
-		{
-			if (!isToggleRot)
-			{
-				CaptureOfFrontView(rotate270: false, removeBG: true);
-			}
-			else
-			{
-				CaptureOfFrontView(rotate270: true, removeBG: true);
-			}
-		}
-	}
-
-	private void But_BackCaptureBG_Click(object sender, RoutedEventArgs e)
-	{
-		if (IsMusinsaOK())
-		{
-			if (!isToggleRot)
-			{
-				CaptureOfBackView(rotate270: false, removeBG: true);
-			}
-			else
-			{
-				CaptureOfBackView(rotate270: true, removeBG: true);
-			}
-			StopBlink();
-			BarcodeText.Visibility = Visibility.Collapsed;
-		}
-	}
-
-	private void But_CreatRemoveBG_Click(object sender, RoutedEventArgs e)
-	{
-		Log.Debug("Batch Remove Background Click");
-		RemoveBackgroundWnd wnd = new RemoveBackgroundWnd();
-		wnd.InitDirectory = ServiceProvider.Settings.DefaultSession.Folder;
-		if (wnd.ShowDialog() != true)
-		{
 		}
 	}
 
@@ -2045,7 +1987,7 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 		}
 	}
 
-	private async void CaptureOfFrontView(bool rotate270, bool removeBG)
+	private async void CaptureOfFrontView(bool rotate270)
 	{
 		if (ServiceProvider.Settings.isBtnPressed || !ServiceProvider.Settings.ThumbailLoaded)
 		{
@@ -2064,26 +2006,16 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 		}
 		ServiceProvider.Settings.FrontBackMode = 1;
 		ServiceProvider.Settings.GetMeasurePicture = true;
-		if (!removeBG)
+		if (!await CaptureAsync(shouldWait: true))
 		{
-			if (!await CaptureAsync(shouldWait: true))
-			{
-				return;
-			}
-		}
-		else
-		{
-			if (!await CaptureBackground())
-			{
-				return;
-			}
+			return;
 		}
 		MainMenuViewModel.IsMusinsaFrontOK = true;
 		ServiceProvider.WindowsManager.ExecuteCommand("LiveViewWnd_OverlayActive", true);
 		ServiceProvider.WindowsManager.ExecuteCommand("LiveViewWnd_OverlayLastCapture", true);
 	}
 
-	private async void CaptureOfBackView(bool rotate270, bool removeBG)
+	private async void CaptureOfBackView(bool rotate270)
 	{
 		if (!ServiceProvider.Settings.isBtnPressed && ServiceProvider.Settings.ThumbailLoaded)
 		{
@@ -2091,73 +2023,14 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 			is270CaptureMode = rotate270;
 			setExifOrientation(rotate270);
 			ServiceProvider.Settings.FrontBackMode = 2;
-			if (!removeBG)
+			if (!await CaptureAsync(shouldWait: true))
 			{
-				if (!await CaptureAsync(shouldWait: true))
-				{
-					return;
-				}
-			}
-			else
-			{
-				if (!await CaptureBackground())
-				{
-					return;
-				}
+				return;
 			}
 			MainMenuViewModel.IsMusinsaBackOK = true;
 			ServiceProvider.WindowsManager.ExecuteCommand("LiveViewWnd_OverlayActive", false);
 			ServiceProvider.WindowsManager.ExecuteCommand("LiveViewWnd_OverlayLastCapture", false);
 		}
-	}
-
-	private async Task<bool> CaptureBackground()
-	{
-		ServiceProvider.Settings.Background = false;
-		if (!(await CaptureAsync(shouldWait: true)))
-		{
-			System.Windows.MessageBox.Show("\ud83d\udea8조명[ON] 타임오버", "경고", MessageBoxButton.OK, MessageBoxImage.Exclamation);
-			return false;
-		}
-		if (ModeA.IsChecked == false)
-		{
-			ServiceProvider.Settings.Background = true;
-			Backgroud_LightOff();
-			await Task.Delay(300);
-			bool success = await CaptureAsync(shouldWait: true);
-			Backgroud_LightOn();
-			if (!success)
-			{
-				System.Windows.MessageBox.Show("\ud83d\udea8조명[OFF] 타임오버", "경고", MessageBoxButton.OK, MessageBoxImage.Exclamation);
-				return false;
-			}
-		}
-		if (Bg_Auto.IsChecked == false)
-		{
-			return true;
-		}
-		string filename = ServiceProvider.DeviceManager.LastCapturedImage[ServiceProvider.DeviceManager.SelectedCameraDevice];
-		if (filename != null)
-		{
-			RemoveBackgroundWnd wnd = new RemoveBackgroundWnd();
-			if (ModeA.IsChecked == true)
-			{
-				await wnd.PrecessingOneImage(filename);
-			}
-			else
-			{
-				await wnd.PrecessingTwoImages(filename);
-			}
-		}
-		return true;
-	}
-
-	private void Backgroud_LightOn()
-	{
-	}
-
-	private void Backgroud_LightOff()
-	{
 	}
 
 	private void DeviceManager_PhotoCaptured(object sender, PhotoCapturedEventArgs eventArgs)
@@ -3362,19 +3235,6 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 		{
 			System.Windows.MessageBox.Show("Command : " + cmd + "\nData Error: " + ex.Message + "\nRaw Data: " + data);
 		}
-	}
-
-	private void SwitchToRemoveBg_Click(object sender, RoutedEventArgs e)
-	{
-		Settings settings = ServiceProvider.Settings;
-		settings.ShowRemoveBg = true;
-	}
-
-	private void SwitchToNormal_Click(object sender, RoutedEventArgs e)
-	{
-		Settings settings = ServiceProvider.Settings;
-		settings.ShowRemoveBg = false;
-		settings.ShowFrontBack = true;
 	}
 
 	public void USBConnect()

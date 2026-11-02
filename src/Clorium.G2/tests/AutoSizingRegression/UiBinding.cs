@@ -85,9 +85,42 @@ class UiBinding
 
 		string mainCs = File.ReadAllText(Path.Combine(root, "projects/CameraControl/CameraControl/MainWindow.xaml.cs"));
 		Check("legacy launcher and exit kill removed from source", !mainCs.Contains("Program Files (x86)\\\\\\\\Clorium\\\\Clorium AutoSizing") && !mainCs.Contains("GetProcessesByName(\"Clorium AutoSizing\")"));
+		BackgroundRemoval(s, mainCs);
 		byte[] exe = File.ReadAllBytes(Path.Combine(bin, "CameraControl.exe"));
+		Check("built CameraControl.exe has no PhotoScissors/PhotoRoom", Find(exe, Encoding.Unicode.GetBytes("PhotoScissors.exe")) < 0 && Find(exe, Encoding.Unicode.GetBytes("photoroom.com")) < 0 && Find(exe, Encoding.UTF8.GetBytes("RemoveBackgroundWnd")) < 0);
+		Check("built CameraControl.exe contains the Matting Studio client", Find(exe, Encoding.UTF8.GetBytes("CloriumBackgroundRemoval")) >= 0 && Find(exe, Encoding.Unicode.GetBytes("http://127.0.0.1:8765")) >= 0);
 		Check("built CameraControl.exe has no legacy AutoSizing path", Find(exe, Encoding.Unicode.GetBytes("Clorium\\Clorium AutoSizing.exe")) < 0);
 		Check("built CameraControl.exe contains the Desk client", Find(exe, Encoding.UTF8.GetBytes("CloriumAutoSizing")) >= 0 && Find(exe, Encoding.Unicode.GetBytes("CloriumAutoSizing.")) >= 0);
+	}
+
+	// 2026-11-03 배경제거: Matting Studio replaces PhotoScissors, the PhotoRoom window and the 배경 제거 촬영 mode.
+	static void BackgroundRemoval(Settings s, string mainCs)
+	{
+		Check("배경제거 is off by default, script path empty", !new Settings().UseBackgroundRemoval && new Settings().BackgroundRemovalPath == "");
+		s.UseBackgroundRemoval = false;
+		var railXml = Element("MainWindow.xaml", "but_AIRemoveBg");
+		Check("rail label is 배경제거 and bound to Settings.UseBackgroundRemoval", railXml.GetElementsByTagName("TextBlock").Cast<XmlElement>().Any(t => t.GetAttribute("Text") == "배경제거") && railXml.GetAttribute("Visibility").Contains("ServiceProvider.Settings") && railXml.GetAttribute("Visibility").Contains("Path=UseBackgroundRemoval"));
+		var rail = (Button)Parse(railXml, "Style", "Click");
+		var switchXml = Element("windows/SettingsWnd.xaml", "G2Feat_removebg");
+		var toggle = (CheckBox)Parse(switchXml, "Style"); toggle.DataContext = s;
+		Pump(); Check("배경제거 rail hidden and switch OFF while disabled", rail.Visibility == Visibility.Collapsed && toggle.IsChecked == false);
+		toggle.IsChecked = true; Pump(); Check("switch ON shows the 배경제거 rail button", s.UseBackgroundRemoval && rail.Visibility == Visibility.Visible);
+		toggle.IsChecked = false; Pump(); Check("switch OFF hides it again", !s.UseBackgroundRemoval && rail.Visibility == Visibility.Collapsed);
+		var card = switchXml; while (card != null && card.GetAttribute("Style") != "{StaticResource G2Card}") card = card.ParentNode as XmlElement;
+		Check("배경제거 card: script path row with browse, no legacy capture options", card.OuterXml.Contains("{Binding BackgroundRemovalPath}") && card.OuterXml.Contains("Btn_BackgroundRemovalPath_Click") && !card.OuterXml.Contains("ModeBgPng") && !card.OuterXml.Contains("BGTargetColor") && !card.OuterXml.Contains("ControlRemoveBackground"));
+		s.BackgroundRemovalPath = @"D:\Tools\Matting\outputs\matting-studio\Start.ps1"; s.UseBackgroundRemoval = true;
+		var loaded = JsonConvert.DeserializeObject<Settings>(JsonConvert.SerializeObject(s));
+		Check("JSON settings persist UseBackgroundRemoval and path", loaded.UseBackgroundRemoval && loaded.BackgroundRemovalPath == s.BackgroundRemovalPath);
+		var legacy = JsonConvert.DeserializeObject<Settings>("{\"ShowRemoveBg\":true,\"ModeBgPng\":true}");
+		Check("older settings with the removed capture mode still load, feature OFF", legacy != null && !legacy.UseBackgroundRemoval);
+		string mainXaml = File.ReadAllText(Path.Combine(root, "projects/CameraControl/CameraControl/MainWindow.xaml"));
+		Check("배경 제거 촬영 panel and its controls removed", !mainXaml.Contains("Name=\"RemoveBg\"") && !mainXaml.Contains("But_FrontCaptureBG_Click") && !mainXaml.Contains("Name=\"ModeA\"") && !mainXaml.Contains("Bg_Auto") && !mainXaml.Contains("Path=ShowRemoveBg"));
+		Check("normal F/B panel no longer hidden by the old mode", mainXaml.Contains("<!-- capture face: F / B / D (normal mode) -->"));
+		Check("legacy capture/launch code removed", !mainCs.Contains("CaptureBackground") && !mainCs.Contains("RemoveBackgroundWnd") && !mainCs.Contains("removeBG") && !mainCs.Contains("\"PhotoScissors\"") && !mainCs.Contains("SwitchToRemoveBg"));
+		string csproj = File.ReadAllText(Path.Combine(root, "projects/CameraControl/CameraControl.csproj"));
+		Check("old windows removed from the project", !csproj.Contains("RemoveBackgroundWnd") && !File.Exists(Path.Combine(root, "projects/CameraControl/CameraControl/ViewModel/AIRemoveBackgroundViewModel.cs")));
+		string presets = File.ReadAllText(Path.Combine(root, "projects/CameraControl/CameraControl/windows/SettingsWnd.G2.cs"));
+		Check("presets copy UseBackgroundRemoval, not the removed options", presets.Contains("\"UseBackgroundRemoval\"") && !presets.Contains("\"ShowRemoveBg\"") && !presets.Contains("\"ModeBgPng\""));
 	}
 
 	static int Find(byte[] data, byte[] pattern)

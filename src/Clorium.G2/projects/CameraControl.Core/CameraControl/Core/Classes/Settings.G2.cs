@@ -90,6 +90,36 @@ public partial class Settings
         }
     }
 
+    private bool _useBackgroundRemoval;
+
+    // G2: 배경제거 — Clorium Matting Studio (local BiRefNet web app, 127.0.0.1:8765). Replaces the removed
+    // PhotoScissors launcher, PhotoRoom window and 배경 제거 촬영 mode; ON shows the left-rail 배경제거 button.
+    // Legacy Background/ShowRemoveBg/ModeBg* stay only for settings-file compatibility. Persisted; default off.
+    public bool UseBackgroundRemoval
+    {
+        get => _useBackgroundRemoval;
+        set
+        {
+            if (_useBackgroundRemoval == value) return;
+            _useBackgroundRemoval = value;
+            NotifyPropertyChanged("UseBackgroundRemoval");
+        }
+    }
+
+    private string _backgroundRemovalPath = "";
+
+    // Matting Studio Start.ps1. Empty = <G2 folder>\CloriumBackgroundRemoval\outputs\matting-studio\Start.ps1
+    public string BackgroundRemovalPath
+    {
+        get => _backgroundRemovalPath;
+        set
+        {
+            if (_backgroundRemovalPath == value) return;
+            _backgroundRemovalPath = value ?? "";
+            NotifyPropertyChanged("BackgroundRemovalPath");
+        }
+    }
+
     // Main screen 조명 켜기/끄기 panel: the light app and/or the USB LED dimmer.
     [System.Xml.Serialization.XmlIgnore]
     [Newtonsoft.Json.JsonIgnore]

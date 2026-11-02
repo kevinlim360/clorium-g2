@@ -45,7 +45,6 @@
     <Page Remove="CameraControl/Panels/SessionControl.xaml" />
     <Page Remove="CameraControl/StartUpWindow.xaml" />
     <Page Remove="CameraControl/windows/AboutWnd.xaml" />
-    <Page Remove="CameraControl/windows/AIRemoveBackgroundWnd.xaml" />
     <Page Remove="CameraControl/windows/AstroLiveViewWnd.xaml" />
     <Page Remove="CameraControl/windows/AutoExportPluginEdit.xaml" />
     <Page Remove="CameraControl/windows/BarcodeWnd.xaml" />
@@ -72,7 +71,6 @@
     <Page Remove="CameraControl/windows/PrintWnd.xaml" />
     <Page Remove="CameraControl/windows/PropertyWnd.xaml" />
     <Page Remove="CameraControl/windows/QrCodeWnd.xaml" />
-    <Page Remove="CameraControl/windows/RemoveBackgroundWnd.xaml" />
     <Page Remove="CameraControl/windows/SavePresetWnd.xaml" />
     <Page Remove="CameraControl/windows/ScriptCommandEdit.xaml" />
     <Page Remove="CameraControl/windows/ScriptWnd.xaml" />
@@ -109,7 +107,6 @@
     <Page Include="CameraControl/Panels/SessionControl.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="panels/sessioncontrol.xaml" />
     <Page Include="CameraControl/StartUpWindow.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="startupwindow.xaml" />
     <Page Include="CameraControl/windows/AboutWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/aboutwnd.xaml" />
-    <Page Include="CameraControl/windows/AIRemoveBackgroundWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/airemovebackgroundwnd.xaml" />
     <Page Include="CameraControl/windows/AstroLiveViewWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/astroliveviewwnd.xaml" />
     <Page Include="CameraControl/windows/AutoExportPluginEdit.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/autoexportpluginedit.xaml" />
     <Page Include="CameraControl/windows/BarcodeWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/barcodewnd.xaml" />
@@ -136,7 +133,6 @@
     <Page Include="CameraControl/windows/PrintWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/printwnd.xaml" />
     <Page Include="CameraControl/windows/PropertyWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/propertywnd.xaml" />
     <Page Include="CameraControl/windows/QrCodeWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/qrcodewnd.xaml" />
-    <Page Include="CameraControl/windows/RemoveBackgroundWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/removebackgroundwnd.xaml" />
     <Page Include="CameraControl/windows/SavePresetWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/savepresetwnd.xaml" />
     <Page Include="CameraControl/windows/ScriptCommandEdit.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/scriptcommandedit.xaml" />
     <Page Include="CameraControl/windows/ScriptWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/scriptwnd.xaml" />

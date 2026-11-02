@@ -93,6 +93,17 @@ public partial class SettingsWnd : Window, IComponentConnector
 		}
 	}
 
+	private void Btn_BackgroundRemovalPath_Click(object sender, RoutedEventArgs e)
+	{
+		Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog();
+		dialog.Filter = "Matting Studio Start.ps1|Start.ps1|PowerShell (*.ps1)|*.ps1";
+		dialog.FileName = ServiceProvider.Settings.BackgroundRemovalPath;
+		if (dialog.ShowDialog() == true)
+		{
+			ServiceProvider.Settings.BackgroundRemovalPath = dialog.FileName;
+		}
+	}
+
 	private void Btn_add_device_Click(object sender, RoutedEventArgs e)
 	{
 		if (ServiceProvider.ExternalDeviceManager.ExternalDevices.Count == 0)

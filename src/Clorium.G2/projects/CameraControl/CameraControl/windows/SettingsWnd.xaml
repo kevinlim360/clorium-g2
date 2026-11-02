@@ -398,38 +398,22 @@
     <TextBlock Style="{StaticResource G2Caption}" TextWrapping="Wrap" Margin="14,0,14,10" Text="앞·뒷면을 _PR_F, _PR_B로 저장합니다. 켜면 세로·가로 버튼 옆에 미감개선 스위치가 생깁니다. 촬영·저장 중에는 바꿀 수 없습니다." />
     
   </StackPanel>
-</Border><Border Style="{StaticResource G2Card}" Padding="0" Margin="0,0,0,10" Tag="배경 제거 촬영 촬영 면을 배경 제거용 F/B 촬영으로 바꿉니다." Visibility="{Binding Source={x:Static Core:ServiceProvider.Branding}, Path=ControlRemoveBackground, Converter={StaticResource BooleanToVisibilityConverter}}">
+</Border><Border Style="{StaticResource G2Card}" Padding="0" Margin="0,0,0,10" Tag="배경제거 배경 제거 Matting Studio 클로리움 배경제거(Matting Studio)로 선택한 사진이나 폴더의 배경을 지웁니다. 켜면 왼쪽 도구에 배경제거 버튼이 나타납니다. 실행 스크립트">
   <StackPanel>
     <DockPanel Margin="14,12,12,4">
-      <ContentControl DockPanel.Dock="Right" Focusable="False" VerticalAlignment="Center"><CheckBox x:Name="G2Feat_removebg" Style="{StaticResource G2Switch}" IsChecked="{Binding ShowRemoveBg}" /></ContentControl>
+      <ContentControl DockPanel.Dock="Right" Focusable="False" VerticalAlignment="Center"><CheckBox x:Name="G2Feat_removebg" Style="{StaticResource G2Switch}" IsChecked="{Binding UseBackgroundRemoval}" /></ContentControl>
       <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-        <TextBlock Style="{StaticResource G2SectionTitle}" Text="배경 제거 촬영" />
-        <Border Style="{StaticResource G2Chip}" Background="#FFEEF0F3" Margin="8,0,0,0"><TextBlock Text="공통" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="#FF3A4654" /></Border>
+        <TextBlock Style="{StaticResource G2SectionTitle}" Text="배경제거" />
+        <Border Style="{StaticResource G2Chip}" Background="#FFE3ECFB" Margin="8,0,0,0"><TextBlock Text="G2" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="#FF1F5FD6" /></Border>
       </StackPanel>
     </DockPanel>
-    <TextBlock Style="{StaticResource G2Caption}" TextWrapping="Wrap" Margin="14,0,14,10" Text="촬영 면을 배경 제거용 F/B 촬영으로 바꿉니다." />
-    <StackPanel Visibility="{Binding IsChecked, ElementName=G2Feat_removebg, Converter={StaticResource BooleanToVisibilityConverter}}"><Border Style="{StaticResource G2SetRow}" Tag="PNG로 저장 배경 제거 후 투명 PNG">
+    <TextBlock Style="{StaticResource G2Caption}" TextWrapping="Wrap" Margin="14,0,14,10" Text="클로리움 배경제거(Matting Studio)로 선택한 사진이나 폴더의 배경을 지웁니다. 켜면 왼쪽 도구에 배경제거 버튼이 나타나고, 누르면 이 PC의 배경제거 화면에 선택한 사진이 대상으로 올라갑니다. 원본은 그대로 두고 옆 _bgr 폴더에 저장합니다." />
+    <StackPanel Visibility="{Binding IsChecked, ElementName=G2Feat_removebg, Converter={StaticResource BooleanToVisibilityConverter}}"><Border Style="{StaticResource G2SetRow}" Tag="배경제거 실행 스크립트 ">
   <DockPanel>
-    <ContentControl DockPanel.Dock="Right" VerticalAlignment="Center" Margin="12,0,0,0" Focusable="False"><CheckBox Style="{StaticResource G2Switch}" IsChecked="{Binding ModeBgPng}" /></ContentControl>
+    <ContentControl DockPanel.Dock="Right" VerticalAlignment="Center" Margin="12,0,0,0" Focusable="False"><StackPanel Orientation="Horizontal"><TextBox Width="240" FontFamily="{StaticResource G2Mono}" Text="{Binding BackgroundRemovalPath}" ToolTip="비워 두면 G2 폴더의 CloriumBackgroundRemoval\outputs\matting-studio\Start.ps1" /><Button Style="{StaticResource G2GhostButton}" Width="34" Padding="0" Margin="6,0,0,0" ToolTip="파일 선택" Click="Btn_BackgroundRemovalPath_Click"><Viewbox Width="16" Height="16"><Path Width="24" Height="24" Stroke="{StaticResource G2Sub}" StrokeThickness="1.8" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round" Data="M3,6 H10 L12,8 H21 V19 H3 Z" /></Viewbox></Button></StackPanel></ContentControl>
     <StackPanel VerticalAlignment="Center">
-      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="PNG로 저장" /></StackPanel>
-      <TextBlock Style="{StaticResource G2Caption}" TextWrapping="Wrap" Margin="0,2,0,0" Text="배경 제거 후 투명 PNG" />
-    </StackPanel>
-  </DockPanel>
-</Border><Border Style="{StaticResource G2SetRow}" Tag="JPG로 저장 ">
-  <DockPanel>
-    <ContentControl DockPanel.Dock="Right" VerticalAlignment="Center" Margin="12,0,0,0" Focusable="False"><CheckBox Style="{StaticResource G2Switch}" IsChecked="{Binding ModeBgJpeg}" /></ContentControl>
-    <StackPanel VerticalAlignment="Center">
-      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="JPG로 저장" /></StackPanel>
-      
-    </StackPanel>
-  </DockPanel>
-</Border><Border Style="{StaticResource G2SetRow}" Tag="배경 기준 색 ">
-  <DockPanel>
-    <ContentControl DockPanel.Dock="Right" VerticalAlignment="Center" Margin="12,0,0,0" Focusable="False"><TextBox Width="120" Text="{Binding BGTargetColor}" FontFamily="{StaticResource G2Mono}" /></ContentControl>
-    <StackPanel VerticalAlignment="Center">
-      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="배경 기준 색" /></StackPanel>
-      
+      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="배경제거 실행 스크립트" /></StackPanel>
+      <TextBlock Style="{StaticResource G2Caption}" TextWrapping="Wrap" Text="Matting Studio의 Start.ps1. 비워 두면 G2 폴더의 CloriumBackgroundRemoval 폴더를 사용합니다." />
     </StackPanel>
   </DockPanel>
 </Border></StackPanel>

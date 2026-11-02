@@ -372,7 +372,7 @@
               <TextBlock Text="색보정" HorizontalAlignment="Center" Margin="0,4,0,0" />
             </StackPanel>
           </Button>
-          <Button Name="but_AIRemoveBg" Style="{StaticResource G2RailButton}" ToolTip="{T:Translate LabelAIRemoveBg}" Click="but_AIRemoveBg_Click" Visibility="{Binding Source={x:Static Core:ServiceProvider.Branding}, Path=ControlRemoveBackground, Converter={StaticResource BooleanToVisibilityConverter1}}">
+          <Button Name="but_AIRemoveBg" Style="{StaticResource G2RailButton}" ToolTip="배경제거 (Matting Studio)" Click="but_AIRemoveBg_Click" Visibility="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=UseBackgroundRemoval, Converter={StaticResource BooleanToVisibilityConverter1}}">
             <StackPanel>
               <Viewbox Width="22" Height="22" HorizontalAlignment="Center"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoLayers}" /></Viewbox>
               <TextBlock Text="배경제거" HorizontalAlignment="Center" Margin="0,4,0,0" />
@@ -700,7 +700,7 @@
 
             <!-- capture face: F / B / D (normal mode) -->
             <StackPanel Name="FrontBack" Margin="0,0,0,12" Visibility="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=ShowFrontBack, Converter={StaticResource BooleanToVisibilityConverter1}}">
-              <StackPanel Visibility="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=ShowRemoveBg, Mode=OneWay, Converter={StaticResource ZeroOrFalseToVisibleConverter}}">
+              <StackPanel>
                 <DockPanel Margin="0,0,0,8">
                   <TextBlock Style="{StaticResource G2SectionTitle}" Text="촬영 면" />
                 </DockPanel>
@@ -843,48 +843,6 @@
                   </Button>
                 </UniformGrid>
               </StackPanel>
-            </StackPanel>
-
-            <!-- capture face: background-removal mode -->
-            <StackPanel Name="RemoveBg" Margin="0,0,0,12" Visibility="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=ShowRemoveBg, Converter={StaticResource BooleanToVisibilityConverter1}}">
-              <DockPanel Margin="0,0,0,8">
-                <Button DockPanel.Dock="Right" Style="{StaticResource G2ButtonBase}" Height="24" Padding="6,0" FontSize="{DynamicResource G2Fs11}" Foreground="{StaticResource G2Accent}" Click="SwitchToNormal_Click" Content="일반 촬영으로 전환" />
-                <TextBlock Style="{StaticResource G2SectionTitle}" Text="{T:Translate LabelRemoveBgExpander}" />
-              </DockPanel>
-              <Grid>
-                <Grid.ColumnDefinitions>
-                  <ColumnDefinition Width="*" />
-                  <ColumnDefinition Width="Auto" />
-                  <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" Style="{StaticResource G2TileButton}" Margin="0,0,4,0" ToolTip="앞면 · 배경 제거 촬영" Click="But_FrontCaptureBG_Click">
-                  <StackPanel>
-                    <TextBlock Text="F" HorizontalAlignment="Center" FontSize="{DynamicResource G2Fs22}" FontWeight="SemiBold" Foreground="{StaticResource G2Accent}" FontFamily="{StaticResource G2Mono}" />
-                    <TextBlock Text="앞면 · 배경" HorizontalAlignment="Center" FontSize="{DynamicResource G2Fs12}" FontWeight="SemiBold" />
-                  </StackPanel>
-                </Button>
-                <Button Grid.Column="1" Style="{StaticResource G2TileButton}" Width="58" Margin="4,0" ToolTip="{T:Translate LabelRemoveBgEdit}" Click="But_CreatRemoveBG_Click">
-                  <StackPanel>
-                    <Viewbox Width="20" Height="20" HorizontalAlignment="Center"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoLayers}" /></Viewbox>
-                    <TextBlock Text="편집" HorizontalAlignment="Center" FontSize="{DynamicResource G2Fs11}" Margin="0,4,0,0" />
-                  </StackPanel>
-                </Button>
-                <Button Grid.Column="2" Style="{StaticResource G2TileButton}" Margin="4,0,0,0" ToolTip="뒷면 · 배경 제거 촬영" Click="But_BackCaptureBG_Click">
-                  <StackPanel>
-                    <TextBlock Text="B" HorizontalAlignment="Center" FontSize="{DynamicResource G2Fs22}" FontWeight="SemiBold" Foreground="{StaticResource G2Accent}" FontFamily="{StaticResource G2Mono}" />
-                    <TextBlock Text="뒷면 · 배경" HorizontalAlignment="Center" FontSize="{DynamicResource G2Fs12}" FontWeight="SemiBold" />
-                  </StackPanel>
-                </Button>
-              </Grid>
-              <DockPanel Margin="0,10,0,0">
-                <Border DockPanel.Dock="Right" CornerRadius="8" Background="{StaticResource G2Panel2}" Padding="2">
-                  <StackPanel Orientation="Horizontal">
-                    <RadioButton Name="ModeA" Style="{StaticResource G2Segment}" GroupName="ModeGroup" IsChecked="True" Content="1회 촬영" />
-                    <RadioButton Name="ModeB" Style="{StaticResource G2Segment}" GroupName="ModeGroup" Content="2회 촬영" />
-                  </StackPanel>
-                </Border>
-                <CheckBox Name="Bg_Auto" Content="{T:Translate LabelAuto}" VerticalAlignment="Center" />
-              </DockPanel>
             </StackPanel>
 
             <!-- camera settings -->
