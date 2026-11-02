@@ -598,17 +598,33 @@
   </DockPanel>
 </Border></StackPanel>
   </StackPanel>
-</Border><Border Style="{StaticResource G2Card}" Padding="0" Margin="0,0,0,10" Tag="촬영 후 조명 끄기 촬영이 끝나면 조명을 자동으로 끕니다." Visibility="{Binding Source={x:Static Core:ServiceProvider.Branding}, Path=ControlLighting, Converter={StaticResource BooleanToVisibilityConverter}}">
+</Border><Border Style="{StaticResource G2Card}" Padding="0" Margin="0,0,0,10" Tag="조명 조절 클로리움 조명 제어(Bluetooth)로 Godox 조명을 켜고 끕니다. 켜면 왼쪽 도구에 조명 버튼이 나타납니다. 촬영 후 조명 끄기 실행 파일">
   <StackPanel>
     <DockPanel Margin="14,12,12,4">
-      <ContentControl DockPanel.Dock="Right" Focusable="False" VerticalAlignment="Center"><CheckBox x:Name="G2Feat_lightafter" Style="{StaticResource G2Switch}" IsChecked="{Binding ModeLighting}" /></ContentControl>
+      <ContentControl DockPanel.Dock="Right" Focusable="False" VerticalAlignment="Center"><CheckBox x:Name="G2Feat_light" Style="{StaticResource G2Switch}" IsChecked="{Binding UseCloriumLight}" /></ContentControl>
       <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-        <TextBlock Style="{StaticResource G2SectionTitle}" Text="촬영 후 조명 끄기" />
-        <Border Style="{StaticResource G2Chip}" Background="#FFEEF0F3" Margin="8,0,0,0"><TextBlock Text="공통" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="#FF3A4654" /></Border>
+        <TextBlock Style="{StaticResource G2SectionTitle}" Text="조명 조절" />
+        <Border Style="{StaticResource G2Chip}" Background="#FFE3ECFB" Margin="8,0,0,0"><TextBlock Text="G2" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="#FF1F5FD6" /></Border>
       </StackPanel>
     </DockPanel>
-    <TextBlock Style="{StaticResource G2Caption}" TextWrapping="Wrap" Margin="14,0,14,10" Text="촬영이 끝나면 조명을 자동으로 끕니다." />
-    
+    <TextBlock Style="{StaticResource G2Caption}" TextWrapping="Wrap" Margin="14,0,14,10" Text="클로리움 조명 제어(Bluetooth)로 Godox 조명을 켜고 끕니다. 켜면 왼쪽 도구에 조명 버튼이 나타나고, 시작·촬영·절전·종료 때 조명을 함께 제어합니다." />
+    <StackPanel Visibility="{Binding IsChecked, ElementName=G2Feat_light, Converter={StaticResource BooleanToVisibilityConverter}}"><Border Style="{StaticResource G2SetRow}" Tag="촬영 후 조명 끄기 ">
+  <DockPanel>
+    <ContentControl DockPanel.Dock="Right" VerticalAlignment="Center" Margin="12,0,0,0" Focusable="False"><CheckBox x:Name="G2Feat_lightafter" Style="{StaticResource G2Switch}" IsChecked="{Binding ModeLighting}" /></ContentControl>
+    <StackPanel VerticalAlignment="Center">
+      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="촬영 후 조명 끄기" /></StackPanel>
+      <TextBlock Style="{StaticResource G2Caption}" TextWrapping="Wrap" Text="촬영 직전에 켜고, 사진을 받으면 끕니다." />
+    </StackPanel>
+  </DockPanel>
+</Border><Border Style="{StaticResource G2SetRow}" Tag="조명 제어 실행 파일 ">
+  <DockPanel>
+    <ContentControl DockPanel.Dock="Right" VerticalAlignment="Center" Margin="12,0,0,0" Focusable="False"><StackPanel Orientation="Horizontal"><TextBox Width="240" FontFamily="{StaticResource G2Mono}" Text="{Binding CloriumLightPath}" ToolTip="비워 두면 G2 폴더의 CloriumLightControl\CloriumLightControl.exe" /><Button Style="{StaticResource G2GhostButton}" Width="34" Padding="0" Margin="6,0,0,0" ToolTip="파일 선택" Click="Btn_CloriumLightPath_Click"><Viewbox Width="16" Height="16"><Path Width="24" Height="24" Stroke="{StaticResource G2Sub}" StrokeThickness="1.8" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round" Data="M3,6 H10 L12,8 H21 V19 H3 Z" /></Viewbox></Button></StackPanel></ContentControl>
+    <StackPanel VerticalAlignment="Center">
+      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="조명 제어 실행 파일" /></StackPanel>
+      <TextBlock Style="{StaticResource G2Caption}" TextWrapping="Wrap" Text="비워 두면 G2 폴더의 CloriumLightControl 폴더를 사용합니다." />
+    </StackPanel>
+  </DockPanel>
+</Border></StackPanel>
   </StackPanel>
 </Border>
     </StackPanel>
@@ -633,22 +649,6 @@
     <ContentControl DockPanel.Dock="Right" VerticalAlignment="Center" Margin="12,0,0,0" Focusable="False"><CheckBox Style="{StaticResource G2Switch}" IsChecked="{Binding UseLEDDimmer}" /></ContentControl>
     <StackPanel VerticalAlignment="Center">
       <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="LED 조명 디머" /></StackPanel>
-      
-    </StackPanel>
-  </DockPanel>
-</Border><Border Style="{StaticResource G2SetRow}" Tag="조명 색온도 최소 (K) ">
-  <DockPanel>
-    <ContentControl DockPanel.Dock="Right" VerticalAlignment="Center" Margin="12,0,0,0" Focusable="False"><TextBox Width="90" Text="{Binding LightTemperatureMin}" FontFamily="{StaticResource G2Mono}" HorizontalContentAlignment="Center" /></ContentControl>
-    <StackPanel VerticalAlignment="Center">
-      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="조명 색온도 최소 (K)" /></StackPanel>
-      
-    </StackPanel>
-  </DockPanel>
-</Border><Border Style="{StaticResource G2SetRow}" Tag="조명 색온도 최대 (K) ">
-  <DockPanel>
-    <ContentControl DockPanel.Dock="Right" VerticalAlignment="Center" Margin="12,0,0,0" Focusable="False"><TextBox Width="90" Text="{Binding LightTemperatureMax}" FontFamily="{StaticResource G2Mono}" HorizontalContentAlignment="Center" /></ContentControl>
-    <StackPanel VerticalAlignment="Center">
-      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="조명 색온도 최대 (K)" /></StackPanel>
       
     </StackPanel>
   </DockPanel>

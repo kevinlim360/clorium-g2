@@ -274,7 +274,7 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 		_ManagementTimer.Interval = TimeSpan.FromSeconds(1.0);
 		_ManagementTimer.Tick += ManagementTimer_Tick;
 		_ManagementTimer.Start();
-		LightControlWnd.Instance.AllLightOn();
+		CloriumLightControl.EnsureStarted();
 		ServiceProvider.Settings.PrevTime = default;
 		ServiceProvider.Settings.PauseTime = default;
 		ServiceProvider.Settings.IsTimerRunning = false;
@@ -344,7 +344,7 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 		SignalRWebServer.Dispose();
 		WatcherFtpServer.StopFTPServer();
 		DisconnectBarcodeScanner();
-		LightControlWnd.Instance.AllLightOff();
+		if (CloriumLightControl.Enabled) CloriumLightControl.PowerAsync(false, 5000).Wait(6000);
 		ExternProcess_Close();
 		_ManagementTimer.Stop();
 		_ManagementTimer.Tick -= ManagementTimer_Tick;
@@ -520,7 +520,7 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 		}
 		if ((DateTime.Now - lastPowerSaveTime).TotalMinutes >= (double)ServiceProvider.Settings.LightPowerSaveTime)
 		{
-			LightControlWnd.Instance.AllLightOff();
+			CloriumLightControl.Power(false);
 			Send_Dimming("0");
 			lastPowerSaveTime = DateTime.Now;
 		}
@@ -723,11 +723,7 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 	private void but_Lighting_Click(object sender, RoutedEventArgs e)
 	{
 		Log.Debug("Main ICON : Lighting Click");
-		LightControlWnd wnd = new LightControlWnd(this);
-		wnd.Owner = this;
-		if (wnd.ShowDialog() != true)
-		{
-		}
+		CloriumLightControl.OpenWindow();
 	}
 
 	private void but_TurnTable_Click(object sender, RoutedEventArgs e)
@@ -793,14 +789,14 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 
 	private void but_LightingOn_Click(object sender, RoutedEventArgs e)
 	{
-		LightControlWnd.Instance.AllLightOn();
+		CloriumLightControl.Power(true);
 		Send_Dimming(ServiceProvider.Settings.LED_Dimming);
 		lastPowerSaveTime = DateTime.Now;
 	}
 
 	private void but_LightingOff_Click(object sender, RoutedEventArgs e)
 	{
-		LightControlWnd.Instance.AllLightOff();
+		CloriumLightControl.Power(false);
 		Send_Dimming("0");
 		lastPowerSaveTime = DateTime.Now;
 	}
@@ -1950,23 +1946,13 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 				}
 				return;
 			}
-			if ((DateTime.Now - lastPowerSaveTime).TotalMinutes >= (double)ServiceProvider.Settings.LightPowerSaveTime)
+			// Capture thread: wait (bounded) for the light app so the shot is not taken in the dark.
+			if ((DateTime.Now - lastPowerSaveTime).TotalMinutes >= (double)ServiceProvider.Settings.LightPowerSaveTime || (CloriumLightControl.Enabled && ServiceProvider.Settings.ModeLighting))
 			{
-				System.Windows.Application.Current.Dispatcher.Invoke(() =>
-				{
-					LightControlWnd.Instance.AllLightOn();
-					Thread.Sleep(200);
-				});
+				CloriumLightControl.PowerAsync(true, 8000).Wait(9000);
+				Thread.Sleep(200);
 			}
 			lastPowerSaveTime = DateTime.Now;
-			if (ServiceProvider.Branding.ControlLighting && ServiceProvider.Settings.ModeLighting)
-			{
-				System.Windows.Application.Current.Dispatcher.Invoke(() =>
-				{
-					LightControlWnd.Instance.AllLightOn();
-					Thread.Sleep(200);
-				});
-			}
 			Thread thread = new Thread((ThreadStart)CameraHelper.Capture);
 			thread.Start();
 		}
@@ -2002,9 +1988,9 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 		ServiceProvider.Settings.ThumbailLoaded = false;
 		try
 		{
-			if ((DateTime.Now - lastPowerSaveTime).TotalMinutes >= (double)ServiceProvider.Settings.LightPowerSaveTime || (ServiceProvider.Branding.ControlLighting && ServiceProvider.Settings.ModeLighting))
+			if ((DateTime.Now - lastPowerSaveTime).TotalMinutes >= (double)ServiceProvider.Settings.LightPowerSaveTime || (CloriumLightControl.Enabled && ServiceProvider.Settings.ModeLighting))
 			{
-				LightControlWnd.Instance.AllLightOn();
+				await CloriumLightControl.PowerAsync(true, 8000);
 				Thread.Sleep(200);
 			}
 			lastPowerSaveTime = DateTime.Now;
@@ -2320,13 +2306,10 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 			Log.Debug("[" + CaptureCount + "] ===== 캡쳐 이벤트 시작 =====");
 			eventArgs.CameraDevice.IsBusy = true;
 			string extension = Path.GetExtension(eventArgs.FileName);
-			System.Windows.Application.Current.Dispatcher.Invoke(() =>
+			if (CloriumLightControl.Enabled && ServiceProvider.Settings.ModeLighting)
 			{
-				if (ServiceProvider.Branding.ControlLighting && ServiceProvider.Settings.ModeLighting)
-				{
-					LightControlWnd.Instance.AllLightOff();
-				}
-			});
+				CloriumLightControl.Power(false);
+			}
 			if (LiveViewManager.PreviewRequest.ContainsKey(eventArgs.CameraDevice) && LiveViewManager.PreviewRequest[eventArgs.CameraDevice])
 			{
 				LiveViewManager.PreviewRequest[eventArgs.CameraDevice] = false;

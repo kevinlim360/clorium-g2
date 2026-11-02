@@ -29,4 +29,39 @@ public partial class Settings
             NotifyPropertyChanged("UseLargeText");
         }
     }
+
+    private bool _useCloriumLight;
+
+    // G2: 조명 조절 — Clorium Light Control (Godox Bluetooth app). Replaces the removed DMX controller;
+    // ModeLighting (촬영 후 조명 끄기) and LightPowerSaveTime keep their meaning. Persisted; default off.
+    public bool UseCloriumLight
+    {
+        get => _useCloriumLight;
+        set
+        {
+            if (_useCloriumLight == value) return;
+            _useCloriumLight = value;
+            NotifyPropertyChanged("UseCloriumLight");
+            NotifyPropertyChanged("ShowLightingPanel");
+        }
+    }
+
+    private string _cloriumLightPath = "";
+
+    // Empty = <G2 folder>\CloriumLightControl\CloriumLightControl.exe
+    public string CloriumLightPath
+    {
+        get => _cloriumLightPath;
+        set
+        {
+            if (_cloriumLightPath == value) return;
+            _cloriumLightPath = value ?? "";
+            NotifyPropertyChanged("CloriumLightPath");
+        }
+    }
+
+    // Main screen 조명 켜기/끄기 panel: the light app and/or the USB LED dimmer.
+    [System.Xml.Serialization.XmlIgnore]
+    [Newtonsoft.Json.JsonIgnore]
+    public bool ShowLightingPanel => UseCloriumLight || (ServiceProvider.Branding?.ControlLEDDimmer ?? false);
 }

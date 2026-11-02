@@ -62,7 +62,6 @@
     <Page Remove="CameraControl/windows/FileNameTemplateEditorWnd.xaml" />
     <Page Remove="CameraControl/windows/FullScreenWnd.xaml" />
     <Page Remove="CameraControl/windows/GetIpWnd.xaml" />
-    <Page Remove="CameraControl/windows/LightControlWnd.xaml" />
     <Page Remove="CameraControl/windows/LiveViewFullScreenWnd.xaml" />
     <Page Remove="CameraControl/windows/LiveViewWnd.xaml" />
     <Page Remove="CameraControl/windows/MultipleCameraWnd.xaml" />
@@ -127,7 +126,6 @@
     <Page Include="CameraControl/windows/FileNameTemplateEditorWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/filenametemplateeditorwnd.xaml" />
     <Page Include="CameraControl/windows/FullScreenWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/fullscreenwnd.xaml" />
     <Page Include="CameraControl/windows/GetIpWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/getipwnd.xaml" />
-    <Page Include="CameraControl/windows/LightControlWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/lightcontrolwnd.xaml" />
     <Page Include="CameraControl/windows/LiveViewFullScreenWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/liveviewfullscreenwnd.xaml" />
     <Page Include="CameraControl/windows/LiveViewWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/liveviewwnd.xaml" />
     <Page Include="CameraControl/windows/MultipleCameraWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/multiplecamerawnd.xaml" />

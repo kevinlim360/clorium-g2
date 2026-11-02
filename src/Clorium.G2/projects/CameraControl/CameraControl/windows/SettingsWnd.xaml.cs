@@ -71,6 +71,17 @@ public partial class SettingsWnd : Window, IComponentConnector
 		}
 	}
 
+	private void Btn_CloriumLightPath_Click(object sender, RoutedEventArgs e)
+	{
+		Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog();
+		dialog.Filter = "CloriumLightControl.exe|CloriumLightControl.exe|프로그램 (*.exe)|*.exe";
+		dialog.FileName = ServiceProvider.Settings.CloriumLightPath;
+		if (dialog.ShowDialog() == true)
+		{
+			ServiceProvider.Settings.CloriumLightPath = dialog.FileName;
+		}
+	}
+
 	private void Btn_add_device_Click(object sender, RoutedEventArgs e)
 	{
 		if (ServiceProvider.ExternalDeviceManager.ExternalDevices.Count == 0)
@@ -194,7 +205,8 @@ public partial class SettingsWnd : Window, IComponentConnector
 		}
 		string src = Path.Combine("D:\\Clorium Data\\Clorium_LightPresets.json");
 		string dst = dstFolder + date + " Clorium_LightPresets.json";
-		File.Copy(src, dst, overwrite: true);
+		// DMX light presets were removed in G2; older installs may still have the file.
+		if (File.Exists(src)) File.Copy(src, dst, overwrite: true);
 		src = Path.Combine("D:\\Clorium Data\\Clorium_MDPData.txt");
 		dst = dstFolder + date + " Clorium_MDPData.txt";
 		File.Copy(src, dst, overwrite: true);

@@ -360,7 +360,7 @@
               <TextBlock Text="치수" HorizontalAlignment="Center" Margin="0,4,0,0" />
             </StackPanel>
           </Button>
-          <Button Name="but_Lighting" Style="{StaticResource G2RailButton}" ToolTip="{T:Translate LabelLighting}" Click="but_Lighting_Click" Visibility="{Binding Source={x:Static Core:ServiceProvider.Branding}, Path=ControlLighting, Converter={StaticResource BooleanToVisibilityConverter1}}">
+          <Button Name="but_Lighting" Style="{StaticResource G2RailButton}" ToolTip="{T:Translate LabelLighting}" Click="but_Lighting_Click" Visibility="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=UseCloriumLight, Converter={StaticResource BooleanToVisibilityConverter1}}">
             <StackPanel>
               <Viewbox Width="22" Height="22" HorizontalAlignment="Center"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoBulb}" /></Viewbox>
               <TextBlock Text="조명" HorizontalAlignment="Center" Margin="0,4,0,0" />
@@ -623,7 +623,7 @@
           <StackPanel>
 
             <!-- lighting -->
-            <Border Height="58" Padding="12,0,10,0" CornerRadius="12" Background="{StaticResource G2Panel2}" BorderBrush="{StaticResource G2Line}" BorderThickness="1" Margin="0,0,0,14" Visibility="{Binding Source={x:Static Core:ServiceProvider.Branding}, Path=ControlLighting, Converter={StaticResource BooleanToVisibilityConverter1}}">
+            <Border Height="58" Padding="12,0,10,0" CornerRadius="12" Background="{StaticResource G2Panel2}" BorderBrush="{StaticResource G2Line}" BorderThickness="1" Margin="0,0,0,14" Visibility="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=ShowLightingPanel, Converter={StaticResource BooleanToVisibilityConverter1}}">
               <DockPanel>
                 <Border DockPanel.Dock="Left" Width="36" Height="36" CornerRadius="18" Background="{StaticResource G2AccentSoft}" VerticalAlignment="Center">
                   <Viewbox Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoBulb}" Stroke="{StaticResource G2Accent}" /></Viewbox>
