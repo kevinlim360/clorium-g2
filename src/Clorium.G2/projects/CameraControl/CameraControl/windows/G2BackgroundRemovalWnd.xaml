@@ -171,7 +171,22 @@
         </StackPanel>
         <TextBlock x:Name="CountText" Grid.Column="1" VerticalAlignment="Center" FontFamily="{StaticResource G2Mono}" FontSize="15" FontWeight="SemiBold" Text="" />
       </Grid>
-      <ProgressBar x:Name="Progress" DockPanel.Dock="Top" Style="{StaticResource BrProgress}" Margin="0,0,0,12" Minimum="0" Maximum="1" Value="0" />
+      <ProgressBar x:Name="Progress" DockPanel.Dock="Top" Style="{StaticResource BrProgress}" Margin="0,0,0,10" Minimum="0" Maximum="1" Value="0" />
+      <!-- zoom: both panes move together so the same spot is compared -->
+      <DockPanel DockPanel.Dock="Top" Margin="2,0,0,8">
+        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+          <TextBlock x:Name="ZoomText" VerticalAlignment="Center" Margin="0,0,10,0" FontFamily="{StaticResource G2Mono}" FontSize="12" FontWeight="SemiBold" Text="맞춤" />
+          <Button Style="{StaticResource G2GhostButton}" Height="28" Width="32" Padding="0" Margin="0,0,4,0" ToolTip="축소" Click="ZoomOut_Click">
+            <Viewbox Width="14" Height="14"><Path Style="{StaticResource G2IconPath}" Data="M10,4 A6,6 0 1 0 10.001,4 Z M14.5,14.5 L20,20 M7,10 H13" /></Viewbox>
+          </Button>
+          <Button Style="{StaticResource G2GhostButton}" Height="28" Width="32" Padding="0" Margin="0,0,4,0" ToolTip="확대" Click="ZoomIn_Click">
+            <Viewbox Width="14" Height="14"><Path Style="{StaticResource G2IconPath}" Data="M10,4 A6,6 0 1 0 10.001,4 Z M14.5,14.5 L20,20 M7,10 H13 M10,7 V13" /></Viewbox>
+          </Button>
+          <Button Style="{StaticResource G2GhostButton}" Height="28" Padding="10,0" Margin="0,0,4,0" FontSize="12" ToolTip="원본 화소 크기(100%)로 봅니다." Click="ZoomActual_Click" Content="100%" />
+          <Button Style="{StaticResource G2GhostButton}" Height="28" Padding="10,0" FontSize="12" ToolTip="화면에 맞춥니다. (사진을 두 번 클릭해도 됩니다)" Click="ZoomFit_Click" Content="맞춤" />
+        </StackPanel>
+        <TextBlock Style="{StaticResource G2Caption}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Text="마우스 휠로 확대/축소, 끌어서 이동, 두 번 클릭하면 맞춤. 원본과 결과가 함께 움직입니다." />
+      </DockPanel>
 
       <Border x:Name="ErrorsCard" DockPanel.Dock="Bottom" Style="{StaticResource G2Card}" Margin="0,12,0,0" MaxHeight="150" Visibility="Collapsed">
         <DockPanel>
@@ -189,14 +204,18 @@
           <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Border Grid.Column="0" Background="{DynamicResource G2Stage}" CornerRadius="12" ClipToBounds="True">
-          <Grid>
-            <Image x:Name="SourceImage" Margin="14" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality" />
+          <Grid x:Name="SourceView" Background="Transparent" Cursor="Hand" MouseWheel="View_MouseWheel" MouseLeftButtonDown="View_MouseLeftButtonDown" MouseMove="View_MouseMove" MouseLeftButtonUp="View_MouseLeftButtonUp">
+            <Grid x:Name="SourceCanvas">
+              <Image x:Name="SourceImage" Margin="14" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality" />
+            </Grid>
             <Border Style="{StaticResource BrStageLabel}"><TextBlock Foreground="White" FontSize="11.5" FontWeight="SemiBold" Text="원본" /></Border>
           </Grid>
         </Border>
         <Border Grid.Column="2" Background="{DynamicResource G2Stage}" CornerRadius="12" ClipToBounds="True">
-          <Grid Background="{StaticResource BrChecker}">
-            <Image x:Name="ResultImage" Margin="14" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality" />
+          <Grid x:Name="ResultView" Background="{StaticResource BrChecker}" Cursor="Hand" MouseWheel="View_MouseWheel" MouseLeftButtonDown="View_MouseLeftButtonDown" MouseMove="View_MouseMove" MouseLeftButtonUp="View_MouseLeftButtonUp">
+            <Grid x:Name="ResultCanvas">
+              <Image x:Name="ResultImage" Margin="14" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality" />
+            </Grid>
             <Border Style="{StaticResource BrStageLabel}"><TextBlock Foreground="White" FontSize="11.5" FontWeight="SemiBold" Text="배경 제거 결과" /></Border>
             <TextBlock x:Name="ResultEmpty" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource G2Sub}" Text="처리하면 여기에 결과가 보입니다" />
           </Grid>

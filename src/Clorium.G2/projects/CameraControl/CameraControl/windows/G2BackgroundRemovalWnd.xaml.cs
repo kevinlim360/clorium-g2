@@ -7,6 +7,8 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using CameraControl.Classes;
@@ -16,7 +18,8 @@ namespace CameraControl.windows;
 
 // G2 배경제거 screen. One window; the rail button brings it forward with the photo selected in G2 as the target.
 // Flow: target (photos or a folder) → 확인 (/api/batch/scan, nothing written) → 배경 제거 시작 (/api/batch/start) → the
-// job is polled for progress and the engine's before/after thumbnails. The engine keeps running if the window closes.
+// job is polled for progress and the engine's before/after thumbnails, which are replaced by the full-size photo and
+// saved PNG. Both panes zoom (wheel) and move (drag) together. The engine keeps running if the window closes.
 public partial class G2BackgroundRemovalWnd : Window
 {
 	private static G2BackgroundRemovalWnd _instance;
@@ -43,9 +46,37 @@ public partial class G2BackgroundRemovalWnd : Window
 
 	private string _shownResult;
 
+	// What the last 확인 listed: the selected photos (or the one folder), so a preview name maps back to files.
+	private string[] _scanPaths = new string[0];
+
+	private bool _scanFolder;
+
+	// Preview item on screen; its full-size source/result replace the engine's 400 px thumbnails once read.
+	private string _currentName;
+
+	private bool _sourceFromFile;
+
+	private bool _resultFromFile;
+
+	private bool _resultLoading;
+
+	// Shared by both panes: zooming or moving one moves the other (same spot before/after).
+	private readonly ScaleTransform _zoom = new ScaleTransform();
+
+	private readonly TranslateTransform _pan = new TranslateTransform();
+
+	private Point? _dragFrom;
+
+	private Point _panFrom;
+
 	public G2BackgroundRemovalWnd()
 	{
 		InitializeComponent();
+		TransformGroup view = new TransformGroup();
+		view.Children.Add(_zoom);
+		view.Children.Add(_pan);
+		SourceCanvas.RenderTransform = view;
+		ResultCanvas.RenderTransform = view;
 		_healthTimer.Tick += (s, e) => CheckHealth();
 		_jobTimer.Tick += (s, e) => PollJob();
 		Loaded += (s, e) => CheckHealth();
@@ -255,16 +286,68 @@ public partial class G2BackgroundRemovalWnd : Window
 		UpdateButtons();
 	}
 
-	// Before processing: the first photo of the plan on the left, nothing on the right.
+	// Before processing: the first photo of the plan (full size) on the left, nothing on the right.
 	private void ShowFirstSource(JsonElement plan, string[] paths, bool folder)
 	{
+		_scanPaths = paths;
+		_scanFolder = folder;
 		string first = null;
 		if (!folder) first = paths[0];
 		else if (plan.TryGetProperty("examples", out JsonElement examples) && examples.GetArrayLength() > 0) first = Path.Combine(paths[0], examples[0].GetProperty("source").GetString());
-		SourceImage.Source = first != null && File.Exists(first) ? LoadFile(first) : null;
+		SourceImage.Source = null;
 		ResultImage.Source = null;
 		ResultEmpty.Visibility = Visibility.Visible;
-		_shownSource = _shownResult = null;
+		_shownSource = _shownResult = _currentName = null;
+		_resultFromFile = _resultLoading = false;
+		Fit();
+		if (first != null) LoadInto(SourceImage, first, () => _currentName == null);
+	}
+
+	// Full-size read off the UI thread; applied only while the same item is still on screen.
+	private void LoadInto(Image target, string path, Func<bool> stillWanted, Action<bool> done = null)
+	{
+		Task.Run(() => File.Exists(path) ? LoadFile(path) : null).ContinueWith(t =>
+		{
+			bool ok = t.Result != null && stillWanted();
+			if (ok)
+			{
+				target.Source = t.Result;
+				if (target == ResultImage) ResultEmpty.Visibility = Visibility.Collapsed;
+				UpdateZoomText();
+			}
+			done?.Invoke(ok);
+		}, TaskScheduler.FromCurrentSynchronizationContext());
+	}
+
+	private string SourcePathOf(string name)
+	{
+		if (string.IsNullOrEmpty(name) || _scanPaths.Length == 0) return null;
+		if (_scanFolder) return Path.Combine(_scanPaths[0], name);
+		return _scanPaths.FirstOrDefault(p => p.EndsWith("\\" + name, StringComparison.OrdinalIgnoreCase) || string.Equals(p, name, StringComparison.OrdinalIgnoreCase));
+	}
+
+	// Same rule as the engine (batch.output_path): every folder level gets _bgr, the file <stem>_bgr.png. A name the
+	// engine had to change (front.jpg + front.png, an earlier result) is not found and the thumbnail stays.
+	private string ResultPathOf(string name)
+	{
+		if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(_output)) return null;
+		string[] parts = name.Split('\\', '/');
+		string folder = _output;
+		for (int i = 0; i < parts.Length - 1; i++) folder = Path.Combine(folder, parts[i] + "_bgr");
+		return Path.Combine(folder, Path.GetFileNameWithoutExtension(parts[parts.Length - 1]) + "_bgr.png");
+	}
+
+	private void TryResultFile()
+	{
+		if (_resultFromFile || _resultLoading || _currentName == null) return;
+		string name = _currentName, path = ResultPathOf(name);
+		if (path == null || !File.Exists(path)) return;
+		_resultLoading = true;
+		LoadInto(ResultImage, path, () => _currentName == name, ok =>
+		{
+			_resultLoading = false;
+			if (ok) _resultFromFile = true;
+		});
 	}
 
 	private static BitmapImage LoadFile(string path)
@@ -275,7 +358,6 @@ public partial class G2BackgroundRemovalWnd : Window
 			image.BeginInit();
 			image.CacheOption = BitmapCacheOption.OnLoad;
 			image.CreateOptions = BitmapCreateOptions.IgnoreColorProfile;
-			image.DecodePixelWidth = 1200;
 			image.UriSource = new Uri(path);
 			image.EndInit();
 			image.Freeze();
@@ -379,18 +461,28 @@ public partial class G2BackgroundRemovalWnd : Window
 		if (job.TryGetProperty("output", out JsonElement output) && output.ValueKind == JsonValueKind.String) _output = output.GetString();
 		if (job.TryGetProperty("preview", out JsonElement preview) && preview.ValueKind == JsonValueKind.Object)
 		{
-			string source = Str(preview, "source"), result = Str(preview, "result");
-			if (source != _shownSource)
+			// The engine only sends 400 px thumbnails: shown at once, then replaced by the photo and the saved PNG.
+			string name = Str(preview, "name"), source = Str(preview, "source"), result = Str(preview, "result");
+			if (name != _currentName)
+			{
+				_currentName = name;
+				_sourceFromFile = _resultFromFile = _resultLoading = false;
+				_shownSource = _shownResult = null;
+				string sourcePath = SourcePathOf(name);
+				if (sourcePath != null) LoadInto(SourceImage, sourcePath, () => _currentName == name, ok => _sourceFromFile |= ok);
+			}
+			if (source != _shownSource && !_sourceFromFile)
 			{
 				_shownSource = source;
 				SourceImage.Source = LoadDataUrl(source);
 			}
-			if (result != _shownResult)
+			if (result != _shownResult && !_resultFromFile)
 			{
 				_shownResult = result;
 				ResultImage.Source = LoadDataUrl(result);
 				ResultEmpty.Visibility = ResultImage.Source == null ? Visibility.Visible : Visibility.Collapsed;
 			}
+			if (!string.IsNullOrEmpty(result)) TryResultFile();
 		}
 		if (job.TryGetProperty("errors", out JsonElement errors) && errors.ValueKind == JsonValueKind.Array && errors.GetArrayLength() > 0)
 		{
@@ -398,6 +490,7 @@ public partial class G2BackgroundRemovalWnd : Window
 			ErrorsCard.Visibility = Visibility.Visible;
 		}
 		if (status == "running") return;
+		TryResultFile();
 		_jobTimer.Stop();
 		_running = false;
 		_planId = null;
@@ -422,6 +515,109 @@ public partial class G2BackgroundRemovalWnd : Window
 	private static int Int(JsonElement e, string name) => e.TryGetProperty(name, out JsonElement v) && v.ValueKind == JsonValueKind.Number ? v.GetInt32() : 0;
 
 	private static string Str(JsonElement e, string name) => e.TryGetProperty(name, out JsonElement v) && v.ValueKind == JsonValueKind.String ? v.GetString() : "";
+
+	// ---------- zoom (both panes) ----------
+
+	private const double MaxZoom = 40;
+
+	private void View_MouseWheel(object sender, MouseWheelEventArgs e)
+	{
+		ZoomAt(e.GetPosition((IInputElement)sender), _zoom.ScaleX * Math.Pow(1.25, e.Delta / 120.0));
+		e.Handled = true;
+	}
+
+	private void View_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+	{
+		if (e.ClickCount == 2)
+		{
+			Fit();
+			return;
+		}
+		if (_zoom.ScaleX <= 1) return;
+		FrameworkElement view = (FrameworkElement)sender;
+		_dragFrom = e.GetPosition(view);
+		_panFrom = new Point(_pan.X, _pan.Y);
+		view.CaptureMouse();
+		view.Cursor = Cursors.SizeAll;
+	}
+
+	private void View_MouseMove(object sender, MouseEventArgs e)
+	{
+		if (_dragFrom == null) return;
+		Point now = e.GetPosition((IInputElement)sender);
+		_pan.X = _panFrom.X + now.X - _dragFrom.Value.X;
+		_pan.Y = _panFrom.Y + now.Y - _dragFrom.Value.Y;
+		ClampPan();
+	}
+
+	private void View_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+	{
+		if (_dragFrom == null) return;
+		_dragFrom = null;
+		FrameworkElement view = (FrameworkElement)sender;
+		view.ReleaseMouseCapture();
+		view.Cursor = Cursors.Hand;
+	}
+
+	private void ZoomIn_Click(object sender, RoutedEventArgs e) => ZoomAt(ViewCenter(), _zoom.ScaleX * 1.5);
+
+	private void ZoomOut_Click(object sender, RoutedEventArgs e) => ZoomAt(ViewCenter(), _zoom.ScaleX / 1.5);
+
+	private void ZoomFit_Click(object sender, RoutedEventArgs e) => Fit();
+
+	// 100% = one photo pixel per screen pixel.
+	private void ZoomActual_Click(object sender, RoutedEventArgs e)
+	{
+		double actual = ActualPixelScale();
+		if (actual > 0) ZoomAt(ViewCenter(), actual);
+	}
+
+	private Point ViewCenter() => new Point(SourceView.ActualWidth / 2, SourceView.ActualHeight / 2);
+
+	private void Fit()
+	{
+		_zoom.ScaleX = _zoom.ScaleY = 1;
+		_pan.X = _pan.Y = 0;
+		UpdateZoomText();
+	}
+
+	// p is in pane coordinates; the point under the cursor stays put.
+	private void ZoomAt(Point p, double scale)
+	{
+		scale = Math.Max(1, Math.Min(MaxZoom, scale));
+		double old = _zoom.ScaleX;
+		_pan.X = p.X - (p.X - _pan.X) * scale / old;
+		_pan.Y = p.Y - (p.Y - _pan.Y) * scale / old;
+		_zoom.ScaleX = _zoom.ScaleY = scale;
+		ClampPan();
+		UpdateZoomText();
+	}
+
+	private void ClampPan()
+	{
+		double w = SourceView.ActualWidth, h = SourceView.ActualHeight, s = _zoom.ScaleX;
+		_pan.X = Math.Min(0, Math.Max(w - w * s, _pan.X));
+		_pan.Y = Math.Min(0, Math.Max(h - h * s, _pan.Y));
+	}
+
+	// Zoom factor at which the shown photo is drawn 1:1 on screen (0 = nothing shown yet).
+	private double ActualPixelScale()
+	{
+		Image image = SourceImage.Source != null ? SourceImage : ResultImage;
+		if (!(image.Source is BitmapSource bitmap) || image.ActualWidth <= 0) return 0;
+		double dpi = VisualTreeHelper.GetDpi(this).DpiScaleX;
+		return bitmap.PixelWidth / (image.ActualWidth * dpi);
+	}
+
+	private void UpdateZoomText()
+	{
+		double s = _zoom.ScaleX, actual = ActualPixelScale();
+		ZoomText.Text = s <= 1.001 ? "맞춤" + (actual > 0 ? " · " + Math.Round(100 / actual) + "%" : "") : actual > 0 ? Math.Round(100 * s / actual) + "%" : "×" + s.ToString("0.#");
+		// At 200% and more show crisp photo pixels (edges of the cut-out) instead of smoothing them.
+		BitmapScalingMode mode = actual > 0 && s / actual >= 2 ? BitmapScalingMode.NearestNeighbor : BitmapScalingMode.HighQuality;
+		RenderOptions.SetBitmapScalingMode(SourceImage, mode);
+		RenderOptions.SetBitmapScalingMode(ResultImage, mode);
+	}
 
 	private void OpenOutput_Click(object sender, RoutedEventArgs e)
 	{

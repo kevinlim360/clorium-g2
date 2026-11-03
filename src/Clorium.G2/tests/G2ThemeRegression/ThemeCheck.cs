@@ -138,6 +138,19 @@ class ThemeCheck
 				Console.WriteLine("  배경제거 chip tip=" + ((FrameworkElement)bw.FindName("EngineChip")).ToolTip + " scanError=" + ((TextBlock)bw.FindName("ScanError")).Text);
 				Check("배경제거 window scans the photo with the engine in " + mode + " (" + engine.Text + ", " + summary + ")", engine.Text == "준비 완료" && summary.StartsWith("사진 1장") && ((Button)bw.FindName("StartButton")).IsEnabled && (d ? Bg(bw).R < 0x30 : Bg(bw).R > 0xE0));
 				Check("scan wrote nothing next to the photo", !Directory.Exists(outDir + "_bgr"));
+				var src = (Image)bw.FindName("SourceImage");
+				DateTime until3 = DateTime.Now.AddSeconds(10);
+				while (!(src.Source is BitmapSource) && DateTime.Now < until3) Pump(100);
+				Check("원본 is the full-size photo, not a thumbnail (" + (src.Source is BitmapSource ? ((BitmapSource)src.Source).PixelWidth : 0) + " px)", src.Source is BitmapSource && ((BitmapSource)src.Source).PixelWidth == 1600);
+				var zoomText = (TextBlock)bw.FindName("ZoomText");
+				bgr.GetMethod("ZoomActual_Click", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(bw, new object[] { null, null }); Pump(200);
+				Snapshot(bw, Path.Combine(outDir, "background-removal-100-" + mode + ".png"));
+				Check("100% button zooms both panes together (" + zoomText.Text + ")", zoomText.Text == "100%" && ((FrameworkElement)bw.FindName("SourceCanvas")).RenderTransform == ((FrameworkElement)bw.FindName("ResultCanvas")).RenderTransform && ((FrameworkElement)bw.FindName("SourceCanvas")).RenderTransform.Value.M11 > 1);
+				bgr.GetMethod("ZoomFit_Click", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(bw, new object[] { null, null }); Pump(100);
+				Check("맞춤 returns to the whole photo (" + zoomText.Text + ")", zoomText.Text.StartsWith("맞춤") && ((FrameworkElement)bw.FindName("SourceCanvas")).RenderTransform.Value.M11 == 1);
+				bgr.GetField("_output", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(bw, @"D:\shoot_bgr");
+				string mapped = (string)bgr.GetMethod("ResultPathOf", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(bw, new object[] { @"sub\C1_001_F.jpg" });
+				Check("result file name follows the engine (" + mapped + ")", mapped == @"D:\shoot_bgr\sub_bgr\C1_001_F_bgr.png");
 				bw.Close();
 			}
 			apply.Invoke(null, new object[] { false });
