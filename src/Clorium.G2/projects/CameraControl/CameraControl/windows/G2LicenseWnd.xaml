@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Clorium G2 · 설정 > 라이선스: state of the license this PC runs with (the 4.7.1.5 D:\ key-file check used at start-up). -->
+<Window x:Class="CameraControl.windows.G2LicenseWnd" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Title="라이선스" Width="560" SizeToContent="Height" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" ShowInTaskbar="False" Background="{DynamicResource G2Page}" FontFamily="{DynamicResource G2Font}" TextElement.Foreground="{DynamicResource G2Text}" TextElement.FontSize="13" UseLayoutRounding="True">
+  <Window.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/CameraControl;component/styles/g2theme.xaml" />
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </Window.Resources>
+  <StackPanel Margin="20,18,20,18">
+    <TextBlock FontSize="{DynamicResource G2Fs20}" FontWeight="Bold" Text="라이선스" />
+    <TextBlock Style="{StaticResource G2Caption}" Margin="0,4,0,14" TextWrapping="Wrap" Text="이 PC에서 클로리움이 사용하는 라이선스 상태입니다. 시작할 때와 같은 방법으로 D:\의 키 파일을 확인합니다." />
+    <Border Style="{StaticResource G2Card}" Padding="16,14">
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="110" />
+          <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto" />
+          <RowDefinition Height="Auto" />
+          <RowDefinition Height="Auto" />
+          <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" Foreground="{StaticResource G2Sub}" Text="상태" Margin="0,0,0,10" />
+        <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Margin="0,0,0,10">
+          <Border x:Name="StateChip" CornerRadius="10" Padding="10,2" Background="{StaticResource G2OkBg}">
+            <TextBlock x:Name="StateText" FontWeight="SemiBold" Foreground="{StaticResource G2Ok}" Text="확인 중" />
+          </Border>
+        </StackPanel>
+        <TextBlock Grid.Row="1" Foreground="{StaticResource G2Sub}" Text="라이선스 방식" Margin="0,0,0,10" />
+        <TextBlock Grid.Row="1" Grid.Column="1" Margin="0,0,0,10" TextWrapping="Wrap" Text="PC 고정 키 파일 (D:\)" />
+        <TextBlock Grid.Row="2" Foreground="{StaticResource G2Sub}" Text="키 파일" Margin="0,0,0,10" />
+        <TextBlock x:Name="KeyFileText" Grid.Row="2" Grid.Column="1" Margin="0,0,0,10" TextWrapping="Wrap" FontFamily="{StaticResource G2Mono}" Text="-" />
+        <TextBlock Grid.Row="3" Foreground="{StaticResource G2Sub}" Text="프로그램 버전" />
+        <TextBlock x:Name="VersionText" Grid.Row="3" Grid.Column="1" FontFamily="{StaticResource G2Mono}" Text="-" />
+      </Grid>
+    </Border>
+    <Border Style="{StaticResource G2Card}" Padding="16,14" Margin="0,12,0,0">
+      <StackPanel>
+        <DockPanel>
+          <Button DockPanel.Dock="Right" Style="{StaticResource G2GhostButton}" Content="복사" Click="Copy_Click" />
+          <TextBlock Style="{StaticResource G2SectionTitle}" VerticalAlignment="Center" Text="PC 식별 정보" />
+        </DockPanel>
+        <TextBlock Style="{StaticResource G2Caption}" Margin="0,4,0,8" TextWrapping="Wrap" Text="키 파일을 새로 받거나 PC를 바꿀 때 클로리움(주)에 이 정보를 알려 주세요." />
+        <TextBox x:Name="IdentifierBox" IsReadOnly="True" TextWrapping="Wrap" MinHeight="64" FontFamily="{StaticResource G2Mono}" />
+      </StackPanel>
+    </Border>
+    <TextBlock x:Name="ErrorText" Style="{StaticResource G2Caption}" Margin="0,10,0,0" TextWrapping="Wrap" Foreground="{StaticResource G2Err}" Visibility="Collapsed" />
+    <TextBlock Style="{StaticResource G2Caption}" Margin="0,10,0,0" TextWrapping="Wrap" Text="서버 인증·PC 이전을 지원하는 관리형 라이선스는 준비 중입니다." />
+    <Button Style="{StaticResource G2PrimaryButton}" HorizontalAlignment="Right" Margin="0,14,0,0" MinWidth="90" Content="닫기" IsCancel="True" IsDefault="True" Click="Close_Click" />
+  </StackPanel>
+</Window>

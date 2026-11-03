@@ -1,5 +1,8 @@
 ﻿param(
     [switch]$SkipBuild,
+    # Only replace the G2 program files of an existing test runtime; module folders (and a Matting Studio server started
+    # from them) and G2TestData are left as they are.
+    [switch]$ProgramOnly,
     [string]$Target = '',
     [string]$LightDist = 'C:\Users\user\Documents\Codex\클로리움조명조절\work\dist\CloriumLightControl',
     [string]$AutoSizingDir = 'C:\Users\user\Documents\ChatGPT\의류 사진으로 부위별 사이즈 자동 측정\Clorium_ManualMeasure_Studio_Test_20261017\실행파일',
@@ -24,8 +27,9 @@ function Run([string[]]$ToolArgs) { & dotnet @ToolArgs; if ($LASTEXITCODE -ne 0)
 function Remove-Junction([string]$Path) { if (Test-Path -LiteralPath $Path) { [IO.Directory]::Delete($Path, $false) } }
 
 if (-not (Test-Path -LiteralPath $runtime)) { throw "dev runtime missing: $runtime" }
-$running = @(Get-Process -ErrorAction SilentlyContinue | Where-Object { $_.Path -and $_.Path.StartsWith($Target, [StringComparison]::OrdinalIgnoreCase) })
+$running = @(Get-Process -ErrorAction SilentlyContinue | Where-Object { $_.Path -and $_.Path.StartsWith($Target, [StringComparison]::OrdinalIgnoreCase) -and (-not $ProgramOnly -or $_.ProcessName -like 'CameraControl*') })
 if ($running.Count) { throw "Close the test runtime first (running: $($running | ForEach-Object { "$($_.ProcessName) $($_.Id)" }))" }
+if ($ProgramOnly -and -not (Test-Path -LiteralPath (Join-Path $Target 'CameraControl.exe'))) { throw "-ProgramOnly needs an existing test runtime: $Target" }
 
 Push-Location $src
 try {
@@ -36,18 +40,20 @@ try {
     }
 
     # Fresh program files; G2TestData (isolated settings) is kept between rebuilds.
-    if (Test-Path -LiteralPath $Target) {
+    if ($ProgramOnly) { } elseif (Test-Path -LiteralPath $Target) {
         Remove-Junction (Join-Path $Target 'CloriumBackgroundRemoval/work/matting-venv')
         Remove-Junction (Join-Path $Target 'CloriumBackgroundRemoval/work/matting-runtime')
         Get-ChildItem -LiteralPath $Target -Force | Where-Object { $_.Name -ne 'G2TestData' } | Remove-Item -Recurse -Force
     }
-    $null = robocopy $runtime $Target /E /NFL /NDL /NJH /NJS /NP /R:1 /W:1
-    if ($LASTEXITCODE -ge 8) { throw "robocopy $LASTEXITCODE" }
-    $global:LASTEXITCODE = 0
-    Get-ChildItem -LiteralPath $Target -Filter 'G2*Check*.exe' | Remove-Item -Force
-    # The dev runtime has no Tools\exiv2.exe (thumbnail metadata); copy it from the installed app, read only.
-    $tools = 'C:\Program Files (x86)\Clorium\Tools'
-    if (-not (Test-Path -LiteralPath (Join-Path $Target 'Tools/exiv2.exe')) -and (Test-Path -LiteralPath $tools)) { Copy-Item -LiteralPath $tools -Destination $Target -Recurse }
+    if (-not $ProgramOnly) {
+        $null = robocopy $runtime $Target /E /NFL /NDL /NJH /NJS /NP /R:1 /W:1
+        if ($LASTEXITCODE -ge 8) { throw "robocopy $LASTEXITCODE" }
+        $global:LASTEXITCODE = 0
+        Get-ChildItem -LiteralPath $Target -Filter 'G2*Check*.exe' | Remove-Item -Force
+        # The dev runtime has no Tools\exiv2.exe (thumbnail metadata); copy it from the installed app, read only.
+        $tools = 'C:\Program Files (x86)\Clorium\Tools'
+        if (-not (Test-Path -LiteralPath (Join-Path $Target 'Tools/exiv2.exe')) -and (Test-Path -LiteralPath $tools)) { Copy-Item -LiteralPath $tools -Destination $Target -Recurse }
+    }
     [IO.File]::WriteAllText((Join-Path $Target 'g2-development-runtime.marker'), 'Isolated G2 integration test runtime: skip installed-app maintenance and restart.')
 
     foreach ($m in @('CameraControl.Core', 'Canon.Eos.Framework', 'PortableDeviceLib')) { foreach ($e in @('dll', 'pdb')) { Copy-Item -LiteralPath "projects/$m/bin/Release/net48/$m.$e" -Destination $Target -Force } }
@@ -79,6 +85,7 @@ if (-not (Test-Path -LiteralPath (Join-Path $data 'settings.json'))) {
 }
 
 # Linked modules at G2's default locations.
+if ($ProgramOnly) { "G2 program files updated (modules and G2TestData untouched): $Target"; return }
 $light = Join-Path $Target 'CloriumLightControl'
 $null = robocopy $LightDist $light /E /XF app.log /NFL /NDL /NJH /NJS /NP /R:1 /W:1
 if ($LASTEXITCODE -ge 8) { throw "robocopy light $LASTEXITCODE" }

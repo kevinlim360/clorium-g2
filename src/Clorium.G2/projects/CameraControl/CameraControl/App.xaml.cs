@@ -57,6 +57,8 @@ public partial class App : System.Windows.Application
 		ServiceProvider.Branding = Branding.LoadBranding();
 		ServiceProvider.Settings = new Settings();
 		ServiceProvider.Settings = ServiceProvider.Settings.Load();
+		// G2 windows take their colours from G2Palette when they load; a theme change applies after a restart.
+		CameraControl.Classes.G2Palette.Dark = ServiceProvider.Settings.UseDarkScreen;
 		ServiceProvider.Settings.RemoveSessionFile(ServiceProvider.Settings.SessionFileKeepDays);
 		if (!CheckLicense())
 		{
@@ -448,6 +450,26 @@ public partial class App : System.Windows.Application
 		if (System.Windows.MessageBox.Show(errorMessage, TranslationStrings.LabelApplicationError, MessageBoxButton.YesNo, MessageBoxImage.Hand) == MessageBoxResult.No && System.Windows.Application.Current != null)
 		{
 			System.Windows.Application.Current.Shutdown();
+		}
+	}
+
+	// 설정 > 라이선스: the same D:\ key-file check as CheckLicense, without message boxes or attribute changes.
+	internal (string KeyFile, string Identifiers, string Error) LegacyLicenseInfo()
+	{
+		try
+		{
+			var identifiers = LicenseFileMatcher.ReadHardwareIdentifiers();
+			string information = string.Join("\n", identifiers.Where(LicenseFileMatcher.IsUsableIdentifier).Distinct());
+			var keys = new[] { Encryption_key, LicenseFileMatcher.ReadCompatibilityKey() };
+			if (!keys.Any(key => !string.IsNullOrEmpty(key)))
+			{
+				return (null, information, "라이선스 확인 설정을 읽지 못했습니다. 최신 Clorium 업데이트를 다시 설치해 주세요.");
+			}
+			return (LicenseFileMatcher.FindMatchingFile("D:\\", identifiers, keys, Encrypt, RemoveSpecialCharacters), information, null);
+		}
+		catch (Exception ex)
+		{
+			return (null, "", "라이선스 키 확인 중 오류가 발생했습니다: " + ex.Message);
 		}
 	}
 

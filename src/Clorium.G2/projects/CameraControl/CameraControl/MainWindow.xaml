@@ -10,33 +10,10 @@
       <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/CameraControl;component/styles/g2theme.xaml" />
         <ResourceDictionary>
-          <!-- keep this window light even when the app theme is Dark (for embedded panels that still use theme brushes) -->
+          <!-- legacy MaterialDesign/MahApps brushes of embedded panels follow the G2 palette: myClasess:G2MaterialOverrides below -->
           <FontFamily x:Key="MaterialDesignFont">pack://application:,,,/CameraControl;component/fonts/#Noto Sans KR, Malgun Gothic</FontFamily>
-          <SolidColorBrush x:Key="MaterialDesignBackground" Color="#FFFFFFFF" />
-          <SolidColorBrush x:Key="MaterialDesignPaper" Color="#FFF3F4F6" />
-          <SolidColorBrush x:Key="MaterialDesignCardBackground" Color="#FFFFFFFF" />
-          <SolidColorBrush x:Key="MaterialDesignBody" Color="#FF16181C" />
-          <SolidColorBrush x:Key="MaterialDesignBodyLight" Color="#FF56606C" />
-          <SolidColorBrush x:Key="MaterialDesignDivider" Color="#FFE1E4E9" />
-          <SolidColorBrush x:Key="MaterialDesignSelection" Color="#FFE3ECFB" />
-          <SolidColorBrush x:Key="MaterialDesignPaperLight" Color="#FFFFFFFF" />
-          <SolidColorBrush x:Key="MaterialDesignTextBoxBorder" Color="#FFA9B0BA" />
-          <SolidColorBrush x:Key="MaterialDesignCheckBoxOff" Color="#FFA9B0BA" />
-          <SolidColorBrush x:Key="MaterialDesignToolBackground" Color="#FFE1E4E9" />
-          <SolidColorBrush x:Key="MaterialDesignToolForeground" Color="#FF16181C" />
-          <SolidColorBrush x:Key="MaterialDesignFlatButtonClick" Color="#FFE3ECFB" />
-          <SolidColorBrush x:Key="MahApps.Brushes.ThemeBackground" Color="#FFFFFFFF" />
-          <SolidColorBrush x:Key="MahApps.Brushes.ThemeForeground" Color="#FF16181C" />
-          <SolidColorBrush x:Key="MahApps.Brushes.Text" Color="#FF16181C" />
-          <SolidColorBrush x:Key="MahApps.Brushes.Label.Text" Color="#FF16181C" />
-          <SolidColorBrush x:Key="MahApps.Brushes.Control.Background" Color="#FFFFFFFF" />
-          <SolidColorBrush x:Key="MahApps.Brushes.Window.Background" Color="#FFF3F4F6" />
-          <SolidColorBrush x:Key="WhiteBrush" Color="#FFFFFFFF" />
-          <SolidColorBrush x:Key="BlackBrush" Color="#FF16181C" />
-          <SolidColorBrush x:Key="TextBrush" Color="#FF16181C" />
-          <SolidColorBrush x:Key="LabelTextBrush" Color="#FF16181C" />
-          <SolidColorBrush x:Key="ControlBackgroundBrush" Color="#FFFFFFFF" />
         </ResourceDictionary>
+        <myClasess:G2MaterialOverrides />
       </ResourceDictionary.MergedDictionaries>
       <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter1" />
       <wpf:IntToProgressConverter x:Key="MyConverter" />
@@ -155,6 +132,7 @@
               </MenuItem>
               <MenuItem Header="설정">
                 <MenuItem Header="클로리움 설정" Command="{Binding SettingsCommand}" Visibility="{Binding Branding.ShowSettingMenuMainWindow, Converter={StaticResource BooleanToVisibilityConverter1}}" />
+                <MenuItem Header="라이선스" Click="OpenLicense_Click" />
                 <Separator />
                 <MenuItem Header="{T:Translate MenuPlugins}" Visibility="{Binding Branding.ShowPluginMenu, Converter={StaticResource BooleanToVisibilityConverter1}}">
                   <MenuItem Header="{T:Translate LabelExport}" ItemsSource="{Binding ExportPlugins}">
@@ -192,7 +170,7 @@
           </FrameworkElement.ContextMenu>
           <StackPanel Orientation="Horizontal">
             <Image Height="28" Source="{Binding ElementName=Window, Path=Icon}" RenderOptions.BitmapScalingMode="HighQuality" />
-            <TextBlock Text="G2" Margin="8,0,6,0" VerticalAlignment="Center" FontSize="{DynamicResource G2Fs12}" FontWeight="Bold" Foreground="#FF5C636B" />
+            <TextBlock Text="G2" Margin="8,0,6,0" VerticalAlignment="Center" FontSize="{DynamicResource G2Fs12}" FontWeight="Bold" Foreground="{StaticResource G2Sub}" />
             <Viewbox Width="12" Height="12" VerticalAlignment="Center"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoChevron}" Stroke="{StaticResource G2Sub}" /></Viewbox>
           </StackPanel>
         </Button>
@@ -574,7 +552,7 @@
         <Button DockPanel.Dock="Bottom" Name="btn_Capture" Style="{StaticResource G2PrimaryButton}" Height="48" Padding="13,0" Margin="0,10,0,0" ToolTip="{T:Translate CapturePhotoToolTip}" IsEnabled="{Binding Source={x:Static Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice.IsConnected}" Click="CaptureOfIcon_Click">
           <DockPanel>
             <Grid DockPanel.Dock="Left" Width="26" Height="26" VerticalAlignment="Center">
-              <Ellipse Stroke="#E6FFFFFF" StrokeThickness="2.2" />
+              <Ellipse Stroke="{StaticResource G2Overlay}" StrokeThickness="2.2" />
               <Ellipse Width="15" Height="15" Fill="White" />
             </Grid>
             <TextBlock DockPanel.Dock="Right" Text="Space" FontSize="{DynamicResource G2Fs11}" Opacity="0.85" VerticalAlignment="Center" Margin="8,0,0,0" />
@@ -705,59 +683,24 @@
                   <TextBlock Style="{StaticResource G2SectionTitle}" Text="촬영 면" />
                 </DockPanel>
                 <UniformGrid Rows="1">
-                  <Button Style="{StaticResource G2TileButton}" Margin="0,0,4,0" ToolTip="앞면 촬영 (_F · 미감개선 ON: _PR_F · 하자 ON: _D)" Click="But_FrontCapture_Click">
+                  <Button Style="{StaticResource G2TileButton}" Margin="0,0,4,0" ToolTip="앞면 촬영 (_F · 미감개선 ON: _PR_F)" Click="But_FrontCapture_Click">
                     <StackPanel>
                       <TextBlock Text="F" HorizontalAlignment="Center" FontSize="{DynamicResource G2Fs22}" FontWeight="SemiBold" Foreground="{StaticResource G2Accent}" FontFamily="{StaticResource G2Mono}" />
                       <TextBlock Text="앞면" HorizontalAlignment="Center" FontSize="{DynamicResource G2Fs12}" FontWeight="SemiBold" />
                     </StackPanel>
                   </Button>
-                  <Button Style="{StaticResource G2TileButton}" Margin="4,0" ToolTip="뒷면 촬영 (_B · 미감개선 ON: _PR_B)" Visibility="{Binding IsChecked, ElementName=Check_Defect, Converter={StaticResource InverseBooleanToVisibilityConverter}}" Click="But_BackCapture_Click">
+                  <Button Style="{StaticResource G2TileButton}" Margin="4,0" ToolTip="뒷면 촬영 (_B · 미감개선 ON: _PR_B)" Click="But_BackCapture_Click">
                     <StackPanel>
                       <TextBlock Text="B" HorizontalAlignment="Center" FontSize="{DynamicResource G2Fs22}" FontWeight="SemiBold" Foreground="{StaticResource G2Accent}" FontFamily="{StaticResource G2Mono}" />
                       <TextBlock Text="뒷면" HorizontalAlignment="Center" FontSize="{DynamicResource G2Fs12}" FontWeight="SemiBold" />
                     </StackPanel>
                   </Button>
-                  <CheckBox Name="Check_Defect" Margin="4,0,0,0" Height="70" Cursor="Hand" ToolTip="하자 촬영 (켜면 앞면 버튼으로 _D 저장)" IsChecked="{Binding IsDefect}" Visibility="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=UseDefectCapture, Converter={StaticResource BooleanToVisibilityConverter1}}">
-                    <CheckBox.Style>
-                      <Style TargetType="CheckBox">
-                        <Setter Property="Template">
-                          <Setter.Value>
-                            <ControlTemplate TargetType="CheckBox">
-                              <Border x:Name="bd" CornerRadius="12" Background="{StaticResource G2Panel2}" BorderBrush="{StaticResource G2Line}" BorderThickness="1">
-                                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                                  <TextBlock x:Name="letter" Text="D" HorizontalAlignment="Center" FontSize="{DynamicResource G2Fs22}" FontWeight="SemiBold" Foreground="{StaticResource G2Sub}" FontFamily="{StaticResource G2Mono}" />
-                                  <TextBlock x:Name="lbl" Text="하자" HorizontalAlignment="Center" FontSize="{DynamicResource G2Fs12}" FontWeight="SemiBold" Foreground="{StaticResource G2Text}" />
-                                </StackPanel>
-                              </Border>
-                              <ControlTemplate.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                  <Setter TargetName="bd" Property="Background" Value="{StaticResource G2Hover}" />
-                                </Trigger>
-                                <Trigger Property="IsChecked" Value="True">
-                                  <Setter TargetName="bd" Property="Background" Value="{StaticResource G2AccentSoft}" />
-                                  <Setter TargetName="bd" Property="BorderBrush" Value="{StaticResource G2Accent}" />
-                                  <Setter TargetName="bd" Property="BorderThickness" Value="2" />
-                                  <Setter TargetName="letter" Property="Foreground" Value="{StaticResource G2Accent}" />
-                                  <Setter TargetName="lbl" Property="Text" Value="하자 ON" />
-                                </Trigger>
-                                <Trigger Property="IsEnabled" Value="False">
-                                  <Setter Property="Opacity" Value="0.5" />
-                                </Trigger>
-                              </ControlTemplate.Triggers>
-                            </ControlTemplate>
-                          </Setter.Value>
-                        </Setter>
-                        <Style.Triggers>
-                          <DataTrigger Binding="{Binding isBtnPressed}" Value="True">
-                            <Setter Property="IsEnabled" Value="False" />
-                          </DataTrigger>
-                          <DataTrigger Binding="{Binding ThumbailLoaded}" Value="False">
-                            <Setter Property="IsEnabled" Value="False" />
-                          </DataTrigger>
-                        </Style.Triggers>
-                      </Style>
-                    </CheckBox.Style>
-                  </CheckBox>
+                  <Button Name="but_DefectCapture" Style="{StaticResource G2TileButton}" Margin="4,0,0,0" ToolTip="하자 촬영: 누르면 바로 _D로 촬영합니다" Click="But_DefectCapture_Click" Visibility="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=UseDefectCapture, Converter={StaticResource BooleanToVisibilityConverter1}}">
+                    <StackPanel>
+                      <TextBlock Text="D" HorizontalAlignment="Center" FontSize="{DynamicResource G2Fs22}" FontWeight="SemiBold" Foreground="{StaticResource G2Pr}" FontFamily="{StaticResource G2Mono}" />
+                      <TextBlock Text="하자" HorizontalAlignment="Center" FontSize="{DynamicResource G2Fs12}" FontWeight="SemiBold" />
+                    </StackPanel>
+                  </Button>
                 </UniformGrid>
                 <UniformGrid Rows="1" Margin="0,10,0,0">
                   <CheckBox Name="Check_AestheticImprovement" Content="미감개선" Height="42" Margin="0,0,4,0" Cursor="Hand"
@@ -869,10 +812,10 @@
                 <Border CornerRadius="10" Background="{StaticResource G2Panel2}" Padding="8" DataContext="{Binding Source={x:Static Core:ServiceProvider.Settings}}" Visibility="{Binding Source={x:Static Core:ServiceProvider.Branding}, Path=ShowHistogram, Converter={StaticResource BooleanToVisibilityConverter1}}">
                   <StackPanel>
                     <Grid Height="80">
-                      <Polygon Stretch="Fill" Fill="#FFA9B0BA" Opacity="0.55" Points="{Binding Path=SelectedBitmap.LuminanceHistogramPoints}" />
+                      <Polygon Stretch="Fill" Fill="{StaticResource G2Line2}" Opacity="0.55" Points="{Binding Path=SelectedBitmap.LuminanceHistogramPoints}" />
                       <Polygon Stretch="Fill" Stroke="#FFD64545" Opacity="0.6" Points="{Binding Path=SelectedBitmap.RedColorHistogramPoints}" />
                       <Polygon Stretch="Fill" Stroke="#FF2E9E5B" Opacity="0.6" Points="{Binding Path=SelectedBitmap.GreenColorHistogramPoints}" />
-                      <Polygon Stretch="Fill" Stroke="#FF1F5FD6" Opacity="0.6" Points="{Binding Path=SelectedBitmap.BlueColorHistogramPoints}" />
+                      <Polygon Stretch="Fill" Stroke="{StaticResource G2Accent}" Opacity="0.6" Points="{Binding Path=SelectedBitmap.BlueColorHistogramPoints}" />
                       <Ellipse Width="20" Height="20" StrokeThickness="2.5" Stroke="{StaticResource G2Accent}" StrokeDashArray="3 2" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding Path=ImageLoading, Converter={StaticResource BooleanToVisibilityConverter1}}" />
                     </Grid>
                     <DockPanel Margin="0,6,0,0">

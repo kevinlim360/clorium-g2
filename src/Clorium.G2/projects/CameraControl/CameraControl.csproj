@@ -152,6 +152,7 @@
     <!-- G2 UI: shared design-A theme and embedded fonts (Noto Sans KR, JetBrains Mono · SIL OFL 1.1, see fonts/) -->
     <Page Include="styles/g2theme.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="styles/g2theme.xaml" />
     <!-- G2 colour correction window (engine: CameraControl/Classes/G2ImageAdjust.cs, Magick.NET) -->
+    <Page Include="CameraControl/windows/G2LicenseWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/g2licensewnd.xaml" />
     <Page Include="CameraControl/windows/G2ColorAdjustWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/g2coloradjustwnd.xaml" />
     <Resource Remove="fonts/notosanskr-regular.otf" />
     <Resource Include="fonts/notosanskr-regular.otf" LogicalName="fonts/notosanskr-regular.otf" />

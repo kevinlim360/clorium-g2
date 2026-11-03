@@ -1,36 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Clorium G2 · design A (light) shared theme.
+  Clorium G2 · design A shared theme (밝은 화면 / 어두운 화면 colours from G2Palette).
   Tokens, fonts, stroke icons and control styles drawn fresh for the G2 UI.
   Merged by MainWindow, LayoutNormal and Controler. No legacy MaterialDesign/MahApps visuals are used here.
 -->
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:cls="clr-namespace:CameraControl.Classes">
+
+  <!-- ===== colour tokens: 밝은 화면 / 어두운 화면 (CameraControl/Classes/G2Palette.cs) ===== -->
+  <ResourceDictionary.MergedDictionaries>
+    <cls:G2Palette />
+  </ResourceDictionary.MergedDictionaries>
 
   <!-- ===== fonts (embedded, OFL) ===== -->
   <FontFamily x:Key="G2Font">pack://application:,,,/CameraControl;component/fonts/#Noto Sans KR, Malgun Gothic</FontFamily>
   <FontFamily x:Key="G2Mono">pack://application:,,,/CameraControl;component/fonts/#JetBrains Mono, Consolas</FontFamily>
 
-  <!-- ===== colour tokens ===== -->
-  <Color x:Key="G2AccentColor">#FF1F5FD6</Color>
-  <SolidColorBrush x:Key="G2Page" Color="#FFF3F4F6" />
-  <SolidColorBrush x:Key="G2Panel" Color="#FFFFFFFF" />
-  <SolidColorBrush x:Key="G2Panel2" Color="#FFF3F4F6" />
-  <SolidColorBrush x:Key="G2Hover" Color="#FFEAECEF" />
-  <SolidColorBrush x:Key="G2Line" Color="#FFE1E4E9" />
-  <SolidColorBrush x:Key="G2Line2" Color="#FFA9B0BA" />
-  <SolidColorBrush x:Key="G2Stage" Color="#FFE4E6EA" />
-  <SolidColorBrush x:Key="G2Overlay" Color="#F0FFFFFF" />
-  <SolidColorBrush x:Key="G2Text" Color="#FF16181C" />
-  <SolidColorBrush x:Key="G2Sub" Color="#FF56606C" />
-  <SolidColorBrush x:Key="G2Accent" Color="#FF1F5FD6" />
-  <SolidColorBrush x:Key="G2AccentHover" Color="#FF1A52BA" />
-  <SolidColorBrush x:Key="G2AccentSoft" Color="#FFE3ECFB" />
-  <SolidColorBrush x:Key="G2Pr" Color="#FFB35400" />
-  <SolidColorBrush x:Key="G2PrBg" Color="#FFFFF1DF" />
-  <SolidColorBrush x:Key="G2Ok" Color="#FF1A7F37" />
-  <SolidColorBrush x:Key="G2OkBg" Color="#FFE8F5EC" />
-  <SolidColorBrush x:Key="G2Err" Color="#FFC62828" />
-  <SolidColorBrush x:Key="G2SwitchOff" Color="#FFC3C8CF" />
 
   <!-- ===== stroke icons (24x24, 1.8 stroke, round caps) ===== -->
   <Geometry x:Key="G2IcoLive">M3,7 H6 L8,4 H16 L18,7 H21 V20 H3 Z M12,9 A4,4 0 1 0 12.001,9 Z</Geometry>
@@ -606,7 +590,7 @@
     <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate TargetType="Thumb">
-          <Border x:Name="t" CornerRadius="3" Background="#FFC9CED5" />
+          <Border x:Name="t" CornerRadius="3" Background="{StaticResource G2Thumb}" />
           <ControlTemplate.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
               <Setter TargetName="t" Property="Background" Value="{StaticResource G2Line2}" />

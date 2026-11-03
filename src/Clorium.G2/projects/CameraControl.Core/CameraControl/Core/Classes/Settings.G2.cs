@@ -137,6 +137,94 @@ public partial class Settings
         }
     }
 
+    private string _backupFolder = "";
+
+    // 촬영 > 항상 원본 백업: target folder. Empty = the original rule (D:\<top folder> Backup\<same sub folders>);
+    // otherwise <BackupFolder>\<source path without the drive>.
+    public string BackupFolder
+    {
+        get => _backupFolder;
+        set
+        {
+            if (_backupFolder == value) return;
+            _backupFolder = value ?? "";
+            NotifyPropertyChanged("BackupFolder");
+        }
+    }
+
+    private bool _useDarkScreen;
+
+    // 화면과 언어 > 테마: 밝은 화면 (default) / 어두운 화면. Replaces the MaterialDesign colour list (CurrentThemeNameNew is
+    // kept only for settings-file compatibility). G2 windows read it at start-up (G2Palette), so a change needs a restart.
+    public bool UseDarkScreen
+    {
+        get => _useDarkScreen;
+        set
+        {
+            if (_useDarkScreen == value) return;
+            _useDarkScreen = value;
+            NotifyPropertyChanged("UseDarkScreen");
+            NotifyPropertyChanged("ScreenTheme");
+        }
+    }
+
+    // Settings window selector: 0 = 밝은 화면, 1 = 어두운 화면.
+    [System.Xml.Serialization.XmlIgnore]
+    [Newtonsoft.Json.JsonIgnore]
+    public int ScreenTheme
+    {
+        get => UseDarkScreen ? 1 : 0;
+        set => UseDarkScreen = value == 1;
+    }
+
+    private int _calibrationTarget;
+
+    // 오토사이징 캘리브레이션 판: 0 = 원판 (DiskSize diameter, MetaScale only), 1 = 정사각형 판 (SquareBoardSize; X/Y scale and
+    // perspective from its four detected corners, saved in SquareCalibration and written to 치수측정\*_M.jpeg only).
+    public int CalibrationTarget
+    {
+        get => _calibrationTarget;
+        set
+        {
+            if (_calibrationTarget == value) return;
+            _calibrationTarget = value;
+            NotifyPropertyChanged("CalibrationTarget");
+            NotifyPropertyChanged("SquareCalibrationSummary");
+        }
+    }
+
+    private double _squareBoardSize = 500.0;
+
+    public double SquareBoardSize
+    {
+        get => _squareBoardSize;
+        set
+        {
+            if (_squareBoardSize == value) return;
+            _squareBoardSize = value;
+            NotifyPropertyChanged("SquareBoardSize");
+        }
+    }
+
+    private string _squareCalibration = "";
+
+    // Last accepted square-board calibration (SquareBoardCalibration.Format); empty = not calibrated yet.
+    public string SquareCalibration
+    {
+        get => _squareCalibration;
+        set
+        {
+            if (_squareCalibration == value) return;
+            _squareCalibration = value ?? "";
+            NotifyPropertyChanged("SquareCalibration");
+            NotifyPropertyChanged("SquareCalibrationSummary");
+        }
+    }
+
+    [System.Xml.Serialization.XmlIgnore]
+    [Newtonsoft.Json.JsonIgnore]
+    public string SquareCalibrationSummary => SquareBoardCalibration.Describe(SquareCalibration);
+
     // Main screen 조명 켜기/끄기 panel: the light app and/or the USB LED dimmer.
     [System.Xml.Serialization.XmlIgnore]
     [Newtonsoft.Json.JsonIgnore]

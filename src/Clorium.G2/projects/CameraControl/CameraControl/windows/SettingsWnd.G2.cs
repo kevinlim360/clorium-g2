@@ -29,7 +29,9 @@ public partial class SettingsWnd
 			"AutoPreview",
 			"AutoPreviewJpgOnly",
 			"Autorotate",
+			"BackupFolder",
 			"Barcode_DeviceName",
+			"CalibrationTarget",
 			"CanonFocusStepWait",
 			"DetectionType",
 			"DiskSize",
@@ -72,6 +74,8 @@ public partial class SettingsWnd
 			"SmalFocusStep",
 			"SmallFocusStepCanon",
 			"SoundTime",
+			"SquareBoardSize",
+			"SquareCalibration",
 			"StartMinimized",
 			"StartupWithWindows",
 			"UseAPICommunication",
@@ -245,11 +249,11 @@ public partial class SettingsWnd
 			if (state != null)
 			{
 				state.Text = !has ? "비어 있음" : (selected ? (G2Same(map) ? "선택됨 · 저장값과 같음" : "선택됨 · 바뀐 값 있음") : "저장됨");
-				state.Foreground = new SolidColorBrush(!has ? Color.FromRgb(0x56, 0x60, 0x6C) : (selected ? Color.FromRgb(0x1F, 0x5F, 0xD6) : Color.FromRgb(0x3A, 0x46, 0x54)));
+				state.Foreground = (Brush)FindResource(!has ? "G2Sub" : (selected ? "G2Accent" : "G2NeutralText"));
 			}
 			if (badge != null)
 			{
-				badge.Background = new SolidColorBrush(selected ? Color.FromRgb(0x1F, 0x5F, 0xD6) : (has ? Color.FromRgb(0x8F, 0xA8, 0xD6) : Color.FromRgb(0xC3, 0xC8, 0xCF)));
+				badge.Background = has && !selected ? new SolidColorBrush(Color.FromRgb(0x8F, 0xA8, 0xD6)) : (Brush)FindResource(selected ? "G2Accent" : "G2SwitchOff");
 			}
 		}
 		if (message != null && G2Status != null)
@@ -368,7 +372,7 @@ public partial class SettingsWnd
 				continue;
 			}
 			string tag = fe.Tag as string;
-			bool searchable = fe is Border && tag != null && (fe.Style == fe.TryFindResource("G2SetRow") || fe.Style == fe.TryFindResource("G2Card") || tag == "설정프리셋");
+			bool searchable = fe is Border && tag != null && (fe.Style == fe.TryFindResource("G2SetRow") || fe.Style?.BasedOn == fe.TryFindResource("G2SetRow") || fe.Style == fe.TryFindResource("G2Card") || tag == "설정프리셋");
 			if (searchable)
 			{
 				bool self = q.Length == 0 || parentMatched || tag.IndexOf(q, StringComparison.OrdinalIgnoreCase) >= 0;

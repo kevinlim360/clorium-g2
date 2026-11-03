@@ -1975,6 +1975,40 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 		}
 	}
 
+	private void OpenLicense_Click(object sender, RoutedEventArgs e)
+	{
+		new G2LicenseWnd { Owner = this }.ShowDialog();
+	}
+
+	// 하자 촬영 button (shown when 하자 촬영 is on in 클로리움 설정): one press captures a _D picture at once.
+	private void But_DefectCapture_Click(object sender, RoutedEventArgs e)
+	{
+		if (IsMusinsaOK())
+		{
+			CaptureOfDefect(isToggleRot);
+		}
+	}
+
+	private async void CaptureOfDefect(bool rotate270)
+	{
+		if (ServiceProvider.Settings.isBtnPressed || !ServiceProvider.Settings.ThumbailLoaded)
+		{
+			return;
+		}
+		Log.Debug("하자 촬영 Click : " + (rotate270 ? "270 회전" : "무 회전"));
+		is270CaptureMode = rotate270;
+		setExifOrientation(rotate270);
+		ServiceProvider.Settings.IsDefect = true;
+		ServiceProvider.Settings.FrontBackMode = 0;
+		ServiceProvider.Settings.GetMeasurePicture = false;
+		ServiceProvider.Settings.Background = false;
+		if (!await CaptureAsync(shouldWait: true))
+		{
+			// Not captured: the next F/B picture must not be named _D.
+			ServiceProvider.Settings.IsDefect = false;
+		}
+	}
+
 	private async void CaptureOfFrontView(bool rotate270)
 	{
 		if (ServiceProvider.Settings.isBtnPressed || !ServiceProvider.Settings.ThumbailLoaded)
@@ -2648,6 +2682,19 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 			metadata2.Title = cloriumID;
 			metadata2.Subject = scale;
 			metadata2.Comment = host;
+			// 정사각형 판 캘리브레이션: X/Y scale, keystone, rotation and homography as one Windows tag (XPKeywords, UTF-16) on
+			// the measurement copy only. BitmapMetadata.Keywords fails on camera JPEGs (TYPE_E_OUTOFBOUNDS); this query works.
+			if (ServiceProvider.Settings.CalibrationTarget == 1 && SquareBoardCalibration.Parse(ServiceProvider.Settings.SquareCalibration) != null)
+			{
+				try
+				{
+					metadata2.SetQuery(SquareBoardCalibration.MetadataQuery, System.Text.Encoding.Unicode.GetBytes(ServiceProvider.Settings.SquareCalibration + "\0"));
+				}
+				catch (Exception ex)
+				{
+					Log.Error("정사각형 판 스케일 메타데이터 기록 실패", ex);
+				}
+			}
 			string measurePath = Path.Combine(Path.GetDirectoryName(fullpathfilename), "치수측정");
 			if (!Directory.Exists(measurePath))
 			{
@@ -2724,6 +2771,16 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 		{
 			string directory = Path.GetDirectoryName(filename);
 			string tempName = Path.GetFileName(filename);
+			string backupRoot = ServiceProvider.Settings.BackupFolder?.Trim().Trim('"');
+			if (!string.IsNullOrEmpty(backupRoot))
+			{
+				// 촬영 > 백업 폴더: <BackupFolder>\<source folders without the drive>\<file>
+				string relative = directory.Substring(Path.GetPathRoot(directory).Length);
+				string target = Path.Combine(backupRoot, relative, tempName);
+				Directory.CreateDirectory(Path.GetDirectoryName(target));
+				File.Copy(filename, target, overwrite: true);
+				return;
+			}
 			string topFolder = directory.Split(Path.DirectorySeparatorChar)[1];
 			string oldFolderName = new DirectoryInfo(topFolder).Name;
 			string newFolderName = oldFolderName + " Backup";
@@ -2897,7 +2954,11 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 		isCalibrationMode = true;
 		await CaptureAsync(shouldWait: true);
 		ServiceProvider.Settings.ThumbailLoaded = true;
-		if (File.Exists(filename_Calibration))
+		if (File.Exists(filename_Calibration) && ServiceProvider.Settings.CalibrationTarget == 1)
+		{
+			CalibrateWithSquareBoard(filename_Calibration, ServiceProvider.Settings.SquareBoardSize);
+		}
+		else if (File.Exists(filename_Calibration))
 		{
 			double scale = GetScaleWithSquareROI(filename_Calibration, ServiceProvider.Settings.DiskSize);
 			MessageBoxResult ret = System.Windows.MessageBox.Show("스케일 값 : " + scale, "알림", MessageBoxButton.YesNo);
@@ -2906,6 +2967,67 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 				ServiceProvider.Settings.MetaScale = scale.ToString();
 				Log.Debug("자동 캘리브레이션 실행 : " + ServiceProvider.Settings.MetaScale);
 			}
+		}
+	}
+
+	// 정사각형 판: detect the four corners, show them on a check image and ask before keeping the values.
+	// MetaScale gets the mean X/Y scale so existing readers of the _M.jpeg Subject keep working.
+	private void CalibrateWithSquareBoard(string filePath, double boardMm)
+	{
+		try
+		{
+			BitmapImage bitmap = new BitmapImage();
+			bitmap.BeginInit();
+			bitmap.UriSource = new Uri(Path.GetFullPath(filePath));
+			bitmap.CacheOption = BitmapCacheOption.OnLoad;
+			bitmap.EndInit();
+			bitmap.Freeze();
+			int width = bitmap.PixelWidth, height = bitmap.PixelHeight;
+			byte[] pixels = new byte[width * height * 4];
+			new FormatConvertedBitmap(bitmap, PixelFormats.Bgra32, null, 0.0).CopyPixels(pixels, width * 4, 0);
+			SquareBoardCalibration result = SquareBoardCalibration.Detect(pixels, width, height, boardMm);
+
+			DrawingVisual visual = new DrawingVisual();
+			using (DrawingContext dc = visual.RenderOpen())
+			{
+				dc.DrawImage(bitmap, new Rect(0.0, 0.0, width, height));
+				double[] c = result.Corners;
+				var pen = new System.Windows.Media.Pen(System.Windows.Media.Brushes.Lime, Math.Max(3.0, width / 800.0));
+				for (int i = 0; i < 4; i++)
+				{
+					int j = (i + 1) % 4;
+					dc.DrawLine(pen, new System.Windows.Point(c[i * 2], c[i * 2 + 1]), new System.Windows.Point(c[j * 2], c[j * 2 + 1]));
+					dc.DrawEllipse(System.Windows.Media.Brushes.Red, null, new System.Windows.Point(c[i * 2], c[i * 2 + 1]), width / 200.0, width / 200.0);
+				}
+				FormattedText ft = new FormattedText("정사각형 판 " + boardMm + " mm\n" + result.Summary(), CultureInfo.CurrentCulture, System.Windows.FlowDirection.LeftToRight, new Typeface("Malgun Gothic"), width * 0.018, System.Windows.Media.Brushes.Yellow, VisualTreeHelper.GetDpi(visual).PixelsPerDip);
+				dc.DrawText(ft, new System.Windows.Point(30.0, 30.0));
+			}
+			string outPath = Path.Combine(Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(filePath) + "_square_ret.jpg");
+			RenderTargetBitmap renderTarget = new RenderTargetBitmap(width, height, 96.0, 96.0, PixelFormats.Pbgra32);
+			renderTarget.Render(visual);
+			JpegBitmapEncoder encoder = new JpegBitmapEncoder { QualityLevel = 90 };
+			encoder.Frames.Add(BitmapFrame.Create(renderTarget));
+			using (FileStream fs = new FileStream(outPath, FileMode.Create))
+			{
+				encoder.Save(fs);
+			}
+			Process.Start(new ProcessStartInfo { FileName = outPath, UseShellExecute = true });
+
+			if (System.Windows.MessageBox.Show(result.Summary() + "\n\n이 값을 치수 촬영 스케일로 저장할까요?", "정사각형 판 캘리브레이션", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+			{
+				ServiceProvider.Settings.SquareCalibration = result.Format();
+				ServiceProvider.Settings.MetaScale = result.Scale.ToString(CultureInfo.InvariantCulture);
+				Log.Debug("정사각형 판 캘리브레이션 : " + ServiceProvider.Settings.SquareCalibration);
+			}
+		}
+		catch (SquareBoardCalibration.DetectionException ex)
+		{
+			System.Windows.MessageBox.Show(ex.Message, "정사각형 판 캘리브레이션");
+		}
+		catch (Exception ex)
+		{
+			Log.Error("정사각형 판 캘리브레이션 실패", ex);
+			System.Windows.MessageBox.Show("캘리브레이션 사진을 처리하지 못했습니다.\n\n" + ex.Message, "정사각형 판 캘리브레이션");
 		}
 	}
 

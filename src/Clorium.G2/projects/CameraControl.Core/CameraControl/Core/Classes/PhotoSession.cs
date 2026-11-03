@@ -708,7 +708,7 @@ public class PhotoSession : BaseFieldClass
 		if (ServiceProvider.Settings.TurnTableShot)
 		{
 			string pathname = "";
-			return (!ServiceProvider.Branding.ControlMultiCamera) ? (ServiceProvider.Settings.TurnTableShot_PathName + "\\" + CloriumID + ServiceProvider.Settings.TurnTableShot_FileName) : (ServiceProvider.Settings.TurnTableShot_PathName + "\\" + CloriumID + ServiceProvider.Settings.CameraAlias + "_" + ServiceProvider.Settings.TurnTableShot_FileName);
+			return ServiceProvider.Settings.TurnTableShot_PathName + "\\" + TidyUnderscores((!ServiceProvider.Branding.ControlMultiCamera) ? (CloriumID + ServiceProvider.Settings.TurnTableShot_FileName) : (CloriumID + ServiceProvider.Settings.CameraAlias + "_" + ServiceProvider.Settings.TurnTableShot_FileName));
 		}
 		// Defect capture takes precedence over a stale front/back selection.
 		if (ServiceProvider.Settings.IsDefect)
@@ -727,7 +727,23 @@ public class PhotoSession : BaseFieldClass
 		{
 			res += "_BG";
 		}
-		return res;
+		return TidyUnderscores(res);
+	}
+
+	// Name parts are joined with "_" while CameraAlias already starts with one and CloriumID/barcode may be empty
+	// (C1_360photo__011_F, _360photo__001): keep a single "_" between parts and none at the start of a name.
+	internal static string TidyUnderscores(string name)
+	{
+		string[] parts = name.Split('\\');
+		for (int i = 0; i < parts.Length; i++)
+		{
+			string tidy = Regex.Replace(parts[i], "_{2,}", "_").TrimStart('_');
+			if (tidy.Length > 0)
+			{
+				parts[i] = tidy;
+			}
+		}
+		return string.Join("\\", parts);
 	}
 
 	public FileItem AddFile(string fileName)

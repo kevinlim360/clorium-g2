@@ -61,26 +61,11 @@ public class WindowsManager
 	{
 		PaletteHelper paletteHelper = new PaletteHelper();
 		ITheme theme = paletteHelper.GetTheme();
-		IBaseTheme baseTheme2;
-		if (!ServiceProvider.Settings.CurrentThemeNameNew.StartsWith("Dark"))
-		{
-			IBaseTheme baseTheme = new MaterialDesignLightTheme();
-			baseTheme2 = baseTheme;
-		}
-		else
-		{
-			IBaseTheme baseTheme = new MaterialDesignDarkTheme();
-			baseTheme2 = baseTheme;
-		}
-		IBaseTheme baseTheme3 = baseTheme2;
-		theme.SetBaseTheme(baseTheme3);
-		foreach (Swatch item in new SwatchesProvider().Swatches)
-		{
-			if (item.Name == ServiceProvider.Settings.CurrentThemeNameNew.Split('\\')[1])
-			{
-				theme.SetPrimaryColor(item.PrimaryHues[item.PrimaryHues.Count / 2].Color);
-			}
-		}
+		// G2: 밝은 화면 / 어두운 화면 only (Settings.UseDarkScreen) with the G2 accent; the old colour list
+		// (CurrentThemeNameNew) is no longer applied.
+		bool dark = ServiceProvider.Settings.UseDarkScreen;
+		theme.SetBaseTheme(dark ? new MaterialDesignDarkTheme() : new MaterialDesignLightTheme());
+		theme.SetPrimaryColor(dark ? System.Windows.Media.Color.FromRgb(0x3D, 0x7E, 0xF0) : System.Windows.Media.Color.FromRgb(0x1F, 0x5F, 0xD6));
 		paletteHelper.SetTheme(theme);
 	}
 

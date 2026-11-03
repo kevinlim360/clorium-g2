@@ -123,6 +123,19 @@ public partial class SettingsWnd : Window, IComponentConnector
 		}
 	}
 
+	private void Btn_BackupFolder_Click(object sender, RoutedEventArgs e)
+	{
+		using (FolderBrowserDialog dialog = new FolderBrowserDialog())
+		{
+			dialog.Description = "원본 백업 폴더";
+			dialog.SelectedPath = ServiceProvider.Settings.BackupFolder;
+			if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+			{
+				ServiceProvider.Settings.BackupFolder = dialog.SelectedPath;
+			}
+		}
+	}
+
 	private void Btn_add_device_Click(object sender, RoutedEventArgs e)
 	{
 		if (ServiceProvider.ExternalDeviceManager.ExternalDevices.Count == 0)

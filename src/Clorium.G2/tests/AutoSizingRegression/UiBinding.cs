@@ -11,6 +11,8 @@ using System.Windows.Controls;
 using System.Windows.Markup;
 using System.Windows.Threading;
 using System.Xml;
+using System.Text.RegularExpressions;
+using System.Windows.Media;
 using CameraControl.Core;
 using CameraControl.Core.Classes;
 using Newtonsoft.Json;
@@ -88,6 +90,7 @@ class UiBinding
 		BackgroundRemoval(s, mainCs);
 		ImageAdjust(s, mainCs);
 		Superfocus(s);
+		SettingsAndCapture(s, bin);
 		byte[] exe = File.ReadAllBytes(Path.Combine(bin, "CameraControl.exe"));
 		Check("built CameraControl.exe has no ColorCompensationWnd, contains the 이미지보정 window and client", Find(exe, Encoding.UTF8.GetBytes("ColorCompensationWnd")) < 0 && Find(exe, Encoding.Unicode.GetBytes("Clorium_ColorCompensation.json")) < 0 && Find(exe, Encoding.UTF8.GetBytes("G2ColorAdjustWnd")) >= 0 && Find(exe, Encoding.UTF8.GetBytes("CloriumImageAdjust")) >= 0);
 		Check("built CameraControl.exe has no PhotoScissors/PhotoRoom", Find(exe, Encoding.Unicode.GetBytes("PhotoScissors.exe")) < 0 && Find(exe, Encoding.Unicode.GetBytes("photoroom.com")) < 0 && Find(exe, Encoding.UTF8.GetBytes("RemoveBackgroundWnd")) < 0);
@@ -173,6 +176,72 @@ class UiBinding
 		string vm = File.ReadAllText(Path.Combine(root, "projects/CameraControl/CameraControl/ViewModel/LiveViewViewModel.cs"));
 		Check("legacy focus stacking panels and A/B jump buttons removed", !live.Contains("ExpanderFocusStacking") && !live.Contains("MoveACommand") && !live.Contains("FocusStackingCommand") && !live.Contains("FocusControl_Click"));
 		Check("legacy focus stacking code removed from the live view model", !vm.Contains("FocusStacking") && !vm.Contains("_focusStackinMode") && !vm.Contains("PhotoCount") && vm.Contains("LockCurrentNearCommand"));
+	}
+
+	static XmlElement Ancestor(XmlElement e, string tag) { var p = e.ParentNode as XmlElement; while (p != null && p.LocalName != tag) p = p.ParentNode as XmlElement; return p; }
+
+	// 2026-11-03 settings/capture requests: 일반 first, 라이선스 menu, light/dark theme, backup folder, square-board
+	// calibration rows, barcode card under 장치 · 연결, one-press 하자 button, single underscores in file names.
+	static void SettingsAndCapture(Settings s, string bin)
+	{
+		var doc = new XmlDocument(); doc.Load(Path.Combine(root, "projects/CameraControl/CameraControl/windows/SettingsWnd.xaml"));
+		var tabs = doc.GetElementsByTagName("TabControl").Cast<XmlElement>().First(t => t.GetAttribute("Name", Xaml) == "G2Tabs");
+		var firstTab = tabs.GetElementsByTagName("TabItem").Cast<XmlElement>().First();
+		Check("클로리움 설정 opens on 일반 (first tab)", tabs.GetAttribute("SelectedIndex") == "0" && firstTab.GetAttribute("Tag") == "일반");
+		var barcode = Element("windows/SettingsWnd.xaml", "G2Feat_barcode");
+		Check("바코드 연동 card moved to 장치 · 연결", Ancestor(barcode, "TabItem").GetAttribute("Tag") == "장치 · 연결");
+
+		string xaml = File.ReadAllText(Path.Combine(root, "projects/CameraControl/CameraControl/windows/SettingsWnd.xaml"));
+		Check("theme: 밝은 화면 / 어두운 화면 only, old colour list removed", xaml.Contains("SelectedIndex=\"{Binding ScreenTheme}\"><ComboBoxItem Content=\"밝은 화면\" /><ComboBoxItem Content=\"어두운 화면\" />") && !xaml.Contains("{Binding Themes}") && !xaml.Contains("CurrentThemeNameNew"));
+		Check("어두운 화면 is off by default", !new Settings().UseDarkScreen && new Settings().ScreenTheme == 0);
+		s.ScreenTheme = 1;
+		var dark = JsonConvert.DeserializeObject<Settings>(JsonConvert.SerializeObject(s));
+		Check("어두운 화면 choice persists (UseDarkScreen)", s.UseDarkScreen && dark.UseDarkScreen && dark.ScreenTheme == 1);
+		s.ScreenTheme = 0;
+
+		int backupAt = xaml.IndexOf("{Binding BackupFolder}");
+		Check("백업 폴더 row (path + folder button) shown only while 항상 원본 백업 is on", backupAt > 0 && xaml.LastIndexOf("<StackPanel Visibility=\"{Binding UseAlwaysBackup", backupAt) > xaml.LastIndexOf("Tag=\"항상 원본 백업 \"", backupAt) && xaml.IndexOf("Btn_BackupFolder_Click", backupAt) > 0);
+		s.BackupFolder = @"E:\Clorium Backup";
+		Check("백업 폴더 persists (JSON), empty by default", JsonConvert.DeserializeObject<Settings>(JsonConvert.SerializeObject(s)).BackupFolder == @"E:\Clorium Backup" && new Settings().BackupFolder == "");
+
+		Check("calibration board selector (원판 / 정사각형 판) bound to CalibrationTarget", xaml.Contains("SelectedIndex=\"{Binding CalibrationTarget}\"><ComboBoxItem Content=\"원판\" /><ComboBoxItem Content=\"정사각형 판\" />"));
+		Check("disk size row only for 원판, board size + result only for 정사각형 판", Regex.IsMatch(xaml, "Tag=\"기준 원판 크기 \">.*?DataTrigger Binding=\"\\{Binding CalibrationTarget\\}\" Value=\"0\"") && Regex.IsMatch(xaml, "Tag=\"정사각형 판 크기 \">.*?DataTrigger Binding=\"\\{Binding CalibrationTarget\\}\" Value=\"1\".*?\\{Binding SquareBoardSize\\}.*?\\{Binding SquareCalibrationSummary\\}", RegexOptions.Singleline));
+		Check("square board defaults: 원판 selected, 500 mm, not calibrated", new Settings().CalibrationTarget == 0 && new Settings().SquareBoardSize == 500 && new Settings().SquareCalibration == "" && new Settings().SquareCalibrationSummary.StartsWith("아직"));
+
+		string main = File.ReadAllText(Path.Combine(root, "projects/CameraControl/CameraControl/MainWindow.xaml"));
+		string mainCs = File.ReadAllText(Path.Combine(root, "projects/CameraControl/CameraControl/MainWindow.xaml.cs"));
+		Check("설정 menu: 라이선스 right under 클로리움 설정", Regex.IsMatch(main, "<MenuItem Header=\"클로리움 설정\"[^\\n]*\\n\\s*<MenuItem Header=\"라이선스\" Click=\"OpenLicense_Click\" />") && mainCs.Contains("new G2LicenseWnd"));
+		var defect = Element("MainWindow.xaml", "but_DefectCapture");
+		Check("하자 button: a capture button shown by 하자 촬영 setting, toggle removed", defect.LocalName == "Button" && defect.GetAttribute("Click") == "But_DefectCapture_Click" && defect.GetAttribute("Visibility").Contains("Path=UseDefectCapture") && !main.Contains("Check_Defect"));
+		Check("하자 capture sets _D for one shot and clears it when nothing was captured", Regex.IsMatch(mainCs, "IsDefect = true;.*?if \\(!await CaptureAsync\\(shouldWait: true\\)\\)\\s*\\{[^}]*IsDefect = false;", RegexOptions.Singleline));
+		Check("square calibration written to the measurement copy only (WriteMetadata XPKeywords tag)", Regex.IsMatch(mainCs, "metadata2.Comment = host;.*?CalibrationTarget == 1.*?metadata2.SetQuery\\(SquareBoardCalibration.MetadataQuery", RegexOptions.Singleline));
+
+		Assembly core = typeof(Settings).Assembly;
+		var tidy = core.GetType("CameraControl.Core.Classes.PhotoSession").GetMethod("TidyUnderscores", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static);
+		Func<string, string> T = n => (string)tidy.Invoke(null, new object[] { n });
+		Check("file names: C1_360photo__011_F -> C1_360photo_011_F", T("C1_360photo__011_F") == "C1_360photo_011_F");
+		Check("file names: _360photo__001 -> 360photo_001, sub folders kept", T("_360photo__001") == "360photo_001" && T(@"sub\__a__b_D") == @"sub\a_b_D" && T("test_001_PR_F") == "test_001_PR_F");
+		Check("Core has the square-board calibration", core.GetType("CameraControl.Core.Classes.SquareBoardCalibration") != null);
+
+		Assembly g2 = Assembly.LoadFrom(Path.Combine(bin, "CameraControl.exe"));
+		var palette = g2.GetType("CameraControl.Classes.G2Palette", true);
+		var darkProp = palette.GetProperty("Dark");
+		Func<string, ResourceDictionary> make = n => (ResourceDictionary)Activator.CreateInstance(g2.GetType("CameraControl.Classes." + n, true));
+		darkProp.SetValue(null, false);
+		var light = make("G2Palette"); var lightMd = make("G2MaterialOverrides");
+		darkProp.SetValue(null, true);
+		var darkP = make("G2Palette"); var darkMd = make("G2MaterialOverrides");
+		darkProp.SetValue(null, false);
+		Func<ResourceDictionary, string, string> C = (d, k) => ((SolidColorBrush)d[k]).Color.ToString();
+		Check("palette 밝은 화면 keeps the design-A colours", C(light, "G2Page") == "#FFF3F4F6" && C(light, "G2Panel") == "#FFFFFFFF" && C(light, "G2Text") == "#FF16181C" && C(light, "G2Accent") == "#FF1F5FD6");
+		Check("palette 어두운 화면: dark page/panel, light text", C(darkP, "G2Page") == "#FF101113" && C(darkP, "G2Panel") == "#FF1B1D21" && C(darkP, "G2Text") == "#FFF1F3F5" && C(darkP, "G2OnAccent") == "#FFFFFFFF");
+		Check("legacy MaterialDesign/MahApps brushes follow the palette", C(lightMd, "MaterialDesignPaper") == "#FFF3F4F6" && C(darkMd, "MaterialDesignPaper") == "#FF101113" && C(darkMd, "MahApps.Brushes.Text") == "#FFF1F3F5");
+		string theme = File.ReadAllText(Path.Combine(root, "projects/CameraControl/styles/g2theme.xaml"));
+		Check("g2theme takes all colour tokens from G2Palette", theme.Contains("<cls:G2Palette />") && !theme.Contains("<SolidColorBrush x:Key=\"G2Page\""));
+		int literal = 0;
+		foreach (string f in new[] { "CameraControl/MainWindow.xaml", "CameraControl/windows/SettingsWnd.xaml", "CameraControl/windows/G2LicenseWnd.xaml" })
+			literal += Regex.Matches(File.ReadAllText(Path.Combine(root, "projects/CameraControl", f)), "(Background|Foreground|BorderBrush)=\"#FF(FFFFFF|F3F4F6|16181C|E3ECFB|FFF1DF|EEF0F3)\"").Count;
+		Check("no pinned light colours left on G2 window surfaces", literal == 0);
 	}
 
 	static int Find(byte[] data, byte[] pattern)

@@ -8,7 +8,7 @@
       </ResourceDictionary.MergedDictionaries>
       <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
       <Style x:Key="G2SetRow" TargetType="Border">
-        <Setter Property="BorderBrush" Value="#FFEEF0F3" />
+        <Setter Property="BorderBrush" Value="{StaticResource G2Neutral}" />
         <Setter Property="BorderThickness" Value="0,1,0,0" />
         <Setter Property="Padding" Value="14,8" />
         <Setter Property="MinHeight" Value="48" />
@@ -25,7 +25,7 @@
         <Setter Property="Template">
           <Setter.Value>
             <ControlTemplate TargetType="RadioButton">
-              <Border x:Name="bd" Height="54" CornerRadius="10" Padding="10,0" Background="#FFF7F9FD" BorderBrush="#FFC9D6EE" BorderThickness="1">
+              <Border x:Name="bd" Height="54" CornerRadius="10" Padding="10,0" Background="{StaticResource G2Panel2}" BorderBrush="{StaticResource G2AccentSoft}" BorderThickness="1">
                 <ContentPresenter VerticalAlignment="Center" />
               </Border>
               <ControlTemplate.Triggers>
@@ -89,7 +89,7 @@
         <TextBlock VerticalAlignment="Center" FontSize="{DynamicResource G2Fs16}" FontWeight="Bold" Text="클로리움 설정" />
       </DockPanel>
     </Border>
-    <TabControl x:Name="G2Tabs" Grid.Row="1" TabStripPlacement="Left" ItemContainerStyle="{StaticResource G2NavItem}" SelectedIndex="2" Background="Transparent" BorderThickness="0" Padding="0">
+    <TabControl x:Name="G2Tabs" Grid.Row="1" TabStripPlacement="Left" ItemContainerStyle="{StaticResource G2NavItem}" SelectedIndex="0" Background="Transparent" BorderThickness="0" Padding="0">
       <TabControl.Template>
         <ControlTemplate TargetType="TabControl">
           <DockPanel>
@@ -147,11 +147,11 @@
       <TextBlock Style="{StaticResource G2Caption}" TextWrapping="Wrap" Margin="0,2,0,0" Text="화면 글자 약 1.35배 확대보기 (상품이름 제외)" />
     </StackPanel>
   </DockPanel>
-</Border><Border Style="{StaticResource G2SetRow}" Tag="테마 " Visibility="{Binding Path=Branding.UseThemeSelector, Converter={StaticResource BooleanToVisibilityConverter}}">
+</Border><Border Style="{StaticResource G2SetRow}" Tag="테마 밝은 화면 어두운 화면 ">
   <DockPanel>
-    <ContentControl DockPanel.Dock="Right" VerticalAlignment="Center" Margin="12,0,0,0" Focusable="False"><ComboBox Width="220" ItemsSource="{Binding Themes}" SelectedValue="{Binding CurrentThemeNameNew}"></ComboBox></ContentControl>
+    <ContentControl DockPanel.Dock="Right" VerticalAlignment="Center" Margin="12,0,0,0" Focusable="False"><ComboBox Width="220" SelectedIndex="{Binding ScreenTheme}"><ComboBoxItem Content="밝은 화면" /><ComboBoxItem Content="어두운 화면" /></ComboBox></ContentControl>
     <StackPanel VerticalAlignment="Center">
-      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="테마" /><Border Style="{StaticResource G2Chip}" Background="#FFFFF1DF"><TextBlock Text="재시작" FontSize="{DynamicResource G2Fs10_5}" Foreground="#FF8A5300" /></Border></StackPanel>
+      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="테마" /><Border Style="{StaticResource G2Chip}" Background="{StaticResource G2PrBg}"><TextBlock Text="재시작" FontSize="{DynamicResource G2Fs10_5}" Foreground="{StaticResource G2PrText}" /></Border></StackPanel>
       
     </StackPanel>
   </DockPanel>
@@ -159,7 +159,7 @@
   <DockPanel>
     <ContentControl DockPanel.Dock="Right" VerticalAlignment="Center" Margin="12,0,0,0" Focusable="False"><ComboBox Width="220" DisplayMemberPath="Name" SelectedValuePath="Value" ItemsSource="{Binding Source={x:Static T:TranslationManager.AvailableLangs}}" SelectedValue="{Binding SelectedLanguage}"></ComboBox></ContentControl>
     <StackPanel VerticalAlignment="Center">
-      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="언어" /><Border Style="{StaticResource G2Chip}" Background="#FFFFF1DF"><TextBlock Text="재시작" FontSize="{DynamicResource G2Fs10_5}" Foreground="#FF8A5300" /></Border></StackPanel>
+      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="언어" /><Border Style="{StaticResource G2Chip}" Background="{StaticResource G2PrBg}"><TextBlock Text="재시작" FontSize="{DynamicResource G2Fs10_5}" Foreground="{StaticResource G2PrText}" /></Border></StackPanel>
       
     </StackPanel>
   </DockPanel>
@@ -220,7 +220,15 @@
       
     </StackPanel>
   </DockPanel>
-</Border><Border Style="{StaticResource G2SetRow}" Tag="병렬 전송 여러 장을 동시에 받아 저장 시간을 줄입니다">
+</Border><StackPanel Visibility="{Binding UseAlwaysBackup, Converter={StaticResource BooleanToVisibilityConverter}}"><Border Style="{StaticResource G2SetRow}" Tag="백업 폴더 원본 백업 위치 ">
+  <DockPanel>
+    <ContentControl DockPanel.Dock="Right" VerticalAlignment="Center" Margin="12,0,0,0" Focusable="False"><StackPanel Orientation="Horizontal"><TextBox Width="240" FontFamily="{StaticResource G2Mono}" Text="{Binding BackupFolder}" ToolTip="비워 두면 D:\&lt;최상위 폴더&gt; Backup\… (기존 방식)" /><Button Style="{StaticResource G2GhostButton}" Width="34" Padding="0" Margin="6,0,0,0" ToolTip="폴더 선택" Click="Btn_BackupFolder_Click"><Viewbox Width="16" Height="16"><Path Width="24" Height="24" Stroke="{StaticResource G2Sub}" StrokeThickness="1.8" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round" Data="M3,6 H10 L12,8 H21 V19 H3 Z" /></Viewbox></Button></StackPanel></ContentControl>
+    <StackPanel VerticalAlignment="Center">
+      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="백업 폴더" /></StackPanel>
+      <TextBlock Style="{StaticResource G2Caption}" TextWrapping="Wrap" Text="원본과 치수 사진을 같은 하위 폴더 구조로 복사합니다. 비워 두면 기존처럼 D:\&lt;최상위 폴더&gt; Backup에 저장합니다." />
+    </StackPanel>
+  </DockPanel>
+</Border></StackPanel><Border Style="{StaticResource G2SetRow}" Tag="병렬 전송 여러 장을 동시에 받아 저장 시간을 줄입니다">
   <DockPanel>
     <ContentControl DockPanel.Dock="Right" VerticalAlignment="Center" Margin="12,0,0,0" Focusable="False"><CheckBox Style="{StaticResource G2Switch}" IsChecked="{Binding UseParallelTransfer}" /></ContentControl>
     <StackPanel VerticalAlignment="Center">
@@ -302,7 +310,7 @@
 </TabItem><TabItem Tag="확장기능">
   <TabItem.Header>
     <DockPanel>
-      <ContentControl DockPanel.Dock="Right" Focusable="False"><Border Style="{StaticResource G2Chip}" Background="#FF1F5FD6" Margin="6,0,0,0"><TextBlock Text="NEW" FontSize="{DynamicResource G2Fs10}" FontWeight="SemiBold" Foreground="#FFFFFFFF" /></Border></ContentControl>
+      <ContentControl DockPanel.Dock="Right" Focusable="False"><Border Style="{StaticResource G2Chip}" Background="{StaticResource G2Accent}" Margin="6,0,0,0"><TextBlock Text="NEW" FontSize="{DynamicResource G2Fs10}" FontWeight="SemiBold" Foreground="{StaticResource G2OnAccent}" /></Border></ContentControl>
       <Viewbox Width="17" Height="17"><Path Width="24" Height="24" Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=TabItem}}" StrokeThickness="1.8" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round" Data="M4,20 V9 L12,4 L20,9 V20 M9,20 V14 H15 V20 M4,20 H20" /></Viewbox>
       <TextBlock Margin="9,0,0,0" VerticalAlignment="Center" Text="확장기능" />
     </DockPanel>
@@ -311,14 +319,14 @@
     <StackPanel Margin="20,16,20,20">
       <TextBlock FontSize="{DynamicResource G2Fs20}" FontWeight="Bold" Text="확장기능" />
       <TextBlock Style="{StaticResource G2Caption}" FontSize="{DynamicResource G2Fs12}" TextWrapping="Wrap" Margin="0,4,0,14" Text="필요한 기능만 켜서 씁니다. 꺼진 기능은 촬영 화면에서 버튼까지 사라집니다." />
-      <Border CornerRadius="12" Background="#FFE3ECFB" Padding="14,12" Margin="0,0,0,14" Tag="설정프리셋">
+      <Border CornerRadius="12" Background="{StaticResource G2AccentSoft}" Padding="14,12" Margin="0,0,0,14" Tag="설정프리셋">
   <StackPanel>
     <TextBlock FontSize="{DynamicResource G2Fs13_5}" FontWeight="Bold" Text="설정프리셋" />
-    <TextBlock FontSize="{DynamicResource G2Fs11_5}" Foreground="#FF3A4654" TextWrapping="Wrap" Margin="0,3,0,10" Text="A·B·C 중 하나만 선택됩니다. 큰 버튼을 누르면 그 칸에 저장된 설정으로 바뀌고, 아래 '저장하기'를 누르면 지금 설정이 그 칸에 저장(덮어쓰기)됩니다. 저장한 설정은 창 아래 '저장'을 눌러야 적용이 확정됩니다." />
+    <TextBlock FontSize="{DynamicResource G2Fs11_5}" Foreground="{StaticResource G2NeutralText}" TextWrapping="Wrap" Margin="0,3,0,10" Text="A·B·C 중 하나만 선택됩니다. 큰 버튼을 누르면 그 칸에 저장된 설정으로 바뀌고, 아래 '저장하기'를 누르면 지금 설정이 그 칸에 저장(덮어쓰기)됩니다. 저장한 설정은 창 아래 '저장'을 눌러야 적용이 확정됩니다." />
     <UniformGrid Rows="1"><StackPanel Margin="0,0,4,0">
   <RadioButton x:Name="G2SlotA" Tag="A" GroupName="G2SettingSlots" Style="{StaticResource G2SlotButton}" Click="G2PresetLoad_Click" ToolTip="설정 A에 저장된 설정으로 바꿉니다">
     <DockPanel>
-      <Border x:Name="G2SlotKeyA" DockPanel.Dock="Left" Width="30" Height="30" CornerRadius="7" Background="#FFE1E4E9">
+      <Border x:Name="G2SlotKeyA" DockPanel.Dock="Left" Width="30" Height="30" CornerRadius="7" Background="{StaticResource G2Line}">
         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="{StaticResource G2Mono}" FontSize="{DynamicResource G2Fs15}" FontWeight="SemiBold" Foreground="White" Text="A" />
       </Border>
       <StackPanel Margin="9,0,0,0" VerticalAlignment="Center">
@@ -333,7 +341,7 @@
 </StackPanel><StackPanel Margin="4,0">
   <RadioButton x:Name="G2SlotB" Tag="B" GroupName="G2SettingSlots" Style="{StaticResource G2SlotButton}" Click="G2PresetLoad_Click" ToolTip="설정 B에 저장된 설정으로 바꿉니다">
     <DockPanel>
-      <Border x:Name="G2SlotKeyB" DockPanel.Dock="Left" Width="30" Height="30" CornerRadius="7" Background="#FFE1E4E9">
+      <Border x:Name="G2SlotKeyB" DockPanel.Dock="Left" Width="30" Height="30" CornerRadius="7" Background="{StaticResource G2Line}">
         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="{StaticResource G2Mono}" FontSize="{DynamicResource G2Fs15}" FontWeight="SemiBold" Foreground="White" Text="B" />
       </Border>
       <StackPanel Margin="9,0,0,0" VerticalAlignment="Center">
@@ -348,7 +356,7 @@
 </StackPanel><StackPanel Margin="4,0,0,0">
   <RadioButton x:Name="G2SlotC" Tag="C" GroupName="G2SettingSlots" Style="{StaticResource G2SlotButton}" Click="G2PresetLoad_Click" ToolTip="설정 C에 저장된 설정으로 바꿉니다">
     <DockPanel>
-      <Border x:Name="G2SlotKeyC" DockPanel.Dock="Left" Width="30" Height="30" CornerRadius="7" Background="#FFE1E4E9">
+      <Border x:Name="G2SlotKeyC" DockPanel.Dock="Left" Width="30" Height="30" CornerRadius="7" Background="{StaticResource G2Line}">
         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="{StaticResource G2Mono}" FontSize="{DynamicResource G2Fs15}" FontWeight="SemiBold" Foreground="White" Text="C" />
       </Border>
       <StackPanel Margin="9,0,0,0" VerticalAlignment="Center">
@@ -368,7 +376,7 @@
       <ContentControl DockPanel.Dock="Right" Focusable="False" VerticalAlignment="Center"><CheckBox x:Name="G2Feat_apparel" Style="{StaticResource G2Switch}" IsChecked="{Binding ShowFrontBack}" /></ContentControl>
       <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
         <TextBlock Style="{StaticResource G2SectionTitle}" Text="의류 촬영 (앞면 · 뒷면)" />
-        <Border Style="{StaticResource G2Chip}" Background="#FFEEF0F3" Margin="8,0,0,0"><TextBlock Text="공통" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="#FF3A4654" /></Border>
+        <Border Style="{StaticResource G2Chip}" Background="{StaticResource G2Neutral}" Margin="8,0,0,0"><TextBlock Text="공통" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="{StaticResource G2NeutralText}" /></Border>
       </StackPanel>
     </DockPanel>
     <TextBlock Style="{StaticResource G2Caption}" TextWrapping="Wrap" Margin="14,0,14,10" Text="촬영 화면에 F/B 버튼을 표시하고 파일 이름 끝에 _F, _B를 붙입니다." />
@@ -380,7 +388,7 @@
       <ContentControl DockPanel.Dock="Right" Focusable="False" VerticalAlignment="Center"><CheckBox x:Name="G2Feat_defect" Style="{StaticResource G2Switch}" IsChecked="{Binding UseDefectCapture}" /></ContentControl>
       <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
         <TextBlock Style="{StaticResource G2SectionTitle}" Text="하자 촬영 (D)" />
-        <Border Style="{StaticResource G2Chip}" Background="#FFFFF1DF" Margin="8,0,0,0"><TextBlock Text="무신사" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="#FF8A5300" /></Border>
+        <Border Style="{StaticResource G2Chip}" Background="{StaticResource G2PrBg}" Margin="8,0,0,0"><TextBlock Text="무신사" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="{StaticResource G2PrText}" /></Border>
       </StackPanel>
     </DockPanel>
     <TextBlock Style="{StaticResource G2Caption}" TextWrapping="Wrap" Margin="14,0,14,10" Text="D 버튼을 켠 채 앞면을 찍으면 _D로 저장합니다. 미감개선(PR)과 치수 측정에서 제외됩니다." />
@@ -392,7 +400,7 @@
       <ContentControl DockPanel.Dock="Right" Focusable="False" VerticalAlignment="Center"><CheckBox Name="EnableAestheticImprovement" Style="{StaticResource G2Switch}" IsChecked="{Binding UseAestheticImprovement, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding CanChangeAestheticImprovement}" ToolTip="프로그램을 다시 실행하면 미감개선은 ON으로 시작합니다." /></ContentControl>
       <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
         <TextBlock Style="{StaticResource G2SectionTitle}" Text="미감개선 모드 (PR)" />
-        <Border Style="{StaticResource G2Chip}" Background="#FFFFF1DF" Margin="8,0,0,0"><TextBlock Text="무신사" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="#FF8A5300" /></Border>
+        <Border Style="{StaticResource G2Chip}" Background="{StaticResource G2PrBg}" Margin="8,0,0,0"><TextBlock Text="무신사" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="{StaticResource G2PrText}" /></Border>
       </StackPanel>
     </DockPanel>
     <TextBlock Style="{StaticResource G2Caption}" TextWrapping="Wrap" Margin="14,0,14,10" Text="앞·뒷면을 _PR_F, _PR_B로 저장합니다. 켜면 세로·가로 버튼 옆에 미감개선 스위치가 생깁니다. 촬영·저장 중에는 바꿀 수 없습니다." />
@@ -404,7 +412,7 @@
       <ContentControl DockPanel.Dock="Right" Focusable="False" VerticalAlignment="Center"><CheckBox x:Name="G2Feat_removebg" Style="{StaticResource G2Switch}" IsChecked="{Binding UseBackgroundRemoval}" /></ContentControl>
       <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
         <TextBlock Style="{StaticResource G2SectionTitle}" Text="배경제거" />
-        <Border Style="{StaticResource G2Chip}" Background="#FFE3ECFB" Margin="8,0,0,0"><TextBlock Text="G2" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="#FF1F5FD6" /></Border>
+        <Border Style="{StaticResource G2Chip}" Background="{StaticResource G2AccentSoft}" Margin="8,0,0,0"><TextBlock Text="G2" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="{StaticResource G2Accent}" /></Border>
       </StackPanel>
     </DockPanel>
     <TextBlock Style="{StaticResource G2Caption}" TextWrapping="Wrap" Margin="14,0,14,10" Text="클로리움 배경제거(Matting Studio)로 선택한 사진이나 폴더의 배경을 지웁니다. 켜면 왼쪽 도구에 배경제거 버튼이 나타나고, 누르면 이 PC의 배경제거 화면에 선택한 사진이 대상으로 올라갑니다. 원본은 그대로 두고 옆 _bgr 폴더에 저장합니다." />
@@ -424,7 +432,7 @@
       <ContentControl DockPanel.Dock="Right" Focusable="False" VerticalAlignment="Center"><CheckBox x:Name="G2Feat_imageadjust" Style="{StaticResource G2Switch}" IsChecked="{Binding UseImageAdjust}" /></ContentControl>
       <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
         <TextBlock Style="{StaticResource G2SectionTitle}" Text="이미지보정" />
-        <Border Style="{StaticResource G2Chip}" Background="#FFE3ECFB" Margin="8,0,0,0"><TextBlock Text="G2" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="#FF1F5FD6" /></Border>
+        <Border Style="{StaticResource G2Chip}" Background="{StaticResource G2AccentSoft}" Margin="8,0,0,0"><TextBlock Text="G2" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="{StaticResource G2Accent}" /></Border>
       </StackPanel>
     </DockPanel>
     <TextBlock Style="{StaticResource G2Caption}" TextWrapping="Wrap" Margin="14,0,14,10" Text="노출·명도·대비·채도·색온도/틴트·RGB 레벨을 보정하고 전후를 나란히 비교합니다. 켜면 왼쪽 도구에 이미지보정 버튼이 나타나고, 누르면 선택한 사진이 보정 창에 열립니다. 템플릿을 저장해 폴더 단위로 일괄 적용할 수 있으며, 원본은 그대로 두고 _cc 사본으로 저장합니다." />
@@ -444,7 +452,7 @@
       <ContentControl DockPanel.Dock="Right" Focusable="False" VerticalAlignment="Center"><CheckBox x:Name="G2Feat_autosizing" Style="{StaticResource G2Switch}" IsChecked="{Binding UseAutoSizing}" /></ContentControl>
       <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
         <TextBlock Style="{StaticResource G2SectionTitle}" Text="오토사이징" />
-        <Border Style="{StaticResource G2Chip}" Background="#FFE3ECFB" Margin="8,0,0,0"><TextBlock Text="G2" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="#FF1F5FD6" /></Border>
+        <Border Style="{StaticResource G2Chip}" Background="{StaticResource G2AccentSoft}" Margin="8,0,0,0"><TextBlock Text="G2" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="{StaticResource G2Accent}" /></Border>
       </StackPanel>
     </DockPanel>
     <TextBlock Style="{StaticResource G2Caption}" TextWrapping="Wrap" Margin="14,0,14,10" Text="클로리움 오토사이징(Desk)으로 치수 사진을 열어 부위별 치수를 잽니다. 켜면 왼쪽 도구에 오토사이징 버튼이 나타나고, 선택한 사진의 치수측정 사진(_M)을 바로 엽니다. 측정 스케일은 치수 사진에 함께 기록됩니다." />
@@ -465,12 +473,28 @@
       
     </StackPanel>
   </DockPanel>
-</Border><Border Style="{StaticResource G2SetRow}" Tag="기준 원판 크기 ">
+</Border><Border Style="{StaticResource G2SetRow}" Tag="캘리브레이션 판 원판 정사각형 판 500mm ">
+  <DockPanel>
+    <ContentControl DockPanel.Dock="Right" VerticalAlignment="Center" Margin="12,0,0,0" Focusable="False"><ComboBox Width="160" SelectedIndex="{Binding CalibrationTarget}"><ComboBoxItem Content="원판" /><ComboBoxItem Content="정사각형 판" /></ComboBox></ContentControl>
+    <StackPanel VerticalAlignment="Center">
+      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="캘리브레이션 판" /></StackPanel>
+      <TextBlock Style="{StaticResource G2Caption}" TextWrapping="Wrap" Text="정사각형 판은 네 모서리를 자동으로 찾아 가로·세로 스케일과 사다리꼴 왜곡·회전 보정값을 만들고, 치수 촬영 사진(치수측정\*_M.jpeg)에만 기록합니다." />
+    </StackPanel>
+  </DockPanel>
+</Border><Border Tag="기준 원판 크기 "><Border.Style><Style TargetType="Border" BasedOn="{StaticResource G2SetRow}"><Setter Property="Visibility" Value="Collapsed" /><Style.Triggers><DataTrigger Binding="{Binding CalibrationTarget}" Value="0"><Setter Property="Visibility" Value="Visible" /></DataTrigger></Style.Triggers></Style></Border.Style>
   <DockPanel>
     <ContentControl DockPanel.Dock="Right" VerticalAlignment="Center" Margin="12,0,0,0" Focusable="False"><TextBox Width="120" Text="{Binding DiskSize}" FontFamily="{StaticResource G2Mono}" /></ContentControl>
     <StackPanel VerticalAlignment="Center">
       <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="기준 원판 크기" /></StackPanel>
       
+    </StackPanel>
+  </DockPanel>
+</Border><Border Tag="정사각형 판 크기 "><Border.Style><Style TargetType="Border" BasedOn="{StaticResource G2SetRow}"><Setter Property="Visibility" Value="Collapsed" /><Style.Triggers><DataTrigger Binding="{Binding CalibrationTarget}" Value="1"><Setter Property="Visibility" Value="Visible" /></DataTrigger></Style.Triggers></Style></Border.Style>
+  <DockPanel>
+    <ContentControl DockPanel.Dock="Right" VerticalAlignment="Center" Margin="12,0,0,0" Focusable="False"><TextBox Width="120" Text="{Binding SquareBoardSize}" FontFamily="{StaticResource G2Mono}" /></ContentControl>
+    <StackPanel VerticalAlignment="Center">
+      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="정사각형 판 한 변 (mm)" /></StackPanel>
+      <TextBlock Style="{StaticResource G2Caption}" TextWrapping="Wrap" Text="{Binding SquareCalibrationSummary}" />
     </StackPanel>
   </DockPanel>
 </Border><Border Style="{StaticResource G2SetRow}" Tag="스케일 보정 ">
@@ -489,47 +513,11 @@
       <ContentControl DockPanel.Dock="Right" Focusable="False" VerticalAlignment="Center"><CheckBox x:Name="G2Feat_superfocus" Style="{StaticResource G2Switch}" IsChecked="{Binding UseSuperfocus}" /></ContentControl>
       <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
         <TextBlock Style="{StaticResource G2SectionTitle}" Text="수퍼포커스" />
-        <Border Style="{StaticResource G2Chip}" Background="#FFE3ECFB" Margin="8,0,0,0"><TextBlock Text="G2" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="#FF1F5FD6" /></Border>
+        <Border Style="{StaticResource G2Chip}" Background="{StaticResource G2AccentSoft}" Margin="8,0,0,0"><TextBlock Text="G2" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="{StaticResource G2Accent}" /></Border>
       </StackPanel>
     </DockPanel>
     <TextBlock Style="{StaticResource G2Caption}" TextWrapping="Wrap" Margin="14,0,14,10" Text="여러 초점으로 찍어 한 장으로 합성합니다. 켜면 왼쪽 도구에 수퍼포커스 버튼이 나타납니다." />
     
-  </StackPanel>
-</Border><Border Style="{StaticResource G2Card}" Padding="0" Margin="0,0,0,10" Tag="바코드 연동 바코드 스캐너로 상품이름을 읽습니다." Visibility="{Binding Source={x:Static Core:ServiceProvider.Branding}, Path=ControlBarcodeScanner, Converter={StaticResource BooleanToVisibilityConverter}}">
-  <StackPanel>
-    <DockPanel Margin="14,12,12,4">
-      <ContentControl DockPanel.Dock="Right" Focusable="False" VerticalAlignment="Center"><CheckBox x:Name="G2Feat_barcode" Style="{StaticResource G2Switch}" IsChecked="{Binding UseBarcodeScanner}" /></ContentControl>
-      <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-        <TextBlock Style="{StaticResource G2SectionTitle}" Text="바코드 연동" />
-        <Border Style="{StaticResource G2Chip}" Background="#FFEEF0F3" Margin="8,0,0,0"><TextBlock Text="공통" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="#FF3A4654" /></Border>
-      </StackPanel>
-    </DockPanel>
-    <TextBlock Style="{StaticResource G2Caption}" TextWrapping="Wrap" Margin="14,0,14,10" Text="바코드 스캐너로 상품이름을 읽습니다." />
-    <StackPanel Visibility="{Binding IsChecked, ElementName=G2Feat_barcode, Converter={StaticResource BooleanToVisibilityConverter}}"><Border Style="{StaticResource G2SetRow}" Tag="바코드로 새 세션 만들기 ">
-  <DockPanel>
-    <ContentControl DockPanel.Dock="Right" VerticalAlignment="Center" Margin="12,0,0,0" Focusable="False"><CheckBox Style="{StaticResource G2Switch}" IsChecked="{Binding ModeBarcodeSession}" /></ContentControl>
-    <StackPanel VerticalAlignment="Center">
-      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="바코드로 새 세션 만들기" /></StackPanel>
-      
-    </StackPanel>
-  </DockPanel>
-</Border><Border Style="{StaticResource G2SetRow}" Tag="바코드 읽으면 바로 촬영 ">
-  <DockPanel>
-    <ContentControl DockPanel.Dock="Right" VerticalAlignment="Center" Margin="12,0,0,0" Focusable="False"><CheckBox Style="{StaticResource G2Switch}" IsChecked="{Binding ModeBarcodeCapture}" /></ContentControl>
-    <StackPanel VerticalAlignment="Center">
-      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="바코드 읽으면 바로 촬영" /></StackPanel>
-      
-    </StackPanel>
-  </DockPanel>
-</Border><Border Style="{StaticResource G2SetRow}" Tag="스캐너 장치 이름 ">
-  <DockPanel>
-    <ContentControl DockPanel.Dock="Right" VerticalAlignment="Center" Margin="12,0,0,0" Focusable="False"><TextBox Width="200" Text="{Binding Barcode_DeviceName}" FontFamily="{StaticResource G2Mono}" /></ContentControl>
-    <StackPanel VerticalAlignment="Center">
-      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="스캐너 장치 이름" /></StackPanel>
-      
-    </StackPanel>
-  </DockPanel>
-</Border></StackPanel>
   </StackPanel>
 </Border><Border Style="{StaticResource G2Card}" Padding="0" Margin="0,0,0,10" Tag="외부 API 연동 촬영 결과를 고객사 서버로 보냅니다. 파일 이름과 폴더 규칙은 그대로 유지됩니다.">
   <StackPanel>
@@ -537,7 +525,7 @@
       <ContentControl DockPanel.Dock="Right" Focusable="False" VerticalAlignment="Center"><CheckBox x:Name="G2Feat_api" Style="{StaticResource G2Switch}" IsChecked="{Binding UseAPICommunication}" /></ContentControl>
       <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
         <TextBlock Style="{StaticResource G2SectionTitle}" Text="외부 API 연동" />
-        <Border Style="{StaticResource G2Chip}" Background="#FFE8F5EC" Margin="8,0,0,0"><TextBlock Text="고객사 시스템" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="#FF1A7F37" /></Border>
+        <Border Style="{StaticResource G2Chip}" Background="{StaticResource G2OkBg}" Margin="8,0,0,0"><TextBlock Text="고객사 시스템" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="{StaticResource G2Ok}" /></Border>
       </StackPanel>
     </DockPanel>
     <TextBlock Style="{StaticResource G2Caption}" TextWrapping="Wrap" Margin="14,0,14,10" Text="촬영 결과를 고객사 서버로 보냅니다. 파일 이름과 폴더 규칙은 그대로 유지됩니다." />
@@ -565,7 +553,7 @@
       <ContentControl DockPanel.Dock="Right" Focusable="False" VerticalAlignment="Center"><CheckBox x:Name="G2Feat_alarm" Style="{StaticResource G2Switch}" IsChecked="{Binding UseAlarm}" /></ContentControl>
       <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
         <TextBlock Style="{StaticResource G2SectionTitle}" Text="작업 타이머 · 알람" />
-        <Border Style="{StaticResource G2Chip}" Background="#FFEEF0F3" Margin="8,0,0,0"><TextBlock Text="공통" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="#FF3A4654" /></Border>
+        <Border Style="{StaticResource G2Chip}" Background="{StaticResource G2Neutral}" Margin="8,0,0,0"><TextBlock Text="공통" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="{StaticResource G2NeutralText}" /></Border>
       </StackPanel>
     </DockPanel>
     <TextBlock Style="{StaticResource G2Caption}" TextWrapping="Wrap" Margin="14,0,14,10" Text="작업 시간 측정과 알람, 작업 통계(csv) 저장." />
@@ -617,7 +605,7 @@
       <ContentControl DockPanel.Dock="Right" Focusable="False" VerticalAlignment="Center"><CheckBox x:Name="G2Feat_light" Style="{StaticResource G2Switch}" IsChecked="{Binding UseCloriumLight}" /></ContentControl>
       <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
         <TextBlock Style="{StaticResource G2SectionTitle}" Text="조명 조절" />
-        <Border Style="{StaticResource G2Chip}" Background="#FFE3ECFB" Margin="8,0,0,0"><TextBlock Text="G2" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="#FF1F5FD6" /></Border>
+        <Border Style="{StaticResource G2Chip}" Background="{StaticResource G2AccentSoft}" Margin="8,0,0,0"><TextBlock Text="G2" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="{StaticResource G2Accent}" /></Border>
       </StackPanel>
     </DockPanel>
     <TextBlock Style="{StaticResource G2Caption}" TextWrapping="Wrap" Margin="14,0,14,10" Text="클로리움 조명 제어(Bluetooth)로 Godox 조명을 켜고 끕니다. 켜면 왼쪽 도구에 조명 버튼이 나타나고, 시작·촬영·절전·종료 때 조명을 함께 제어합니다." />
@@ -674,6 +662,42 @@
     </StackPanel>
   </DockPanel>
 </Border>
+  </StackPanel>
+</Border><Border Style="{StaticResource G2Card}" Padding="0" Margin="0,0,0,12" Tag="바코드 연동 바코드 스캐너로 상품이름을 읽습니다." Visibility="{Binding Source={x:Static Core:ServiceProvider.Branding}, Path=ControlBarcodeScanner, Converter={StaticResource BooleanToVisibilityConverter}}">
+  <StackPanel>
+    <DockPanel Margin="14,12,12,4">
+      <ContentControl DockPanel.Dock="Right" Focusable="False" VerticalAlignment="Center"><CheckBox x:Name="G2Feat_barcode" Style="{StaticResource G2Switch}" IsChecked="{Binding UseBarcodeScanner}" /></ContentControl>
+      <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+        <TextBlock Style="{StaticResource G2SectionTitle}" Text="바코드 연동" />
+        <Border Style="{StaticResource G2Chip}" Background="{StaticResource G2Neutral}" Margin="8,0,0,0"><TextBlock Text="공통" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="{StaticResource G2NeutralText}" /></Border>
+      </StackPanel>
+    </DockPanel>
+    <TextBlock Style="{StaticResource G2Caption}" TextWrapping="Wrap" Margin="14,0,14,10" Text="바코드 스캐너로 상품이름을 읽습니다." />
+    <StackPanel Visibility="{Binding IsChecked, ElementName=G2Feat_barcode, Converter={StaticResource BooleanToVisibilityConverter}}"><Border Style="{StaticResource G2SetRow}" Tag="바코드로 새 세션 만들기 ">
+  <DockPanel>
+    <ContentControl DockPanel.Dock="Right" VerticalAlignment="Center" Margin="12,0,0,0" Focusable="False"><CheckBox Style="{StaticResource G2Switch}" IsChecked="{Binding ModeBarcodeSession}" /></ContentControl>
+    <StackPanel VerticalAlignment="Center">
+      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="바코드로 새 세션 만들기" /></StackPanel>
+      
+    </StackPanel>
+  </DockPanel>
+</Border><Border Style="{StaticResource G2SetRow}" Tag="바코드 읽으면 바로 촬영 ">
+  <DockPanel>
+    <ContentControl DockPanel.Dock="Right" VerticalAlignment="Center" Margin="12,0,0,0" Focusable="False"><CheckBox Style="{StaticResource G2Switch}" IsChecked="{Binding ModeBarcodeCapture}" /></ContentControl>
+    <StackPanel VerticalAlignment="Center">
+      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="바코드 읽으면 바로 촬영" /></StackPanel>
+      
+    </StackPanel>
+  </DockPanel>
+</Border><Border Style="{StaticResource G2SetRow}" Tag="스캐너 장치 이름 ">
+  <DockPanel>
+    <ContentControl DockPanel.Dock="Right" VerticalAlignment="Center" Margin="12,0,0,0" Focusable="False"><TextBox Width="200" Text="{Binding Barcode_DeviceName}" FontFamily="{StaticResource G2Mono}" /></ContentControl>
+    <StackPanel VerticalAlignment="Center">
+      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="스캐너 장치 이름" /></StackPanel>
+      
+    </StackPanel>
+  </DockPanel>
+</Border></StackPanel>
   </StackPanel>
 </Border><Border Style="{StaticResource G2Card}" Padding="0" Margin="0,0,0,12" Tag="컨트롤러" Visibility="{Binding Source={x:Static Core:ServiceProvider.Branding}, Path=ControlMonstarDeck, Converter={StaticResource BooleanToVisibilityConverter}}">
   <StackPanel>
@@ -947,7 +971,7 @@
 </TabItem><TabItem Tag="레거시 설정">
   <TabItem.Header>
     <DockPanel>
-      <ContentControl DockPanel.Dock="Right" Focusable="False"><Border Style="{StaticResource G2Chip}" Background="#FFFFF1DF" Margin="6,0,0,0"><TextBlock Text="정리 예정" FontSize="{DynamicResource G2Fs10}" FontWeight="SemiBold" Foreground="#FF8A5300" /></Border></ContentControl>
+      <ContentControl DockPanel.Dock="Right" Focusable="False"><Border Style="{StaticResource G2Chip}" Background="{StaticResource G2PrBg}" Margin="6,0,0,0"><TextBlock Text="정리 예정" FontSize="{DynamicResource G2Fs10}" FontWeight="SemiBold" Foreground="{StaticResource G2PrText}" /></Border></ContentControl>
       <Viewbox Width="17" Height="17"><Path Width="24" Height="24" Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=TabItem}}" StrokeThickness="1.8" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round" Data="M12,3 L21,19 H3 Z M12,10 V14 M12,17 L12.01,17" /></Viewbox>
       <TextBlock Margin="9,0,0,0" VerticalAlignment="Center" Text="레거시 설정" />
     </DockPanel>
@@ -963,7 +987,7 @@
   <DockPanel>
     <ContentControl DockPanel.Dock="Right" VerticalAlignment="Center" Margin="12,0,0,0" Focusable="False"><TextBox Width="80" Text="{Binding SmallFocusStepCanon}" FontFamily="{StaticResource G2Mono}" HorizontalContentAlignment="Center" /></ContentControl>
     <StackPanel VerticalAlignment="Center">
-      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="작은 단계" /><Border Style="{StaticResource G2Chip}" Background="#FFE3ECFB"><TextBlock Text="재개발" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="#FF1F5FD6" /></Border></StackPanel>
+      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="작은 단계" /><Border Style="{StaticResource G2Chip}" Background="{StaticResource G2AccentSoft}"><TextBlock Text="재개발" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="{StaticResource G2Accent}" /></Border></StackPanel>
       
     </StackPanel>
   </DockPanel>
@@ -971,7 +995,7 @@
   <DockPanel>
     <ContentControl DockPanel.Dock="Right" VerticalAlignment="Center" Margin="12,0,0,0" Focusable="False"><TextBox Width="80" Text="{Binding MediumFocusStepCanon}" FontFamily="{StaticResource G2Mono}" HorizontalContentAlignment="Center" /></ContentControl>
     <StackPanel VerticalAlignment="Center">
-      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="중간 단계" /><Border Style="{StaticResource G2Chip}" Background="#FFE3ECFB"><TextBlock Text="재개발" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="#FF1F5FD6" /></Border></StackPanel>
+      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="중간 단계" /><Border Style="{StaticResource G2Chip}" Background="{StaticResource G2AccentSoft}"><TextBlock Text="재개발" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="{StaticResource G2Accent}" /></Border></StackPanel>
       
     </StackPanel>
   </DockPanel>
@@ -979,7 +1003,7 @@
   <DockPanel>
     <ContentControl DockPanel.Dock="Right" VerticalAlignment="Center" Margin="12,0,0,0" Focusable="False"><TextBox Width="80" Text="{Binding LargeFocusStepCanon}" FontFamily="{StaticResource G2Mono}" HorizontalContentAlignment="Center" /></ContentControl>
     <StackPanel VerticalAlignment="Center">
-      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="큰 단계" /><Border Style="{StaticResource G2Chip}" Background="#FFE3ECFB"><TextBlock Text="재개발" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="#FF1F5FD6" /></Border></StackPanel>
+      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="큰 단계" /><Border Style="{StaticResource G2Chip}" Background="{StaticResource G2AccentSoft}"><TextBlock Text="재개발" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="{StaticResource G2Accent}" /></Border></StackPanel>
       
     </StackPanel>
   </DockPanel>
@@ -987,7 +1011,7 @@
   <DockPanel>
     <ContentControl DockPanel.Dock="Right" VerticalAlignment="Center" Margin="12,0,0,0" Focusable="False"><TextBox Width="80" Text="{Binding CanonFocusStepWait}" FontFamily="{StaticResource G2Mono}" HorizontalContentAlignment="Center" /></ContentControl>
     <StackPanel VerticalAlignment="Center">
-      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="단계 사이 대기 (ms)" /><Border Style="{StaticResource G2Chip}" Background="#FFE3ECFB"><TextBlock Text="재개발" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="#FF1F5FD6" /></Border></StackPanel>
+      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="단계 사이 대기 (ms)" /><Border Style="{StaticResource G2Chip}" Background="{StaticResource G2AccentSoft}"><TextBlock Text="재개발" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="{StaticResource G2Accent}" /></Border></StackPanel>
       
     </StackPanel>
   </DockPanel>
@@ -1000,7 +1024,7 @@
   <DockPanel>
     <ContentControl DockPanel.Dock="Right" VerticalAlignment="Center" Margin="12,0,0,0" Focusable="False"><TextBox Width="80" Text="{Binding SmalFocusStep}" FontFamily="{StaticResource G2Mono}" HorizontalContentAlignment="Center" /></ContentControl>
     <StackPanel VerticalAlignment="Center">
-      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="작은 단계" /><Border Style="{StaticResource G2Chip}" Background="#FFE3ECFB"><TextBlock Text="재개발" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="#FF1F5FD6" /></Border></StackPanel>
+      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="작은 단계" /><Border Style="{StaticResource G2Chip}" Background="{StaticResource G2AccentSoft}"><TextBlock Text="재개발" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="{StaticResource G2Accent}" /></Border></StackPanel>
       
     </StackPanel>
   </DockPanel>
@@ -1008,7 +1032,7 @@
   <DockPanel>
     <ContentControl DockPanel.Dock="Right" VerticalAlignment="Center" Margin="12,0,0,0" Focusable="False"><TextBox Width="80" Text="{Binding MediumFocusStep}" FontFamily="{StaticResource G2Mono}" HorizontalContentAlignment="Center" /></ContentControl>
     <StackPanel VerticalAlignment="Center">
-      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="중간 단계" /><Border Style="{StaticResource G2Chip}" Background="#FFE3ECFB"><TextBlock Text="재개발" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="#FF1F5FD6" /></Border></StackPanel>
+      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="중간 단계" /><Border Style="{StaticResource G2Chip}" Background="{StaticResource G2AccentSoft}"><TextBlock Text="재개발" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="{StaticResource G2Accent}" /></Border></StackPanel>
       
     </StackPanel>
   </DockPanel>
@@ -1016,7 +1040,7 @@
   <DockPanel>
     <ContentControl DockPanel.Dock="Right" VerticalAlignment="Center" Margin="12,0,0,0" Focusable="False"><TextBox Width="80" Text="{Binding LargeFocusStep}" FontFamily="{StaticResource G2Mono}" HorizontalContentAlignment="Center" /></ContentControl>
     <StackPanel VerticalAlignment="Center">
-      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="큰 단계" /><Border Style="{StaticResource G2Chip}" Background="#FFE3ECFB"><TextBlock Text="재개발" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="#FF1F5FD6" /></Border></StackPanel>
+      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="큰 단계" /><Border Style="{StaticResource G2Chip}" Background="{StaticResource G2AccentSoft}"><TextBlock Text="재개발" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="{StaticResource G2Accent}" /></Border></StackPanel>
       
     </StackPanel>
   </DockPanel>
@@ -1029,7 +1053,7 @@
   <DockPanel>
     <ContentControl DockPanel.Dock="Right" VerticalAlignment="Center" Margin="12,0,0,0" Focusable="False"><ComboBox Width="160" SelectedIndex="{Binding DetectionType}"><ComboBoxItem Content="두 프레임 차이" /><ComboBoxItem Content="배경 모델링" /></ComboBox></ContentControl>
     <StackPanel VerticalAlignment="Center">
-      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="움직임 감지 방식" /><Border Style="{StaticResource G2Chip}" Background="#FFFFF1DF"><TextBlock Text="삭제 검토" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="#FF8A5300" /></Border></StackPanel>
+      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="움직임 감지 방식" /><Border Style="{StaticResource G2Chip}" Background="{StaticResource G2PrBg}"><TextBlock Text="삭제 검토" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="{StaticResource G2PrText}" /></Border></StackPanel>
       
     </StackPanel>
   </DockPanel>
@@ -1037,7 +1061,7 @@
   <DockPanel>
     <ContentControl DockPanel.Dock="Right" VerticalAlignment="Center" Margin="12,0,0,0" Focusable="False"><TextBox Width="80" Text="{Binding MotionBlockSize}" FontFamily="{StaticResource G2Mono}" HorizontalContentAlignment="Center" /></ContentControl>
     <StackPanel VerticalAlignment="Center">
-      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="최소 감지 블록" /><Border Style="{StaticResource G2Chip}" Background="#FFFFF1DF"><TextBlock Text="삭제 검토" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="#FF8A5300" /></Border></StackPanel>
+      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="최소 감지 블록" /><Border Style="{StaticResource G2Chip}" Background="{StaticResource G2PrBg}"><TextBlock Text="삭제 검토" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="{StaticResource G2PrText}" /></Border></StackPanel>
       
     </StackPanel>
   </DockPanel>
@@ -1045,7 +1069,7 @@
   <DockPanel>
     <ContentControl DockPanel.Dock="Right" VerticalAlignment="Center" Margin="12,0,0,0" Focusable="False"><CheckBox Style="{StaticResource G2Switch}" IsChecked="{Binding EasyLiveViewControl}" /></ContentControl>
     <StackPanel VerticalAlignment="Center">
-      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="간편 라이브뷰 조작" /><Border Style="{StaticResource G2Chip}" Background="#FFFFF1DF"><TextBlock Text="삭제 검토" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="#FF8A5300" /></Border></StackPanel>
+      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="간편 라이브뷰 조작" /><Border Style="{StaticResource G2Chip}" Background="{StaticResource G2PrBg}"><TextBlock Text="삭제 검토" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="{StaticResource G2PrText}" /></Border></StackPanel>
       
     </StackPanel>
   </DockPanel>
@@ -1053,7 +1077,7 @@
   <DockPanel>
     <ContentControl DockPanel.Dock="Right" VerticalAlignment="Center" Margin="12,0,0,0" Focusable="False"><TextBox Width="80" Text="{Binding LiveViewFreezeTimeOut}" FontFamily="{StaticResource G2Mono}" HorizontalContentAlignment="Center" /></ContentControl>
     <StackPanel VerticalAlignment="Center">
-      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="화면 정지 시간 (초)" /><Border Style="{StaticResource G2Chip}" Background="#FFE8F5EC"><TextBlock Text="유지" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="#FF1A7F37" /></Border></StackPanel>
+      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="화면 정지 시간 (초)" /><Border Style="{StaticResource G2Chip}" Background="{StaticResource G2OkBg}"><TextBlock Text="유지" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="{StaticResource G2Ok}" /></Border></StackPanel>
       
     </StackPanel>
   </DockPanel>
@@ -1061,7 +1085,7 @@
   <DockPanel>
     <ContentControl DockPanel.Dock="Right" VerticalAlignment="Center" Margin="12,0,0,0" Focusable="False"><Button x:Name="tn_showoverlay" Style="{StaticResource G2GhostButton}" Content="폴더 열기" Click="Btn_ShowOverlayFolder_Click" /></ContentControl>
     <StackPanel VerticalAlignment="Center">
-      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="오버레이 폴더" /><Border Style="{StaticResource G2Chip}" Background="#FFFFF1DF"><TextBlock Text="삭제 검토" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="#FF8A5300" /></Border></StackPanel>
+      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="오버레이 폴더" /><Border Style="{StaticResource G2Chip}" Background="{StaticResource G2PrBg}"><TextBlock Text="삭제 검토" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="{StaticResource G2PrText}" /></Border></StackPanel>
       
     </StackPanel>
   </DockPanel>
@@ -1074,7 +1098,7 @@
   <DockPanel>
     <ContentControl DockPanel.Dock="Right" VerticalAlignment="Center" Margin="12,0,0,0" Focusable="False"><CheckBox Style="{StaticResource G2Switch}" IsChecked="{Binding Autorotate}" /></ContentControl>
     <StackPanel VerticalAlignment="Center">
-      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="자동 회전" /><Border Style="{StaticResource G2Chip}" Background="#FFE8F5EC"><TextBlock Text="유지" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="#FF1A7F37" /></Border></StackPanel>
+      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="자동 회전" /><Border Style="{StaticResource G2Chip}" Background="{StaticResource G2OkBg}"><TextBlock Text="유지" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="{StaticResource G2Ok}" /></Border></StackPanel>
       
     </StackPanel>
   </DockPanel>
@@ -1082,7 +1106,7 @@
   <DockPanel>
     <ContentControl DockPanel.Dock="Right" VerticalAlignment="Center" Margin="12,0,0,0" Focusable="False"><CheckBox Style="{StaticResource G2Switch}" IsChecked="{Binding AutoPreview}" /></ContentControl>
     <StackPanel VerticalAlignment="Center">
-      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="자동 미리보기" /><Border Style="{StaticResource G2Chip}" Background="#FFE8F5EC"><TextBlock Text="유지" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="#FF1A7F37" /></Border></StackPanel>
+      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="자동 미리보기" /><Border Style="{StaticResource G2Chip}" Background="{StaticResource G2OkBg}"><TextBlock Text="유지" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="{StaticResource G2Ok}" /></Border></StackPanel>
       <TextBlock Style="{StaticResource G2Caption}" TextWrapping="Wrap" Margin="0,2,0,0" Text="Lightroom을 쓰면 끄세요" />
     </StackPanel>
   </DockPanel>
@@ -1090,7 +1114,7 @@
   <DockPanel>
     <ContentControl DockPanel.Dock="Right" VerticalAlignment="Center" Margin="12,0,0,0" Focusable="False"><CheckBox Style="{StaticResource G2Switch}" IsChecked="{Binding AutoPreviewJpgOnly}" /></ContentControl>
     <StackPanel VerticalAlignment="Center">
-      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="JPG만 미리보기" /><Border Style="{StaticResource G2Chip}" Background="#FFFFF1DF"><TextBlock Text="삭제 검토" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="#FF8A5300" /></Border></StackPanel>
+      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="JPG만 미리보기" /><Border Style="{StaticResource G2Chip}" Background="{StaticResource G2PrBg}"><TextBlock Text="삭제 검토" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="{StaticResource G2PrText}" /></Border></StackPanel>
       
     </StackPanel>
   </DockPanel>
@@ -1098,7 +1122,7 @@
   <DockPanel>
     <ContentControl DockPanel.Dock="Right" VerticalAlignment="Center" Margin="12,0,0,0" Focusable="False"><CheckBox Style="{StaticResource G2Switch}" IsChecked="{Binding DontLoadThumbnails}" /></ContentControl>
     <StackPanel VerticalAlignment="Center">
-      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="썸네일 불러오지 않기" /><Border Style="{StaticResource G2Chip}" Background="#FFFFF1DF"><TextBlock Text="삭제 검토" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="#FF8A5300" /></Border></StackPanel>
+      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="썸네일 불러오지 않기" /><Border Style="{StaticResource G2Chip}" Background="{StaticResource G2PrBg}"><TextBlock Text="삭제 검토" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="{StaticResource G2PrText}" /></Border></StackPanel>
       
     </StackPanel>
   </DockPanel>
@@ -1106,7 +1130,7 @@
   <DockPanel>
     <ContentControl DockPanel.Dock="Right" VerticalAlignment="Center" Margin="12,0,0,0" Focusable="False"><CheckBox Style="{StaticResource G2Switch}" IsChecked="{Binding LoadFullRespreview}" /></ContentControl>
     <StackPanel VerticalAlignment="Center">
-      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="원본 해상도로 미리보기" /><Border Style="{StaticResource G2Chip}" Background="#FFE8F5EC"><TextBlock Text="유지" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="#FF1A7F37" /></Border></StackPanel>
+      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="원본 해상도로 미리보기" /><Border Style="{StaticResource G2Chip}" Background="{StaticResource G2OkBg}"><TextBlock Text="유지" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="{StaticResource G2Ok}" /></Border></StackPanel>
       
     </StackPanel>
   </DockPanel>
@@ -1135,7 +1159,7 @@
   <DockPanel>
     <ContentControl DockPanel.Dock="Right" VerticalAlignment="Center" Margin="12,0,0,0" Focusable="False"><TextBox Width="80" Text="{Binding ExternalDeviceWaitForFocus}" FontFamily="{StaticResource G2Mono}" HorizontalContentAlignment="Center" /></ContentControl>
     <StackPanel VerticalAlignment="Center">
-      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="초점 대기 (ms)" /><Border Style="{StaticResource G2Chip}" Background="#FFE3ECFB"><TextBlock Text="재개발" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="#FF1F5FD6" /></Border></StackPanel>
+      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="초점 대기 (ms)" /><Border Style="{StaticResource G2Chip}" Background="{StaticResource G2AccentSoft}"><TextBlock Text="재개발" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="{StaticResource G2Accent}" /></Border></StackPanel>
       
     </StackPanel>
   </DockPanel>
@@ -1143,7 +1167,7 @@
   <DockPanel>
     <ContentControl DockPanel.Dock="Right" VerticalAlignment="Center" Margin="12,0,0,0" Focusable="False"><TextBox Width="80" Text="{Binding ExternalDeviceWaitForCapture}" FontFamily="{StaticResource G2Mono}" HorizontalContentAlignment="Center" /></ContentControl>
     <StackPanel VerticalAlignment="Center">
-      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="촬영 대기 (ms)" /><Border Style="{StaticResource G2Chip}" Background="#FFE3ECFB"><TextBlock Text="재개발" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="#FF1F5FD6" /></Border></StackPanel>
+      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="촬영 대기 (ms)" /><Border Style="{StaticResource G2Chip}" Background="{StaticResource G2AccentSoft}"><TextBlock Text="재개발" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="{StaticResource G2Accent}" /></Border></StackPanel>
       
     </StackPanel>
   </DockPanel>
