@@ -1,44 +1,111 @@
-PASS unauthenticated admin rejected
+﻿PASS unauthenticated admin rejected
+--- 시나리오 1: 정식 영구 · 최초 1회 인증 후 영구 사용
+PASS fresh install says this PC has no license
 PASS perpetual activates without expiry
 PASS mistyped replacement serial rejected
 PASS mistyped replacement preserves valid license
 PASS same device activation idempotent
-PASS second PC seat limit
-PASS other machine denied by local verifier
-PASS unsupported major denied locally
 PASS paid lifetime survives corrected PC clock without server
 PASS one-time perpetual remains valid 100 years without server
 PASS perpetual performs no automatic server revalidation
 PASS explicit server block is not network grace
 PASS block persists locally
 PASS unblock restores existing device
-PASS release disables old PC
-PASS new PC takes released seat
+--- 시나리오 2: 버전 업그레이드 시 1회 확인 (Major.Minor)
+PASS patch build 4.7.1.9 needs no new check
+PASS upgrade to 4.8 blocks until license check
+PASS offline upgraded PC stays blocked and explains why
+PASS upgrade check runs automatically (no force) and passes
+PASS server records upgraded version
+PASS after the one check no further contact is needed
+PASS version above purchased major denied locally
+PASS server refuses unpurchased major [VERSION_DENIED]
+PASS refused major upgrade does not damage existing 4.8 license
+PASS server enforces purchased version on activation
+--- 시나리오 3: 다른 PC로 옮긴 설치는 '라이선스 없음'
+PASS copied license on another PC shows no-license message
+PASS undecryptable state from another PC shows no-license message
+PASS undecryptable original is preserved aside
+--- 시나리오 4: PC 변경은 회사 승인 후 사용
+PASS new PC on a used license waits for approval [APPROVAL_PENDING]
+PASS new PC shows request code and stays unlicensed
+PASS checking again before approval is still pending [APPROVAL_PENDING]
+PASS one queued PcChange request with PC details
+PASS approval without retiring the old PC exceeds seats
+PASS approved new PC works permanently
+PASS limitation: offline old perpetual PC is not recalled until it connects
+PASS old PC is recalled when it connects [DEVICE_REVOKED]
+PASS recalled old PC is blocked locally
+PASS recalled old PC cannot reactivate itself [DEVICE_REVOKED]
+PASS release disables PC
 PASS released token cannot refresh
-PASS forced recall denies cached refresh
-PASS recalled PC cannot reactivate itself
-PASS admin can reallow recalled PC
-PASS protected state survives process/session reopen
+PASS even after release, a different PC needs approval [APPROVAL_PENDING]
+PASS rejected PC is told so [REQUEST_REJECTED]
+PASS rejection reason reaches the PC
+PASS first installs up to purchased seats need no approval
+PASS PC beyond purchased seats waits for approval [APPROVAL_PENDING]
+PASS same PC with lost/replaced license state needs approval [APPROVAL_PENDING]
+PASS reinstalled PC approved without consuming another seat
+--- 시나리오 5: 임시 라이선스 (데모/테스트 · 1개월/3개월/1년)
+PASS temporary serial is issued without purpose or term
+PASS first install asks for a license
+PASS temporary serial waits for company approval [APPROVAL_PENDING]
+PASS waiting PC shows request code
+PASS purpose other than demo/test refused
+PASS term other than 1/3/12 months refused
+PASS approved demo works with 1 KST calendar month
+PASS temporary works offline until one second before end
+PASS temporary stops exactly at end
+PASS temporary detects PC clock rollback
+PASS temporary makes no periodic server contact during its term
+PASS re-approved term reaches PC on online check
+PASS temporary on a second PC needs PC-change approval [APPROVAL_PENDING]
+PASS test 3-month request queued [APPROVAL_PENDING]
+PASS approved test 3 months expiry
+PASS test 12-month request queued [APPROVAL_PENDING]
+PASS approved test 1 year expiry
+PASS conversion candidate queued [APPROVAL_PENDING]
+PASS temporary converts to perpetual without reinstall
+--- 시나리오 6: 인터넷 없는 PC (오프라인 파일)
 PASS offline file exchange produces perpetual PC grant
 PASS tamper rejected
 PASS wrong signer rejected
 PASS offline response cannot migrate PC
-PASS demo has fixed signed expiry
-PASS running demo expires without restart
-PASS expired demo cannot renew
-PASS demo converts without reinstall/state deletion
-PASS staff account issues exactly three KST calendar months
-PASS staff clock rollback remains denied
-PASS early staff refresh preserves stored deadline
-PASS same serial does not restart employee period
-PASS staff offline file activation rejected by server
-PASS disabled staff cannot reauthenticate
-PASS staff denial blocks local next capture
-PASS staff re-enable restores current period
+PASS offline temporary file is queued for approval first
+PASS offline request is marked in queue
+PASS same request file after approval yields 1-year test
+--- 시나리오 7: 계정 중지 · 동시 요청
+PASS disabled customer cannot recheck [ACCOUNT_DISABLED]
+PASS denied state shown until next successful check
+PASS re-enabled customer restores license
 PASS concurrent activation cannot overbook
-PASS server enforces purchased version
+--- 시나리오 8: 제품별 라이선스 (클로리움 · 클로리움 오토사이징 · 새 제품)
+PASS server starts with Clorium and AutoSizing products
+PASS licenses issued without product belong to Clorium
+PASS standalone AutoSizing first install says AutoSizing has no license
+PASS Clorium serial refused in AutoSizing [PRODUCT_DENIED]
+PASS message names both products
+PASS AutoSizing serial refused in Clorium [PRODUCT_DENIED]
+PASS same PC holds Clorium and AutoSizing licenses independently
+PASS AutoSizing uses its own version line and major
+PASS Clorium grant does not unlock AutoSizing
+PASS Clorium state renamed as AutoSizing state is not a license
+PASS AutoSizing moved to another PC needs approval [APPROVAL_PENDING]
+PASS approval request belongs to the AutoSizing license
+PASS AutoSizing temporary waits for approval [APPROVAL_PENDING]
+PASS AutoSizing 3-month demo works
+PASS product code must be a plain identifier
+PASS license for an unregistered product refused
+PASS newly registered product uses the same license system
+PASS disabled product refuses online check [PRODUCT_DISABLED]
+PASS disabled product cannot be issued
+PASS re-enabled product works again
+PASS disabling another product leaves Clorium untouched
+--- 기록 · 내보내기 · 백업
 PASS CSV export includes customer and serial
-PASS CSV separates staff renewal from permanent expiry
+PASS CSV shows temporary purpose and term
+PASS CSV separates products
 PASS full server backup saved
-PASS audit links lifecycle to license
-LICENSING_INTEGRATION_PASSED=43
+PASS audit links PC change lifecycle to license
+PASS audit links temporary lifecycle to license
+LICENSING_INTEGRATION_PASSED=101

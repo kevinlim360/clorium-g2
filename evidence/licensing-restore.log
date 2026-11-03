@@ -1,5 +1,8 @@
-PASS restored administrator credential works
+﻿PASS restored administrator credential works
 PASS old signature survives complete server restore
 PASS old device renews after restore
 PASS offline perpetual remains valid after server restore
-LICENSING_RESTORE_PASSED=4
+PASS approved temporary remains valid after restore
+PASS temporary renews against restored approval
+PASS AutoSizing license and product registry survive restore
+LICENSING_RESTORE_PASSED=7

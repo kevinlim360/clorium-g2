@@ -1,1 +1,1 @@
-PASS real server connection, customer/license display, serial search, empty search, selected device/history binding, private backup save; rendered actual WPF controls.
+PASS real server connection, customer/license display, serial search, empty search, selected device/history binding, approval queue binding, product list and product filter, private backup save; rendered actual WPF controls.

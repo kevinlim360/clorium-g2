@@ -2,51 +2,64 @@ using Clorium.Licensing;
 using Clorium.LicenseServer;
 
 var folder = Path.GetFullPath(args[0]);
-var clock = new TestClock { Value = new DateTimeOffset(2030, 3, 1, 0, 30, 0, TimeSpan.FromHours(9)) };
+var clock = new TestClock { Value = new DateTimeOffset(2030, 1, 31, 18, 0, 0, TimeSpan.FromHours(9)) };
 int checks = 0;
 void Check(string title, bool passed) { if (!passed) throw new Exception("FAIL " + title); checks++; Console.WriteLine("PASS " + title); }
 void Reject(string title, string code, Action action) { try { action(); throw new Exception("Expected rejection " + title); } catch (RuleException e) { Check(title, e.Code == code); } }
-ActivationRequest Request(string serial, string machine = "staff-pc") => new() { Serial = serial, MachineId = Wire.Hash(machine), DeviceSecret = new string('a',64), Hostname = "POLICY-CHECK", OsVersion = "Windows", AppVersion = "4.7.1.5", Nonce = Wire.Random() };
-DeviceOperation Op(SignedLicense token) => new() { License = token, DeviceSecret = new string('a',64), AppVersion = "4.7.1.5", Nonce = Wire.Random() };
+ActivationRequest Request(string serial, string machine, string version = "4.7.1.5") => new() { Serial = serial, MachineId = Wire.Hash(machine), DeviceSecret = new string('a', 64), Hostname = "POLICY-CHECK", OsVersion = "Windows", AppVersion = version, Nonce = Wire.Random() };
+DeviceOperation Op(SignedLicense token, string version = "4.7.1.5") => new() { License = token, DeviceSecret = new string('a', 64), AppVersion = version, Nonce = Wire.Random() };
+Grant Read(Store s, ApiReply r) => LicenseSignature.Verify(r.License, s.Settings.PublicKey);
+string Pending(Store s, Action a) { try { a(); throw new Exception("Expected approval request"); } catch (RuleException e) when (e.Code == "APPROVAL_PENDING") { return s.Snapshot().Requests.Single(x => x.Code == e.RequestCode).Id; } }
+long Kst(int y, int m, int d, int h) => new DateTimeOffset(y, m, d, h, 0, 0, TimeSpan.FromHours(9)).ToUnixTimeSeconds();
 using (var server = new Store(folder, clock)) {
-    var staff = new Customer { Company = "직원 테스트", Email = "staff-id", IsInternal = true };
-    var perpetual = new LicenseRecord { CustomerId = staff.Id, Kind = "Perpetual" };
-    var test = new LicenseRecord { CustomerId = staff.Id, Kind = "Test", RenewalMonths = 3 };
-    server.Change(d => { d.Customers.Add(staff); d.Licenses.Add(perpetual); d.Licenses.Add(test); return 0; });
-    Reject("internal fixed-term demo cannot bypass staff policy", "INVALID_POLICY", () => Store.AccountPolicy(server.Snapshot(), new LicenseRecord { CustomerId = staff.Id, Kind = "Demo", ExpiresAt = Wire.Now+86400 }));
-    var forever = LicenseSignature.Verify(server.Activate(Request(perpetual.Serial, "paid-pc")).License, server.Settings.PublicKey);
-    Check("paid first online activation has no expiry or periodic contact", forever.ExpiresAt == 0 && forever.RefreshAfter == Wire.Forever && forever.OfflineUntil == Wire.Forever);
-    var issued = server.Activate(Request(test.Serial));
-    var g = LicenseSignature.Verify(issued.License, server.Settings.PublicKey);
-    long due = new DateTimeOffset(2030,6,1,0,30,0,TimeSpan.FromHours(9)).ToUnixTimeSeconds();
-    Check("KST month rollover uses June1 not UTC May28", g.ExpiresAt == due && g.RefreshAfter == due && g.OfflineUntil == due && g.RenewalMonths == 3);
-    clock.Value = clock.Value.AddMonths(1);
-    var early = LicenseSignature.Verify(server.Device(Op(issued.License), false).License, server.Settings.PublicKey);
-    Check("early refresh does not extend three-month deadline", early.ExpiresAt == due);
-    var reactivated = server.Activate(Request(test.Serial));
-    Check("same-serial reactivation does not extend deadline", LicenseSignature.Verify(reactivated.License, server.Settings.PublicKey).ExpiresAt == due);
-    server.Device(Op(reactivated.License), true);
-    var moved = server.Activate(Request(test.Serial, "new-staff-pc"));
-    Check("release and different-PC activation keep license deadline", LicenseSignature.Verify(moved.License, server.Settings.PublicKey).ExpiresAt == due);
-    Reject("staff offline exchange is refused", "ONLINE_REQUIRED", () => server.Activate(Request(test.Serial, "new-staff-pc"), true));
-    Check("staff local validation allows just before boundary", LicenseSignature.Validate(LicenseSignature.Verify(moved.License, server.Settings.PublicKey), Wire.Hash("new-staff-pc"), "4.7.1.5", due-1, early.IssuedAt) == null);
-    Check("staff offline use stops exactly at boundary", LicenseSignature.Validate(LicenseSignature.Verify(moved.License, server.Settings.PublicKey), Wire.Hash("new-staff-pc"), "4.7.1.5", due, early.IssuedAt) != null);
-    clock.Value = DateTimeOffset.FromUnixTimeSeconds(due);
-    var renewed = server.Device(Op(moved.License), false);
-    long next = clock.Value.ToOffset(TimeSpan.FromHours(9)).AddMonths(3).ToUnixTimeSeconds();
-    Check("expired signed staff token renews online for next three months", LicenseSignature.Verify(renewed.License, server.Settings.PublicKey).ExpiresAt == next);
-    server.Change(d => { d.Customers.Single(c => c.Id == staff.Id).Disabled = true; return 0; });
-    Reject("disabled employee cannot refresh", "ACCOUNT_DISABLED", () => server.Device(Op(renewed.License), false));
-    Reject("disabled employee cannot reactivate", "ACCOUNT_DISABLED", () => server.Activate(Request(test.Serial, "new-staff-pc")));
-    server.Change(d => { d.Customers.Single(c => c.Id == staff.Id).Disabled = false; return 0; });
-    Check("re-enabled staff retains previous renewal deadline", LicenseSignature.Verify(server.Device(Op(renewed.License),false).License,server.Settings.PublicKey).ExpiresAt == next);
-    foreach (var date in new[] { new DateTimeOffset(2030,1,31,18,0,0,TimeSpan.FromHours(9)), new DateTimeOffset(2027,11,30,18,0,0,TimeSpan.FromHours(9)) }) {
-        clock.Value = date;
-        var demo = new LicenseRecord { CustomerId = staff.Id, Kind = "Demo", RenewalMonths = 3 }; server.Change(d => { d.Licenses.Add(demo); return 0; });
-        var result = LicenseSignature.Verify(server.Activate(Request(demo.Serial, Wire.Random())).License, server.Settings.PublicKey);
-        Check("calendar boundary " + date.ToString("yyyy-MM-dd"), result.ExpiresAt == date.AddMonths(3).ToUnixTimeSeconds());
+    var customer = new Customer { Company = "정책 검사" };
+    server.Change(d => { d.Customers.Add(customer); return 0; });
+    LicenseRecord Temp() { var l = new LicenseRecord { CustomerId = customer.Id, Kind = "Temporary" }; server.Change(d => { d.Licenses.Add(l); return 0; }); return l; }
+    // Approval time 2030-01-31 18:00 KST: calendar months clamp to month ends and leap days.
+    foreach (var (months, due) in new[] { (1, Kst(2030, 2, 28, 18)), (3, Kst(2030, 4, 30, 18)), (12, Kst(2031, 1, 31, 18)) }) {
+        var l = Temp(); string id = Pending(server, () => server.Activate(Request(l.Serial, "pc-" + months)));
+        server.Decide(id, new ApprovalDecision { Approve = true, Purpose = "Test", TermMonths = months, Reason = "검사" });
+        var g = Read(server, server.Activate(Request(l.Serial, "pc-" + months)));
+        Check("KST " + Store.TermText(months) + " from 01-31 ends " + Store.Kst(due), g.ExpiresAt == due && g.OfflineUntil == due && g.TermMonths == months);
     }
+    // 2028-01-31 01:00 KST is still 01-30 in UTC; a UTC calendar would end on 03-01 KST instead of the leap day.
+    clock.Value = new DateTimeOffset(2028, 1, 31, 1, 0, 0, TimeSpan.FromHours(9));
+    var leap = Temp(); string leapId = Pending(server, () => server.Activate(Request(leap.Serial, "leap")));
+    server.Decide(leapId, new ApprovalDecision { Approve = true, Purpose = "Demo", TermMonths = 1, Reason = "윤년" });
+    var lg = Read(server, server.Activate(Request(leap.Serial, "leap")));
+    Check("early-morning KST approval uses Korean date, leap February 29", lg.ExpiresAt == Kst(2028, 2, 29, 1));
+    Check("temporary stays usable offline right before end", LicenseSignature.Validate(lg, Wire.Hash("leap"), "4.7.1.5", lg.ExpiresAt - 1, lg.IssuedAt) == null);
+    Check("temporary stops at end without server", LicenseSignature.Validate(lg, Wire.Hash("leap"), "4.7.1.5", lg.ExpiresAt, lg.IssuedAt) != null);
+    clock.Value = clock.Value.AddDays(10);
+    Check("refresh inside the term keeps the approved end", Read(server, server.Device(Op(server.Activate(Request(leap.Serial, "leap")).License), false)).ExpiresAt == lg.ExpiresAt);
+    clock.Value = DateTimeOffset.FromUnixTimeSeconds(lg.ExpiresAt);
+    Reject("server refuses an expired temporary", "EXPIRED", () => server.Activate(Request(leap.Serial, "leap")));
+    var extended = server.ChangeTerm(leap.Id, new TermChange { Purpose = "Demo", TermMonths = 1, Reason = "연장" });
+    Check("re-approval after expiry counts from re-approval time", extended.ExpiresAt == clock.Value.ToOffset(TimeSpan.FromHours(9)).AddMonths(1).ToUnixTimeSeconds());
+    Check("extended temporary works again", Read(server, server.Activate(Request(leap.Serial, "leap"))).ExpiresAt == extended.ExpiresAt);
+    Reject("re-approval refuses an unknown term", "INVALID_INPUT", () => server.ChangeTerm(leap.Id, new TermChange { Purpose = "Demo", TermMonths = 6, Reason = "x" }));
+    var paid = new LicenseRecord { CustomerId = customer.Id, Kind = "Perpetual" }; server.Change(d => { d.Licenses.Add(paid); return 0; });
+    var forever = Read(server, server.Activate(Request(paid.Serial, "paid")));
+    Check("perpetual has no expiry or periodic contact", forever.ExpiresAt == 0 && forever.RefreshAfter == Wire.Forever && forever.OfflineUntil == Wire.Forever && forever.VersionLine == "4.7");
+    Check("perpetual local check passes 4.7.9.9 patch", LicenseSignature.Validate(forever, Wire.Hash("paid"), "4.7.9.9", Wire.Now, Wire.Now) == null);
+    Check("perpetual local check requires one check for 4.8", LicenseSignature.Validate(forever, Wire.Hash("paid"), "4.8.0.0", Wire.Now, Wire.Now) != null);
+    Check("server reissues for 4.8 without approval", Read(server, server.Device(Op(server.Activate(Request(paid.Serial, "paid")).License, "4.8.0.0"), false)).VersionLine == "4.8");
+    Reject("PC change on a perpetual license is queued", "APPROVAL_PENDING", () => server.Activate(Request(paid.Serial, "paid-new")));
+    Reject("unapproved temporary refuses unknown purpose at approval", "INVALID_INPUT", () => server.Decide(Pending(server, () => server.Activate(Request(Temp().Serial, "x"))), new ApprovalDecision { Approve = true, Purpose = "Sales", TermMonths = 1, Reason = "x" }));
 }
-using (var reopened = new Store(folder, clock)) Check("next renewal deadlines survive server restart", reopened.Snapshot().Licenses.Count(l => l.RenewalMonths==3 && l.NextReauthAt>0) == 3);
+// A database written by the earlier policy (staff 3-month / fixed-expiry demo) is converted on start.
+var legacyFolder = folder + "-legacy";
+using (var old = new Store(legacyFolder, clock)) old.Change(d => {
+    var c = new Customer { Company = "기존" }; d.Customers.Add(c);
+    d.Licenses.Add(new LicenseRecord { CustomerId = c.Id, Kind = "Test", RenewalMonths = 3, NextReauthAt = Wire.Now + 86400 });
+    d.Licenses.Add(new LicenseRecord { CustomerId = c.Id, Kind = "Demo", ExpiresAt = Wire.Now + 7200 });
+    d.Licenses.Add(new LicenseRecord { CustomerId = c.Id, Kind = "Test", RenewalMonths = 3 }); return 0; });
+using (var reopened = new Store(legacyFolder, clock)) {
+    var ls = reopened.Snapshot().Licenses;
+    Check("legacy records belong to Clorium and default products are registered", ls.All(l => l.Product == Products.Clorium) && reopened.Snapshot().Products.Select(p => p.Code).OrderBy(c => c).SequenceEqual(new[] { Products.AutoSizing, Products.Clorium }));
+    Check("legacy demo/test become temporary keeping their end", ls.All(l => l.Kind == "Temporary" && l.RenewalMonths == 0) && ls.Count(l => l.IsApproved && l.ExpiresAt > Wire.Now) == 2);
+    Check("legacy staff license without a fixed end waits for approval", ls.Count(l => !l.IsApproved) == 1);
+}
+using (var reopened = new Store(folder, clock)) Check("approvals and terms survive server restart", reopened.Snapshot().Licenses.Count(l => l.IsTemporary && l.IsApproved) == 4 && reopened.Snapshot().Requests.Count(r => r.Status == "Approved") == 4);
 Console.WriteLine("LICENSING_POLICY_PASSED=" + checks);
 class TestClock : TimeProvider { public DateTimeOffset Value { get; set; } public override DateTimeOffset GetUtcNow() => Value; }
