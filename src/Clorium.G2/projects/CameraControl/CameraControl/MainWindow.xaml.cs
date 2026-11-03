@@ -3251,6 +3251,43 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 		}
 	}
 
+	// G2 top bar replaces the hidden Metro title bar (ShowTitleBar=False): dragging its empty area moves the window,
+	// a double click toggles maximized. Buttons, toggles and inputs in the bar handle their own clicks first.
+	private void G2TopBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+	{
+		if (e.ClickCount == 2)
+		{
+			WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+			e.Handled = true;
+			return;
+		}
+		if (WindowState == WindowState.Maximized)
+		{
+			// Restore under the cursor, keeping the grab point at the same relative position.
+			System.Windows.Point grab = e.GetPosition(this);
+			double ratio = ActualWidth > 0 ? grab.X / ActualWidth : 0.5;
+			System.Windows.Point screen = PointToScreen(grab);
+			PresentationSource source = PresentationSource.FromVisual(this);
+			if (source?.CompositionTarget != null) screen = source.CompositionTarget.TransformFromDevice.Transform(screen);
+			Rect work = SystemParameters.WorkArea;
+			double width = RestoreBounds.IsEmpty || RestoreBounds.Width < 800 ? work.Width * 0.8 : RestoreBounds.Width;
+			double height = RestoreBounds.IsEmpty || RestoreBounds.Height < 600 ? work.Height * 0.8 : RestoreBounds.Height;
+			WindowState = WindowState.Normal;
+			Width = width;
+			Height = height;
+			Left = screen.X - width * ratio;
+			Top = Math.Max(work.Top, screen.Y - grab.Y);
+		}
+		try
+		{
+			DragMove();
+		}
+		catch (InvalidOperationException)
+		{
+			// the button was already released
+		}
+	}
+
 	private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 	{
 		if (ServiceProvider.Settings.UseLEDDimmer && e.ClickCount == 2)

@@ -97,7 +97,7 @@
     </tb:TaskbarIcon>
 
     <!-- ===================== top bar ===================== -->
-    <Border Grid.Row="0" Grid.ColumnSpan="3" Background="{StaticResource G2Panel}" BorderBrush="{StaticResource G2Line}" BorderThickness="0,0,0,1">
+    <Border x:Name="G2TopBar" Grid.Row="0" Grid.ColumnSpan="3" Background="{StaticResource G2Panel}" BorderBrush="{StaticResource G2Line}" BorderThickness="0,0,0,1" MouseLeftButtonDown="G2TopBar_MouseLeftButtonDown">
       <Grid Margin="12,0,138,0">
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="Auto" />
