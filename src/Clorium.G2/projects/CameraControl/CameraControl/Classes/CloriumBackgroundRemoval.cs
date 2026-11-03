@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -11,11 +12,12 @@ using CameraControl.Devices;
 
 namespace CameraControl.Classes;
 
-// G2 ↔ Clorium 배경제거 (Matting Studio: local BiRefNet Flask app on http://127.0.0.1:8765, Korean browser UI).
-// Replaces the removed PhotoScissors launcher, PhotoRoom window and 배경 제거 촬영 mode. The rail button starts the
-// studio with its own Start.ps1 -NoBrowser when it is not running, then opens /?select=<photo or folder>&mode=file|folder
-// in the default browser: the page only scans that target (no processing starts, nothing is written) and the operator
-// presses 배경 제거 시작. Results go next to the source in *_bgr folders; originals are never changed. Never throws into G2.
+// G2 ↔ Clorium 배경제거. The engine is the local Matting Studio server (BiRefNet Flask app on http://127.0.0.1:8765);
+// the screen is G2's own window (windows/G2BackgroundRemovalWnd), no browser. The rail button starts the server with its
+// own Start.ps1 -NoBrowser when it is not running, then opens the window with the selected photo (or its folder) as the
+// target: the window only scans it (nothing is written) and the operator presses 배경 제거 시작. The window drives the
+// server's batch API (/api/batch/scan|start|<id>|cancel). Results go next to the source in *_bgr folders; originals are
+// never changed. Never throws into G2.
 internal static class CloriumBackgroundRemoval
 {
 	public const string StudioUrl = "http://127.0.0.1:8765";
@@ -26,8 +28,10 @@ internal static class CloriumBackgroundRemoval
 
 	private static readonly HttpClient Http = new HttpClient { Timeout = TimeSpan.FromSeconds(10) };
 
-	// Replaced by tests; the default opens the operator's browser.
-	internal static Action<string> OpenUrl = url => Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
+	private static string _token;
+
+	// Replaced by tests; the default shows the G2 배경제거 window ("" = no target).
+	internal static Action<string> ShowStudio = target => Application.Current.Dispatcher.Invoke(() => CameraControl.windows.G2BackgroundRemovalWnd.ShowFor(target));
 
 	public static bool Enabled => ServiceProvider.Settings.UseBackgroundRemoval;
 
@@ -62,36 +66,125 @@ internal static class CloriumBackgroundRemoval
 		}
 	}
 
-	public static string BuildUrl(string target)
+	// What the window gets: an existing supported photo, else an existing folder, else "" (nothing selected).
+	public static string NormalizeTarget(string target)
 	{
-		if (string.IsNullOrWhiteSpace(target)) return StudioUrl + "/";
-		// A file the studio cannot read (RAW, video...) is sent as its folder.
+		if (string.IsNullOrWhiteSpace(target)) return "";
+		// A file the engine cannot read (RAW, video...) is sent as its folder.
 		if (File.Exists(target) && !IsPhoto(target)) target = Path.GetDirectoryName(Path.GetFullPath(target));
-		string mode = File.Exists(target) ? "file" : Directory.Exists(target) ? "folder" : null;
-		return mode == null ? StudioUrl + "/" : StudioUrl + "/?mode=" + mode + "&select=" + Uri.EscapeDataString(target);
+		return File.Exists(target) || Directory.Exists(target) ? target : "";
 	}
 
-	// Rail button. Finishes with the URL opened (null = disabled, not started or failed; the operator was told why).
+	// Rail button. Finishes with the target shown ("" = window without a target; null = disabled, not started or
+	// failed; the operator was told why).
 	public static Task<string> Open(string target)
 	{
 		if (!Enabled) return Task.FromResult<string>(null);
-		string url = BuildUrl(target);
+		string shown = NormalizeTarget(target);
 		return Task.Run(() =>
 		{
 			if (!IsRunning() && !Start()) return null;
 			try
 			{
-				OpenUrl(url);
-				Log.Debug("BackgroundRemoval : opened " + url);
-				return url;
+				ShowStudio(shown);
+				Log.Debug("BackgroundRemoval : window for " + (shown.Length == 0 ? "(none)" : shown));
+				return shown;
 			}
 			catch (Exception ex)
 			{
-				Log.Error("BackgroundRemoval : unable to open browser", ex);
-				ShowError("브라우저를 열지 못했습니다.\n\n" + StudioUrl + " 주소를 직접 열어 주세요.\n\n" + ex.Message);
+				Log.Error("BackgroundRemoval : unable to show the window", ex);
+				ShowError("배경제거 화면을 열지 못했습니다.\n\n" + ex.Message);
 				return null;
 			}
 		});
+	}
+
+	// ---- engine API for G2BackgroundRemovalWnd. Calls block: run them off the UI thread. Failures throw
+	// ApiException with a message for the operator. ----
+
+	public sealed class ApiException : Exception
+	{
+		public ApiException(string message) : base(message) { }
+	}
+
+	// GET /api/health: model ready + its loading message.
+	public static (bool Ready, string Message) Health()
+	{
+		JsonElement health = Request(HttpMethod.Get, "/api/health", null);
+		if (health.TryGetProperty("error", out JsonElement error) && error.ValueKind == JsonValueKind.String) return (false, error.GetString());
+		bool ready = health.TryGetProperty("ready", out JsonElement r) && r.ValueKind == JsonValueKind.True;
+		return (ready, health.TryGetProperty("message", out JsonElement m) && m.ValueKind == JsonValueKind.String ? m.GetString() : "");
+	}
+
+	// Lists the photos and their *_bgr destinations; nothing is written.
+	public static JsonElement Scan(string[] paths, bool folder)
+	{
+		object body = folder ? (object)new { mode = "folder", path = paths[0] } : new { mode = "file", path = paths[0], paths };
+		return Request(HttpMethod.Post, "/api/batch/scan", body);
+	}
+
+	public static JsonElement StartBatch(string planId, int resolution, int edgeStrength, bool opaqueProduct, bool detailRecovery)
+	{
+		return Request(HttpMethod.Post, "/api/batch/start", new { plan_id = planId, resolution, edge_strength = edgeStrength, opaque_product = opaqueProduct, detail_recovery = detailRecovery });
+	}
+
+	public static JsonElement BatchStatus(string jobId) => Request(HttpMethod.Get, "/api/batch/" + Uri.EscapeDataString(jobId), null);
+
+	public static JsonElement CancelBatch(string jobId) => Request(HttpMethod.Post, "/api/batch/" + Uri.EscapeDataString(jobId) + "/cancel", new { });
+
+	private static JsonElement Request(HttpMethod method, string path, object body)
+	{
+		// POST needs the per-run token the server writes into its page; a restarted server has a new one (403 once).
+		for (int attempt = 0; ; attempt++)
+		{
+			using (HttpRequestMessage request = new HttpRequestMessage(method, StudioUrl + path))
+			{
+				if (body != null)
+				{
+					request.Content = new StringContent(JsonSerializer.Serialize(body), System.Text.Encoding.UTF8, "application/json");
+					request.Headers.Add("X-Studio-Token", Token(attempt > 0));
+				}
+				(int status, string text) = Send(request);
+				if (status == 403 && body != null && attempt == 0) continue;
+				JsonElement json;
+				try
+				{
+					using (JsonDocument document = JsonDocument.Parse(text)) json = document.RootElement.Clone();
+				}
+				catch (JsonException)
+				{
+					throw new ApiException("배경제거 엔진의 응답을 읽지 못했습니다. (HTTP " + status + ")");
+				}
+				if (status >= 200 && status < 300) return json;
+				throw new ApiException(json.ValueKind == JsonValueKind.Object && json.TryGetProperty("error", out JsonElement error) && error.ValueKind == JsonValueKind.String ? error.GetString() : "배경제거 엔진 오류 (HTTP " + status + ")");
+			}
+		}
+	}
+
+	private static string Token(bool refresh)
+	{
+		if (_token != null && !refresh) return _token;
+		using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, StudioUrl + "/"))
+		{
+			Match match = Regex.Match(Send(request).Text, "const token='([^']+)'");
+			if (!match.Success) throw new ApiException("배경제거 엔진의 응답을 확인하지 못했습니다.");
+			return _token = match.Groups[1].Value;
+		}
+	}
+
+	private static (int Status, string Text) Send(HttpRequestMessage request)
+	{
+		try
+		{
+			using (HttpResponseMessage response = Http.SendAsync(request).Result)
+			{
+				return ((int)response.StatusCode, response.Content.ReadAsStringAsync().Result);
+			}
+		}
+		catch (Exception ex) when (ex is AggregateException || ex is HttpRequestException || ex is TaskCanceledException || ex is InvalidOperationException)
+		{
+			throw new ApiException("배경제거 엔진에 연결하지 못했습니다. 엔진이 종료됐다면 G2의 배경제거 버튼을 다시 눌러 주세요.");
+		}
 	}
 
 	public static bool IsRunning() => Probe() == true;

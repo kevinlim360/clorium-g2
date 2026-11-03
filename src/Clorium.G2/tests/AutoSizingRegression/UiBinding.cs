@@ -95,6 +95,10 @@ class UiBinding
 		Check("built CameraControl.exe has no ColorCompensationWnd, contains the 이미지보정 window and client", Find(exe, Encoding.UTF8.GetBytes("ColorCompensationWnd")) < 0 && Find(exe, Encoding.Unicode.GetBytes("Clorium_ColorCompensation.json")) < 0 && Find(exe, Encoding.UTF8.GetBytes("G2ColorAdjustWnd")) >= 0 && Find(exe, Encoding.UTF8.GetBytes("CloriumImageAdjust")) >= 0);
 		Check("built CameraControl.exe has no PhotoScissors/PhotoRoom", Find(exe, Encoding.Unicode.GetBytes("PhotoScissors.exe")) < 0 && Find(exe, Encoding.Unicode.GetBytes("photoroom.com")) < 0 && Find(exe, Encoding.UTF8.GetBytes("RemoveBackgroundWnd")) < 0);
 		Check("built CameraControl.exe contains the Matting Studio client", Find(exe, Encoding.UTF8.GetBytes("CloriumBackgroundRemoval")) >= 0 && Find(exe, Encoding.Unicode.GetBytes("http://127.0.0.1:8765")) >= 0);
+		string bgr = File.ReadAllText(Path.Combine(root, "projects/CameraControl/CameraControl/Classes/CloriumBackgroundRemoval.cs"));
+		Check("배경제거 opens G2's own window (no browser page)", Find(exe, Encoding.UTF8.GetBytes("G2BackgroundRemovalWnd")) >= 0 && bgr.Contains("G2BackgroundRemovalWnd.ShowFor(target)") && !bgr.Contains("OpenUrl") && !bgr.Contains("?mode=") && File.ReadAllText(Path.Combine(root, "projects/CameraControl/CameraControl.csproj")).Contains("windows/G2BackgroundRemovalWnd.xaml"));
+		string live = File.ReadAllText(Path.Combine(root, "projects/CameraControl/CameraControl/windows/LiveViewWnd.xaml"));
+		Check("라이브뷰 uses the G2 design (g2theme, G2 page/stage, no MaterialDesign paper or cards)", live.Contains("styles/g2theme.xaml") && live.Contains("Background=\"{DynamicResource G2Page}\"") && live.Contains("{DynamicResource G2Stage}") && !live.Contains("MaterialDesignPaper") && !live.Contains("materialDesign:Card"));
 		Check("built CameraControl.exe has no legacy AutoSizing path", Find(exe, Encoding.Unicode.GetBytes("Clorium\\Clorium AutoSizing.exe")) < 0);
 		Check("built CameraControl.exe contains the Desk client", Find(exe, Encoding.UTF8.GetBytes("CloriumAutoSizing")) >= 0 && Find(exe, Encoding.Unicode.GetBytes("CloriumAutoSizing.")) >= 0);
 	}
@@ -167,7 +171,7 @@ class UiBinding
 		s.UseSuperfocus = false;
 		var railXml = Element("MainWindow.xaml", "but_Superfocus");
 		var rail = (Button)Parse(railXml, "Style", "Click");
-		var launcher = (Button)Parse(Element("windows/LiveViewWnd.xaml", "SuperfocusLauncher"), "Click");
+		var launcher = (Button)Parse(Element("windows/LiveViewWnd.xaml", "SuperfocusLauncher"), "Style", "Click");
 		var toggle = (CheckBox)Parse(Element("windows/SettingsWnd.xaml", "G2Feat_superfocus"), "Style"); toggle.DataContext = s;
 		Pump(); Check("수퍼포커스 rail and live view launcher hidden while disabled", rail.Visibility == Visibility.Collapsed && launcher.Visibility == Visibility.Collapsed && toggle.IsChecked == false);
 		toggle.IsChecked = true; Pump(); Check("switch ON shows the rail button and the live view launcher", s.UseSuperfocus && rail.Visibility == Visibility.Visible && launcher.Visibility == Visibility.Visible);

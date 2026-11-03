@@ -482,6 +482,14 @@ public partial class LiveViewWnd : Window, IWindow, INotifyPropertyChanged, ICom
 					otherExpander.IsExpanded = false;
 				}
 			}
+			else if (child is Decorator card)
+			{
+				// G2 section cards (Border) around each Expander
+				if (card.Child is Expander cardExpander && cardExpander != currentExpander)
+				{
+					cardExpander.IsExpanded = false;
+				}
+			}
 			else if (child is Expander directExpander && directExpander != currentExpander)
 			{
 				directExpander.IsExpanded = false;

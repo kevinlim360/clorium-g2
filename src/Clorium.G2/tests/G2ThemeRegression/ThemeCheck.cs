@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Threading;
@@ -18,6 +19,7 @@ using CameraControl.Core.Classes;
 class ThemeCheck
 {
 	static int count;
+	static string lastError = "";
 	static void Check(string name, bool ok) { if (!ok) throw new Exception("FAIL: " + name); Console.WriteLine("PASS: " + name); count++; }
 
 	static void Pump(int ms)
@@ -57,6 +59,7 @@ class ThemeCheck
 			SynchronizationContext.SetSynchronizationContext(new DispatcherSynchronizationContext(Dispatcher.CurrentDispatcher));
 			ServiceProvider.Branding = (Branding)FormatterServices.GetUninitializedObject(typeof(Branding));
 			ServiceProvider.Settings = new Settings();
+			CameraControl.Devices.Log.LogError += a => { lastError = a.Message + " " + a.Exception; };
 			Assembly g2 = Assembly.LoadFrom(Path.Combine(bin, "CameraControl.exe"));
 			PropertyInfo dark = g2.GetType("CameraControl.Classes.G2Palette", true).GetProperty("Dark");
 			Type license = g2.GetType("CameraControl.windows.G2LicenseWnd", true);
@@ -103,6 +106,41 @@ class ThemeCheck
 			apply.Invoke(null, new object[] { false }); Pump(300);
 			Check("and light again", Bg(live).R > 0xE0);
 			live.Close();
+
+			// 라이브뷰 (no camera) and 배경제거 (needs the engine on 8765, e.g. the G2 test runtime's) in both themes.
+			// The legacy live view expects G2's App.xaml theme dictionaries (MahApps / MaterialDesign) at application level.
+			foreach (string src in new[] { "MahApps.Metro;component/Styles/Controls.xaml", "MahApps.Metro;component/Styles/Fonts.xaml", "MahApps.Metro;component/Styles/Themes/Light.Blue.xaml", "MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml", "MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml", "MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Grey.xaml", "MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Blue.xaml" })
+				app.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("pack://application:,,,/" + src) });
+			Type liveView = g2.GetType("CameraControl.windows.LiveViewWnd", true);
+			Type bgr = g2.GetType("CameraControl.windows.G2BackgroundRemovalWnd", true);
+			foreach (bool d in new[] { false, true })
+			{
+				apply.Invoke(null, new object[] { d }); Pump(200);
+				string mode = d ? "dark" : "light";
+				lastError = "";
+				var lv = (Window)Activator.CreateInstance(liveView, new object[] { null });
+				if (lastError.Length > 0) throw new Exception("라이브뷰 did not load: " + lastError);
+				lv.Width = 1280; lv.Height = 820; lv.Show(); Pump(600);
+				Snapshot(lv, Path.Combine(outDir, "liveview-" + mode + ".png"));
+				Check("라이브뷰 builds without a camera and uses the G2 page in " + mode + " (" + Bg(lv) + ")", lv.FindName("_image") != null && lv.FindName("ExpanderCalibration") != null && (d ? Bg(lv).R < 0x30 : Bg(lv).R > 0xE0));
+				lv.Hide(); // its Closing hands over to WindowsManager (not set up here)
+
+				var bw = (Window)Activator.CreateInstance(bgr);
+				bw.Show();
+				bgr.GetMethod("SetTarget", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(bw, new object[] { jpeg });
+				var card = (FrameworkElement)bw.FindName("ScanCard");
+				var engine = (TextBlock)bw.FindName("EngineText");
+				DateTime until2 = DateTime.Now.AddSeconds(20);
+				while ((card.Visibility != Visibility.Visible || engine.Text == "엔진 확인 중") && DateTime.Now < until2) Pump(100);
+				Pump(300);
+				Snapshot(bw, Path.Combine(outDir, "background-removal-" + mode + ".png"));
+				string summary = ((TextBlock)bw.FindName("ScanSummary")).Text;
+				Console.WriteLine("  배경제거 chip tip=" + ((FrameworkElement)bw.FindName("EngineChip")).ToolTip + " scanError=" + ((TextBlock)bw.FindName("ScanError")).Text);
+				Check("배경제거 window scans the photo with the engine in " + mode + " (" + engine.Text + ", " + summary + ")", engine.Text == "준비 완료" && summary.StartsWith("사진 1장") && ((Button)bw.FindName("StartButton")).IsEnabled && (d ? Bg(bw).R < 0x30 : Bg(bw).R > 0xE0));
+				Check("scan wrote nothing next to the photo", !Directory.Exists(outDir + "_bgr"));
+				bw.Close();
+			}
+			apply.Invoke(null, new object[] { false });
 
 			// 정사각형 판 keyword on a measurement copy: the same calls as MainWindow.WriteMetadata.
 			string value = "clorium-scale:v1;board=500;sx=0.2;sy=0.2001;kh=0.01;kv=0;rot=0.1;h=1,0,0,0,1,0,0,0,1;corners=1,1,2,1,2,2,1,2;at=2026-11-03T12:00:00";

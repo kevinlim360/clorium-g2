@@ -701,7 +701,7 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 	private void but_AIRemoveBg_Click(object sender, RoutedEventArgs e)
 	{
 		Log.Debug("Main ICON : RemoveBg Click");
-		// G2: Clorium 배경제거 (Matting Studio) — open the selected photo, or its folder, in the local studio.
+		// G2: Clorium 배경제거 — open G2's 배경제거 window (local Matting Studio engine) with the selected photo, or its folder.
 		CloriumBackgroundRemoval.Open(CloriumBackgroundRemoval.ResolveTarget(ServiceProvider.Settings?.SelectedBitmap?.FileItem?.FileName));
 	}
 
