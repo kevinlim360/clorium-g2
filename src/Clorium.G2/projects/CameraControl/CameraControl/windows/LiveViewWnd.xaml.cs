@@ -453,16 +453,6 @@ public partial class LiveViewWnd : Window, IWindow, INotifyPropertyChanged, ICom
 		HelpProvider.Run(HelpSections.LiveView);
 	}
 
-	private void ShowFocusControl_Click(object sender, RoutedEventArgs e)
-	{
-		Check_FocusControl.IsChecked = true;
-	}
-
-	private void HideFocusControl_Click(object sender, RoutedEventArgs e)
-	{
-		Check_FocusControl.IsChecked = false;
-	}
-
 	private void Expander_Click(object sender, RoutedEventArgs e)
 	{
 		if (!(sender is Expander currentExpander))

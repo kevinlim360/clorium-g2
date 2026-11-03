@@ -378,7 +378,7 @@
               <TextBlock Text="배경제거" HorizontalAlignment="Center" Margin="0,4,0,0" />
             </StackPanel>
           </Button>
-          <Button Style="{StaticResource G2RailButton}" ToolTip="수퍼포커스" Click="OpenSuperfocus_Click" Visibility="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=UseSuperfocus, Converter={StaticResource BooleanToVisibilityConverter1}}">
+          <Button Name="but_Superfocus" Style="{StaticResource G2RailButton}" ToolTip="수퍼포커스" Click="OpenSuperfocus_Click" Visibility="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=UseSuperfocus, Converter={StaticResource BooleanToVisibilityConverter1}}">
             <StackPanel>
               <Viewbox Width="22" Height="22" HorizontalAlignment="Center"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoFocus}" /></Viewbox>
               <TextBlock Text="수퍼포커스" HorizontalAlignment="Center" Margin="0,4,0,0" />

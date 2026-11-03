@@ -2,9 +2,10 @@ namespace CameraControl.Core.Classes;
 
 public partial class Settings
 {
-    private bool _useSuperfocus = true;
+    private bool _useSuperfocus;
 
-    // G2 UI: Superfocus entry point ON/OFF (main menu > 설정). Persisted; missing in older settings files = ON.
+    // G2 UI: 수퍼포커스 entry point ON/OFF (클로리움 설정 > 수퍼포커스; ON shows the left-rail button). Persisted;
+    // default off like the other G2 features (2026-11-03). Settings files saved before keep their stored value.
     public bool UseSuperfocus
     {
         get => _useSuperfocus;

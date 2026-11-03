@@ -146,7 +146,6 @@
               <materialDesign:PackIcon Kind="Lock" />
             </materialDesign:ToggleButtonAssist.OnContent>
           </ToggleButton>
-          <Button Margin="4" Content="|&lt;" Style="{DynamicResource MaterialDesignFloatingActionMiniLightButton}" Cursor="Hand" Command="{Binding MoveACommand}" IsEnabled="{Binding LockA}" Visibility="{Binding AdvancexFocusStacking, Converter={StaticResource BooleanToVisibilityConverter1}}" ToolTip="{T:Translate LabelGoNear}" />
           <Button Margin="4" Content="&lt;&lt;&lt;" FontWeight="Bold" Style="{DynamicResource MaterialDesignFloatingActionMiniLightButton}" Command="{Binding FocusMMMCommand}" ToolTip="{T:Translate LabelMoveLargeToCamera}" />
           <Button Margin="4" Content="&lt;&lt;" FontWeight="Bold" Style="{DynamicResource MaterialDesignFloatingActionMiniLightButton}" Command="{Binding FocusMMCommand}" ToolTip="{T:Translate LabelMoveMediumToCamera}" />
           <Button Margin="4" Content="&lt;" FontWeight="Bold" Style="{DynamicResource MaterialDesignFloatingActionMiniLightButton}" Command="{Binding FocusMCommand}" ToolTip="{T:Translate LabelMoveSmallToCamera}" />
@@ -154,7 +153,6 @@
           <Button Margin="4" Content="&gt;" FontWeight="Bold" Style="{DynamicResource MaterialDesignFloatingActionMiniLightButton}" Command="{Binding FocusPCommand}" ToolTip="{T:Translate LabelMoveSmallToInfinity}" />
           <Button Margin="4" Content="&gt;&gt;" FontWeight="Bold" Style="{DynamicResource MaterialDesignFloatingActionMiniLightButton}" Command="{Binding FocusPPCommand}" ToolTip="{T:Translate LabelMoveMediumToInfinity}" />
           <Button Margin="4" Content="&gt;&gt;&gt;" FontWeight="Bold" Style="{DynamicResource MaterialDesignFloatingActionMiniLightButton}" Command="{Binding FocusPPPCommand}" ToolTip="{T:Translate LabelMoveLargeToInfinity}" />
-          <Button Margin="4" Content="&gt;|" Style="{DynamicResource MaterialDesignFloatingActionMiniLightButton}" Command="{Binding MoveBCommand}" IsEnabled="{Binding LockB}" Visibility="{Binding AdvancexFocusStacking, Converter={StaticResource BooleanToVisibilityConverter1}}" ToolTip="{T:Translate LabelGoFar}" />
           <ToggleButton Height="40" Width="40" Margin="4" Style="{StaticResource MaterialDesignActionLightToggleButton}" IsChecked="{Binding LockB}" ToolTip="{T:Translate LabelLockFar}">
             <ContentControl.Content>
               <materialDesign:PackIcon Kind="LockOpen" />
@@ -232,7 +230,7 @@
           <StackPanel.ScrollOwner>
             <ScrollViewer />
           </StackPanel.ScrollOwner>
-          <Button x:Name="SuperfocusLauncher" Margin="4" HorizontalContentAlignment="Left" Content="수퍼포커스" Click="SuperfocusOpen_Click" Padding="16,10" ToolTip="이동 가능한 수퍼포커스 조작 창을 엽니다." ToolTipService.InitialShowDelay="300" />
+          <Button x:Name="SuperfocusLauncher" Margin="4" Visibility="{Binding UseSuperfocus, Converter={StaticResource BooleanToVisibilityConverter1}, Source={x:Static Core:ServiceProvider.Settings}}" HorizontalContentAlignment="Left" Content="수퍼포커스" Click="SuperfocusOpen_Click" Padding="16,10" ToolTip="이동 가능한 수퍼포커스 조작 창을 엽니다." ToolTipService.InitialShowDelay="300" />
           <materialDesign:Card Margin="4" Visibility="{Binding ShowOverlayLiveView, Converter={StaticResource BooleanToVisibilityConverter1}, Source={x:Static Core:ServiceProvider.Branding}}">
             <Expander Name="ExpanderOverlay" IsExpanded="True" Header="{T:Translate LabelOverlay}" Expanded="Expander_Click">
               <Grid Margin="4 0 0 10">
@@ -413,80 +411,6 @@
                 <Controls:NumericUpDown Grid.Row="1" Grid.Column="1" Margin="3" Minimum="1" Value="{Binding CaptureCount}" IsEnabled="{Binding IsFree}" />
                 <CheckBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="3" Content="{T:Translate LabelAutoFocusBeforCapture}" IsChecked="{Binding AutoFocusBeforCapture}" />
                 <local:LiveViewControlerSimple Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="20,3" DataContext="{Binding CameraDevice}" />
-              </Grid>
-            </Expander>
-          </materialDesign:Card>
-          <materialDesign:Card Margin="4" Visibility="Collapsed">
-            <Expander Name="ExpanderFocusStackingAdvanced" Header="{T:Translate LabelFocusStackingAdvanced}" Expanded="ShowFocusControl_Click" Collapsed="HideFocusControl_Click">
-              <Grid Margin="4">
-                <Grid.RowDefinitions>
-                  <RowDefinition Height="Auto" />
-                  <RowDefinition Height="Auto" />
-                  <RowDefinition Height="Auto" />
-                  <RowDefinition Height="Auto" />
-                  <RowDefinition Height="Auto" />
-                  <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                  <ColumnDefinition Width="1*" />
-                  <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Label Grid.Row="0" Grid.Column="0" Content="{T:Translate LabelNoOfPhots}" />
-                <Controls:NumericUpDown Grid.Row="0" Grid.Column="1" Margin="2" Minimum="1" IsEnabled="{Binding IsFree}" Value="{Binding PhotoNo}" />
-                <Label Grid.Row="1" Grid.Column="0" Content="{T:Translate LabelFocusStep}" />
-                <Controls:NumericUpDown Grid.Row="1" Grid.Column="1" Margin="2" Minimum="1" IsEnabled="{Binding IsFree}" Value="{Binding FocusStep}" />
-                <Button Grid.Row="3" Grid.Column="0" Margin="5" Content="{T:Translate ButtonStart}" IsEnabled="{Binding IsFree}" Command="{Binding StartFocusStackingCommand}" />
-                <Button Grid.Row="3" Grid.Column="1" Margin="5" Content="{T:Translate ButtonPreview}" IsEnabled="{Binding IsFree}" Command="{Binding PreviewFocusStackingCommand}" />
-                <Button Grid.Row="4" Grid.Column="1" Margin="5" Content="{T:Translate ButtonStop}" IsEnabled="{Binding IsFocusStackingRunning}" Command="{Binding StopFocusStackingCommand}" />
-                <StackPanel Orientation="Horizontal" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center">
-                  <Label Content="Count" />
-                  <Label Margin="5,0,15,0" Content="{Binding PhotoCount}" />
-                  <Label Content="Auto" />
-                  <CheckBox ToolTip="Generate Image" HorizontalAlignment="Right" IsChecked="{Binding AutoFocusStackingImage}" />
-                </StackPanel>
-                <ProgressBar Grid.Row="4" Grid.Column="0" Margin="5" VerticalAlignment="Bottom" Value="{Binding FocusStackingTick}" Maximum="{Binding WaitTime}" />
-              </Grid>
-            </Expander>
-          </materialDesign:Card>
-          <materialDesign:Card Margin="4" Visibility="Collapsed">
-            <Expander Name="ExpanderFocusStackingSimple" Header="{T:Translate LabelFocusStackingSimple}" Expanded="ShowFocusControl_Click" Collapsed="HideFocusControl_Click">
-              <Grid Margin="4">
-                <Grid.RowDefinitions>
-                  <RowDefinition Height="Auto" />
-                  <RowDefinition Height="Auto" />
-                  <RowDefinition Height="Auto" />
-                  <RowDefinition Height="Auto" />
-                  <RowDefinition Height="Auto" />
-                  <RowDefinition Height="Auto" />
-                  <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                  <ColumnDefinition Width="1*" />
-                  <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Label Grid.Row="0" Grid.Column="0" Content="{T:Translate LabelNoOfPhots}" />
-                <Controls:NumericUpDown Grid.Row="0" Grid.Column="1" Margin="2" Minimum="1" Value="{Binding PhotoNumber}" IsEnabled="{Binding IsFree}" />
-                <Label Grid.Row="1" Grid.Column="0" Content="{T:Translate LabelDirection}" />
-                <ComboBox Grid.Row="1" Grid.Column="1" Margin="2" SelectedIndex="{Binding Direction}" IsEnabled="{Binding IsFree}">
-                  <ComboBoxItem Content="{T:Translate LabelFarNear}" />
-                  <ComboBoxItem Content="{T:Translate LabelNearFar}" />
-                </ComboBox>
-                <Label Grid.Row="2" Grid.Column="0" Content="{T:Translate LabelFocusStep}" />
-                <ComboBox Grid.Row="2" Grid.Column="1" Margin="2" SelectedIndex="{Binding FocusStepSize}" IsEnabled="{Binding IsFree}">
-                  <ComboBoxItem Content="{T:Translate LabelStepSmall}" />
-                  <ComboBoxItem Content="{T:Translate LabelStepMedium}" />
-                  <ComboBoxItem Content="{T:Translate LabelStepLarge}" />
-                </ComboBox>
-                <Button Grid.Row="4" Grid.Column="0" Margin="5" Content="{T:Translate ButtonStart}" IsEnabled="{Binding IsFree}" Command="{Binding StartSimpleFocusStackingCommand}" />
-                <Button Grid.Row="4" Grid.Column="1" Margin="5" Content="{T:Translate ButtonPreview}" IsEnabled="{Binding IsFree}" Command="{Binding PreviewSimpleFocusStackingCommand}" />
-                <Button Grid.Row="5" Grid.Column="1" Margin="5" Content="{T:Translate ButtonStop}" IsEnabled="{Binding IsFocusStackingRunning}" Command="{Binding StopSimpleFocusStackingCommand}" />
-                <StackPanel Orientation="Horizontal" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center">
-                  <Label Content="Count" />
-                  <Label Margin="5,0,15,0" Content="{Binding PhotoCount}" />
-                  <Label Content="Auto" />
-                  <CheckBox ToolTip="Generate Image" HorizontalAlignment="Right" IsChecked="{Binding AutoFocusStackingImage}" />
-                </StackPanel>
-                <ProgressBar Grid.Row="5" Grid.Column="0" Margin="5" VerticalAlignment="Bottom" Value="{Binding FocusStackingTick}" Maximum="{Binding WaitTime}" />
               </Grid>
             </Expander>
           </materialDesign:Card>

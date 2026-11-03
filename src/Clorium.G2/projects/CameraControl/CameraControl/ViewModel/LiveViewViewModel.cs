@@ -60,8 +60,6 @@ public class LiveViewViewModel : ViewModelBase
 
 	private System.Timers.Timer _freezeTimer = new System.Timers.Timer();
 
-	private System.Timers.Timer _focusStackingTimer = new System.Timers.Timer(1000.0);
-
 	private const int DesiredFrameRate = 20;
 
 	private int _totalframes = 0;
@@ -96,21 +94,11 @@ public class LiveViewViewModel : ViewModelBase
 
 	private string _localSelectedOverlay = null;
 
-	private bool _focusStackingPreview = false;
-
 	private bool _focusIProgress = false;
-
-	private int _focusStackinMode = 0;
-
-	private int _focusStep;
 
 	private int _focusValue;
 
 	private int _focusCounter;
-
-	private int _focusStepSize;
-
-	private int _focusStackingTick;
 
 	private int _focusProgressMax;
 
@@ -138,8 +126,6 @@ public class LiveViewViewModel : ViewModelBase
 
 	private int _gridType;
 
-	private int _direction;
-
 	private bool _triggerOnMotion;
 
 	private double _currentMotionIndex;
@@ -166,19 +152,9 @@ public class LiveViewViewModel : ViewModelBase
 
 	private bool _lockB;
 
-	private bool _isBusy;
-
 	private int _rotation;
 
 	private bool _settingArea;
-
-	private int _photoNumber;
-
-	private int _photoNo;
-
-	private int _photoCount;
-
-	private int _waitTime;
 
 	private int _countDown;
 
@@ -209,8 +185,6 @@ public class LiveViewViewModel : ViewModelBase
 	private int _timer_Elapsed_count = 0;
 
 	private int _frame_count = 0;
-
-	private bool _autofocusstackingImage;
 
 	public int writeableBitmapPixelWidth = 0;
 
@@ -280,22 +254,6 @@ public class LiveViewViewModel : ViewModelBase
 
 	public RelayCommand FocusMMMCommand { get; set; }
 
-	public RelayCommand MoveACommand { get; set; }
-
-	public RelayCommand MoveBCommand { get; set; }
-
-	public RelayCommand StartFocusStackingCommand { get; set; }
-
-	public RelayCommand PreviewFocusStackingCommand { get; set; }
-
-	public RelayCommand StopFocusStackingCommand { get; set; }
-
-	public RelayCommand StartSimpleFocusStackingCommand { get; set; }
-
-	public RelayCommand PreviewSimpleFocusStackingCommand { get; set; }
-
-	public RelayCommand StopSimpleFocusStackingCommand { get; set; }
-
 	public RelayCommand StartLiveViewCommand { get; set; }
 
 	public RelayCommand StopLiveViewCommand { get; set; }
@@ -303,8 +261,6 @@ public class LiveViewViewModel : ViewModelBase
 	public RelayCommand ResetBrigthnessCommand { get; set; }
 
 	public RelayCommand BrowseOverlayCommand { get; set; }
-
-	public RelayCommand HelpFocusStackingCommand { get; set; }
 
 	public RelayCommand ResetOverlayCommand { get; set; }
 
@@ -701,23 +657,6 @@ public class LiveViewViewModel : ViewModelBase
 
 	public int CropOffsetY { get; set; }
 
-	public int FocusStackingTick
-	{
-		get
-		{
-			return _focusStackingTick;
-		}
-		set
-		{
-			_focusStackingTick = value;
-			RaisePropertyChanged(() => FocusStackingTick);
-		}
-	}
-
-	public bool SimpleFocusStacking => false;
-
-	public bool AdvancexFocusStacking => CameraControl.Devices.LegacyCapturePolicy.FocusStackingEnabled && !SimpleFocusStacking;
-
 	public BitmapSource Preview
 	{
 		get
@@ -950,67 +889,7 @@ public class LiveViewViewModel : ViewModelBase
 		}
 	}
 
-	public bool IsFree => !_isBusy && !CaptureInProgress;
-
-	public int PhotoNumber
-	{
-		get
-		{
-			return _photoNumber;
-		}
-		set
-		{
-			_photoNumber = value;
-			RaisePropertyChanged(() => PhotoCount);
-		}
-	}
-
-	public int PhotoCount
-	{
-		get
-		{
-			return _photoCount;
-		}
-		set
-		{
-			_photoCount = value;
-			RaisePropertyChanged(() => PhotoCount);
-		}
-	}
-
-	public int PhotoNo
-	{
-		get
-		{
-			return _photoNo;
-		}
-		set
-		{
-			_photoNo = value;
-			RaisePropertyChanged(() => PhotoNo);
-			if (PhotoNo > 0)
-			{
-				_focusStep = Convert.ToInt32(decimal.Round((decimal)FocusValue / (decimal)PhotoNo, MidpointRounding.AwayFromZero));
-			}
-			RaisePropertyChanged(() => FocusStep);
-			RaisePropertyChanged(() => PhotoNo);
-		}
-	}
-
-	public int FocusStep
-	{
-		get
-		{
-			return _focusStep;
-		}
-		set
-		{
-			_focusStep = value;
-			_photoNo = Convert.ToInt32(decimal.Round((decimal)FocusValue / (decimal)FocusStep, MidpointRounding.AwayFromZero));
-			RaisePropertyChanged(() => FocusStep);
-			RaisePropertyChanged(() => PhotoNo);
-		}
-	}
+	public bool IsFree => !CaptureInProgress;
 
 	public int FocusValue
 	{
@@ -1021,10 +900,6 @@ public class LiveViewViewModel : ViewModelBase
 		set
 		{
 			_focusValue = value;
-			if (FocusStep > 0)
-			{
-				PhotoNo = FocusValue / FocusStep;
-			}
 			RaisePropertyChanged(() => FocusValue);
 			RaisePropertyChanged(() => CounterMessage);
 		}
@@ -1063,45 +938,6 @@ public class LiveViewViewModel : ViewModelBase
 		}
 	}
 
-	public int FocusStepSize
-	{
-		get
-		{
-			return _focusStepSize;
-		}
-		set
-		{
-			_focusStepSize = value;
-			RaisePropertyChanged(() => FocusStepSize);
-		}
-	}
-
-	public int Direction
-	{
-		get
-		{
-			return _direction;
-		}
-		set
-		{
-			_direction = value;
-			RaisePropertyChanged(() => Direction);
-		}
-	}
-
-	public int WaitTime
-	{
-		get
-		{
-			return _waitTime;
-		}
-		set
-		{
-			_waitTime = value;
-			RaisePropertyChanged(() => WaitTime);
-		}
-	}
-
 	public string CounterMessage
 	{
 		get
@@ -1127,22 +963,7 @@ public class LiveViewViewModel : ViewModelBase
 		}
 	}
 
-	public bool IsFocusStackingRunning
-	{
-		get
-		{
-			return _isBusy;
-		}
-		set
-		{
-			_isBusy = value && CameraControl.Devices.LegacyCapturePolicy.FocusStackingEnabled;
-			RaisePropertyChanged(() => IsFocusStackingRunning);
-			RaisePropertyChanged(() => IsFree);
-			RaisePropertyChanged(() => FocusingEnabled);
-		}
-	}
-
-	public bool FocusingEnabled => !IsFocusStackingRunning && !_focusIProgress;
+	public bool FocusingEnabled => !_focusIProgress;
 
 	public bool LockA
 	{
@@ -1176,7 +997,6 @@ public class LiveViewViewModel : ViewModelBase
 			if (_lockB && LockA)
 			{
 				FocusValue = FocusCounter;
-				PhotoCount = 5;
 			}
 			if (!_lockA && LockB)
 			{
@@ -1185,19 +1005,6 @@ public class LiveViewViewModel : ViewModelBase
 			}
 			RaisePropertyChanged(() => LockB);
 			RaisePropertyChanged(() => CounterMessage);
-		}
-	}
-
-	public bool AutoFocusStackingImage
-	{
-		get
-		{
-			return _autofocusstackingImage;
-		}
-		set
-		{
-			_autofocusstackingImage = value;
-			RaisePropertyChanged(() => AutoFocusStackingImage);
 		}
 	}
 
@@ -1834,14 +1641,6 @@ public class LiveViewViewModel : ViewModelBase
 		{
 			SetFocus(SimpleManualFocus ? ServiceProvider.Settings.LargeFocusStepCanon : ServiceProvider.Settings.LargeFocusStep);
 		});
-		MoveACommand = new RelayCommand(() =>
-		{
-			SetFocus(-FocusCounter);
-		});
-		MoveBCommand = new RelayCommand(() =>
-		{
-			SetFocus(FocusValue);
-		});
 		LockCurrentNearCommand = new RelayCommand(() =>
 		{
 			if (LockB)
@@ -1859,19 +1658,9 @@ public class LiveViewViewModel : ViewModelBase
 			}
 			LockB = true;
 		});
-		StartFocusStackingCommand = new RelayCommand(StartFocusStacking, () => CameraControl.Devices.LegacyCapturePolicy.FocusStackingEnabled);
-		PreviewFocusStackingCommand = new RelayCommand(PreviewFocusStacking, () => CameraControl.Devices.LegacyCapturePolicy.FocusStackingEnabled);
-		StopFocusStackingCommand = new RelayCommand(StopFocusStacking);
 		ResetBrigthnessCommand = new RelayCommand(() =>
 		{
 			Brightness = 0;
-		});
-		StartSimpleFocusStackingCommand = new RelayCommand(StartSimpleFocusStacking, () => CameraControl.Devices.LegacyCapturePolicy.FocusStackingEnabled);
-		PreviewSimpleFocusStackingCommand = new RelayCommand(PreviewSimpleFocusStacking, () => CameraControl.Devices.LegacyCapturePolicy.FocusStackingEnabled);
-		StopSimpleFocusStackingCommand = new RelayCommand(StopFocusStacking);
-		HelpFocusStackingCommand = new RelayCommand(() =>
-		{
-			HelpProvider.Run(HelpSections.FocusStacking);
 		});
 		BrowseOverlayCommand = new RelayCommand(BrowseOverlay);
 		ResetOverlayCommand = new RelayCommand(ResetOverlay);
@@ -1885,7 +1674,6 @@ public class LiveViewViewModel : ViewModelBase
 		});
 		ZoomIn100 = new RelayCommand(ToggleZoom);
 		ToggleGridCommand = new RelayCommand(ToggleGrid);
-		FocuseDone += LiveViewViewModel_FocuseDone;
 		CaptureSnapshotCommand = new RelayCommand(CaptureSnapshot);
 		FullScreenCommand = new RelayCommand(FullScreen);
 		ClosePreviewCommand = new RelayCommand(() =>
@@ -1901,10 +1689,6 @@ public class LiveViewViewModel : ViewModelBase
 	private void Init()
 	{
 		IsActive = true;
-		WaitTime = 2;
-		PhotoNo = 2;
-		FocusStep = 2;
-		PhotoCount = 5;
 		DelayedStart = false;
 		RecButtonText = TranslationStrings.ButtonRecordMovie;
 		CalibrateBase = ServiceProvider.Settings.DiskSize.ToString();
@@ -1919,8 +1703,6 @@ public class LiveViewViewModel : ViewModelBase
 		_freezeTimer.Interval = ServiceProvider.Settings.LiveViewFreezeTimeOut * 1000;
 		_freezeTimer.Elapsed += FreezeTimer_Elapsed;
 		_timer.Elapsed += Timer_Elapsed;
-		_focusStackingTimer.AutoReset = true;
-		_focusStackingTimer.Elapsed += FocusStackingTimer_Elapsed;
 		_restartTimer.AutoReset = true;
 		_restartTimer.Elapsed += RestartTimer_Elapsed;
 		LiveViewManager.PreviewCaptured += LiveViewManager_PreviewCaptured;
@@ -1933,7 +1715,6 @@ public class LiveViewViewModel : ViewModelBase
 	public void UnInit()
 	{
 		_timer.Stop();
-		_focusStackingTimer.Stop();
 		_restartTimer.Stop();
 		CameraDevice.PhotoCaptured -= CameraDevicePhotoCaptured;
 		LiveViewManager.PreviewCaptured -= LiveViewManager_PreviewCaptured;
@@ -2241,10 +2022,6 @@ public class LiveViewViewModel : ViewModelBase
 	{
 		_detector.Reset();
 		_photoCapturedTime = DateTime.Now;
-		if (IsFocusStackingRunning)
-		{
-			_focusStackingTimer.Start();
-		}
 		_timer.Start();
 	}
 
@@ -2289,52 +2066,6 @@ public class LiveViewViewModel : ViewModelBase
 	private void FreezeTimer_Elapsed(object sender, ElapsedEventArgs e)
 	{
 		FreezeImage = false;
-	}
-
-	private void FocusStackingTimer_Elapsed(object sender, ElapsedEventArgs e)
-	{
-		// Legacy capture is disabled in G2; replacement uses a separate service.
-		if (!CameraControl.Devices.LegacyCapturePolicy.FocusStackingEnabled) return;
-
-		if (!IsFocusStackingRunning)
-		{
-			return;
-		}
-		if (_focusStackinMode == 0)
-		{
-			_focusStackingTimer.Stop();
-			StartLiveView();
-			if (PhotoCount > 0)
-			{
-				SetFocus(FocusStep);
-			}
-		}
-		else
-		{
-			_focusStackingTimer.Stop();
-			StartLiveView();
-			if (PhotoCount > 0)
-			{
-				int dir = ((Direction != 0) ? 1 : (-1));
-				switch (FocusStepSize)
-				{
-				case 0:
-					SetFocus(dir * (SimpleManualFocus ? ServiceProvider.Settings.SmallFocusStepCanon : ServiceProvider.Settings.SmalFocusStep));
-					break;
-				case 1:
-					SetFocus(dir * (SimpleManualFocus ? ServiceProvider.Settings.MediumFocusStepCanon : ServiceProvider.Settings.MediumFocusStep));
-					break;
-				case 2:
-					SetFocus(dir * (SimpleManualFocus ? ServiceProvider.Settings.LargeFocusStepCanon : ServiceProvider.Settings.LargeFocusStep));
-					break;
-				}
-			}
-			else
-			{
-				LiveViewViewModel_FocuseDone(null, null);
-			}
-		}
-		FocusStackingTick++;
 	}
 
 	public virtual void GetLiveImage()
@@ -2400,7 +2131,7 @@ public class LiveViewViewModel : ViewModelBase
 			{
 				return;
 			}
-			if (!LiveViewData.IsLiveViewRunning && !IsFocusStackingRunning)
+			if (!LiveViewData.IsLiveViewRunning)
 			{
 				DelayedStart = true;
 				_restartTimerStartTime = DateTime.Now;
@@ -3090,35 +2821,10 @@ public class LiveViewViewModel : ViewModelBase
 					CameraDevice.StartLiveView();
 					if (SimpleManualFocus)
 					{
-						if (IsFocusStackingRunning)
-						{
-							if (_focusStackinMode == 0)
-							{
-								FocusProgressMax = Math.Abs(step);
-								FocusProgressValue = 0;
-								FocusProgressVisible = true;
-								for (int i = 0; i < Math.Abs(step); i++)
-								{
-									FocusProgressValue++;
-									FocusCounter += CameraDevice.Focus(step);
-									GetLiveImage();
-									Thread.Sleep(ServiceProvider.Settings.CanonFocusStepWait);
-								}
-								FocusProgressVisible = false;
-							}
-							else
-							{
-								FocusStepMove(step);
-								GetLiveImage();
-							}
-						}
-						else
-						{
-							FocusStepMove(step);
-							GetLiveImage();
-							focusStep = step;
-							FocusCounter += focusStep;
-						}
+						FocusStepMove(step);
+						GetLiveImage();
+						focusStep = step;
+						FocusCounter += focusStep;
 					}
 					else
 					{
@@ -3156,10 +2862,7 @@ public class LiveViewViewModel : ViewModelBase
 		OnFocuseDone();
 		RaisePropertyChanged(() => FocusingEnabled);
 		RaisePropertyChanged(() => SelectedFocusValue);
-		if (!IsFocusStackingRunning)
-		{
-			_timer.Start();
-		}
+		_timer.Start();
 	}
 
 	private void FocusStepMove(int step)
@@ -3189,79 +2892,6 @@ public class LiveViewViewModel : ViewModelBase
 	private static void OnFocuseDone()
 	{
 		FocuseDone?.Invoke(null, EventArgs.Empty);
-	}
-
-	private void LiveViewViewModel_FocuseDone(object sender, EventArgs e)
-	{
-		StaticHelper.Instance.SystemMessage = "";
-		if (!IsFocusStackingRunning)
-		{
-			return;
-		}
-		Recording = false;
-		try
-		{
-			if (!_focusStackingPreview)
-			{
-				Capture();
-			}
-		}
-		catch (Exception ex)
-		{
-			Log.Error(ex);
-			StaticHelper.Instance.SystemMessage = ex.Message;
-			_focusStackingTimer.Start();
-			return;
-		}
-		if (_focusStackinMode == 0)
-		{
-			PhotoCount++;
-			GetLiveImage();
-			FocusStackingTick = 0;
-			if (FocusCounter >= FocusValue)
-			{
-				IsFocusStackingRunning = false;
-				ServiceProvider.WindowsManager.ExecuteCommand("LiveViewWnd_Message", TranslationStrings.LabelStackingFinished);
-				if (AutoFocusStackingImage)
-				{
-					GenerateFocusStackingImage();
-				}
-			}
-		}
-		else
-		{
-			PhotoCount++;
-			if (PhotoCount >= PhotoNumber)
-			{
-				IsFocusStackingRunning = false;
-				ServiceProvider.WindowsManager.ExecuteCommand("LiveViewWnd_Message", TranslationStrings.LabelStackingFinished);
-				if (AutoFocusStackingImage)
-				{
-					GenerateFocusStackingImage();
-				}
-			}
-			GetLiveImage();
-			FocusStackingTick = 0;
-		}
-		if (_focusStackingPreview && IsFocusStackingRunning)
-		{
-			_focusStackingTimer.Start();
-		}
-	}
-
-	private void GenerateFocusStackingImage()
-	{
-		// Legacy capture is disabled in G2; replacement uses a separate service.
-		if (!CameraControl.Devices.LegacyCapturePolicy.FocusStackingEnabled) return;
-
-		foreach (IToolPlugin item in ServiceProvider.PluginManager.ToolPlugins)
-		{
-			if (item.Title == "Enfuse")
-			{
-				item.Execute();
-				item.Init();
-			}
-		}
 	}
 
 	public void SetFocusPos(System.Windows.Point initialPoint, double refWidth, double refHeight)
@@ -3363,82 +2993,6 @@ public class LiveViewViewModel : ViewModelBase
 			Log.Error("Unable to auto focus", ex);
 			StaticHelper.Instance.SystemMessage = ex.Message;
 		}
-	}
-
-	private void StartFocusStacking()
-	{
-		// Legacy capture is disabled in G2; replacement uses a separate service.
-		if (!CameraControl.Devices.LegacyCapturePolicy.FocusStackingEnabled) return;
-
-		if (!LockA || !LockB)
-		{
-			ServiceProvider.WindowsManager.ExecuteCommand("LiveViewWnd_Message", TranslationStrings.LabelLockNearFar);
-			return;
-		}
-		_focusStackinMode = 0;
-		FocusStackingTick = 0;
-		_focusIProgress = false;
-		GetLiveImage();
-		PhotoCount = 0;
-		_focusStackingPreview = false;
-		IsFocusStackingRunning = true;
-		ServiceProvider.WindowsManager.ExecuteCommand("NextSeries");
-		SetFocus(-FocusCounter);
-	}
-
-	private void StartSimpleFocusStacking()
-	{
-		// Legacy capture is disabled in G2; replacement uses a separate service.
-		if (!CameraControl.Devices.LegacyCapturePolicy.FocusStackingEnabled) return;
-
-		if (LockA || LockB)
-		{
-			ServiceProvider.WindowsManager.ExecuteCommand("LiveViewWnd_Message", TranslationStrings.LabelErrorSimpleStackingFocusLock);
-			return;
-		}
-		LockA = false;
-		_focusStackinMode = 1;
-		FocusStackingTick = 0;
-		_focusIProgress = false;
-		PhotoCount = 0;
-		IsFocusStackingRunning = true;
-		_focusStackingPreview = false;
-		ServiceProvider.WindowsManager.ExecuteCommand("NextSeries");
-		_focusStackingTimer.Start();
-	}
-
-	private void PreviewFocusStacking()
-	{
-		// Legacy capture is disabled in G2; replacement uses a separate service.
-		if (!CameraControl.Devices.LegacyCapturePolicy.FocusStackingEnabled) return;
-
-		_focusStackinMode = 0;
-		GetLiveImage();
-		PhotoCount = 0;
-		IsFocusStackingRunning = true;
-		_focusStackingPreview = true;
-		SetFocus(-FocusCounter);
-	}
-
-	private void PreviewSimpleFocusStacking()
-	{
-		// Legacy capture is disabled in G2; replacement uses a separate service.
-		if (!CameraControl.Devices.LegacyCapturePolicy.FocusStackingEnabled) return;
-
-		LockA = false;
-		_focusStackinMode = 1;
-		PhotoCount = 0;
-		IsFocusStackingRunning = true;
-		_focusStackingPreview = true;
-		_focusStackingTimer.Start();
-	}
-
-	private void StopFocusStacking()
-	{
-		IsFocusStackingRunning = false;
-		FocusStackingTick = 0;
-		_focusStackingTimer.Stop();
-		_timer.Start();
 	}
 
 	private void ProcessMotionDetection(Bitmap bmp)

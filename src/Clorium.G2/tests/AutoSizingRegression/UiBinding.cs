@@ -87,6 +87,7 @@ class UiBinding
 		Check("legacy launcher and exit kill removed from source", !mainCs.Contains("Program Files (x86)\\\\\\\\Clorium\\\\Clorium AutoSizing") && !mainCs.Contains("GetProcessesByName(\"Clorium AutoSizing\")"));
 		BackgroundRemoval(s, mainCs);
 		ImageAdjust(s, mainCs);
+		Superfocus(s);
 		byte[] exe = File.ReadAllBytes(Path.Combine(bin, "CameraControl.exe"));
 		Check("built CameraControl.exe has no ColorCompensationWnd, contains the 이미지보정 window and client", Find(exe, Encoding.UTF8.GetBytes("ColorCompensationWnd")) < 0 && Find(exe, Encoding.Unicode.GetBytes("Clorium_ColorCompensation.json")) < 0 && Find(exe, Encoding.UTF8.GetBytes("G2ColorAdjustWnd")) >= 0 && Find(exe, Encoding.UTF8.GetBytes("CloriumImageAdjust")) >= 0);
 		Check("built CameraControl.exe has no PhotoScissors/PhotoRoom", Find(exe, Encoding.Unicode.GetBytes("PhotoScissors.exe")) < 0 && Find(exe, Encoding.Unicode.GetBytes("photoroom.com")) < 0 && Find(exe, Encoding.UTF8.GetBytes("RemoveBackgroundWnd")) < 0);
@@ -153,6 +154,25 @@ class UiBinding
 		string cc = Path.Combine(root, "projects/CameraControl/CameraControl");
 		Check("old window and view model removed from the project", !csproj.Contains("ColorCompensationWnd") && !File.Exists(Path.Combine(cc, "windows/ColorCompensationWnd.xaml")) && !File.Exists(Path.Combine(cc, "ViewModel/ColorCompensationViewModel.cs")) && csproj.Contains("G2ColorAdjustWnd.xaml"));
 		Check("presets copy UseImageAdjust", File.ReadAllText(Path.Combine(cc, "windows/SettingsWnd.G2.cs")).Contains("\"UseImageAdjust\""));
+	}
+
+	// 2026-11-03 수퍼포커스: default off like the other G2 features; the legacy focus stacking panels are removed.
+	static void Superfocus(Settings s)
+	{
+		Check("수퍼포커스 is off by default; older settings without the key stay off", !new Settings().UseSuperfocus && !JsonConvert.DeserializeObject<Settings>("{}").UseSuperfocus);
+		Check("settings saved with 수퍼포커스 ON keep it ON", JsonConvert.DeserializeObject<Settings>("{\"UseSuperfocus\":true}").UseSuperfocus);
+		s.UseSuperfocus = false;
+		var railXml = Element("MainWindow.xaml", "but_Superfocus");
+		var rail = (Button)Parse(railXml, "Style", "Click");
+		var launcher = (Button)Parse(Element("windows/LiveViewWnd.xaml", "SuperfocusLauncher"), "Click");
+		var toggle = (CheckBox)Parse(Element("windows/SettingsWnd.xaml", "G2Feat_superfocus"), "Style"); toggle.DataContext = s;
+		Pump(); Check("수퍼포커스 rail and live view launcher hidden while disabled", rail.Visibility == Visibility.Collapsed && launcher.Visibility == Visibility.Collapsed && toggle.IsChecked == false);
+		toggle.IsChecked = true; Pump(); Check("switch ON shows the rail button and the live view launcher", s.UseSuperfocus && rail.Visibility == Visibility.Visible && launcher.Visibility == Visibility.Visible);
+		toggle.IsChecked = false; Pump(); Check("switch OFF hides both again", !s.UseSuperfocus && rail.Visibility == Visibility.Collapsed && launcher.Visibility == Visibility.Collapsed);
+		string live = File.ReadAllText(Path.Combine(root, "projects/CameraControl/CameraControl/windows/LiveViewWnd.xaml"));
+		string vm = File.ReadAllText(Path.Combine(root, "projects/CameraControl/CameraControl/ViewModel/LiveViewViewModel.cs"));
+		Check("legacy focus stacking panels and A/B jump buttons removed", !live.Contains("ExpanderFocusStacking") && !live.Contains("MoveACommand") && !live.Contains("FocusStackingCommand") && !live.Contains("FocusControl_Click"));
+		Check("legacy focus stacking code removed from the live view model", !vm.Contains("FocusStacking") && !vm.Contains("_focusStackinMode") && !vm.Contains("PhotoCount") && vm.Contains("LockCurrentNearCommand"));
 	}
 
 	static int Find(byte[] data, byte[] pattern)
