@@ -1,9 +1,9 @@
 @echo off
-chcp 65001 >nul
 rem Clorium G2 integration test runtime (built by Build-G2IntegrationTest.ps1). Settings are isolated in .local\g2-integration-test\G2TestData.
+rem Saved as CP949 (Korean ANSI) on purpose: a UTF-8 batch file with chcp 65001 is misread by cmd on Korean Windows.
 set "G2TEST=%~dp0.local\g2-integration-test"
 if not exist "%G2TEST%\CameraControl.exe" (
-  echo í†µí•© í…ŒìŠ¤íŠ¸ ì‹¤í–‰ë³¸ì´ ì—†ìŠµë‹ˆë‹¤. ë¨¼ì € Build-G2IntegrationTest.ps1ì„ ì‹¤í–‰í•˜ì„¸ìš”.
+  echo ÅëÇÕ Å×½ºÆ® ½ÇÇàº»ÀÌ ¾ø½À´Ï´Ù. ¸ÕÀú Build-G2IntegrationTest.ps1À» ½ÇÇàÇÏ¼¼¿ä.
   pause
   exit /b 1
 )
