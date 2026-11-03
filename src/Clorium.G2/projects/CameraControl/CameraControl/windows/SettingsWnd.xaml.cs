@@ -34,6 +34,22 @@ public partial class SettingsWnd : Window, IComponentConnector
 		}
 		RotateFlipTypesValues = new AsyncObservableCollection<RotateFlipType>(Enum.GetValues(typeof(RotateFlipType)).Cast<RotateFlipType>().Distinct());
 		DataContext = ServiceProvider.Settings;
+		// 테마: choosing 밝은/어두운 화면 switches G2, legacy windows and the light app at once; closing (also on
+		// 취소, which restores the old value without a change notification) re-applies whatever is current.
+		ServiceProvider.Settings.PropertyChanged += Settings_ThemeChanged;
+		Closed += (sender, e) =>
+		{
+			ServiceProvider.Settings.PropertyChanged -= Settings_ThemeChanged;
+			CameraControl.Classes.G2Palette.ApplyScreenTheme();
+		};
+	}
+
+	private void Settings_ThemeChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+	{
+		if (e.PropertyName == "UseDarkScreen")
+		{
+			CameraControl.Classes.G2Palette.ApplyScreenTheme();
+		}
 	}
 
 	private void Window_Loaded(object sender, RoutedEventArgs e)

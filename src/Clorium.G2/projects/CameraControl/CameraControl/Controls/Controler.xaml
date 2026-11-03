@@ -13,14 +13,14 @@
       </DataTemplate>
       <Style x:Key="G2RowLabel" TargetType="TextBlock">
         <Setter Property="FontSize" Value="{DynamicResource G2Fs11_5}" />
-        <Setter Property="Foreground" Value="{StaticResource G2Sub}" />
+        <Setter Property="Foreground" Value="{DynamicResource G2Sub}" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="TextTrimming" Value="CharacterEllipsis" />
         <Setter Property="Margin" Value="0,0,8,0" />
       </Style>
     </ResourceDictionary>
   </FrameworkElement.Resources>
-  <StackPanel TextElement.FontFamily="{StaticResource G2Font}" TextElement.Foreground="{StaticResource G2Text}">
+  <StackPanel TextElement.FontFamily="{StaticResource G2Font}" TextElement.Foreground="{DynamicResource G2Text}">
     <Grid Margin="0,0,0,10">
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="78" />

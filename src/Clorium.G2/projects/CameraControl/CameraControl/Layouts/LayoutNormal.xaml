@@ -24,10 +24,10 @@
               </Border>
               <ControlTemplate.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                  <Setter TargetName="ring" Property="BorderBrush" Value="{StaticResource G2Line2}" />
+                  <Setter TargetName="ring" Property="BorderBrush" Value="{DynamicResource G2Line2}" />
                 </Trigger>
                 <Trigger Property="IsSelected" Value="True">
-                  <Setter TargetName="ring" Property="BorderBrush" Value="{StaticResource G2Accent}" />
+                  <Setter TargetName="ring" Property="BorderBrush" Value="{DynamicResource G2Accent}" />
                 </Trigger>
               </ControlTemplate.Triggers>
             </ControlTemplate>
@@ -35,7 +35,7 @@
         </Setter>
       </Style>
       <DataTemplate x:Key="G2ThumbTemplate">
-        <Border CornerRadius="5" BorderThickness="1" BorderBrush="{Binding Name, Converter={StaticResource G2FaceTag}, ConverterParameter=border}" Background="{StaticResource G2Panel2}" ClipToBounds="True" Height="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=ThumbHeigh}" ToolTipService.InitialShowDelay="250" ToolTipService.ShowDuration="20000">
+        <Border CornerRadius="5" BorderThickness="1" BorderBrush="{Binding Name, Converter={StaticResource G2FaceTag}, ConverterParameter=border}" Background="{DynamicResource G2Panel2}" ClipToBounds="True" Height="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=ThumbHeigh}" ToolTipService.InitialShowDelay="250" ToolTipService.ShowDuration="20000">
           <FrameworkElement.ToolTip>
             <ToolTip>
               <StackPanel MinWidth="170">
@@ -69,7 +69,7 @@
             <CheckBox Margin="0,5,5,0" HorizontalAlignment="Right" VerticalAlignment="Top" Cursor="Hand" ToolTip="선택 (휴지통으로 한꺼번에 삭제)" IsChecked="{Binding Path=IsChecked}">
               <CheckBox.Template>
                 <ControlTemplate TargetType="CheckBox">
-                  <Border x:Name="box" Width="18" Height="18" CornerRadius="4" BorderThickness="1.5" BorderBrush="{StaticResource G2Overlay}" Background="#66000000">
+                  <Border x:Name="box" Width="18" Height="18" CornerRadius="4" BorderThickness="1.5" BorderBrush="{DynamicResource G2Overlay}" Background="#66000000">
                     <Path x:Name="mark" Data="M4,9 L7.5,12.5 L14,5.5" Stroke="White" StrokeThickness="2" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round" Visibility="Collapsed" />
                   </Border>
                   <ControlTemplate.Triggers>
@@ -78,15 +78,15 @@
                       <Setter TargetName="box" Property="Background" Value="#99000000" />
                     </Trigger>
                     <Trigger Property="IsChecked" Value="True">
-                      <Setter TargetName="box" Property="Background" Value="{StaticResource G2Accent}" />
-                      <Setter TargetName="box" Property="BorderBrush" Value="{StaticResource G2Accent}" />
+                      <Setter TargetName="box" Property="Background" Value="{DynamicResource G2Accent}" />
+                      <Setter TargetName="box" Property="BorderBrush" Value="{DynamicResource G2Accent}" />
                       <Setter TargetName="mark" Property="Visibility" Value="Visible" />
                     </Trigger>
                   </ControlTemplate.Triggers>
                 </ControlTemplate>
               </CheckBox.Template>
             </CheckBox>
-            <Ellipse Width="18" Height="18" StrokeThickness="2.5" Stroke="{StaticResource G2Accent}" StrokeDashArray="3 2" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding Loading, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            <Ellipse Width="18" Height="18" StrokeThickness="2.5" Stroke="{DynamicResource G2Accent}" StrokeDashArray="3 2" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding Loading, Converter={StaticResource BooleanToVisibilityConverter}}" />
           </Grid>
         </Border>
       </DataTemplate>
@@ -94,14 +94,14 @@
         <Setter Property="Height" Value="30" />
         <Setter Property="Padding" Value="11,0" />
         <Setter Property="CornerRadius" Value="8" />
-        <Setter Property="Background" Value="{StaticResource G2Overlay}" />
+        <Setter Property="Background" Value="{DynamicResource G2Overlay}" />
       </Style>
     </ResourceDictionary>
   </FrameworkElement.Resources>
   <FrameworkElement.DataContext>
     <viewModel:LayoutViewModel />
   </FrameworkElement.DataContext>
-  <Grid TextElement.FontFamily="{StaticResource G2Font}" TextElement.Foreground="{StaticResource G2Text}">
+  <Grid TextElement.FontFamily="{StaticResource G2Font}" TextElement.Foreground="{DynamicResource G2Text}">
     <Grid.RowDefinitions>
       <RowDefinition Height="*" />
       <RowDefinition Height="Auto" />
@@ -109,7 +109,7 @@
     </Grid.RowDefinitions>
 
     <!-- ===== stage: last captured image ===== -->
-    <Grid Grid.Row="0" Background="{StaticResource G2Stage}" ClipToBounds="True">
+    <Grid Grid.Row="0" Background="{DynamicResource G2Stage}" ClipToBounds="True">
       <Grid RenderTransformOrigin="0.5,0.5" ClipToBounds="True">
         <FrameworkElement.LayoutTransform>
           <RotateTransform Angle="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=SelectedBitmap.FileItem.RotationAngle}" />
@@ -118,11 +118,11 @@
           <Border Name="MainAestheticImageBorder" Margin="56,56,56,64" Background="White">
             <Border.Style>
               <Style TargetType="Border">
-                <Setter Property="BorderBrush" Value="{StaticResource G2Line}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource G2Line}" />
                 <Setter Property="BorderThickness" Value="2" />
                 <Style.Triggers>
                   <DataTrigger Binding="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=IsAestheticImprovementActive}" Value="True">
-                    <Setter Property="BorderBrush" Value="{StaticResource G2Pr}" />
+                    <Setter Property="BorderBrush" Value="{DynamicResource G2Pr}" />
                     <Setter Property="BorderThickness" Value="3" />
                   </DataTrigger>
                 </Style.Triggers>
@@ -147,13 +147,13 @@
       </Border>
       <!-- top-right: PR state + zoom -->
       <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,14,16,0">
-        <Border Style="{StaticResource G2OverlayChip}" Background="{StaticResource G2PrBg}" Margin="0,0,6,0" Visibility="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=IsAestheticImprovementActive, Converter={StaticResource BooleanToVisibilityConverter}}">
+        <Border Style="{StaticResource G2OverlayChip}" Background="{DynamicResource G2PrBg}" Margin="0,0,6,0" Visibility="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=IsAestheticImprovementActive, Converter={StaticResource BooleanToVisibilityConverter}}">
           <StackPanel Orientation="Horizontal">
-            <Ellipse Width="7" Height="7" Fill="{StaticResource G2Pr}" VerticalAlignment="Center" Margin="0,0,6,0" />
-            <TextBlock Text="미감개선 ON" FontSize="{DynamicResource G2Fs12_5}" FontWeight="SemiBold" Foreground="{StaticResource G2Pr}" VerticalAlignment="Center" />
+            <Ellipse Width="7" Height="7" Fill="{DynamicResource G2Pr}" VerticalAlignment="Center" Margin="0,0,6,0" />
+            <TextBlock Text="미감개선 ON" FontSize="{DynamicResource G2Fs12_5}" FontWeight="SemiBold" Foreground="{DynamicResource G2Pr}" VerticalAlignment="Center" />
           </StackPanel>
         </Border>
-        <ComboBox Width="78" Height="30" Background="{StaticResource G2Overlay}" BorderBrush="Transparent" ToolTip="확대 배율" SelectedIndex="{Binding ZoomIndex}">
+        <ComboBox Width="78" Height="30" Background="{DynamicResource G2Overlay}" BorderBrush="Transparent" ToolTip="확대 배율" SelectedIndex="{Binding ZoomIndex}">
           <ComboBoxItem Content="맞춤" />
           <ComboBoxItem Content="60 %" />
           <ComboBoxItem Content="100 %" />
@@ -172,11 +172,11 @@
       <Border Style="{StaticResource G2OverlayChip}" Height="40" Padding="14,0,6,0" VerticalAlignment="Bottom" Margin="16,0,16,14" DataContext="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=SelectedBitmap.FileItem}">
         <DockPanel>
           <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
-            <TextBlock Margin="12,0,4,0" FontSize="{DynamicResource G2Fs11}" Foreground="{StaticResource G2Sub}" VerticalAlignment="Center" Text="F" />
+            <TextBlock Margin="12,0,4,0" FontSize="{DynamicResource G2Fs11}" Foreground="{DynamicResource G2Sub}" VerticalAlignment="Center" Text="F" />
             <TextBlock FontFamily="{StaticResource G2Mono}" FontSize="{DynamicResource G2Fs12_5}" FontWeight="Medium" VerticalAlignment="Center" Text="{Binding F}" />
-            <TextBlock Margin="14,0,4,0" FontSize="{DynamicResource G2Fs11}" Foreground="{StaticResource G2Sub}" VerticalAlignment="Center" Text="셔터" />
+            <TextBlock Margin="14,0,4,0" FontSize="{DynamicResource G2Fs11}" Foreground="{DynamicResource G2Sub}" VerticalAlignment="Center" Text="셔터" />
             <TextBlock FontFamily="{StaticResource G2Mono}" FontSize="{DynamicResource G2Fs12_5}" FontWeight="Medium" VerticalAlignment="Center" Text="{Binding E}" />
-            <TextBlock Margin="14,0,4,0" FontSize="{DynamicResource G2Fs11}" Foreground="{StaticResource G2Sub}" VerticalAlignment="Center" Text="ISO" />
+            <TextBlock Margin="14,0,4,0" FontSize="{DynamicResource G2Fs11}" Foreground="{DynamicResource G2Sub}" VerticalAlignment="Center" Text="ISO" />
             <TextBlock FontFamily="{StaticResource G2Mono}" FontSize="{DynamicResource G2Fs12_5}" FontWeight="Medium" VerticalAlignment="Center" Text="{Binding Iso}" Margin="0,0,10,0" />
           </StackPanel>
           <TextBlock FontFamily="{StaticResource G2Mono}" FontSize="{DynamicResource G2Fs12_5}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Text="{Binding Name}" />
@@ -185,10 +185,10 @@
     </Grid>
 
     <!-- ===== slim bar above thumbnails ===== -->
-    <Border Grid.Row="1" Height="36" Background="{StaticResource G2Panel}" BorderBrush="{StaticResource G2Line}" BorderThickness="0,1,0,0" Padding="10,0" Visibility="{Binding Source={x:Static Core:ServiceProvider.Branding}, Path=ShowThumbPanel, Converter={StaticResource BooleanToVisibilityConverter}}">
+    <Border Grid.Row="1" Height="36" Background="{DynamicResource G2Panel}" BorderBrush="{DynamicResource G2Line}" BorderThickness="0,1,0,0" Padding="10,0" Visibility="{Binding Source={x:Static Core:ServiceProvider.Branding}, Path=ShowThumbPanel, Converter={StaticResource BooleanToVisibilityConverter}}">
       <DockPanel>
         <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
-          <TextBlock FontFamily="{StaticResource G2Mono}" FontSize="{DynamicResource G2Fs11_5}" Foreground="{StaticResource G2Sub}" VerticalAlignment="Center">
+          <TextBlock FontFamily="{StaticResource G2Mono}" FontSize="{DynamicResource G2Fs11_5}" Foreground="{DynamicResource G2Sub}" VerticalAlignment="Center">
             <Run Text="{Binding SelectedPhotoIndex, Mode=OneWay}" /><Run Text=" / " /><Run Text="{Binding ElementName=ImageLIstBox, Path=Items.Count, Mode=OneWay}" />
           </TextBlock>
         </StackPanel>
@@ -204,7 +204,7 @@
           <TextBlock Text="이 세션 사진" FontSize="{DynamicResource G2Fs12}" FontWeight="Bold" VerticalAlignment="Center" Margin="2,0,16,0" />
           <Button ToolTip="이전 사진" Command="{Binding PrevImageCommand}"><Viewbox Width="16" Height="16"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoArrowL}" /></Viewbox></Button>
           <Button ToolTip="다음 사진" Command="{Binding NextImageCommand}"><Viewbox Width="16" Height="16"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoArrowR}" /></Viewbox></Button>
-          <Border Width="1" Height="16" Background="{StaticResource G2Line}" Margin="0,0,12,0" />
+          <Border Width="1" Height="16" Background="{DynamicResource G2Line}" Margin="0,0,12,0" />
           <StackPanel Orientation="Horizontal" Visibility="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=ShowThumbUpDown, Converter={StaticResource BooleanToVisibilityConverter}}">
             <ToggleButton Width="28" Height="28" ToolTip="별로예요" IsChecked="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=SelectedBitmap.FileItem.IsUnLiked}"><Viewbox Width="16" Height="16"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoThumbDown}" /></Viewbox></ToggleButton>
             <ToggleButton Width="28" Height="28" ToolTip="좋아요" IsChecked="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=SelectedBitmap.FileItem.IsLiked}"><Viewbox Width="16" Height="16"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoThumbUp}" /></Viewbox></ToggleButton>
@@ -216,7 +216,7 @@
           <Button ToolTip="{translation:Translate LabelShowInExplorer}" Command="{Binding Path=OpenExplorerCommand}"><Viewbox Width="16" Height="16"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoExplorer}" /></Viewbox></Button>
           <Button ToolTip="{translation:Translate LabelRestoreFromBackup}" Command="{Binding Path=RestoreCommand}" IsEnabled="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=SelectedBitmap.FileItem.HaveBackupFile}"><Viewbox Width="16" Height="16"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoRestore}" /></Viewbox></Button>
           <Button Width="NaN" Padding="6,0" ToolTip="{translation:Translate LabelOpenLightroom}" Command="{Binding OpenInLightroomCommand}" Visibility="{Binding LightroomIsInstalled, Converter={StaticResource BooleanToVisibilityConverter}}"><TextBlock Text="Lr" FontFamily="{StaticResource G2Mono}" FontSize="{DynamicResource G2Fs12}" FontWeight="SemiBold" /></Button>
-          <Button Foreground="{StaticResource G2Err}" ToolTip="삭제 · 체크한 사진 전부 (체크가 없으면 선택한 사진)" Command="{Binding Path=DeleteItemCommand}"><Viewbox Width="16" Height="16"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoTrash}" /></Viewbox></Button>
+          <Button Foreground="{DynamicResource G2Err}" ToolTip="삭제 · 체크한 사진 전부 (체크가 없으면 선택한 사진)" Command="{Binding Path=DeleteItemCommand}"><Viewbox Width="16" Height="16"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoTrash}" /></Viewbox></Button>
           <ItemsControl ItemsSource="{Binding PanelPlugins}" VerticalAlignment="Center">
             <ItemsControl.ItemTemplate>
               <DataTemplate>
@@ -234,7 +234,7 @@
     </Border>
 
     <!-- ===== same-session thumbnails ===== -->
-    <ListBox Name="ImageLIstBox" Grid.Row="2" Padding="14,10,14,8" Background="{StaticResource G2Panel}" BorderThickness="0" VirtualizingPanel.IsVirtualizing="True" IsSynchronizedWithCurrentItem="True" Focusable="False" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Disabled" ItemContainerStyle="{StaticResource G2ThumbItem}" ItemTemplate="{StaticResource G2ThumbTemplate}" ItemsSource="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=DefaultSession.Files, IsAsync=True}">
+    <ListBox Name="ImageLIstBox" Grid.Row="2" Padding="14,10,14,8" Background="{DynamicResource G2Panel}" BorderThickness="0" VirtualizingPanel.IsVirtualizing="True" IsSynchronizedWithCurrentItem="True" Focusable="False" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Disabled" ItemContainerStyle="{StaticResource G2ThumbItem}" ItemTemplate="{StaticResource G2ThumbTemplate}" ItemsSource="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=DefaultSession.Files, IsAsync=True}">
       <ListBox.Template>
         <ControlTemplate TargetType="ListBox">
           <Border Background="{TemplateBinding Background}">

@@ -59,6 +59,7 @@ internal static class CloriumLightControl
 					Thread.Sleep(500);
 				}
 			}
+			ApplyTheme(ServiceProvider.Settings.UseDarkScreen);
 			PowerAsync(true, 30000).Wait();
 		});
 	}
@@ -66,8 +67,44 @@ internal static class CloriumLightControl
 	// Rail button: bring the running app forward, or start it.
 	public static void OpenWindow()
 	{
-		if (Send("{\"command\":\"show\"}", 300, 3000)?.GetProperty("ok").GetBoolean() == true) return;
-		Launch(showErrors: true);
+		if (Send("{\"command\":\"show\"}", 300, 3000)?.GetProperty("ok").GetBoolean() == true)
+		{
+			ApplyTheme(ServiceProvider.Settings.UseDarkScreen);
+			return;
+		}
+		if (Launch(showErrors: true)) ApplyThemeWhenReady();
+	}
+
+	// 클로리움 설정 > 테마 (밝은/어두운 화면) for the light app window. A light app without the theme command (before
+	// 0.7.11) answers "unknown command"; that is only logged.
+	public static void ApplyTheme(bool dark)
+	{
+		if (Enabled) ApplyThemeAsync(dark);
+	}
+
+	internal static Task<bool> ApplyThemeAsync(bool dark)
+	{
+		return Task.Run(() =>
+		{
+			JsonElement? response = Send("{\"command\":\"theme\",\"dark\":" + (dark ? "true" : "false") + "}", 300, 5000);
+			Log.Debug("CloriumLight : theme " + (dark ? "dark" : "light") + " -> " + (response?.GetRawText() ?? "not reachable"));
+			return response != null && response.Value.TryGetProperty("ok", out JsonElement ok) && ok.ValueKind == JsonValueKind.True;
+		});
+	}
+
+	// After a launch: wait for the control pipe, then send the theme.
+	private static void ApplyThemeWhenReady()
+	{
+		Task.Run(() =>
+		{
+			DateTime deadline = DateTime.Now.AddSeconds(30);
+			while (!IsRunning())
+			{
+				if (DateTime.Now > deadline) return;
+				Thread.Sleep(500);
+			}
+			ApplyTheme(ServiceProvider.Settings.UseDarkScreen);
+		});
 	}
 
 	// Power every registered light. Returns false (and logs) on any failure or timeout.

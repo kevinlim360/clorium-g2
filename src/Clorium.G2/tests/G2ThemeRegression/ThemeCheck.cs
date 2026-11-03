@@ -91,6 +91,19 @@ class ThemeCheck
 			}
 			dark.SetValue(null, false, null);
 
+			// 바로 전환: a window opened light turns dark (and back) without reopening.
+			MethodInfo apply = g2.GetType("CameraControl.Classes.G2Palette", true).GetMethod("Apply");
+			var live = (Window)Activator.CreateInstance(license);
+			live.Show(); Pump(300);
+			Check("open window starts light", Bg(live).R > 0xE0);
+			apply.Invoke(null, new object[] { true }); Pump(300);
+			Snapshot(live, Path.Combine(outDir, "license-live-dark.png"));
+			var liveState = (TextBlock)live.FindName("StateText");
+			Check("same window is dark at once (" + Bg(live) + ", label " + ((SolidColorBrush)((TextBlock)((StackPanel)live.Content).Children[0]).Foreground).Color + ")", Bg(live).R < 0x30 && ((SolidColorBrush)((TextBlock)((StackPanel)live.Content).Children[0]).Foreground).Color.R > 0xC0);
+			apply.Invoke(null, new object[] { false }); Pump(300);
+			Check("and light again", Bg(live).R > 0xE0);
+			live.Close();
+
 			// 정사각형 판 keyword on a measurement copy: the same calls as MainWindow.WriteMetadata.
 			string value = "clorium-scale:v1;board=500;sx=0.2;sy=0.2001;kh=0.01;kv=0;rot=0.1;h=1,0,0,0,1,0,0,0,1;corners=1,1,2,1,2,2,1,2;at=2026-11-03T12:00:00";
 			BitmapFrame frame;

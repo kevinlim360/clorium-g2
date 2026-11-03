@@ -1,13 +1,16 @@
+using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Media;
 
 namespace CameraControl.Classes;
 
-// G2 colour tokens for 밝은 화면 / 어두운 화면 (클로리움 설정 > 화면과 언어 > 테마). Merged first by styles/g2theme.xaml, so
-// every StaticResource G2* colour in the G2 windows resolves here. Dark is read once at start-up (App), so switching the
-// theme takes effect after a restart. Dark values follow the Codex dark design (preview-comparison/palette.txt).
+// G2 colour tokens for 밝은 화면 / 어두운 화면 (클로리움 설정 > 화면과 언어 > 테마). Merged first by styles/g2theme.xaml; the
+// G2 windows use them as DynamicResource, so Apply() switches every open window at once (no restart). Dark values
+// follow the Codex dark design (preview-comparison/palette.txt).
 public sealed class G2Palette : ResourceDictionary
 {
+	// Value for dictionaries created from now on; Apply() also refreshes the live ones.
 	public static bool Dark { get; set; }
 
 	// key, light, dark (ARGB)
@@ -40,15 +43,71 @@ public sealed class G2Palette : ResourceDictionary
 		("G2OnAccent", 0xFFFFFFFF, 0xFFFFFFFF),
 	};
 
+	// Every window merges its own copy of g2theme.xaml (and so of the palette); Apply() refreshes them all.
+	private static readonly List<WeakReference<ResourceDictionary>> Live = new List<WeakReference<ResourceDictionary>>();
+
 	public G2Palette()
+	{
+		Fill();
+		Register(this);
+	}
+
+	private void Fill()
 	{
 		foreach (var t in Tokens)
 		{
-			var brush = new SolidColorBrush(ToColor(Dark ? t.Dark : t.Light));
-			brush.Freeze();
-			Add(t.Key, brush);
+			this[t.Key] = Frozen(ToColor(Dark ? t.Dark : t.Light));
 		}
-		Add("G2AccentColor", ToColor(Dark ? 0xFF3D7EF0 : 0xFF1F5FD6));
+		this["G2AccentColor"] = ToColor(Dark ? 0xFF3D7EF0 : 0xFF1F5FD6);
+	}
+
+	internal static void Register(ResourceDictionary dictionary)
+	{
+		lock (Live)
+		{
+			Live.RemoveAll(r => !r.TryGetTarget(out _));
+			Live.Add(new WeakReference<ResourceDictionary>(dictionary));
+		}
+	}
+
+	// 클로리움 설정 테마 선택: switches the G2 windows (DynamicResource) and the embedded legacy brushes now.
+	public static void Apply(bool dark)
+	{
+		Dark = dark;
+		List<ResourceDictionary> live = new List<ResourceDictionary>();
+		lock (Live)
+		{
+			Live.RemoveAll(r => !r.TryGetTarget(out _));
+			foreach (var r in Live)
+			{
+				if (r.TryGetTarget(out ResourceDictionary d)) live.Add(d);
+			}
+		}
+		foreach (ResourceDictionary d in live)
+		{
+			if (d is G2Palette palette) palette.Fill();
+			else if (d is G2MaterialOverrides overrides) overrides.Fill();
+		}
+	}
+
+	private static bool? _applied;
+
+	// Settings.UseDarkScreen -> G2 windows, MaterialDesign windows and the Clorium Light Control app, when it changed.
+	public static void ApplyScreenTheme()
+	{
+		bool dark = CameraControl.Core.ServiceProvider.Settings?.UseDarkScreen == true;
+		if (_applied == dark) return;
+		_applied = dark;
+		Apply(dark);
+		CameraControl.Core.ServiceProvider.WindowsManager?.ApplyTheme();
+		CloriumLightControl.ApplyTheme(dark);
+	}
+
+	internal static SolidColorBrush Frozen(Color color)
+	{
+		var brush = new SolidColorBrush(color);
+		brush.Freeze();
+		return brush;
 	}
 
 	public static Color ToColor(uint argb) => Color.FromArgb((byte)(argb >> 24), (byte)(argb >> 16), (byte)(argb >> 8), (byte)argb);
@@ -62,7 +121,7 @@ public sealed class G2Palette : ResourceDictionary
 				return Dark ? t.Dark : t.Light;
 			}
 		}
-		throw new System.ArgumentException("unknown G2 colour " + key);
+		throw new ArgumentException("unknown G2 colour " + key);
 	}
 }
 
@@ -83,11 +142,15 @@ public sealed class G2MaterialOverrides : ResourceDictionary
 
 	public G2MaterialOverrides()
 	{
+		Fill();
+		G2Palette.Register(this);
+	}
+
+	internal void Fill()
+	{
 		foreach (var m in Map)
 		{
-			var brush = new SolidColorBrush(G2Palette.ToColor(G2Palette.Value(m.Token)));
-			brush.Freeze();
-			Add(m.Key, brush);
+			this[m.Key] = G2Palette.Frozen(G2Palette.ToColor(G2Palette.Value(m.Token)));
 		}
 	}
 }

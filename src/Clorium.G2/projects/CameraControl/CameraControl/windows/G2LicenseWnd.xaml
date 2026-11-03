@@ -23,17 +23,17 @@
           <RowDefinition Height="Auto" />
           <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" Foreground="{StaticResource G2Sub}" Text="상태" Margin="0,0,0,10" />
+        <TextBlock Grid.Row="0" Foreground="{DynamicResource G2Sub}" Text="상태" Margin="0,0,0,10" />
         <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Margin="0,0,0,10">
-          <Border x:Name="StateChip" CornerRadius="10" Padding="10,2" Background="{StaticResource G2OkBg}">
-            <TextBlock x:Name="StateText" FontWeight="SemiBold" Foreground="{StaticResource G2Ok}" Text="확인 중" />
+          <Border x:Name="StateChip" CornerRadius="10" Padding="10,2" Background="{DynamicResource G2OkBg}">
+            <TextBlock x:Name="StateText" FontWeight="SemiBold" Foreground="{DynamicResource G2Ok}" Text="확인 중" />
           </Border>
         </StackPanel>
-        <TextBlock Grid.Row="1" Foreground="{StaticResource G2Sub}" Text="라이선스 방식" Margin="0,0,0,10" />
+        <TextBlock Grid.Row="1" Foreground="{DynamicResource G2Sub}" Text="라이선스 방식" Margin="0,0,0,10" />
         <TextBlock Grid.Row="1" Grid.Column="1" Margin="0,0,0,10" TextWrapping="Wrap" Text="PC 고정 키 파일 (D:\)" />
-        <TextBlock Grid.Row="2" Foreground="{StaticResource G2Sub}" Text="키 파일" Margin="0,0,0,10" />
+        <TextBlock Grid.Row="2" Foreground="{DynamicResource G2Sub}" Text="키 파일" Margin="0,0,0,10" />
         <TextBlock x:Name="KeyFileText" Grid.Row="2" Grid.Column="1" Margin="0,0,0,10" TextWrapping="Wrap" FontFamily="{StaticResource G2Mono}" Text="-" />
-        <TextBlock Grid.Row="3" Foreground="{StaticResource G2Sub}" Text="프로그램 버전" />
+        <TextBlock Grid.Row="3" Foreground="{DynamicResource G2Sub}" Text="프로그램 버전" />
         <TextBlock x:Name="VersionText" Grid.Row="3" Grid.Column="1" FontFamily="{StaticResource G2Mono}" Text="-" />
       </Grid>
     </Border>
@@ -47,7 +47,7 @@
         <TextBox x:Name="IdentifierBox" IsReadOnly="True" TextWrapping="Wrap" MinHeight="64" FontFamily="{StaticResource G2Mono}" />
       </StackPanel>
     </Border>
-    <TextBlock x:Name="ErrorText" Style="{StaticResource G2Caption}" Margin="0,10,0,0" TextWrapping="Wrap" Foreground="{StaticResource G2Err}" Visibility="Collapsed" />
+    <TextBlock x:Name="ErrorText" Style="{StaticResource G2Caption}" Margin="0,10,0,0" TextWrapping="Wrap" Foreground="{DynamicResource G2Err}" Visibility="Collapsed" />
     <TextBlock Style="{StaticResource G2Caption}" Margin="0,10,0,0" TextWrapping="Wrap" Text="서버 인증·PC 이전을 지원하는 관리형 라이선스는 준비 중입니다." />
     <Button Style="{StaticResource G2PrimaryButton}" HorizontalAlignment="Right" Margin="0,14,0,0" MinWidth="90" Content="닫기" IsCancel="True" IsDefault="True" Click="Close_Click" />
   </StackPanel>

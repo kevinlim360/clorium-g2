@@ -96,12 +96,12 @@
   <Style x:Key="G2SectionTitle" TargetType="TextBlock">
     <Setter Property="FontSize" Value="{DynamicResource G2Fs13_5}" />
     <Setter Property="FontWeight" Value="Bold" />
-    <Setter Property="Foreground" Value="{StaticResource G2Text}" />
+    <Setter Property="Foreground" Value="{DynamicResource G2Text}" />
     <Setter Property="VerticalAlignment" Value="Center" />
   </Style>
   <Style x:Key="G2Caption" TargetType="TextBlock">
     <Setter Property="FontSize" Value="{DynamicResource G2Fs11_5}" />
-    <Setter Property="Foreground" Value="{StaticResource G2Sub}" />
+    <Setter Property="Foreground" Value="{DynamicResource G2Sub}" />
   </Style>
 
   <!-- ===== buttons ===== -->
@@ -112,10 +112,10 @@
     </Border>
     <ControlTemplate.Triggers>
       <Trigger Property="IsMouseOver" Value="True">
-        <Setter TargetName="bd" Property="Background" Value="{StaticResource G2Hover}" />
+        <Setter TargetName="bd" Property="Background" Value="{DynamicResource G2Hover}" />
       </Trigger>
       <Trigger Property="IsPressed" Value="True">
-        <Setter TargetName="bd" Property="Background" Value="{StaticResource G2AccentSoft}" />
+        <Setter TargetName="bd" Property="Background" Value="{DynamicResource G2AccentSoft}" />
       </Trigger>
       <Trigger Property="IsEnabled" Value="False">
         <Setter Property="Opacity" Value="0.4" />
@@ -129,7 +129,7 @@
     <Setter Property="Background" Value="Transparent" />
     <Setter Property="BorderBrush" Value="Transparent" />
     <Setter Property="BorderThickness" Value="0" />
-    <Setter Property="Foreground" Value="{StaticResource G2Text}" />
+    <Setter Property="Foreground" Value="{DynamicResource G2Text}" />
     <Setter Property="FontFamily" Value="{StaticResource G2Font}" />
     <Setter Property="FontSize" Value="{DynamicResource G2Fs12_5}" />
     <Setter Property="HorizontalContentAlignment" Value="Center" />
@@ -145,7 +145,7 @@
     <Setter Property="Width" Value="{DynamicResource G2RailBtnW}" />
     <Setter Property="Height" Value="{DynamicResource G2RailBtnH}" />
     <Setter Property="Margin" Value="0,2" />
-    <Setter Property="Foreground" Value="{StaticResource G2Sub}" />
+    <Setter Property="Foreground" Value="{DynamicResource G2Sub}" />
     <Setter Property="FontSize" Value="{DynamicResource G2Fs11}" />
   </Style>
 
@@ -160,8 +160,8 @@
   <Style x:Key="G2GhostButton" TargetType="Button" BasedOn="{StaticResource G2ButtonBase}">
     <Setter Property="Height" Value="32" />
     <Setter Property="Padding" Value="12,0" />
-    <Setter Property="Background" Value="{StaticResource G2Panel}" />
-    <Setter Property="BorderBrush" Value="{StaticResource G2Line}" />
+    <Setter Property="Background" Value="{DynamicResource G2Panel}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource G2Line}" />
     <Setter Property="BorderThickness" Value="1" />
   </Style>
 
@@ -169,8 +169,8 @@
   <Style x:Key="G2TileButton" TargetType="Button" BasedOn="{StaticResource G2ButtonBase}">
     <Setter Property="Tag" Value="12" />
     <Setter Property="Height" Value="70" />
-    <Setter Property="Background" Value="{StaticResource G2Panel2}" />
-    <Setter Property="BorderBrush" Value="{StaticResource G2Line}" />
+    <Setter Property="Background" Value="{DynamicResource G2Panel2}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource G2Line}" />
     <Setter Property="BorderThickness" Value="1" />
   </Style>
 
@@ -180,13 +180,13 @@
     <Setter Property="Width" Value="{DynamicResource G2ToolTileW}" />
     <Setter Property="Height" Value="{DynamicResource G2ToolTileH}" />
     <Setter Property="Margin" Value="2" />
-    <Setter Property="Foreground" Value="{StaticResource G2Sub}" />
+    <Setter Property="Foreground" Value="{DynamicResource G2Sub}" />
     <Setter Property="FontSize" Value="{DynamicResource G2Fs11}" />
   </Style>
 
   <Style x:Key="G2PrimaryButton" TargetType="Button">
     <Setter Property="Foreground" Value="White" />
-    <Setter Property="Background" Value="{StaticResource G2Accent}" />
+    <Setter Property="Background" Value="{DynamicResource G2Accent}" />
     <Setter Property="FontFamily" Value="{StaticResource G2Font}" />
     <Setter Property="Cursor" Value="Hand" />
     <Setter Property="FocusVisualStyle" Value="{x:Null}" />
@@ -198,10 +198,10 @@
           </Border>
           <ControlTemplate.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-              <Setter TargetName="bd" Property="Background" Value="{StaticResource G2AccentHover}" />
+              <Setter TargetName="bd" Property="Background" Value="{DynamicResource G2AccentHover}" />
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
-              <Setter TargetName="bd" Property="Background" Value="{StaticResource G2SwitchOff}" />
+              <Setter TargetName="bd" Property="Background" Value="{DynamicResource G2SwitchOff}" />
             </Trigger>
           </ControlTemplate.Triggers>
         </ControlTemplate>
@@ -210,11 +210,11 @@
   </Style>
 
   <Style x:Key="G2IconToggle" TargetType="ToggleButton" BasedOn="{StaticResource G2ButtonBase}">
-    <Setter Property="Foreground" Value="{StaticResource G2Sub}" />
+    <Setter Property="Foreground" Value="{DynamicResource G2Sub}" />
     <Style.Triggers>
       <Trigger Property="IsChecked" Value="True">
-        <Setter Property="Foreground" Value="{StaticResource G2Accent}" />
-        <Setter Property="Background" Value="{StaticResource G2AccentSoft}" />
+        <Setter Property="Foreground" Value="{DynamicResource G2Accent}" />
+        <Setter Property="Background" Value="{DynamicResource G2AccentSoft}" />
       </Trigger>
     </Style.Triggers>
   </Style>
@@ -223,7 +223,7 @@
   <Style x:Key="G2Switch" TargetType="ToggleButton">
     <Setter Property="Cursor" Value="Hand" />
     <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-    <Setter Property="Foreground" Value="{StaticResource G2Text}" />
+    <Setter Property="Foreground" Value="{DynamicResource G2Text}" />
     <Setter Property="FontFamily" Value="{StaticResource G2Font}" />
     <Setter Property="FontSize" Value="{DynamicResource G2Fs12_5}" />
     <Setter Property="Background" Value="Transparent" />
@@ -232,7 +232,7 @@
         <ControlTemplate TargetType="ToggleButton">
           <Border Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
             <DockPanel>
-              <Border x:Name="pill" DockPanel.Dock="Right" Width="34" Height="20" CornerRadius="10" Background="{StaticResource G2SwitchOff}" Padding="2" VerticalAlignment="Center" Margin="8,0,0,0">
+              <Border x:Name="pill" DockPanel.Dock="Right" Width="34" Height="20" CornerRadius="10" Background="{DynamicResource G2SwitchOff}" Padding="2" VerticalAlignment="Center" Margin="8,0,0,0">
                 <Ellipse x:Name="knob" Width="16" Height="16" Fill="White" HorizontalAlignment="Left" />
               </Border>
               <ContentPresenter VerticalAlignment="Center" RecognizesAccessKey="True" />
@@ -240,7 +240,7 @@
           </Border>
           <ControlTemplate.Triggers>
             <Trigger Property="IsChecked" Value="True">
-              <Setter TargetName="pill" Property="Background" Value="{StaticResource G2Accent}" />
+              <Setter TargetName="pill" Property="Background" Value="{DynamicResource G2Accent}" />
               <Setter TargetName="knob" Property="HorizontalAlignment" Value="Right" />
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
@@ -256,7 +256,7 @@
   <Style x:Key="G2Segment" TargetType="RadioButton">
     <Setter Property="Cursor" Value="Hand" />
     <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-    <Setter Property="Foreground" Value="{StaticResource G2Sub}" />
+    <Setter Property="Foreground" Value="{DynamicResource G2Sub}" />
     <Setter Property="FontFamily" Value="{StaticResource G2Font}" />
     <Setter Property="FontSize" Value="{DynamicResource G2Fs12}" />
     <Setter Property="Template">
@@ -267,12 +267,12 @@
           </Border>
           <ControlTemplate.Triggers>
             <Trigger Property="IsChecked" Value="True">
-              <Setter TargetName="bd" Property="Background" Value="{StaticResource G2Panel}" />
-              <Setter Property="Foreground" Value="{StaticResource G2Accent}" />
+              <Setter TargetName="bd" Property="Background" Value="{DynamicResource G2Panel}" />
+              <Setter Property="Foreground" Value="{DynamicResource G2Accent}" />
               <Setter Property="FontWeight" Value="SemiBold" />
             </Trigger>
             <Trigger Property="IsMouseOver" Value="True">
-              <Setter Property="Foreground" Value="{StaticResource G2Text}" />
+              <Setter Property="Foreground" Value="{DynamicResource G2Text}" />
             </Trigger>
           </ControlTemplate.Triggers>
         </ControlTemplate>
@@ -284,7 +284,7 @@
   <Style x:Key="G2CheckBox" TargetType="CheckBox">
     <Setter Property="Cursor" Value="Hand" />
     <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-    <Setter Property="Foreground" Value="{StaticResource G2Text}" />
+    <Setter Property="Foreground" Value="{DynamicResource G2Text}" />
     <Setter Property="FontFamily" Value="{StaticResource G2Font}" />
     <Setter Property="FontSize" Value="{DynamicResource G2Fs12_5}" />
     <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -292,15 +292,15 @@
       <Setter.Value>
         <ControlTemplate TargetType="CheckBox">
           <StackPanel Orientation="Horizontal" Background="Transparent">
-            <Border x:Name="box" Width="16" Height="16" CornerRadius="4" BorderThickness="1.5" BorderBrush="{StaticResource G2Line2}" Background="{StaticResource G2Panel}" VerticalAlignment="Center">
+            <Border x:Name="box" Width="16" Height="16" CornerRadius="4" BorderThickness="1.5" BorderBrush="{DynamicResource G2Line2}" Background="{DynamicResource G2Panel}" VerticalAlignment="Center">
               <Path x:Name="mark" Data="M3.5,8 L6.5,11 L12.5,4.5" Stroke="White" StrokeThickness="2" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round" Visibility="Collapsed" />
             </Border>
             <ContentPresenter x:Name="cp" Margin="7,0,0,0" VerticalAlignment="Center" RecognizesAccessKey="True" />
           </StackPanel>
           <ControlTemplate.Triggers>
             <Trigger Property="IsChecked" Value="True">
-              <Setter TargetName="box" Property="Background" Value="{StaticResource G2Accent}" />
-              <Setter TargetName="box" Property="BorderBrush" Value="{StaticResource G2Accent}" />
+              <Setter TargetName="box" Property="Background" Value="{DynamicResource G2Accent}" />
+              <Setter TargetName="box" Property="BorderBrush" Value="{DynamicResource G2Accent}" />
               <Setter TargetName="mark" Property="Visibility" Value="Visible" />
             </Trigger>
             <Trigger Property="Content" Value="{x:Null}">
@@ -317,20 +317,20 @@
 
   <!-- ===== cards / lists ===== -->
   <Style x:Key="G2Card" TargetType="Border">
-    <Setter Property="Background" Value="{StaticResource G2Panel}" />
-    <Setter Property="BorderBrush" Value="{StaticResource G2Line}" />
+    <Setter Property="Background" Value="{DynamicResource G2Panel}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource G2Line}" />
     <Setter Property="BorderThickness" Value="1" />
     <Setter Property="CornerRadius" Value="12" />
     <Setter Property="Padding" Value="12,10" />
   </Style>
   <Style x:Key="G2Divider" TargetType="Border">
     <Setter Property="Height" Value="1" />
-    <Setter Property="Background" Value="{StaticResource G2Line}" />
+    <Setter Property="Background" Value="{DynamicResource G2Line}" />
     <Setter Property="SnapsToDevicePixels" Value="True" />
   </Style>
 
   <Style x:Key="G2ListItem" TargetType="ListBoxItem">
-    <Setter Property="Foreground" Value="{StaticResource G2Text}" />
+    <Setter Property="Foreground" Value="{DynamicResource G2Text}" />
     <Setter Property="FocusVisualStyle" Value="{x:Null}" />
     <Setter Property="Cursor" Value="Hand" />
     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -343,11 +343,11 @@
           </Border>
           <ControlTemplate.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-              <Setter TargetName="bd" Property="Background" Value="{StaticResource G2Panel2}" />
+              <Setter TargetName="bd" Property="Background" Value="{DynamicResource G2Panel2}" />
             </Trigger>
             <Trigger Property="IsSelected" Value="True">
-              <Setter TargetName="bd" Property="Background" Value="{StaticResource G2AccentSoft}" />
-              <Setter TargetName="bd" Property="BorderBrush" Value="{StaticResource G2Accent}" />
+              <Setter TargetName="bd" Property="Background" Value="{DynamicResource G2AccentSoft}" />
+              <Setter TargetName="bd" Property="BorderBrush" Value="{DynamicResource G2Accent}" />
               <Setter Property="FontWeight" Value="Bold" />
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
@@ -362,7 +362,7 @@
     <Setter Property="Background" Value="Transparent" />
     <Setter Property="BorderThickness" Value="0" />
     <Setter Property="Padding" Value="0" />
-    <Setter Property="Foreground" Value="{StaticResource G2Text}" />
+    <Setter Property="Foreground" Value="{DynamicResource G2Text}" />
     <Setter Property="FontFamily" Value="{StaticResource G2Font}" />
     <Setter Property="FontSize" Value="{DynamicResource G2Fs12_5}" />
     <Setter Property="ItemContainerStyle" Value="{StaticResource G2ListItem}" />
@@ -381,7 +381,7 @@
 
   <!-- ===== expander (section with chevron) ===== -->
   <Style x:Key="G2Expander" TargetType="Expander">
-    <Setter Property="Foreground" Value="{StaticResource G2Text}" />
+    <Setter Property="Foreground" Value="{DynamicResource G2Text}" />
     <Setter Property="FontFamily" Value="{StaticResource G2Font}" />
     <Setter Property="Template">
       <Setter.Value>
@@ -392,7 +392,7 @@
                 <ControlTemplate TargetType="ToggleButton">
                   <Border x:Name="hb" Background="Transparent" CornerRadius="7" Padding="2,0,4,0">
                     <DockPanel>
-                      <Path x:Name="chev" DockPanel.Dock="Right" Width="24" Height="24" Data="{StaticResource G2IcoChevron}" Stroke="{StaticResource G2Sub}" StrokeThickness="1.8" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round" RenderTransformOrigin="0.5,0.5">
+                      <Path x:Name="chev" DockPanel.Dock="Right" Width="24" Height="24" Data="{StaticResource G2IcoChevron}" Stroke="{DynamicResource G2Sub}" StrokeThickness="1.8" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round" RenderTransformOrigin="0.5,0.5">
                         <Path.LayoutTransform>
                           <ScaleTransform ScaleX="0.7" ScaleY="0.7" />
                         </Path.LayoutTransform>
@@ -405,7 +405,7 @@
                   </Border>
                   <ControlTemplate.Triggers>
                     <Trigger Property="IsMouseOver" Value="True">
-                      <Setter TargetName="hb" Property="Background" Value="{StaticResource G2Panel2}" />
+                      <Setter TargetName="hb" Property="Background" Value="{DynamicResource G2Panel2}" />
                     </Trigger>
                     <Trigger Property="IsChecked" Value="True">
                       <Setter TargetName="chev" Property="RenderTransform">
@@ -433,7 +433,7 @@
 
   <!-- ===== combo box ===== -->
   <Style x:Key="G2ComboItem" TargetType="ComboBoxItem">
-    <Setter Property="Foreground" Value="{StaticResource G2Text}" />
+    <Setter Property="Foreground" Value="{DynamicResource G2Text}" />
     <Setter Property="FontFamily" Value="{StaticResource G2Font}" />
     <Setter Property="FontSize" Value="{DynamicResource G2Fs12_5}" />
     <Setter Property="FocusVisualStyle" Value="{x:Null}" />
@@ -445,11 +445,11 @@
           </Border>
           <ControlTemplate.Triggers>
             <Trigger Property="IsHighlighted" Value="True">
-              <Setter TargetName="bd" Property="Background" Value="{StaticResource G2Panel2}" />
+              <Setter TargetName="bd" Property="Background" Value="{DynamicResource G2Panel2}" />
             </Trigger>
             <Trigger Property="IsSelected" Value="True">
-              <Setter TargetName="bd" Property="Background" Value="{StaticResource G2AccentSoft}" />
-              <Setter Property="Foreground" Value="{StaticResource G2Accent}" />
+              <Setter TargetName="bd" Property="Background" Value="{DynamicResource G2AccentSoft}" />
+              <Setter Property="Foreground" Value="{DynamicResource G2Accent}" />
             </Trigger>
           </ControlTemplate.Triggers>
         </ControlTemplate>
@@ -457,9 +457,9 @@
     </Setter>
   </Style>
   <Style x:Key="G2ComboBox" TargetType="ComboBox">
-    <Setter Property="Foreground" Value="{StaticResource G2Text}" />
-    <Setter Property="Background" Value="{StaticResource G2Panel2}" />
-    <Setter Property="BorderBrush" Value="{StaticResource G2Line}" />
+    <Setter Property="Foreground" Value="{DynamicResource G2Text}" />
+    <Setter Property="Background" Value="{DynamicResource G2Panel2}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource G2Line}" />
     <Setter Property="FontFamily" Value="{StaticResource G2Mono}" />
     <Setter Property="FontSize" Value="{DynamicResource G2Fs12_5}" />
     <Setter Property="Height" Value="30" />
@@ -475,7 +475,7 @@
               <ToggleButton.Template>
                 <ControlTemplate TargetType="ToggleButton">
                   <Border x:Name="bd" CornerRadius="7" BorderThickness="1" Background="{Binding Background, RelativeSource={RelativeSource AncestorType=ComboBox}}" BorderBrush="{Binding BorderBrush, RelativeSource={RelativeSource AncestorType=ComboBox}}">
-                    <Path HorizontalAlignment="Right" Margin="0,0,4,0" Width="24" Height="24" Data="{StaticResource G2IcoChevron}" Stroke="{StaticResource G2Sub}" StrokeThickness="1.8" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round">
+                    <Path HorizontalAlignment="Right" Margin="0,0,4,0" Width="24" Height="24" Data="{StaticResource G2IcoChevron}" Stroke="{DynamicResource G2Sub}" StrokeThickness="1.8" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round">
                       <Path.LayoutTransform>
                         <ScaleTransform ScaleX="0.6" ScaleY="0.6" />
                       </Path.LayoutTransform>
@@ -483,10 +483,10 @@
                   </Border>
                   <ControlTemplate.Triggers>
                     <Trigger Property="IsMouseOver" Value="True">
-                      <Setter TargetName="bd" Property="BorderBrush" Value="{StaticResource G2Line2}" />
+                      <Setter TargetName="bd" Property="BorderBrush" Value="{DynamicResource G2Line2}" />
                     </Trigger>
                     <Trigger Property="IsChecked" Value="True">
-                      <Setter TargetName="bd" Property="BorderBrush" Value="{StaticResource G2Accent}" />
+                      <Setter TargetName="bd" Property="BorderBrush" Value="{DynamicResource G2Accent}" />
                     </Trigger>
                   </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -494,7 +494,7 @@
             </ToggleButton>
             <ContentPresenter Margin="10,0,24,0" VerticalAlignment="Center" HorizontalAlignment="Left" IsHitTestVisible="False" Content="{TemplateBinding SelectionBoxItem}" ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" />
             <Popup x:Name="PART_Popup" Placement="Bottom" AllowsTransparency="True" Focusable="False" PopupAnimation="None" VerticalOffset="4" IsOpen="{TemplateBinding IsDropDownOpen}">
-              <Border MinWidth="{Binding ActualWidth, RelativeSource={RelativeSource TemplatedParent}}" MaxHeight="{TemplateBinding MaxDropDownHeight}" Margin="0,0,8,8" Padding="4" CornerRadius="9" Background="{StaticResource G2Panel}" BorderBrush="{StaticResource G2Line2}" BorderThickness="1">
+              <Border MinWidth="{Binding ActualWidth, RelativeSource={RelativeSource TemplatedParent}}" MaxHeight="{TemplateBinding MaxDropDownHeight}" Margin="0,0,8,8" Padding="4" CornerRadius="9" Background="{DynamicResource G2Panel}" BorderBrush="{DynamicResource G2Line2}" BorderThickness="1">
                 <Border.Effect>
                   <DropShadowEffect BlurRadius="14" ShadowDepth="3" Opacity="0.2" />
                 </Border.Effect>
@@ -516,16 +516,16 @@
 
   <!-- ===== text box ===== -->
   <Style x:Key="G2TextBox" TargetType="TextBox">
-    <Setter Property="Foreground" Value="{StaticResource G2Text}" />
-    <Setter Property="Background" Value="{StaticResource G2Panel2}" />
-    <Setter Property="BorderBrush" Value="{StaticResource G2Line}" />
+    <Setter Property="Foreground" Value="{DynamicResource G2Text}" />
+    <Setter Property="Background" Value="{DynamicResource G2Panel2}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource G2Line}" />
     <Setter Property="BorderThickness" Value="1" />
     <Setter Property="FontFamily" Value="{StaticResource G2Font}" />
     <Setter Property="FontSize" Value="{DynamicResource G2Fs12_5}" />
     <Setter Property="Padding" Value="8,0" />
     <Setter Property="MinHeight" Value="30" />
     <Setter Property="VerticalContentAlignment" Value="Center" />
-    <Setter Property="CaretBrush" Value="{StaticResource G2Accent}" />
+    <Setter Property="CaretBrush" Value="{DynamicResource G2Accent}" />
     <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate TargetType="TextBox">
@@ -534,7 +534,7 @@
           </Border>
           <ControlTemplate.Triggers>
             <Trigger Property="IsKeyboardFocused" Value="True">
-              <Setter TargetName="bd" Property="BorderBrush" Value="{StaticResource G2Accent}" />
+              <Setter TargetName="bd" Property="BorderBrush" Value="{DynamicResource G2Accent}" />
             </Trigger>
           </ControlTemplate.Triggers>
         </ControlTemplate>
@@ -565,16 +565,16 @@
         <ControlTemplate TargetType="Slider">
           <Track x:Name="PART_Track">
             <Track.DecreaseRepeatButton>
-              <RepeatButton Style="{StaticResource G2SliderRepeat}" Background="{StaticResource G2Accent}" Command="Slider.DecreaseLarge" />
+              <RepeatButton Style="{StaticResource G2SliderRepeat}" Background="{DynamicResource G2Accent}" Command="Slider.DecreaseLarge" />
             </Track.DecreaseRepeatButton>
             <Track.IncreaseRepeatButton>
-              <RepeatButton Style="{StaticResource G2SliderRepeat}" Background="{StaticResource G2Line}" Command="Slider.IncreaseLarge" />
+              <RepeatButton Style="{StaticResource G2SliderRepeat}" Background="{DynamicResource G2Line}" Command="Slider.IncreaseLarge" />
             </Track.IncreaseRepeatButton>
             <Track.Thumb>
               <Thumb>
                 <Thumb.Template>
                   <ControlTemplate TargetType="Thumb">
-                    <Ellipse Width="16" Height="16" Fill="White" Stroke="{StaticResource G2Accent}" StrokeThickness="2" />
+                    <Ellipse Width="16" Height="16" Fill="White" Stroke="{DynamicResource G2Accent}" StrokeThickness="2" />
                   </ControlTemplate>
                 </Thumb.Template>
               </Thumb>
@@ -590,10 +590,10 @@
     <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate TargetType="Thumb">
-          <Border x:Name="t" CornerRadius="3" Background="{StaticResource G2Thumb}" />
+          <Border x:Name="t" CornerRadius="3" Background="{DynamicResource G2Thumb}" />
           <ControlTemplate.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-              <Setter TargetName="t" Property="Background" Value="{StaticResource G2Line2}" />
+              <Setter TargetName="t" Property="Background" Value="{DynamicResource G2Line2}" />
             </Trigger>
           </ControlTemplate.Triggers>
         </ControlTemplate>
@@ -662,12 +662,12 @@
   <Style x:Key="G2ContextMenu" TargetType="ContextMenu">
     <Setter Property="FontFamily" Value="{StaticResource G2Font}" />
     <Setter Property="FontSize" Value="{DynamicResource G2Fs13}" />
-    <Setter Property="Foreground" Value="{StaticResource G2Text}" />
+    <Setter Property="Foreground" Value="{DynamicResource G2Text}" />
     <Setter Property="HasDropShadow" Value="True" />
     <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate TargetType="ContextMenu">
-          <Border Margin="0,0,10,10" Padding="5" CornerRadius="10" Background="{StaticResource G2Panel}" BorderBrush="{StaticResource G2Line2}" BorderThickness="1">
+          <Border Margin="0,0,10,10" Padding="5" CornerRadius="10" Background="{DynamicResource G2Panel}" BorderBrush="{DynamicResource G2Line2}" BorderThickness="1">
             <Border.Effect>
               <DropShadowEffect BlurRadius="18" ShadowDepth="4" Opacity="0.22" />
             </Border.Effect>
@@ -678,7 +678,7 @@
     </Setter>
   </Style>
   <Style x:Key="G2MenuItem" TargetType="MenuItem">
-    <Setter Property="Foreground" Value="{StaticResource G2Text}" />
+    <Setter Property="Foreground" Value="{DynamicResource G2Text}" />
     <Setter Property="FontFamily" Value="{StaticResource G2Font}" />
     <Setter Property="FontSize" Value="{DynamicResource G2Fs13}" />
     <Setter Property="FocusVisualStyle" Value="{x:Null}" />
@@ -688,20 +688,20 @@
           <Grid>
             <Border x:Name="bd" MinWidth="200" Height="32" CornerRadius="6" Background="Transparent" Padding="10,0,8,0">
               <DockPanel>
-                <Path x:Name="sub" DockPanel.Dock="Right" Width="24" Height="24" Data="{StaticResource G2IcoChevronR}" Stroke="{StaticResource G2Sub}" StrokeThickness="1.8" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round" Visibility="Collapsed">
+                <Path x:Name="sub" DockPanel.Dock="Right" Width="24" Height="24" Data="{StaticResource G2IcoChevronR}" Stroke="{DynamicResource G2Sub}" StrokeThickness="1.8" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round" Visibility="Collapsed">
                   <Path.LayoutTransform>
                     <ScaleTransform ScaleX="0.6" ScaleY="0.6" />
                   </Path.LayoutTransform>
                 </Path>
-                <TextBlock x:Name="gesture" DockPanel.Dock="Right" Margin="16,0,0,0" VerticalAlignment="Center" FontFamily="{StaticResource G2Mono}" FontSize="{DynamicResource G2Fs11}" Foreground="{StaticResource G2Sub}" Text="{TemplateBinding InputGestureText}" />
-                <Border x:Name="check" DockPanel.Dock="Left" Width="16" Height="16" Margin="0,0,8,0" CornerRadius="4" BorderThickness="1.5" BorderBrush="{StaticResource G2Line2}" VerticalAlignment="Center" Visibility="Collapsed">
+                <TextBlock x:Name="gesture" DockPanel.Dock="Right" Margin="16,0,0,0" VerticalAlignment="Center" FontFamily="{StaticResource G2Mono}" FontSize="{DynamicResource G2Fs11}" Foreground="{DynamicResource G2Sub}" Text="{TemplateBinding InputGestureText}" />
+                <Border x:Name="check" DockPanel.Dock="Left" Width="16" Height="16" Margin="0,0,8,0" CornerRadius="4" BorderThickness="1.5" BorderBrush="{DynamicResource G2Line2}" VerticalAlignment="Center" Visibility="Collapsed">
                   <Path x:Name="mark" Data="M3.5,8 L6.5,11 L12.5,4.5" Stroke="White" StrokeThickness="2" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Visibility="Collapsed" />
                 </Border>
                 <ContentPresenter ContentSource="Header" VerticalAlignment="Center" RecognizesAccessKey="True" />
               </DockPanel>
             </Border>
             <Popup x:Name="PART_Popup" Placement="Right" HorizontalOffset="2" VerticalOffset="-6" AllowsTransparency="True" Focusable="False" IsOpen="{Binding IsSubmenuOpen, RelativeSource={RelativeSource TemplatedParent}}">
-              <Border Margin="0,0,10,10" Padding="5" CornerRadius="10" Background="{StaticResource G2Panel}" BorderBrush="{StaticResource G2Line2}" BorderThickness="1">
+              <Border Margin="0,0,10,10" Padding="5" CornerRadius="10" Background="{DynamicResource G2Panel}" BorderBrush="{DynamicResource G2Line2}" BorderThickness="1">
                 <Border.Effect>
                   <DropShadowEffect BlurRadius="18" ShadowDepth="4" Opacity="0.22" />
                 </Border.Effect>
@@ -717,15 +717,15 @@
               <Setter TargetName="check" Property="Visibility" Value="Visible" />
             </Trigger>
             <Trigger Property="IsChecked" Value="True">
-              <Setter TargetName="check" Property="Background" Value="{StaticResource G2Accent}" />
-              <Setter TargetName="check" Property="BorderBrush" Value="{StaticResource G2Accent}" />
+              <Setter TargetName="check" Property="Background" Value="{DynamicResource G2Accent}" />
+              <Setter TargetName="check" Property="BorderBrush" Value="{DynamicResource G2Accent}" />
               <Setter TargetName="mark" Property="Visibility" Value="Visible" />
             </Trigger>
             <Trigger Property="IsHighlighted" Value="True">
-              <Setter TargetName="bd" Property="Background" Value="{StaticResource G2Panel2}" />
+              <Setter TargetName="bd" Property="Background" Value="{DynamicResource G2Panel2}" />
             </Trigger>
             <Trigger Property="IsSubmenuOpen" Value="True">
-              <Setter TargetName="bd" Property="Background" Value="{StaticResource G2AccentSoft}" />
+              <Setter TargetName="bd" Property="Background" Value="{DynamicResource G2AccentSoft}" />
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
               <Setter Property="Opacity" Value="0.45" />
@@ -739,7 +739,7 @@
     <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate TargetType="Separator">
-          <Border Height="1" Margin="6,4" Background="{StaticResource G2Line}" />
+          <Border Height="1" Margin="6,4" Background="{DynamicResource G2Line}" />
         </ControlTemplate>
       </Setter.Value>
     </Setter>
@@ -779,7 +779,7 @@
   <Style TargetType="MenuItem" BasedOn="{StaticResource G2MenuItem}" />
   <Style x:Key="{x:Static MenuItem.SeparatorStyleKey}" TargetType="Separator" BasedOn="{StaticResource G2MenuSeparator}" />
   <Style TargetType="Label">
-    <Setter Property="Foreground" Value="{StaticResource G2Text}" />
+    <Setter Property="Foreground" Value="{DynamicResource G2Text}" />
     <Setter Property="FontFamily" Value="{StaticResource G2Font}" />
     <Setter Property="Padding" Value="0" />
   </Style>

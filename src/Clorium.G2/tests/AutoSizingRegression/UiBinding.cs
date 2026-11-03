@@ -242,7 +242,25 @@ class UiBinding
 		foreach (string f in new[] { "CameraControl/MainWindow.xaml", "CameraControl/windows/SettingsWnd.xaml", "CameraControl/windows/G2LicenseWnd.xaml" })
 			literal += Regex.Matches(File.ReadAllText(Path.Combine(root, "projects/CameraControl", f)), "(Background|Foreground|BorderBrush)=\"#FF(FFFFFF|F3F4F6|16181C|E3ECFB|FFF1DF|EEF0F3)\"").Count;
 		Check("no pinned light colours left on G2 window surfaces", literal == 0);
+
+		// 테마 바로 전환: colour tokens are DynamicResource and Apply() refreshes palettes that already exist.
+		int staticTokens = 0;
+		foreach (string f in new[] { "CameraControl/MainWindow.xaml", "CameraControl/windows/SettingsWnd.xaml", "CameraControl/windows/G2LicenseWnd.xaml", "CameraControl/windows/G2ColorAdjustWnd.xaml", "CameraControl/Layouts/LayoutNormal.xaml", "CameraControl/Controls/Controler.xaml", "styles/g2theme.xaml" })
+			staticTokens += Regex.Matches(File.ReadAllText(Path.Combine(root, "projects/CameraControl", f)), "StaticResource G2(Page|Panel2?|Hover|Line2?|Stage|Overlay|Text|Sub|Accent(Hover|Soft)?|Pr(Bg|Text)?|Ok(Bg)?|Err|SwitchOff|Neutral(Text)?|Thumb|OnAccent)\\}").Count;
+		Check("G2 colour tokens are DynamicResource everywhere (" + staticTokens + " static left)", staticTokens == 0);
+		var apply = palette.GetMethod("Apply");
+		var existing = make("G2Palette"); var existingMd = make("G2MaterialOverrides");
+		apply.Invoke(null, new object[] { true });
+		Check("Apply(dark) switches palettes that are already open", C(existing, "G2Page") == "#FF101113" && C(existing, "G2Text") == "#FFF1F3F5" && C(existingMd, "MaterialDesignPaper") == "#FF101113");
+		apply.Invoke(null, new object[] { false });
+		Check("Apply(light) switches them back", C(existing, "G2Page") == "#FFF3F4F6" && C(existingMd, "MaterialDesignPaper") == "#FFF3F4F6");
+		string settingsCs = File.ReadAllText(Path.Combine(root, "projects/CameraControl/CameraControl/windows/SettingsWnd.xaml.cs"));
+		Check("theme choice applies at once (no restart chip) and on close", !Regex.IsMatch(xamlOf("windows/SettingsWnd.xaml"), "Tag=\"테마 [^\"]*\">(?:(?!</Border>).)*재시작", RegexOptions.Singleline) && settingsCs.Contains("e.PropertyName == \"UseDarkScreen\"") && settingsCs.Contains("G2Palette.ApplyScreenTheme()"));
+		string lightCs = File.ReadAllText(Path.Combine(root, "projects/CameraControl/CameraControl/Classes/CloriumLightControl.cs"));
+		Check("light app gets the theme (start, open, setting change)", lightCs.Contains("\\\"command\\\":\\\"theme\\\",\\\"dark\\\":") && Regex.Matches(lightCs, "ApplyTheme\\(ServiceProvider.Settings.UseDarkScreen\\)").Count >= 3);
 	}
+
+	static string xamlOf(string rel) { return File.ReadAllText(Path.Combine(root, "projects/CameraControl/CameraControl", rel)); }
 
 	static int Find(byte[] data, byte[] pattern)
 	{

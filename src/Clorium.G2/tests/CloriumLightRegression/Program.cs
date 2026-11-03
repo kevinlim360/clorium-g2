@@ -20,7 +20,7 @@ namespace CameraControl.Devices
 }
 namespace CameraControl.Core
 {
-	public class Settings { public bool UseCloriumLight = true; public string CloriumLightPath = ""; }
+	public class Settings { public bool UseCloriumLight = true; public string CloriumLightPath = ""; public bool UseDarkScreen; }
 	public static class ServiceProvider { public static Settings Settings = new Settings(); }
 }
 
@@ -67,6 +67,9 @@ static class Program
 				Thread.Sleep(shot * 40); // 0 = still queued, later = already sent to the light app
 				Check("next shot's on wins over pending off #" + shot, CloriumLightControl.PowerAsync(true, 10000).Result);
 			}
+			// 밝은/어두운 화면 from G2 (light app 0.7.11+): switches the light app window, returns to light afterwards.
+			Check("theme dark accepted by the light app", CloriumLightControl.ApplyThemeAsync(true).Result);
+			Check("theme light accepted by the light app", CloriumLightControl.ApplyThemeAsync(false).Result);
 			var older = CloriumLightControl.PowerAsync(false, 10000);
 			var newer = CloriumLightControl.PowerAsync(true, 10000);
 			Check("latest request applied, none hang", newer.Result && older.Wait(12000));
