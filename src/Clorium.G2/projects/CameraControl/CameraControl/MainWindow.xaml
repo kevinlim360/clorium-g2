@@ -366,10 +366,10 @@
               <TextBlock Text="조명" HorizontalAlignment="Center" Margin="0,4,0,0" />
             </StackPanel>
           </Button>
-          <Button Style="{StaticResource G2RailButton}" ToolTip="{T:Translate LabelColorCompensation}" Click="but_ColorCompensation_Click">
+          <Button Name="but_ImageAdjust" Style="{StaticResource G2RailButton}" ToolTip="이미지보정 (노출·색감·템플릿·폴더 일괄)" Click="but_ImageAdjust_Click" Visibility="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=UseImageAdjust, Converter={StaticResource BooleanToVisibilityConverter1}}">
             <StackPanel>
               <Viewbox Width="22" Height="22" HorizontalAlignment="Center"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoDrop}" /></Viewbox>
-              <TextBlock Text="색보정" HorizontalAlignment="Center" Margin="0,4,0,0" />
+              <TextBlock Text="이미지보정" HorizontalAlignment="Center" Margin="0,4,0,0" />
             </StackPanel>
           </Button>
           <Button Name="but_AIRemoveBg" Style="{StaticResource G2RailButton}" ToolTip="배경제거 (Matting Studio)" Click="but_AIRemoveBg_Click" Visibility="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=UseBackgroundRemoval, Converter={StaticResource BooleanToVisibilityConverter1}}">

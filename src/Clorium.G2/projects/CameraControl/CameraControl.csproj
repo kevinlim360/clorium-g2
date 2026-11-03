@@ -53,7 +53,6 @@
     <Page Remove="CameraControl/windows/BrowseWnd.xaml" />
     <Page Remove="CameraControl/windows/BulbWnd.xaml" />
     <Page Remove="CameraControl/windows/CameraPropertyWnd.xaml" />
-    <Page Remove="CameraControl/windows/ColorCompensationWnd.xaml" />
     <Page Remove="CameraControl/windows/DownloadPhotosWnd.xaml" />
     <Page Remove="CameraControl/windows/EditSession.xaml" />
     <Page Remove="CameraControl/windows/EditTagWnd.xaml" />
@@ -115,7 +114,6 @@
     <Page Include="CameraControl/windows/BrowseWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/browsewnd.xaml" />
     <Page Include="CameraControl/windows/BulbWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/bulbwnd.xaml" />
     <Page Include="CameraControl/windows/CameraPropertyWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/camerapropertywnd.xaml" />
-    <Page Include="CameraControl/windows/ColorCompensationWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/colorcompensationwnd.xaml" />
     <Page Include="CameraControl/windows/DownloadPhotosWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/downloadphotoswnd.xaml" />
     <Page Include="CameraControl/windows/EditSession.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/editsession.xaml" />
     <Page Include="CameraControl/windows/EditTagWnd.xaml" Generator="MSBuild:Compile" SubType="Designer" LogicalName="windows/edittagwnd.xaml" />

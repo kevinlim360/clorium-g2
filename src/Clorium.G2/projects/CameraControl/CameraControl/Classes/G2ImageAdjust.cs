@@ -322,7 +322,7 @@ namespace CameraControl.Classes
 		{
 			if (image.ColorSpace == ColorSpace.CMYK)
 			{
-				throw new NotSupportedException("CMYK 이미지는 색보정을 지원하지 않습니다. RGB 사진을 사용해 주세요.");
+				throw new NotSupportedException("CMYK 이미지는 이미지보정을 지원하지 않습니다. RGB 사진을 사용해 주세요.");
 			}
 			bool gray = image.ColorType == ColorType.Grayscale || image.ColorType == ColorType.GrayscaleAlpha || image.ColorType == ColorType.Bilevel;
 			if (gray && (s.ChangesColorBalance || s.Saturation > 1e-9))
@@ -339,13 +339,13 @@ namespace CameraControl.Classes
 		public static MagickImage Load(string path)
 		{
 			if (!File.Exists(path)) throw new FileNotFoundException("사진 파일을 찾을 수 없습니다.", path);
-			if (!IsSupportedFile(path)) throw new NotSupportedException("JPEG, PNG, TIFF, BMP 사진만 색보정할 수 있습니다. RAW 파일은 지원하지 않습니다.");
+			if (!IsSupportedFile(path)) throw new NotSupportedException("JPEG, PNG, TIFF, BMP 사진만 이미지보정할 수 있습니다. RAW 파일은 지원하지 않습니다.");
 			var image = new MagickImage(path);
 			try
 			{
 				if (image.ColorSpace == ColorSpace.CMYK)
 				{
-					throw new NotSupportedException("CMYK 이미지는 색보정을 지원하지 않습니다. RGB 사진을 사용해 주세요.");
+					throw new NotSupportedException("CMYK 이미지는 이미지보정을 지원하지 않습니다. RGB 사진을 사용해 주세요.");
 				}
 				image.AutoOrient();
 				return image;

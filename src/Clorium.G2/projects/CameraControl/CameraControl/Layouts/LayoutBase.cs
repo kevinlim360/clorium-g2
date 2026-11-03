@@ -459,9 +459,6 @@ public class LayoutBase : UserControl
 			case "ViewExplorer":
 				OpenInExplorer();
 				break;
-			case "ViewColorCompensation":
-				OpenColorCompensation();
-				break;
 			case "RefreshDisplay":
 				if (LayoutViewModel.ZoomIndex == 0)
 				{
@@ -564,15 +561,5 @@ public class LayoutBase : UserControl
 	public void Button_Click_2(object sender, RoutedEventArgs e)
 	{
 		MediaElement.Stop();
-	}
-
-	private void OpenColorCompensation()
-	{
-		Log.Debug("OpenColorCompensation Click");
-		ColorCompensationWnd wnd = new ColorCompensationWnd();
-		wnd.pathfilename = ServiceProvider.Settings.SelectedBitmap.FileItem.FileName;
-		if (wnd.ShowDialog() != true)
-		{
-		}
 	}
 }

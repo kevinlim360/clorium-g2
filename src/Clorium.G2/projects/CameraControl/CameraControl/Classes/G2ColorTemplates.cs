@@ -112,7 +112,20 @@ namespace CameraControl.Classes
 				}
 				if (File.Exists(FilePath))
 				{
-					File.Replace(temp, FilePath, null);
+					// The file just written may still be held for a moment (virus scan, indexer, the previous save):
+					// File.Replace then fails with "unable to remove the file to be replaced". Retry briefly.
+					for (int attempt = 0; ; attempt++)
+					{
+						try
+						{
+							File.Replace(temp, FilePath, null);
+							break;
+						}
+						catch (Exception ex) when ((ex is IOException || ex is UnauthorizedAccessException) && attempt < 9)
+						{
+							Thread.Sleep(50 * (attempt + 1));
+						}
+					}
 				}
 				else
 				{
@@ -245,7 +258,7 @@ namespace CameraControl.Classes
 			G2AdjustSettings s = settings.Clone();
 			var log = new StringBuilder();
 			DateTime started = DateTime.Now;
-			log.AppendLine("Clorium G2 색보정 일괄 적용");
+			log.AppendLine("Clorium G2 이미지보정 일괄 적용");
 			log.AppendLine("시작: " + started.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture));
 			log.AppendLine("템플릿: " + (templateName ?? "(이름 없음)"));
 			log.AppendLine("보정값: " + s.Describe());

@@ -86,7 +86,9 @@ class UiBinding
 		string mainCs = File.ReadAllText(Path.Combine(root, "projects/CameraControl/CameraControl/MainWindow.xaml.cs"));
 		Check("legacy launcher and exit kill removed from source", !mainCs.Contains("Program Files (x86)\\\\\\\\Clorium\\\\Clorium AutoSizing") && !mainCs.Contains("GetProcessesByName(\"Clorium AutoSizing\")"));
 		BackgroundRemoval(s, mainCs);
+		ImageAdjust(s, mainCs);
 		byte[] exe = File.ReadAllBytes(Path.Combine(bin, "CameraControl.exe"));
+		Check("built CameraControl.exe has no ColorCompensationWnd, contains the 이미지보정 window and client", Find(exe, Encoding.UTF8.GetBytes("ColorCompensationWnd")) < 0 && Find(exe, Encoding.Unicode.GetBytes("Clorium_ColorCompensation.json")) < 0 && Find(exe, Encoding.UTF8.GetBytes("G2ColorAdjustWnd")) >= 0 && Find(exe, Encoding.UTF8.GetBytes("CloriumImageAdjust")) >= 0);
 		Check("built CameraControl.exe has no PhotoScissors/PhotoRoom", Find(exe, Encoding.Unicode.GetBytes("PhotoScissors.exe")) < 0 && Find(exe, Encoding.Unicode.GetBytes("photoroom.com")) < 0 && Find(exe, Encoding.UTF8.GetBytes("RemoveBackgroundWnd")) < 0);
 		Check("built CameraControl.exe contains the Matting Studio client", Find(exe, Encoding.UTF8.GetBytes("CloriumBackgroundRemoval")) >= 0 && Find(exe, Encoding.Unicode.GetBytes("http://127.0.0.1:8765")) >= 0);
 		Check("built CameraControl.exe has no legacy AutoSizing path", Find(exe, Encoding.Unicode.GetBytes("Clorium\\Clorium AutoSizing.exe")) < 0);
@@ -121,6 +123,36 @@ class UiBinding
 		Check("old windows removed from the project", !csproj.Contains("RemoveBackgroundWnd") && !File.Exists(Path.Combine(root, "projects/CameraControl/CameraControl/ViewModel/AIRemoveBackgroundViewModel.cs")));
 		string presets = File.ReadAllText(Path.Combine(root, "projects/CameraControl/CameraControl/windows/SettingsWnd.G2.cs"));
 		Check("presets copy UseBackgroundRemoval, not the removed options", presets.Contains("\"UseBackgroundRemoval\"") && !presets.Contains("\"ShowRemoveBg\"") && !presets.Contains("\"ModeBgPng\""));
+	}
+
+	// 2026-11-03 이미지보정: the G2ColorAdjustWnd rail button is switched by 클로리움 설정; ColorCompensationWnd is removed.
+	static void ImageAdjust(Settings s, string mainCs)
+	{
+		Check("이미지보정 is off by default", !new Settings().UseImageAdjust);
+		s.UseImageAdjust = false;
+		var railXml = Element("MainWindow.xaml", "but_ImageAdjust");
+		Check("rail label is 이미지보정 and bound to Settings.UseImageAdjust", railXml.GetElementsByTagName("TextBlock").Cast<XmlElement>().Any(t => t.GetAttribute("Text") == "이미지보정") && railXml.GetAttribute("Visibility").Contains("ServiceProvider.Settings") && railXml.GetAttribute("Visibility").Contains("Path=UseImageAdjust") && railXml.GetAttribute("Click") == "but_ImageAdjust_Click");
+		var rail = (Button)Parse(railXml, "Style", "Click");
+		var switchXml = Element("windows/SettingsWnd.xaml", "G2Feat_imageadjust");
+		var toggle = (CheckBox)Parse(switchXml, "Style"); toggle.DataContext = s;
+		Pump(); Check("이미지보정 rail hidden and switch OFF while disabled", rail.Visibility == Visibility.Collapsed && toggle.IsChecked == false);
+		toggle.IsChecked = true; Pump(); Check("switch ON shows the 이미지보정 rail button", s.UseImageAdjust && rail.Visibility == Visibility.Visible);
+		toggle.IsChecked = false; Pump(); Check("switch OFF hides it again", !s.UseImageAdjust && rail.Visibility == Visibility.Collapsed);
+		s.UseImageAdjust = true; Pump(); Check("이미지보정 set from code updates switch and rail", toggle.IsChecked == true && rail.Visibility == Visibility.Visible);
+		var card = switchXml; while (card != null && card.GetAttribute("Style") != "{StaticResource G2Card}") card = card.ParentNode as XmlElement;
+		Check("이미지보정 card has the template folder row", card != null && card.OuterXml.Contains("Btn_ImageAdjustTemplates_Click") && card.OuterXml.Contains("color-templates.xml"));
+		var loaded = JsonConvert.DeserializeObject<Settings>(JsonConvert.SerializeObject(s));
+		var xs = new System.Xml.Serialization.XmlSerializer(typeof(Settings)); var w = new StringWriter(); xs.Serialize(w, s);
+		Check("JSON and XML settings persist UseImageAdjust", loaded.UseImageAdjust && ((Settings)xs.Deserialize(new StringReader(w.ToString()))).UseImageAdjust);
+		Check("older settings file without the key stays OFF", !JsonConvert.DeserializeObject<Settings>("{}").UseImageAdjust);
+		Check("rail handler opens through CloriumImageAdjust, legacy handler gone", mainCs.Contains("CloriumImageAdjust.Open(") && !mainCs.Contains("but_ColorCompensation_Click") && !mainCs.Contains("ColorCompensationWnd"));
+		string layouts = "";
+		foreach (string f in new[] { "LayoutGrid.xaml", "LayoutGridRight.xaml", "LayoutNormal.xaml", "LayoutBase.cs" }) layouts += File.ReadAllText(Path.Combine(root, "projects/CameraControl/CameraControl/Layouts", f));
+		Check("thumbnail menu item and handler for the old window removed", !layouts.Contains("ViewColorCompensation") && !layouts.Contains("ColorCompensationWnd"));
+		string csproj = File.ReadAllText(Path.Combine(root, "projects/CameraControl/CameraControl.csproj"));
+		string cc = Path.Combine(root, "projects/CameraControl/CameraControl");
+		Check("old window and view model removed from the project", !csproj.Contains("ColorCompensationWnd") && !File.Exists(Path.Combine(cc, "windows/ColorCompensationWnd.xaml")) && !File.Exists(Path.Combine(cc, "ViewModel/ColorCompensationViewModel.cs")) && csproj.Contains("G2ColorAdjustWnd.xaml"));
+		Check("presets copy UseImageAdjust", File.ReadAllText(Path.Combine(cc, "windows/SettingsWnd.G2.cs")).Contains("\"UseImageAdjust\""));
 	}
 
 	static int Find(byte[] data, byte[] pattern)

@@ -418,6 +418,26 @@
   </DockPanel>
 </Border></StackPanel>
   </StackPanel>
+</Border><Border Style="{StaticResource G2Card}" Padding="0" Margin="0,0,0,10" Tag="이미지보정 이미지 보정 색보정 노출 명도 대비 채도 색온도 틴트 레벨 템플릿 일괄 _cc 켜면 왼쪽 도구에 이미지보정 버튼이 나타납니다. 템플릿 저장 위치">
+  <StackPanel>
+    <DockPanel Margin="14,12,12,4">
+      <ContentControl DockPanel.Dock="Right" Focusable="False" VerticalAlignment="Center"><CheckBox x:Name="G2Feat_imageadjust" Style="{StaticResource G2Switch}" IsChecked="{Binding UseImageAdjust}" /></ContentControl>
+      <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+        <TextBlock Style="{StaticResource G2SectionTitle}" Text="이미지보정" />
+        <Border Style="{StaticResource G2Chip}" Background="#FFE3ECFB" Margin="8,0,0,0"><TextBlock Text="G2" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="#FF1F5FD6" /></Border>
+      </StackPanel>
+    </DockPanel>
+    <TextBlock Style="{StaticResource G2Caption}" TextWrapping="Wrap" Margin="14,0,14,10" Text="노출·명도·대비·채도·색온도/틴트·RGB 레벨을 보정하고 전후를 나란히 비교합니다. 켜면 왼쪽 도구에 이미지보정 버튼이 나타나고, 누르면 선택한 사진이 보정 창에 열립니다. 템플릿을 저장해 폴더 단위로 일괄 적용할 수 있으며, 원본은 그대로 두고 _cc 사본으로 저장합니다." />
+    <StackPanel Visibility="{Binding IsChecked, ElementName=G2Feat_imageadjust, Converter={StaticResource BooleanToVisibilityConverter}}"><Border Style="{StaticResource G2SetRow}" Tag="이미지보정 템플릿 저장 위치 ">
+  <DockPanel>
+    <ContentControl DockPanel.Dock="Right" VerticalAlignment="Center" Margin="12,0,0,0" Focusable="False"><Button Style="{StaticResource G2GhostButton}" Width="34" Padding="0" ToolTip="템플릿 폴더 열기" Click="Btn_ImageAdjustTemplates_Click"><Viewbox Width="16" Height="16"><Path Width="24" Height="24" Stroke="{StaticResource G2Sub}" StrokeThickness="1.8" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round" Data="M3,6 H10 L12,8 H21 V19 H3 Z" /></Viewbox></Button></ContentControl>
+    <StackPanel VerticalAlignment="Center">
+      <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="보정 템플릿 저장 위치" /></StackPanel>
+      <TextBlock Style="{StaticResource G2Caption}" TextWrapping="Wrap" Text="%APPDATA%\Clorium\G2\color-templates.xml (이 PC의 사용자별). 백업하거나 다른 PC로 옮길 때 이 파일을 복사합니다." />
+    </StackPanel>
+  </DockPanel>
+</Border></StackPanel>
+  </StackPanel>
 </Border><Border Style="{StaticResource G2Card}" Padding="0" Margin="0,0,0,10" Tag="오토사이징 치수 측정 AutoSizing 클로리움 오토사이징(Desk)으로 치수 사진을 열어 부위별 치수를 잽니다. 켜면 왼쪽 도구에 오토사이징 버튼이 나타납니다. 실행 파일 측정 스케일 기준 원판 크기">
   <StackPanel>
     <DockPanel Margin="14,12,12,4">

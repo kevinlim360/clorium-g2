@@ -793,23 +793,11 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 		lastPowerSaveTime = DateTime.Now;
 	}
 
-	private void but_ColorCompensation_Click(object sender, RoutedEventArgs e)
+	private void but_ImageAdjust_Click(object sender, RoutedEventArgs e)
 	{
-		Log.Debug("OpenColorCompensation Click");
-		// G2: new colour-correction window (Magick.NET engine). Saves a new file next to the original; never overwrites it.
-		string file = ServiceProvider.Settings?.SelectedBitmap?.FileItem?.FileName;
-		if (string.IsNullOrEmpty(file) || !File.Exists(file))
-		{
-			System.Windows.MessageBox.Show("색보정할 사진을 먼저 선택해 주세요.", "색보정");
-			return;
-		}
-		if (!G2ImageAdjust.IsSupportedFile(file))
-		{
-			System.Windows.MessageBox.Show("JPEG, PNG, TIFF, BMP 사진만 색보정할 수 있습니다. RAW 파일은 지원하지 않습니다.", "색보정");
-			return;
-		}
-		G2ColorAdjustWnd wnd = new G2ColorAdjustWnd(file) { Owner = this };
-		wnd.ShowDialog();
+		Log.Debug("Main ICON : ImageAdjust Click");
+		// G2 이미지보정 window (Magick.NET engine). Saves a new *_cc file next to the original; never overwrites it.
+		CloriumImageAdjust.Open(ServiceProvider.Settings?.SelectedBitmap?.FileItem?.FileName, this);
 	}
 
 	private void ExternProcess_Close()

@@ -104,6 +104,25 @@ public partial class SettingsWnd : Window, IComponentConnector
 		}
 	}
 
+	private void Btn_ImageAdjustTemplates_Click(object sender, RoutedEventArgs e)
+	{
+		// Folder of %APPDATA%\Clorium\G2\color-templates.xml; it only exists once a template was saved.
+		string folder = Path.GetDirectoryName(CameraControl.Classes.G2ColorTemplateStore.DefaultPath);
+		if (!Directory.Exists(folder))
+		{
+			System.Windows.MessageBox.Show("아직 저장한 보정 템플릿이 없습니다.\n\n" + folder, "이미지보정");
+			return;
+		}
+		try
+		{
+			Process.Start("explorer.exe", "\"" + folder + "\"");
+		}
+		catch (Exception ex)
+		{
+			System.Windows.MessageBox.Show("폴더를 열지 못했습니다.\n\n" + ex.Message, "이미지보정");
+		}
+	}
+
 	private void Btn_add_device_Click(object sender, RoutedEventArgs e)
 	{
 		if (ServiceProvider.ExternalDeviceManager.ExternalDevices.Count == 0)

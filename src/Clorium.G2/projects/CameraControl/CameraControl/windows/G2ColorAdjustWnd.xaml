@@ -3,7 +3,7 @@
   Clorium G2 · 색보정 (design A, light). Tokens/styles: styles/g2theme.xaml.
   Engine: Classes/G2ImageAdjust.cs (Magick.NET / ImageMagick). The original photo is never overwritten.
 -->
-<Window x:Class="CameraControl.windows.G2ColorAdjustWnd" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Title="색보정" Width="1320" Height="860" MinWidth="980" MinHeight="640" WindowStartupLocation="CenterOwner" ShowInTaskbar="False" Background="{DynamicResource G2Page}" FontFamily="{DynamicResource G2Font}" TextElement.Foreground="{DynamicResource G2Text}" TextElement.FontSize="13" TextOptions.TextFormattingMode="Ideal" UseLayoutRounding="True" SnapsToDevicePixels="True">
+<Window x:Class="CameraControl.windows.G2ColorAdjustWnd" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Title="이미지보정" Width="1320" Height="860" MinWidth="980" MinHeight="640" WindowStartupLocation="CenterOwner" ShowInTaskbar="False" Background="{DynamicResource G2Page}" FontFamily="{DynamicResource G2Font}" TextElement.Foreground="{DynamicResource G2Text}" TextElement.FontSize="13" TextOptions.TextFormattingMode="Ideal" UseLayoutRounding="True" SnapsToDevicePixels="True">
   <Window.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
@@ -91,7 +91,7 @@
           <Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoDrop}" Stroke="{StaticResource G2Accent}" />
         </Viewbox>
         <StackPanel Grid.Column="1" Orientation="Vertical" VerticalAlignment="Center">
-          <TextBlock x:Name="FileTitle" Style="{StaticResource G2SectionTitle}" Text="색보정" TextTrimming="CharacterEllipsis" />
+          <TextBlock x:Name="FileTitle" Style="{StaticResource G2SectionTitle}" Text="이미지보정" TextTrimming="CharacterEllipsis" />
           <TextBlock x:Name="FileInfoText" Style="{StaticResource G2Caption}" Margin="0,2,0,0" FontFamily="{StaticResource G2Mono}" Text="" TextTrimming="CharacterEllipsis" />
         </StackPanel>
         <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">

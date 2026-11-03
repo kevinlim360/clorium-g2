@@ -80,6 +80,7 @@ public partial class SettingsWnd
 			"UseAlwaysBackup",
 			"UseAutoSizing",
 			"UseBackgroundRemoval",
+			"UseImageAdjust",
 			"UseBarcodeScanner",
 			"UseCloriumLight",
 			"UseDatabase",

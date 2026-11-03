@@ -254,7 +254,6 @@
           </FrameworkElement.DataContext>
           <MenuItem CommandParameter="ViewExplorer" Header="{translation:Translate LabelShowInExplorer}" Command="{Binding SendCommand}" />
           <MenuItem CommandParameter="ViewExternal" Header="{translation:Translate LabelOpenInExternalViewer}" Command="{Binding SendCommand}" />
-          <MenuItem CommandParameter="ViewColorCompensation" Header="{translation:Translate LabelShowColorCompensation}" Command="{Binding SendCommand}" />
           <MenuItem CommandParameter="Del_Image" Header="{translation:Translate LabelDeleteFiles}" Command="{Binding SendCommand}" />
           <MenuItem Header="{translation:Translate LabelCopyFileNameClipboard}" Command="{Binding Path=CopyNameClipboardCommand}" />
         </ContextMenu>

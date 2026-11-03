@@ -120,6 +120,22 @@ public partial class Settings
         }
     }
 
+    private bool _useImageAdjust;
+
+    // G2: 이미지보정 — built-in colour correction window (G2ColorAdjustWnd, Magick.NET: templates, _cc batch, side-by-side).
+    // Replaces the removed ColorCompensationWnd (thumbnail menu, D:\Clorium Data\Clorium_ColorCompensation.json);
+    // ON shows the left-rail 이미지보정 button. Templates stay in %APPDATA%\Clorium\G2\color-templates.xml. Persisted; default off.
+    public bool UseImageAdjust
+    {
+        get => _useImageAdjust;
+        set
+        {
+            if (_useImageAdjust == value) return;
+            _useImageAdjust = value;
+            NotifyPropertyChanged("UseImageAdjust");
+        }
+    }
+
     // Main screen 조명 켜기/끄기 panel: the light app and/or the USB LED dimmer.
     [System.Xml.Serialization.XmlIgnore]
     [Newtonsoft.Json.JsonIgnore]

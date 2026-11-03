@@ -97,7 +97,7 @@ namespace CameraControl.windows
 			_addToSession = addToSession;
 			InitializeComponent();
 			FileTitle.Text = Path.GetFileName(sourceFile);
-			Title = "색보정 — " + Path.GetFileName(sourceFile);
+			Title = "이미지보정 — " + Path.GetFileName(sourceFile);
 			BuildRows();
 			LoadTemplates();
 			SetBusy(true, "사진을 불러오는 중…");
