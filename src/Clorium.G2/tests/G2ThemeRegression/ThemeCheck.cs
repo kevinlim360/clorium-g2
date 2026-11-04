@@ -158,25 +158,26 @@ class ThemeCheck
 			}
 			apply.Invoke(null, new object[] { false });
 
-			// 시작 화면: the Clorium logo animation at several moments (and its still last frame).
+			// 시작 화면: the Clorium intro control (real-time ribbon), captured while it plays; then CloseWhenReady.
 			ServiceProvider.Branding.ShowStartupScreenAnimation = true;
 			Type startup = g2.GetType("CameraControl.StartUpWindow", true);
 			var sw = (Window)Activator.CreateInstance(startup);
-			sw.Show(); Pump(300);
-			var introBoard = (System.Windows.Media.Animation.Storyboard)sw.Resources["Intro"];
-			foreach (double at in new[] { 0.3, 0.9, 1.6, 2.1, 2.6, 3.4 })
+			var clock = System.Diagnostics.Stopwatch.StartNew();
+			sw.Show();
+			foreach (double at in new[] { 0.6, 1.2, 1.9, 2.6, 3.3, 4.0, 4.7 })
 			{
-				introBoard.Begin(sw, true); introBoard.Pause(sw);
-				introBoard.Seek(sw, TimeSpan.FromSeconds(at), System.Windows.Media.Animation.TimeSeekOrigin.BeginTime); Pump(150);
+				while (clock.Elapsed.TotalSeconds < at) Pump(15);
 				Snapshot(sw, Path.Combine(outDir, "intro-" + at.ToString("0.0").Replace('.', '_') + "s.png"));
 			}
-			var lastLetter = (FrameworkElement)sw.FindName("Tg13");
-			Check("시작 화면: logo animation ends with CLORIUM and AI PHOTO STATION shown (last letter opacity " + lastLetter.Opacity + ")", lastLetter.Opacity > 0.99 && ((System.Windows.Media.ScaleTransform)sw.FindName("WipeScale")).ScaleX > 0.99 && ((System.Windows.Media.RotateTransform)sw.FindName("SymbolRotate")).Angle == 0);
+			var introControl = (FrameworkElement)sw.FindName("Intro");
+			var tags = (Panel)introControl.FindName("TagLayer");
+			double lastTag = tags.Children[tags.Children.Count - 1].Opacity, rib = ((UIElement)introControl.FindName("Rib0")).Opacity;
+			Check("시작 화면: intro ends with the logo ribbons, CLORIUM and AI PHOTO STATION (rib " + rib + ", last letter " + lastTag + ")", rib > 0.99 && lastTag > 0.99 && ((UIElement)introControl.FindName("WordLayer")).Clip != null);
 			DateTime closeStart = DateTime.Now;
 			startup.GetMethod("CloseWhenReady").Invoke(sw, null);
 			DateTime until4 = DateTime.Now.AddSeconds(8);
 			while (sw.IsVisible && DateTime.Now < until4) Pump(50);
-			Check("시작 화면 closes after the intro with a fade (" + (DateTime.Now - closeStart).TotalSeconds.ToString("0.0") + " s)", !sw.IsVisible);
+			Check("시작 화면 fades the logo out and closes once G2 is ready (" + (DateTime.Now - closeStart).TotalSeconds.ToString("0.0") + " s)", !sw.IsVisible && (DateTime.Now - closeStart).TotalSeconds < 2);
 
 			// 촬영음: the seven sounds next to the program, numbered 1..7, all playable (WAV and MP3).
 			Type sounds = typeof(Settings).Assembly.GetType("CameraControl.Core.Classes.ShutterSounds", true);
