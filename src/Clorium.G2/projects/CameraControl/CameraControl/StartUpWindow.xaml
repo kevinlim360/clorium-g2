@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
   Clorium G2 · 시작 화면 (로딩 중). The brand intro control Intro/CloriumIntro (CloriumIntro_WPF_Box, ribbon version C in a
-  square box, 50% white so the screen behind shows through: the window is transparent): a twisting ribbon flies in, wraps into the four logo ribbons, CLORIUM is wiped in and AI PHOTO STATION
+  no background: only the logo floats over the screen, the window is transparent): a twisting ribbon flies in, wraps into the four logo ribbons, CLORIUM is wiped in and AI PHOTO STATION
   drops in (4.4 s); while loading continues the symbol turns 90 degrees every 3 s. StartUpWindow.xaml.cs closes it.
 -->
 <Window x:Class="CameraControl.StartUpWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:intro="clr-namespace:CameraControl.Intro" Title="Clorium" Width="600" Height="600" ShowInTaskbar="False" Topmost="True" WindowStyle="None" ResizeMode="NoResize" WindowStartupLocation="Manual" AllowsTransparency="True" Background="Transparent" Loaded="Window_Loaded" ContentRendered="Window_ContentRendered">
   <Grid>
     <intro:CloriumIntro x:Name="Intro" AutoPlay="False" />
     <Image x:Name="BrandImage" Margin="40" Stretch="Uniform" Visibility="Collapsed" />
-    <TextBlock x:Name="VersionText" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,14,10" FontFamily="Consolas" FontSize="11" Foreground="#FF9AA3AE" />
+    <TextBlock x:Name="VersionText" Visibility="Collapsed" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,14,10" FontFamily="Consolas" FontSize="11" Foreground="#FF9AA3AE" />
   </Grid>
 </Window>

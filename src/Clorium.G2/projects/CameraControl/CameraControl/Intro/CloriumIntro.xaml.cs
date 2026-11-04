@@ -11,7 +11,7 @@ namespace CameraControl.Intro
 {
     /// <summary>
     /// CLORIUM 인트로 애니메이션 (C안 · 리본)
-    /// 정사각형 흰색 박스 안에서 재생되며, 박스 밖으로 나간 부분은 잘립니다.
+    /// 배경 없이 로고만 표시되며, 보이지 않는 정사각형 영역 밖으로 나간 부분은 잘립니다.
     ///  1) 박스 오른쪽 위 모서리에서 앞/뒷면이 있는 리본이 비틀리며 날아와 심볼 둘레를 한 바퀴 돎
     ///  2) 고리가 네 조각으로 나뉘어 원을 따라 휘감기며 꼬여, 로고 리본 윤곽이 됨 (RibbonFx)
     ///  3) 원본 벡터 리본으로 교체 → 하늘색 바가 지나가며 CLORIUM 공개
@@ -125,7 +125,7 @@ namespace CameraControl.Intro
             Complete();
         }
 
-        /// <summary>로딩이 끝났을 때 호출: 흰 박스는 그대로 두고 로고만 0.5초 동안 살짝 커지며 사라집니다.</summary>
+        /// <summary>로딩이 끝났을 때 호출: 로고가 0.5초 동안 살짝 커지며 사라집니다.</summary>
         public Task HideAsync()
         {
             var tcs = new TaskCompletionSource<bool>();

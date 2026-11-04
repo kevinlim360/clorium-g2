@@ -17,6 +17,12 @@ namespace CameraControl.Intro
     {
         public const double EndTime = 2.8;
 
+        /// <summary>
+        /// 변형 중 리본 조각 사이에 흰 분리선을 그릴지 여부. 배경이 투명하면 흰 선이 드러나므로 기본값 false.
+        /// 흰 배경 위에서 쓸 때만 true 로 바꾸세요.
+        /// </summary>
+        public bool ShowSeparators { get; set; }
+
         private const double CX = 879, CY = 482.5, R0 = 330;
         private const int K = 4;
         private const double ThetaTail = 160;               // 고리가 닫혔을 때 꼬리 각도(°)
@@ -176,7 +182,7 @@ namespace CameraControl.Intro
                     dc.DrawGeometry(br, pen, g);                       // 같은 색 테두리로 이음새 숨김
                 }
 
-                if (e > 0)                                            // 흰 분리선 (로고의 흰 틈)
+                if (ShowSeparators && e > 0)                          // 흰 분리선 (흰 배경 위에서만 사용)
                 {
                     var outline = new StreamGeometry();
                     using (var c = outline.Open())

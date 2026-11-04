@@ -3,10 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:CameraControl.Intro"
              Background="Transparent" SnapsToDevicePixels="False">
-    <!-- 정사각형 반투명 흰색 박스 (2200 x 2200 단위) — 컨트롤 크기에 맞춰 균일하게 확대/축소되고, 박스 밖은 잘립니다 -->
+    <!-- 정사각형 영역 (2200 x 2200 단위, 배경 없음) — 컨트롤 크기에 맞춰 균일하게 확대/축소되고, 박스 밖은 잘립니다 -->
     <Viewbox x:Name="RootViewbox" Stretch="Uniform">
-        <!-- 배경: 50% 투명한 흰색 (#80 = 알파 128) -->
-        <Border x:Name="Box" Width="2200" Height="2200" Background="#80FFFFFF" ClipToBounds="True">
+        <!-- 배경 없음: 로고만 표시 (정사각형 영역 밖으로 나간 리본만 잘림) -->
+        <Border x:Name="Box" Width="2200" Height="2200" Background="Transparent" ClipToBounds="True">
             <!-- 원본 .ai 좌표계 (1733 x 1523) 를 박스 가운데에 배치 -->
             <Canvas x:Name="Stage" Width="1733" Height="1523" HorizontalAlignment="Left" VerticalAlignment="Top"
                     Margin="234,339,0,0" RenderTransformOrigin="0.5,0.5">

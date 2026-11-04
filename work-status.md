@@ -1,5 +1,7 @@
 # 클로리움 G2 작업 기록
 
+2026-11-04 시작 화면 배경 없음(사용자 요청: CloriumIntro_WPF_Transparent3.zip으로). 바뀐 것: 박스 배경 Transparent(로고·글자만 화면 위에 표시), RibbonFx.ShowSeparators(변형 중 흰 분리선, 기본 꺼짐) — Intro 세 파일 교체(네임스페이스·.NET 4.8 수정·ShowFinal 유지), 투명 창에서 떠 보이던 버전 숫자는 숨김(Version_Debug 설정은 유지). 검사: 빌드 오류 0, ThemeCheck 19(캡처 모서리 알파 0), UiBinding 84, 테스트 실행본 재시작.
+
 2026-11-04 시작 화면 박스 반투명(사용자 요청: CloriumIntro_WPF_Box2.zip으로). 이전 묶음과 비교해 바뀐 것은 CloriumIntro.xaml의 박스 배경 #80FFFFFF(50% 흰색)와 창 투명화뿐(코드 동일) — Intro/CloriumIntro.xaml 교체(네임스페이스만 변경), StartUpWindow는 AllowsTransparency·Background Transparent, 테두리 제거. 검사: 빌드 오류 0, ThemeCheck 19(캡처의 박스 영역 알파 128), UiBinding 84, 테스트 실행본 재시작 시 시작 화면 1099 ms.
 
 2026-11-04 시작 화면 속도·위치, 조명 창(사용자 보고: 로고 애니메이션이 늦게 뜸, 보조 모니터에 뜸, 로딩 직후 조명 조절 화면이 열려 있음). 시작 화면: 설정을 읽자마자(라이선스·날짜 확인, 세션 정리 전) 띄우고, 메인 창·플러그인을 만드는 동안 멈추지 않도록 별도 UI 스레드(Dispatcher)에서 실행. 확인 중 메시지 상자가 가려지지 않게 그동안은 Topmost 해제 후 다시 설정. 위치는 SystemParameters.WorkArea(주 모니터) 가운데로 직접 지정(CenterScreen은 활성 모니터를 따름). 로그에 'start screen shown N ms after process start' 기록. 조명 창: 이전 상태 기억이 아니라 G2 시작 때 조명을 켜려고 조명 앱을 실행하면서 창이 열렸던 것 — G2가 시작 시 실행할 때 환경 변수 CLORIUM_LIGHT_START_MINIMIZED=1을 주고(옛 조명 앱은 무시), 조명 앱 0.7.12가 최소화로 시작(--minimized 옵션도 추가); 조명 버튼(show)은 그대로 창을 엶. 검사: 빌드 오류 0, UiBinding 84, ThemeCheck 19, 조명 앱 126, 데모 실행(플래그 있음=최소화, 없음=보통, show로 복원). 실제 테스트 실행본: 시작 화면 829 ms(이전 실행 1020 ms 측정은 같은 스레드 버전), 주 모니터(1728x1080) 가운데 564,216-1164,816, 이후 메인 창 정상, 조명 앱 최소화 확인. 미확인: 라이선스 실패 시 메시지 상자 표시(이 PC는 키 일치).
