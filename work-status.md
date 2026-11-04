@@ -1,5 +1,7 @@
 # 클로리움 G2 작업 기록
 
+2026-11-05 시작 화면 인트로 교체(사용자 요청: Clorium Intro4_transparent.zip으로). 새 애니메이션: 네 모서리에서 3D 리본 4개가 굴러 들어와 평행하게 엇갈리며 로고 리본에 정착(RibbonFx 3D 조명·깊이 정렬), 원본 벡터 리본 2.0s, CLORIUM 2.35s, 글자 3.15s, 본편 4.15초, 대기 회전 2초 간격. CloriumIntro.xaml은 동일, CloriumIntro.xaml.cs·RibbonFx.cs 교체(네임스페이스·nullable 표기만 조정, ShowFinal 유지; 이번 RibbonFx에는 .NET 4.8 비호환 문법 없음). 검사: 빌드 오류 0, ThemeCheck 19(실시간 캡처: 1.2초 네 리본 비행, 4.7초 완성 로고), UiBinding 84, 테스트 실행본 재시작.
+
 2026-11-04 시작 화면 배경 없음(사용자 요청: CloriumIntro_WPF_Transparent3.zip으로). 바뀐 것: 박스 배경 Transparent(로고·글자만 화면 위에 표시), RibbonFx.ShowSeparators(변형 중 흰 분리선, 기본 꺼짐) — Intro 세 파일 교체(네임스페이스·.NET 4.8 수정·ShowFinal 유지), 투명 창에서 떠 보이던 버전 숫자는 숨김(Version_Debug 설정은 유지). 검사: 빌드 오류 0, ThemeCheck 19(캡처 모서리 알파 0), UiBinding 84, 테스트 실행본 재시작.
 
 2026-11-04 시작 화면 박스 반투명(사용자 요청: CloriumIntro_WPF_Box2.zip으로). 이전 묶음과 비교해 바뀐 것은 CloriumIntro.xaml의 박스 배경 #80FFFFFF(50% 흰색)와 창 투명화뿐(코드 동일) — Intro/CloriumIntro.xaml 교체(네임스페이스만 변경), StartUpWindow는 AllowsTransparency·Background Transparent, 테두리 제거. 검사: 빌드 오류 0, ThemeCheck 19(캡처의 박스 영역 알파 128), UiBinding 84, 테스트 실행본 재시작 시 시작 화면 1099 ms.

@@ -7,77 +7,89 @@ using System.Windows.Media;
 namespace CameraControl.Intro
 {
     /// <summary>
-    /// 앞/뒷면이 있는 리본을 중심선 + 비틀림 각도로 계산해 매 프레임 직접 그리는 요소.
-    ///  - 0.10 ~ 1.70s  박스 오른쪽 위 모서리에서 비틀리며 날아와 원 궤도를 한 바퀴 돌고 고리로 닫힘
-    ///  - 1.55 ~ 2.55s  고리가 네 조각으로 나뉘어, 원을 따라 휘감기며 각 로고 리본 윤곽으로 변형
-    ///  - 2.50 ~ 2.78s  사라지면서 원본 벡터 리본으로 교체 (CloriumIntro 쪽에서 페이드인)
+    /// 3D 리본 엔진 — 네 모서리에서 모여드는 네 개의 리본 (매 프레임 직접 그리는 요소).
+    /// 각 리본은 최종 로고 리본 모양 그대로, 로고 가운데 정사각형의 변과 평행한 방향으로 미끄러져 들어옵니다.
+    /// 마주 보는 리본(좌↔우, 위↔아래)은 반대 방향으로 평행하게 엇갈려 지나가고, 날아오는 동안
+    /// 진행 방향을 축으로 굴러(3D 롤) 빛을 받다가 도착하며 평평해져 로고가 됩니다.
+    ///  0.10 ~ 2.02s  비행·교차·정착 (위·아래 쌍은 0.12s 늦게 출발)
+    ///  2.25 ~ 2.47s  (아래에서 먼저 나타난 원본 벡터 로고 위에서) 사라짐
     /// 좌표는 원본 .ai 좌표계 그대로이며, Canvas 의 (0,0)에 놓고 쓰면 됩니다.
     /// </summary>
     public sealed class RibbonFx : FrameworkElement
     {
-        public const double EndTime = 2.8;
-
-        /// <summary>
-        /// 변형 중 리본 조각 사이에 흰 분리선을 그릴지 여부. 배경이 투명하면 흰 선이 드러나므로 기본값 false.
-        /// 흰 배경 위에서 쓸 때만 true 로 바꾸세요.
-        /// </summary>
-        public bool ShowSeparators { get; set; }
-
-        private const double CX = 879, CY = 482.5, R0 = 330;
+        private const double CX = 879, CY = 482.5;
         private const int K = 4;
-        private const double ThetaTail = 160;               // 고리가 닫혔을 때 꼬리 각도(°)
+        private const double T0 = 0.10, TPair = 0.12, TFly = 1.80;  // 출발, 두 번째 쌍 지연, 비행 시간
+        private const double Dist = 2500;                          // 출발 거리 (사각형 영역 밖 모서리 쪽)
+        private const double Roll = 2 * Math.PI;                   // 비행 중 구르는 양 (한 바퀴)
+        private const double TSwap = 2.25, TSwapD = 0.22;
+        public const double EndTime = TSwap + TSwapD;
 
-        private static readonly double Len = 2 * Math.PI * R0;  // 리본 길이 = 원 둘레
         private static readonly int M = RibbonEdges.Outer.Length / 2;
-        private static readonly Point[][] TgtOuter = new Point[K][];
-        private static readonly Point[][] TgtInner = new Point[K][];
+        private static readonly double[] ZLayer = { 36, 12, -12, -36 };   // 교차할 때 위아래 층
 
-        // 중심선 (진입 베지어 + 시계 방향 540° 원)
-        private static readonly List<Point> P = new();
-        private static readonly List<double> S = new();
-        private static readonly double HeadEnd;
+        private sealed class Rib
+        {
+            public Point[] O = Array.Empty<Point>(), I = Array.Empty<Point>();
+            public Point G;               // 리본 중심
+            public Vector D, Q;           // 진행 방향, 화면 안에서 그에 수직인 방향
+            public double Delay, Z;
+        }
+        private static readonly Rib[] Ribs = new Rib[K];
 
-        // 색: 꼬리(밝은 하늘색) → 머리(진한 남색)
         private static readonly double[,] Stops =
         {
-            { 0x99, 0xd5, 0xe9 }, { 0x7e, 0xb3, 0xda }, { 0x58, 0x7e, 0xbf }, { 0x30, 0x53, 0xa3 }, { 0x05, 0x35, 0x91 }
+            { 153, 213, 233 }, { 126, 179, 218 }, { 88, 126, 191 }, { 48, 83, 163 }, { 5, 53, 145 }
         };
-
-        private static readonly Pen EdgePenBase = MakeFrozenPen(Brushes.White, 7);
+        private static readonly Vec3 Light = new Vec3(-0.42, -0.62, 0.70).Norm();
+        private static readonly Vec3 Half = new Vec3(Light.X, Light.Y, Light.Z + 1).Norm();
+        private static readonly double Flat = Light.Z;
 
         private readonly Stopwatch _clock = new();
-        private readonly Dictionary<int, (Brush b, Pen p)> _paint = new();
+        private readonly Dictionary<int, (Brush fill, Pen seam, Pen edge)> _paint = new();
+        private readonly List<Quad> _quads = new(K * 80);
         private bool _running;
         private double _time = -1;
 
+        private struct Vec3
+        {
+            public double X, Y, Z;
+            public Vec3(double x, double y, double z) { X = x; Y = y; Z = z; }
+            public Vec3 Norm() { double l = Math.Sqrt(X * X + Y * Y + Z * Z); if (l == 0) l = 1; return new Vec3(X / l, Y / l, Z / l); }
+            public double Dot(Vec3 o) => X * o.X + Y * o.Y + Z * o.Z;
+        }
+
+        private struct Quad
+        {
+            public double Z;
+            public Point A0, A1, B0, B1;
+            public Color C;
+        }
+
         static RibbonFx()
         {
-            // 로고 리본 k = 리본0 을 시계 방향 90°·k 회전
+            // 리본0 진행 방향: 안쪽 직선 변(정사각형의 한 변)과 평행, 오른쪽 위 → 왼쪽 아래
+            var d0 = new Vector(652.74 - 863.95, 493.63 - 296.76);
+            d0.Normalize();
             for (int k = 0; k < K; k++)
             {
-                TgtOuter[k] = new Point[M];
-                TgtInner[k] = new Point[M];
+                var r = new Rib { O = new Point[M], I = new Point[M] };
+                double gx = 0, gy = 0;
                 for (int j = 0; j < M; j++)
                 {
-                    TgtOuter[k][j] = Rot(new Point(RibbonEdges.Outer[2 * j], RibbonEdges.Outer[2 * j + 1]), k);
-                    TgtInner[k][j] = Rot(new Point(RibbonEdges.Inner[2 * j], RibbonEdges.Inner[2 * j + 1]), k);
+                    r.O[j] = Rot(new Point(RibbonEdges.Outer[2 * j], RibbonEdges.Outer[2 * j + 1]), k);
+                    r.I[j] = Rot(new Point(RibbonEdges.Inner[2 * j], RibbonEdges.Inner[2 * j + 1]), k);
+                    gx += r.O[j].X + r.I[j].X; gy += r.O[j].Y + r.I[j].Y;
                 }
+                r.G = new Point(gx / (2 * M), gy / (2 * M));
+                var d = d0;
+                for (int i = 0; i < k; i++) d = new Vector(-d.Y, d.X);
+                r.D = d;
+                r.Q = new Vector(-d.Y, d.X);
+                r.Delay = (k % 2) * TPair;
+                r.Z = ZLayer[k];
+                Ribs[k] = r;
             }
-
-            Point b0 = new(2230, -580), b1 = new(1660, -260), b2 = new(CX + R0, -40), b3 = new(CX + R0, CY);
-            for (int i = 0; i <= 300; i++)
-            {
-                double t = i / 300.0, u = 1 - t;
-                Add(new Point(u * u * u * b0.X + 3 * u * u * t * b1.X + 3 * u * t * t * b2.X + t * t * t * b3.X,
-                              u * u * u * b0.Y + 3 * u * u * t * b1.Y + 3 * u * t * t * b2.Y + t * t * t * b3.Y));
-            }
-            double approach = S[S.Count - 1];
-            for (int i = 1; i <= 900; i++)
-            {
-                double a = (540.0 * i / 900) * Math.PI / 180;
-                Add(new Point(CX + R0 * Math.Cos(a), CY + R0 * Math.Sin(a)));
-            }
-            HeadEnd = approach + (ThetaTail + 360) / 360 * Len;
         }
 
         public RibbonFx()
@@ -124,78 +136,25 @@ namespace CameraControl.Intro
             double t = _time;
             if (t < 0 || t >= EndTime) return;
 
-            double opacity = t < 2.5 ? 1 : 1 - (t - 2.5) / 0.28;
+            double opacity = t < TSwap ? 1 : 1 - (t - TSwap) / TSwapD;
             dc.PushOpacity(Math.Max(0, opacity));
 
-            double u = Clamp01((t - 0.10) / 1.6);
-            double head = HeadEnd * (1 - Math.Pow(1 - u, 2.1));      // 빠르게 진입 → 감속하며 닫힘
-            double tail = head - Len;
-            double hw = 78 + 17 * Smooth((u - 0.45) / 0.55);          // 반폭
-            double twist = 1 - Smooth((t - 0.75) / 0.95);             // 비틀림 풀림
-            double spin = t * 2.4;                                    // 비틀림 마디가 흐름
-
-            var A = new Point[M];
-            var B = new Point[M];
-            var cols = new Color[M];
-
-            for (int k = 0; k < K; k++)
+            Build(t);
+            foreach (var q in _quads)
             {
-                double e = InOut((t - (1.55 + 0.045 * k)) / 0.85);    // 조각별 변형 진행
-                for (int j = 0; j < M; j++)
+                var (fill, seam, edge) = Paint(q.C);
+                var g = new StreamGeometry();
+                using (var c = g.Open())
                 {
-                    double fj = (double)j / (M - 1);
-                    double s = tail + Len * (k + fj) / K;
-                    At(s, out var p, out var n);
-                    double um = (head - s) / Len;                     // 0 = 머리, 1 = 꼬리
-                    double phi = twist * (2 * Math.PI * 1.25 * um + Math.Sin(spin + um * 3) * 0.6);
-                    double cs = Math.Cos(phi);
-                    double w = hw * cs;
-                    var a = Polar(p + n * w, TgtOuter[k][j], e);
-                    var b = Polar(p - n * w, TgtInner[k][j], e);
-
-                    // 변형 중 꼬리 → 머리 방향으로 한 번 감기며 뒤집힘 (끝나면 정확히 로고 윤곽)
-                    double flip = 2 * Math.PI * (1 - Smooth(e * 1.6 - fj * 0.6));
-                    double cf = Math.Cos(flip);
-                    var mid = new Point((a.X + b.X) / 2, (a.Y + b.Y) / 2);
-                    A[j] = mid + (a - mid) * cf;
-                    B[j] = mid + (b - mid) * cf;
-
-                    double c2 = e > 0 ? cf : cs;
-                    double sang = e > 0 ? flip : phi;
-                    double spec = 0.32 * Math.Pow(Math.Max(0, Math.Sin(sang + 0.5)), 24);
-                    double f = (1 - um) + (fj - (1 - um)) * e;
-                    cols[j] = Shade(f, Math.Abs(c2), c2 < 0, spec);
+                    c.BeginFigure(q.A0, true, true);
+                    c.LineTo(q.A1, true, true);
+                    c.LineTo(q.B1, true, true);
+                    c.LineTo(q.B0, true, true);
                 }
-
-                for (int j = 0; j < M - 1; j++)
-                {
-                    var g = new StreamGeometry();
-                    using (var c = g.Open())
-                    {
-                        c.BeginFigure(A[j], true, true);
-                        c.LineTo(A[j + 1], true, false);
-                        c.LineTo(B[j + 1], true, false);
-                        c.LineTo(B[j], true, false);
-                    }
-                    g.Freeze();
-                    var (br, pen) = Paint(cols[j]);
-                    dc.DrawGeometry(br, pen, g);                       // 같은 색 테두리로 이음새 숨김
-                }
-
-                if (ShowSeparators && e > 0)                          // 흰 분리선 (흰 배경 위에서만 사용)
-                {
-                    var outline = new StreamGeometry();
-                    using (var c = outline.Open())
-                    {
-                        c.BeginFigure(A[0], false, true);
-                        for (int j = 1; j < M; j++) c.LineTo(A[j], true, true);
-                        for (int j = M - 1; j >= 0; j--) c.LineTo(B[j], true, true);
-                    }
-                    outline.Freeze();
-                    dc.PushOpacity(e);
-                    dc.DrawGeometry(null, EdgePenBase, outline);
-                    dc.Pop();
-                }
+                g.Freeze();
+                dc.DrawGeometry(fill, seam, g);          // 같은 색 테두리로 이음새 숨김
+                dc.DrawLine(edge, q.A0, q.A1);           // 가장자리: 살짝 어두운 선으로 두께감
+                dc.DrawLine(edge, q.B0, q.B1);
             }
 
             dc.Pop();
@@ -204,43 +163,84 @@ namespace CameraControl.Intro
 
         // ─────────────────────────────────────────────────────────────
 
-        private static void Add(Point p)
+        private void Build(double t)
         {
-            S.Add(P.Count == 0 ? 0 : S[S.Count - 1] + (p - P[P.Count - 1]).Length);
-            P.Add(p);
-        }
+            _quads.Clear();
+            var A = new Point[M]; var B = new Point[M];
+            var za = new double[M]; var zb = new double[M]; var th = new double[M];
 
-        /// <summary>중심선 위 거리 s 의 위치와 바깥쪽 법선</summary>
-        private static void At(double s, out Point pos, out Vector normal)
-        {
-            if (s <= 0)
+            for (int k = 0; k < K; k++)
             {
-                var d = P[1] - P[0]; d.Normalize();
-                pos = P[0] + d * s;
-                normal = new Vector(d.Y, -d.X);
-                return;
+                var R = Ribs[k];
+                double p = Clamp01((t - T0 - R.Delay) / TFly);
+                double e = EaseOut(p);
+                double off = Dist * (1 - e);                          // 남은 거리
+                double roll = Roll * Math.Pow(1 - e, 1.3);            // 구름 → 도착하며 0
+                double flutter = 0.55 * Math.Pow(1 - e, 1.5);         // 길이 방향으로 살짝 일렁임
+                double zLift = R.Z * (1 - e) * 6;
+                double settle = Smooth((t - T0 - R.Delay - TFly * 0.82) / (TFly * 0.2));
+                var shift = -R.D * off;
+
+                for (int j = 0; j < M; j++)
+                {
+                    double fj = (double)j / (M - 1);
+                    th[j] = roll + flutter * Math.Sin(fj * 5 + t * 7 + k);
+                    A[j] = RollPt(R, R.O[j], th[j], shift, out za[j]);
+                    B[j] = RollPt(R, R.I[j], th[j], shift, out zb[j]);
+                }
+                for (int j = 0; j < M - 1; j++)
+                {
+                    double a = (th[j] + th[j + 1]) / 2, c = Math.Cos(a), s = Math.Sin(a);
+                    var N = new Vec3(-R.Q.X * s, -R.Q.Y * s, c).Norm();   // ẑ 를 진행축 둘레로 θ 회전
+                    _quads.Add(new Quad
+                    {
+                        Z = zLift + (za[j] + za[j + 1] + zb[j] + zb[j + 1]) / 4 + k * 0.01,
+                        A0 = A[j], A1 = A[j + 1], B0 = B[j], B1 = B[j + 1],
+                        C = Lit(Base((j + 0.5) / (M - 1)), N, settle)
+                    });
+                }
             }
-            int lo = 0, hi = S.Count - 1;
-            while (hi - lo > 1) { int mid = (lo + hi) >> 1; if (S[mid] <= s) lo = mid; else hi = mid; }
-            double seg = S[hi] - S[lo];
-            double f = Math.Min(1, seg <= 0 ? 0 : (s - S[lo]) / seg);
-            var tv = P[hi] - P[lo];
-            pos = P[lo] + tv * f;
-            tv.Normalize();
-            normal = new Vector(tv.Y, -tv.X);
+            _quads.Sort((x, y) => x.Z.CompareTo(y.Z));               // 먼 것부터 그림
         }
 
-        /// <summary>중심 기준 극좌표 보간 — 원을 따라 휘감기며 조여듦</summary>
-        private static Point Polar(Point from, Point to, double e)
+        /// <summary>리본 중심을 지나는 진행축 둘레로 θ 만큼 굴린 뒤 shift 만큼 이동</summary>
+        private static Point RollPt(Rib r, Point p, double th, Vector shift, out double z)
         {
-            double r1 = Math.Sqrt((from.X - CX) * (from.X - CX) + (from.Y - CY) * (from.Y - CY));
-            double a1 = Math.Atan2(from.Y - CY, from.X - CX);
-            double r2 = Math.Sqrt((to.X - CX) * (to.X - CX) + (to.Y - CY) * (to.Y - CY));
-            double a2 = Math.Atan2(to.Y - CY, to.X - CX);
-            while (a2 - a1 > Math.PI) a2 -= 2 * Math.PI;
-            while (a2 - a1 < -Math.PI) a2 += 2 * Math.PI;
-            double r = r1 + (r2 - r1) * e, a = a1 + (a2 - a1) * e;
-            return new Point(CX + r * Math.Cos(a), CY + r * Math.Sin(a));
+            var rel = p - r.G;
+            double along = rel.X * r.D.X + rel.Y * r.D.Y, perp = rel.X * r.Q.X + rel.Y * r.Q.Y;
+            z = perp * Math.Sin(th);
+            return r.G + r.D * along + r.Q * (perp * Math.Cos(th)) + shift;
+        }
+
+        private static double[] Base(double f)
+        {
+            f = Clamp01(f) * 4;
+            int i = Math.Min(3, (int)Math.Floor(f));
+            double g = f - i;
+            return new[]
+            {
+                Stops[i, 0] + (Stops[i + 1, 0] - Stops[i, 0]) * g,
+                Stops[i, 1] + (Stops[i + 1, 1] - Stops[i, 1]) * g,
+                Stops[i, 2] + (Stops[i + 1, 2] - Stops[i, 2]) * g
+            };
+        }
+
+        /// <summary>조명 적용. settle = 1 이면 원본 색 그대로</summary>
+        private static Color Lit(double[] c, Vec3 n, double settle)
+        {
+            if (n.Z < 0)
+            {
+                n = new Vec3(-n.X, -n.Y, -n.Z);
+                for (int i = 0; i < 3; i++) c[i] += (255 - c[i]) * 0.22;   // 뒷면은 한 톤 밝게
+            }
+            double d = Math.Max(0, n.Dot(Light));
+            double nh = Math.Max(0, n.Dot(Half));
+            double sp = Math.Pow(nh, 60) * 0.55 + Math.Pow(nh, 8) * 0.10;  // 하이라이트 + 은은한 광택
+            double k = 0.48 + 0.52 * d / Flat;
+            k += (1 - k) * settle;
+            sp *= 1 - settle;
+            byte Ch(double v) => (byte)Math.Round(Math.Min(255, Math.Max(0, v * k + 255 * sp)));
+            return Color.FromRgb(Ch(c[0]), Ch(c[1]), Ch(c[2]));
         }
 
         private static Point Rot(Point p, int k)
@@ -250,41 +250,20 @@ namespace CameraControl.Intro
             return new Point(CX + dx, CY + dy);
         }
 
-        private static Color Shade(double f, double shade, bool back, double spec)
-        {
-            int n = Stops.GetLength(0);
-            f = Clamp01(f) * (n - 1);
-            int i = Math.Min(n - 2, (int)Math.Floor(f));
-            double g = f - i;
-            byte Ch(int j)
-            {
-                double v = Stops[i, j] + (Stops[i + 1, j] - Stops[i, j]) * g;
-                if (back) v += (255 - v) * 0.38;                       // 뒷면은 한 톤 밝게
-                v = v * (0.55 + 0.45 * shade) + 255 * spec;            // 면 방향 명암 + 반사광
-                return (byte)Math.Round(Math.Min(255, v));
-            }
-            return Color.FromRgb(Ch(0), Ch(1), Ch(2));
-        }
-
-        private (Brush, Pen) Paint(Color c)
+        private (Brush, Pen, Pen) Paint(Color c)
         {
             int key = (c.R << 16) | (c.G << 8) | c.B;
             if (_paint.TryGetValue(key, out var v)) return v;
-            var b = new SolidColorBrush(c); b.Freeze();
-            var p = new Pen(b, 2.4) { LineJoin = PenLineJoin.Round }; p.Freeze();
-            _paint[key] = (b, p);
-            return (b, p);
-        }
-
-        private static Pen MakeFrozenPen(Brush b, double w)
-        {
-            var p = new Pen(b, w) { LineJoin = PenLineJoin.Round };
-            p.Freeze();
-            return p;
+            var fill = new SolidColorBrush(c); fill.Freeze();
+            var seam = new Pen(fill, 3.2) { LineJoin = PenLineJoin.Round }; seam.Freeze();
+            var eb = new SolidColorBrush(Color.FromArgb(140, (byte)(c.R * 0.62), (byte)(c.G * 0.62), (byte)(c.B * 0.66))); eb.Freeze();
+            var edge = new Pen(eb, 3.4) { StartLineCap = PenLineCap.Round, EndLineCap = PenLineCap.Round }; edge.Freeze();
+            _paint[key] = (fill, seam, edge);
+            return (fill, seam, edge);
         }
 
         private static double Clamp01(double x) => x < 0 ? 0 : x > 1 ? 1 : x;
         private static double Smooth(double x) { x = Clamp01(x); return x * x * (3 - 2 * x); }
-        private static double InOut(double x) { x = Clamp01(x); return x < 0.5 ? 4 * x * x * x : 1 - Math.Pow(-2 * x + 2, 3) / 2; }
+        private static double EaseOut(double x) { x = Clamp01(x); return 1 - Math.Pow(1 - x, 2.2); }
     }
 }

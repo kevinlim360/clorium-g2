@@ -10,18 +10,18 @@ using System.Windows.Threading;
 namespace CameraControl.Intro
 {
     /// <summary>
-    /// CLORIUM 인트로 애니메이션 (C안 · 리본)
+    /// CLORIUM 인트로 애니메이션 (3D 리본 4개)
     /// 배경 없이 로고만 표시되며, 보이지 않는 정사각형 영역 밖으로 나간 부분은 잘립니다.
-    ///  1) 박스 오른쪽 위 모서리에서 앞/뒷면이 있는 리본이 비틀리며 날아와 심볼 둘레를 한 바퀴 돎
-    ///  2) 고리가 네 조각으로 나뉘어 원을 따라 휘감기며 꼬여, 로고 리본 윤곽이 됨 (RibbonFx)
+    ///  1) 네 모서리에서 3D 리본 4개가 굴러 들어옴 (RibbonFx, 3D 조명)
+    ///  2) 마주 보는 리본끼리 평행하게 엇갈려 지나가며 평평해져 로고 리본 자리에 정착
     ///  3) 원본 벡터 리본으로 교체 → 하늘색 바가 지나가며 CLORIUM 공개
     ///  4) AI PHOTO STATION 이 한 글자씩 등장
-    ///  5) 로딩이 계속되면 심볼이 3초마다 90°씩 회전 (4방향 대칭이라 이음새 없음)
+    ///  5) 로딩이 계속되면 심볼이 2초마다 90°씩 회전 (4방향 대칭이라 이음새 없음)
     /// </summary>
     public partial class CloriumIntro : UserControl
     {
         /// <summary>인트로 본편 길이. 이 시점에 IntroCompleted 가 발생합니다.</summary>
-        public static readonly TimeSpan IntroDuration = TimeSpan.FromSeconds(4.4);
+        public static readonly TimeSpan IntroDuration = TimeSpan.FromSeconds(4.15);
 
         /// <summary>인트로 본편이 끝났을 때 발생합니다. (이후에는 대기 루프가 계속 재생됨)</summary>
         public event EventHandler IntroCompleted;
@@ -68,34 +68,34 @@ namespace CameraControl.Intro
                 return;
             }
 
-            // ── 1~2) 리본 비행 + 꼬임 (0 ~ 2.8s) ─────────────────────
+            // ── 1~2) 네 모서리에서 3D 리본 4개가 모여 평행하게 엇갈리며 로고로 (0 ~ 2.47s) ─────────────
             TickLayer.RenderTransform = Transform.Identity;
             Fx.Start();
 
-            // ── 3) 원본 벡터 리본으로 교체 (2.5s ~ 2.78s) ───────────────
+            // ── 3) 원본 벡터 리본이 리본 아래에서 먼저 나타남 (2.0s ~ 2.25s) ──
             foreach (var r in ribs)
             {
                 r.Opacity = 0;
-                r.BeginAnimation(OpacityProperty, KF(2.5, (0, 0, null), (0.28, 1, null)));
+                r.BeginAnimation(OpacityProperty, KF(2.0, (0, 0, null), (0.25, 1, null)));
             }
 
-            // ── 워드마크 와이프 (2.6s ~ 3.5s) ──────────────────────────
+            // ── 워드마크 와이프 (2.35s ~ 3.25s) ──────────────────────────
             var wipe = new ScaleTransform(0, 1, -20, 0);
             WordLayer.Clip = new RectangleGeometry(new Rect(-20, 1095, 1773, 290)) { Transform = wipe };
-            wipe.BeginAnimation(ScaleTransform.ScaleXProperty, KF(2.6, (0, 0, null), (0.9, 1, SnapEase)));
+            wipe.BeginAnimation(ScaleTransform.ScaleXProperty, KF(2.35, (0, 0, null), (0.9, 1, SnapEase)));
 
             var barMove = new TranslateTransform(-30, 0);
             WipeBar.RenderTransform = barMove;
             WipeBar.Opacity = 0;
-            barMove.BeginAnimation(TranslateTransform.XProperty, KF(2.6, (0, -30, null), (0.9, 1745, SnapEase)));
+            barMove.BeginAnimation(TranslateTransform.XProperty, KF(2.35, (0, -30, null), (0.9, 1745, SnapEase)));
             WipeBar.BeginAnimation(OpacityProperty,
-                KF(2.6, (0, 0, null), (0.054, 1, null), (0.9, 1, null), (1.25, 0, Ease)));
+                KF(2.35, (0, 0, null), (0.054, 1, null), (0.9, 1, null), (1.25, 0, Ease)));
 
-            // ── 4) 태그라인: 한 글자씩 (3.4s ~) ───────────────────────
+            // ── 4) 태그라인: 한 글자씩 (3.15s ~) ───────────────────────
             int n = 0;
             foreach (UIElement glyph in TagLayer.Children)
             {
-                double begin = 3.4 + 0.05 * n++;
+                double begin = 3.15 + 0.05 * n++;
                 var tt = new TranslateTransform(0, -14);
                 glyph.RenderTransform = tt;
                 glyph.Opacity = 0;
@@ -103,10 +103,10 @@ namespace CameraControl.Intro
                 tt.BeginAnimation(TranslateTransform.YProperty, KF(begin, (0, -14, null), (0.45, 0, Ease)));
             }
 
-            // ── 5) 대기 루프: 3초마다 90° 딸깍 (4.75s ~) ──────────────
+            // ── 5) 대기 루프: 2초마다 90° 딸깍 (4.6s ~) ──────────────
             var tick = new RotateTransform(0, CX, CY);
             TickLayer.RenderTransform = tick;
-            var tickAnim = KF(4.75, (0, 0, null), (0.9, 90, SnapEase), (3.0, 90, null));
+            var tickAnim = KF(4.6, (0, 0, null), (0.9, 90, SnapEase), (2.0, 90, null));
             tickAnim.RepeatBehavior = RepeatBehavior.Forever;
             tick.BeginAnimation(RotateTransform.AngleProperty, tickAnim);
 
