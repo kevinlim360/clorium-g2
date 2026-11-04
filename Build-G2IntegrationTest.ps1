@@ -58,6 +58,12 @@ try {
 
     foreach ($m in @('CameraControl.Core', 'Canon.Eos.Framework', 'PortableDeviceLib')) { foreach ($e in @('dll', 'pdb')) { Copy-Item -LiteralPath "projects/$m/bin/Release/net48/$m.$e" -Destination $Target -Force } }
     Copy-Item -LiteralPath 'projects/CameraControl/bin/Release/net48/ZoomAndPan.dll' -Destination $Target -Force
+    # G2 촬영음 (Data\ShutterSounds) from the build output.
+    $null = robocopy 'projects/CameraControl/bin/Release/net48/Data/ShutterSounds' (Join-Path $Target 'Data/ShutterSounds') /E /NFL /NDL /NJH /NJS /NP /R:1 /W:1
+    if ($LASTEXITCODE -ge 8) { throw "robocopy shutter sounds $LASTEXITCODE" }
+    # Korean wording file from the source (tools/KoreanText edits it).
+    Copy-Item -LiteralPath 'projects/CameraControl/bin/Release/net48/Languages/ko.xml' -Destination (Join-Path $Target 'Languages/ko.xml') -Force
+    $global:LASTEXITCODE = 0
     Run @('tools/CoreWpfCompatibility/bin/Release/net10.0/CoreWpfCompatibility.dll', "$baseline/releases/Clorium_4.7.1.4_20261023/files/CameraControl.Core.dll", "$Target/CameraControl.Core.dll")
     Run @('tools/WiaMetadataFix/bin/Release/net10.0/WiaMetadataFix.dll', 'projects/CameraControl.Devices/bin/Release/net48/CameraControl.Devices.dll', "$Target/CameraControl.Devices.dll")
     $staged = Join-Path $Target ('CameraControl-staged-' + [guid]::NewGuid().ToString('N') + '.exe')

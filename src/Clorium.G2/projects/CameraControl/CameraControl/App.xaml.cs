@@ -136,7 +136,7 @@ public partial class App : System.Windows.Application
 			StartApplication();
 			if (_startUpWindow != null)
 			{
-				_startUpWindow.Close();
+				_startUpWindow.CloseWhenReady();
 			}
 		}));
 	}

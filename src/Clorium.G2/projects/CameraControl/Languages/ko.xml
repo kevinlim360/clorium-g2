@@ -1,0 +1,226 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <!-- 카메라 속성 Expander -->
+    <string name="LabelTransfer">사진 전송</string>
+    <string name="LabelTransferItem1">1. PC에 저장</string>
+    <string name="LabelTransferItem2">2. 카메라에 저장</string>
+    <string name="LabelTransferItem3">3. PC/카메라 모두 저장</string>	
+    <string name="Battery">⚡전원</string>
+
+
+    <!-- 설정 -->
+    <string name="SettingsWindowTitle">설정</string> 
+    <string name="LabelRestoreFromBackup">백업 복원</string>
+    <string name="ButtonOk">🔵 확인</string> 
+    <string name="ButtonCancel">🔶 취소</string> 
+    <string name="ButtonBackupFile">🏴설정 백업</string> 
+    <string name="ButtonResetSettings"> 🏲 설정 초기화</string> 
+    <string name="LabelTermReset">♲ 기간 초기화</string>
+    <string name="LabelAllReset">♻ 공장 초기화</string>
+    <string name="LabelScaleCalibration">🛠치수측정용 스케일 측정</string>
+    <string name="LabelSyncCameraDateTime">🕒시간 동기화 [PC/카메라]</string>
+    <string name="Labeldays">일</string> 
+    <string name="LabelKeepdays">세션파일 보관 기간</string> 
+    <string name="LabelImageProperties">이미지 속성</string>
+
+    <!-- 아이콘 -->
+    <string name="ReStartToolTip">프로그램을 재시작해야 할 수도 있습니다.</string>
+    <string name="CapturePhotoToolTip">사진 촬영</string> 
+    <string name="BraketingToolTip">브라케팅</string> 
+    <string name="SettingsToolTip">설정</string> 
+    <string name="TimeLapseToolTip">타임 랩스</string> 
+    <string name="FullscreenToolTip">전체 화면</string> 
+    <string name="LiveViewToolTip">실시간 보기</string> 
+    <string name="BrowseSessionsToolTip">세션 검색</string> 
+    <string name="MenuMultipleCamera">멀티 카메라 화면</string> 
+    <string name="MenuWindows">윈도우</string>
+    <string name="SessionWindowTitle">세션 [추가/편집]</string> 
+    <string name="LiveViewWindowTitle">라이브 화면</string> 
+    <string name="MultipleCameraWindowTitle">멀티 카메라 지원</string> 
+    <string name="TimeLapseWindowTitle">타임 랩스</string> 
+    <string name="TurnTableWindowTitle">턴테이블 화면</string>
+    <string name="DownloadWindowTitle">사진 다운로드</string>
+    <string name="Session">세션</string>
+    <string name="LabelPrint">프린트</string>
+    <string name="LabelBrowse">세션 검색</string>
+    <string name="LabelBarcode">바코드</string>
+    <string name="LabelImageSequencer">동영상 만들기</string>
+    <string name="LabelScanBarcode">스캔 바코드</string>
+    <string name="LabelWifiNew">와아파이 연결</string>
+    <string name="LabelConnectbluetoothdevice">블루투스 연결</string>
+    <string name="LabelLighting">조명 컨트롤러</string>
+    <string name="LabelTurnTable">턴테이블 촬영 화면</string>
+    <string name="LabelEnfuse">포커스 스태킹 화면</string>
+    <string name="LabelAIRemoveBg">AI 배경제거</string>
+    <string name="LabelBatchRemoveBg">다중파일 배경제거</string>
+    <string name="LabelRemoveBgCapture">백그라운드 제거 촬영</string>
+    <string name="LabelRuler">치수선 제작 프로그램</string>
+
+    <!-- 메뉴 -->
+    <string name="MenuFile">파일</string> 
+    <string name="MenuExit">종료</string> 
+    <string name="MenuView">화면</string> 
+    <string name="MenuSession">세션</string>
+    <string name="MenuCamera">카메라</string>
+    <string name="MenuHelp">도움말</string> 
+    <string name="MenuHomePage">홈페이지</string> 
+
+    <string name="MenuLayoutGrid">썸네일만 보이기</string> 
+    <string name="MenuLayoutPortrait">썸네일 우측 보이기</string>
+    <string name="MenuLayoutLandscape">썸네일 하단 보이기</string>
+
+    <string name="MenuSessionAdd">세션 만들기 ...</string>
+    <string name="MenuSessionEdit">현재 세션 편집 ...</string>
+    <string name="MenuSessionDel">현재 세션 제거</string>
+
+    <string name="MenuCameraProperty">카메라 속성</string>
+    <string name="LabelUseAsMaster">카메라 속성 복사</string>
+    <string name="LabelRefreshCameraList">카메라 재연결</string>
+
+
+    <!-- 썸네일 메뉴 -->
+    <string name="LabelShowInExplorer">파일 탐색기에서 보기</string>
+    <string name="LabelOpenInExternalViewer">이미지 뷰어에서 보기</string>
+    <string name="LabelShowColorCompensation">색보정 뷰어에서 보기</string>
+    <string name="LabelCopyFileNameClipboard">경로 복사하기</string>
+    <string name="LabelDeleteFiles">선택 파일 지우기</string>
+    <string name="LabelSelectAll">전체 파일 선택</string>
+    <string name="LabelSelectNone">전체 선택 해제</string>
+
+    <!-- 프리셋 Expander -->
+    <string name="LabelCurrentSession">현재 세션</string>
+    <string name="LabelLoadedPreset">현재 프리셋  </string>
+    <string name="LabelTemperature">색온도 : </string>
+    <string name="LabelAperture">조리개 : </string>
+    <string name="MenuPresets">프리셋</string> 
+    <string name="MenuPresetsLoad">프리셋 로드하기</string> 
+    <string name="MenuPresetsNew">프리셋 저장하기</string> 
+    <string name="MenuPresetsEdit">프리셋 내용 보기</string> 
+    <string name="MenuPresetsDelete">프리셋 지우기</string> 
+
+    <!-- 전후면 촬영 Expander -->
+    <string name="LabelFrontBack">전후면 촬영</string>
+    <string name="Label90RotateCapture">90 [도]</string>
+    <string name="FrontBackCaptureToolTip">전면 후면 촬영</string>
+    <string name="FrontBack90CaptureToolTip">90도 회전 촬영</string>
+    <string name="LabelToggleRotateToolTip">토글 90도 회전</string>
+    <string name="LabelProductCounter">세션 작업 통계</string>
+    <string name="LabelToday">오늘 작업량</string>
+    <string name="LabelTotal">누적 작업량</string>
+    <string name="LabelTodayResetToolTip">오늘 작업량 초기화</string>
+    <string name="LabelSessionTimer">알람 타이머</string>
+    <string name="LabelTimerResetToolTip">타이머 초기화</string>
+    <string name="LabelPauseToolTip">작업 시작/일시 정지</string>
+    <string name="LabelAlarmOffToolTip">알람 끄기</string>
+    <string name="LabelStatisticsToolTip">작업 종료하고 통계 작성</string>
+    <string name="LabelColorCompensation">색보정</string>
+    <string name="LabelDefect">하자</string>
+
+
+    <!-- 배경제거 Expander -->
+    <string name="LabelRemoveBgExpander">배경 제거 촬영</string>
+    <string name="LabelRemoveBgEdit">배경 제거 편집창</string>
+    <string name="LabelAuto">자동</string>
+
+
+    <!-- 라이브 뷰 Expander -->
+    <string name="LabelMeasure">측정용 사진 생성</string>
+    <string name="ButtonAutoFocus">자동초점</string>
+    <string name="ButtonCapture">사진촬영</string>
+    <string name="ButtonCancel">취소</string>
+    <string name="ButtonPreview">미리보기</string>
+    <string name="ButtonRecordMovie">동영상</string>
+    <string name="ButtonRecordStopMovie">정지</string>
+
+    <!-- 라이브 뷰 Expander 오버레이 -->
+    <string name="LabelOverlay">고스트</string>
+    <string name="LabelDisplay">라이브 화면</string>
+    <string name="LabelCalibration">캘리브레이션</string>
+    <string name="LabelOveralayImageFile">고스트 이미지 파일</string>
+    <string name="LabelActivate">고스트 켜기</string>
+    <string name="LabelOverlayUseLastCaptured">직전 촬영 이미지</string>
+    <string name="LabelScaling">스케일</string>
+    <string name="LabelHorizontal">수평이동</string>
+    <string name="LabelVertical">수직이동</string>
+
+    <!-- 라이브 뷰 Expander 디스플레이 -->
+    <string name="MenuFlip">좌우 반전</string>
+    <string name="MenuShowThumbInfo">썸네일 정보 보기</string>
+    <string name="MenuLayout">레이아웃</string> 
+    <string name="MenuThumbnailSize">썸네일 크기</string>
+    <string name="LabelShowFocusPoints">포커스 포인트 보이기</string>
+    <string name="LabelOverlayTransparency">투명도</string>
+    <string name="LabelBrightness">밝기</string>
+    <string name="LabelLiveViewRotation">회전</string>
+    <string name="LabelGridColor">색상</string>
+    <string name="LabelBW">흑백</string>
+    <string name="LabelInvert">색상반전</string>
+    <string name="LabelFlip">좌우반전</string>
+    <string name="LabelShowFocusRect">포커스 박스</string>
+    <string name="LabelShowFocusControlBar">포커스 컨트롤 바</string>
+    <string name="LabelShowActiveArea">작동 영역</string>
+    <string name="LabelNoProccesing">적용 안함</string>
+    <string name="LabelRotateClockwise">시계방향 회전</string>
+    <string name="LabelRotateCounterclockwise">반시계 방향 회전</string>
+    <string name="LabelAutoFocusAll">전체 포커스</string>
+    <string name="LabelStartLiveView">라이브 시작</string>
+    <string name="LabelStopLiveView">라이브 정지</string>
+    <string name="LabelStartRecord">동영상 시작</string>
+    <string name="LabelStopRecord">동영상 중지</string>
+    <string name="LabelReset">설정 리셋</string>
+
+    <!-- 라이브 뷰 Expander 캘리브레이션 -->
+    <string name="LabelCalibrateCapture">캘리브레이션</string>
+    <string name="LabelSetArea">🔲박스 보이기</string>
+    <string name="LabelDoneArea">🔳박스 숨기기</string>
+    <string name="LabelScale">📐스케일</string>
+    <string name="LabelReference">교정 원판</string>
+    <string name="LabelBoxSize">박스 크기</string>
+    <string name="LabelScaleValue">스케일 값 (mm/pixel)</string>
+    <string name="LableMeasureCenter">중심점 측정</string>
+    <string name="LableMeasureTilt">평행도 측정</string>
+    <string name="LableMeasureLine">길이 측정</string>
+    <string name="LabelGrid">💠그리드</string>
+    <string name="LabelList">📋리스트</string>
+
+    <!-- 멀티카메라 -->
+    <string name="LabelTitleMutipleLiveView">멀티카메라 라이브 화면</string>
+    <string name="LabelNumberOfCaptures">🔄 반복 회수</string>
+    <string name="LabelDelay"> 🏲 촬영간 지연 시간</string>
+    <string name="LabelWaitTime">🏴반복간 지연 시간</string>
+    <string name="ButtonCapturePhotos"> ⏯ 촬영</string>
+    <string name="ButtonStop">⏸중지</string>
+    <string name="LabelSettingsMultiLiveView">라이브</string>
+    <string name="LabelFormatAllCards">메모리 카드 전부 포맷</string>
+    <string name="LabelControl">컨트롤</string>
+    <string name="LabelColumns">가로</string>
+    <string name="LabelRows">세로</string>
+
+    <!-- 턴테이블 -->
+    <string name="LabelTurnTableTitleUSBConnect">USB 연결</string>
+    <string name="LabelTurnTableTitleCameraFunction">카메라 기능</string>
+    <string name="LabelTurnTableTitleMoveFunction">턴테이블 기능</string>
+    <string name="LabelTurnTableTitleCapture">턴테이블 일반 촬영</string>
+    <string name="LabelTurnTableTitleUserPoint">사용자 지정 각도 촬영</string>
+    <string name="LabelTurnTableTitleMovie">동영상 촬영 (라이브 뷰 화면 활성시 동영상 기능 작동)</string>
+    <string name="LabelTurnTablePort">포트</string>
+    <string name="LabelTurnTableStatus">상태</string>
+    <string name="LabelTurnTableUSBConnectBtn">연결</string>
+    <string name="LabelTurnTableCameraFocusBtn">포커스</string>
+    <string name="LabelTurnTableCameraShutterBtn">셧터</string>
+    <string name="LabelTurnTableCameraAutoBtn">자동</string>
+    <string name="LabelTurnTableMoveTeachHome">원점 등록</string>
+    <string name="LabelTurnTableMoveHome">원점 이동</string>
+    <string name="LabelTurnTableMoveContinuousPlus">연속동작(시계)</string>
+    <string name="LabelTurnTableMoveContinuousMinus">연속동작(반시계)</string>
+    <string name="LabelTurnTableCW">시계 방향</string>
+    <string name="LabelTurnTableCCW">반시계 방향</string>
+    <string name="LabelTurnTableCapture">촬영</string>
+    <string name="LabelTurnTableCount">촬영횟수</string>
+    <string name="LabelTurnTableMoveStop">정지</string>
+    <string name="LabelTurnTableCaptureNonStop">논스톱 촬영</string>
+    <string name="LabelTurnTableUserAngle">선택각도</string>
+    <string name="LabelTurnTableUserCapture">촬영</string>
+
+
+</resources>

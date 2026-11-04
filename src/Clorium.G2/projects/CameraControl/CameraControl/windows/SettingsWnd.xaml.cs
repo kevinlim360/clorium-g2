@@ -139,6 +139,12 @@ public partial class SettingsWnd : Window, IComponentConnector
 		}
 	}
 
+	// 촬영음 듣기: plays the sound picked in the list (even while 촬영음 is off).
+	private void ShutterSoundPreview_Click(object sender, RoutedEventArgs e)
+	{
+		CameraControl.Core.Classes.ShutterSounds.Play(ServiceProvider.Settings.ShutterSound);
+	}
+
 	private void Btn_BackupFolder_Click(object sender, RoutedEventArgs e)
 	{
 		using (FolderBrowserDialog dialog = new FolderBrowserDialog())

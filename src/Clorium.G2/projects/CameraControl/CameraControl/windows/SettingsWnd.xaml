@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Clorium G2 · 클로리움 설정 (design "클로리움 설정 · G2"). Bindings and handlers are the original SettingsWnd ones. -->
-<Window x:Class="CameraControl.windows.SettingsWnd" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:Core="clr-namespace:CameraControl.Core;assembly=CameraControl.Core" xmlns:T="clr-namespace:CameraControl.Core.Translation;assembly=CameraControl.Core" xmlns:wpf="clr-namespace:CameraControl.Core.Wpf;assembly=CameraControl.Core" xmlns:my1="clr-namespace:CameraControl.windows" Title="클로리움 설정" Height="820" Width="860" MinWidth="720" MinHeight="560" WindowStartupLocation="CenterScreen" Background="{DynamicResource G2Panel}" FontFamily="{DynamicResource G2Font}" TextElement.Foreground="{DynamicResource G2Text}" TextElement.FontSize="{DynamicResource G2Fs13}" TextOptions.TextFormattingMode="Ideal" Loaded="Window_Loaded" ContentRendered="G2Settings_ContentRendered">
+<Window x:Class="CameraControl.windows.SettingsWnd" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:Core="clr-namespace:CameraControl.Core;assembly=CameraControl.Core" xmlns:Classes="clr-namespace:CameraControl.Core.Classes;assembly=CameraControl.Core" xmlns:T="clr-namespace:CameraControl.Core.Translation;assembly=CameraControl.Core" xmlns:wpf="clr-namespace:CameraControl.Core.Wpf;assembly=CameraControl.Core" xmlns:my1="clr-namespace:CameraControl.windows" Title="클로리움 설정" Height="820" Width="860" MinWidth="720" MinHeight="560" WindowStartupLocation="CenterScreen" Background="{DynamicResource G2Panel}" FontFamily="{DynamicResource G2Font}" TextElement.Foreground="{DynamicResource G2Text}" TextElement.FontSize="{DynamicResource G2Fs13}" TextOptions.TextFormattingMode="Ideal" Loaded="Window_Loaded" ContentRendered="G2Settings_ContentRendered">
   <FrameworkElement.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
@@ -265,12 +265,14 @@
 </Border><Border Style="{StaticResource G2Card}" Padding="0" Margin="0,0,0,12" Tag="촬영 직후">
   <StackPanel>
     <TextBlock Style="{StaticResource G2SectionTitle}" Margin="14,12,14,6" Text="촬영 직후" />
-    <Border Style="{StaticResource G2SetRow}" Tag="촬영음 ">
+    <Border Style="{StaticResource G2SetRow}" Tag="촬영음 셔터음 셔터 소리 ">
   <DockPanel>
     <ContentControl DockPanel.Dock="Right" VerticalAlignment="Center" Margin="12,0,0,0" Focusable="False"><CheckBox Style="{StaticResource G2Switch}" IsChecked="{Binding UsePlaySound}" /></ContentControl>
+    <Button x:Name="ShutterSoundPreview" DockPanel.Dock="Right" Style="{StaticResource G2GhostButton}" Margin="8,0,0,0" VerticalAlignment="Center" Content="듣기" ToolTip="고른 촬영음을 들어 봅니다." Click="ShutterSoundPreview_Click" />
+    <ContentControl DockPanel.Dock="Right" VerticalAlignment="Center" Margin="12,0,0,0" Focusable="False"><ComboBox x:Name="ShutterSoundList" Width="200" DisplayMemberPath="Label" SelectedValuePath="Number" ItemsSource="{Binding Source={x:Static Classes:ShutterSounds.All}}" SelectedValue="{Binding ShutterSound}" IsEnabled="{Binding UsePlaySound}"></ComboBox></ContentControl>
     <StackPanel VerticalAlignment="Center">
       <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="촬영음" /></StackPanel>
-      
+      <TextBlock Style="{StaticResource G2Caption}" Margin="0,2,0,0" TextWrapping="Wrap" Text="촬영할 때 나는 소리를 고릅니다. 기본은 1번입니다." />
     </StackPanel>
   </DockPanel>
 </Border><Border Style="{StaticResource G2SetRow}" Tag="촬영 후 전체 화면 미리보기 ">

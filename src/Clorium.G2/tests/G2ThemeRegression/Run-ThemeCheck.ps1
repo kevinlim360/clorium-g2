@@ -15,7 +15,10 @@ Get-ChildItem -LiteralPath (Join-Path $r 'dependencies/Managed') -Filter *.dll |
 if (Test-Path -LiteralPath $native) { Copy-Item -LiteralPath $native -Destination $out }
 # {T:Translate} (라이브뷰) reads Languages\*.xml next to the exe; the build output has none (dev runtime, read only).
 $languages = [IO.Path]::GetFullPath((Join-Path $r '../../.local/g2-runtime/Languages'))
-if (Test-Path -LiteralPath $languages) { Copy-Item -LiteralPath $languages -Destination $out -Recurse }
+if (Test-Path -LiteralPath $languages) {
+    New-Item -ItemType Directory -Force (Join-Path $out 'Languages') | Out-Null
+    Get-ChildItem -LiteralPath $languages -File | Where-Object { -not (Test-Path -LiteralPath (Join-Path $out "Languages/$($_.Name)")) } | ForEach-Object { Copy-Item -LiteralPath $_.FullName -Destination (Join-Path $out 'Languages') }
+}
 # Libraries only the runtime ships (ControlzEx for MahApps' generic theme in 라이브뷰, System.Text.Json and its
 # System.Buffers/Memory/... for the 배경제거 engine client): copied from the dev runtime when the build output lacks them.
 $runtimeDir = [IO.Path]::GetFullPath((Join-Path $r '../../.local/g2-runtime'))

@@ -455,4 +455,10 @@
   <ItemGroup Condition="'$(CloriumLegacyLicenseKeyFile)' != ''">
     <EmbeddedResource Include="$(CloriumLegacyLicenseKeyFile)" LogicalName="Clorium.LegacyLicenseKey" />
   </ItemGroup>
+  <ItemGroup>
+    <!-- G2 촬영음 (클로리움 설정 > 촬영 > 촬영음 종류): copied next to the program as Data\ShutterSounds -->
+    <None Include="Data/ShutterSounds/*.*" CopyToOutputDirectory="PreserveNewest" Link="Data/ShutterSounds/%(Filename)%(Extension)" />
+    <!-- Korean UI wording ({T:Translate}); edited with tools/KoreanText like the other Korean text -->
+    <None Include="Languages/ko.xml" CopyToOutputDirectory="PreserveNewest" Link="Languages/ko.xml" />
+  </ItemGroup>
 </Project>

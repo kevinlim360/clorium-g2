@@ -46,6 +46,8 @@ class ThemeCheck
 		using (var f = File.Create(path)) enc.Save(f);
 	}
 
+	static bool EngineUp() { try { using (var c = new System.Net.Sockets.TcpClient()) return c.ConnectAsync("127.0.0.1", 8765).Wait(1000) && c.Connected; } catch { return false; } }
+
 	static Color Bg(Window w) { return ((SolidColorBrush)w.Background).Color; }
 
 	[STAThread]
@@ -125,6 +127,7 @@ class ThemeCheck
 				Check("라이브뷰 builds without a camera and uses the G2 page in " + mode + " (" + Bg(lv) + ")", lv.FindName("_image") != null && lv.FindName("ExpanderCalibration") != null && (d ? Bg(lv).R < 0x30 : Bg(lv).R > 0xE0));
 				lv.Hide(); // its Closing hands over to WindowsManager (not set up here)
 
+				if (!EngineUp()) { Console.WriteLine("SKIP: 배경제거 window checks (engine not running on 8765)"); continue; }
 				var bw = (Window)Activator.CreateInstance(bgr);
 				bw.Show();
 				bgr.GetMethod("SetTarget", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(bw, new object[] { jpeg });
@@ -154,6 +157,46 @@ class ThemeCheck
 				bw.Close();
 			}
 			apply.Invoke(null, new object[] { false });
+
+			// 시작 화면: the Clorium logo animation at several moments (and its still last frame).
+			ServiceProvider.Branding.ShowStartupScreenAnimation = true;
+			Type startup = g2.GetType("CameraControl.StartUpWindow", true);
+			var sw = (Window)Activator.CreateInstance(startup);
+			sw.Show(); Pump(300);
+			var introBoard = (System.Windows.Media.Animation.Storyboard)sw.Resources["Intro"];
+			foreach (double at in new[] { 0.3, 0.9, 1.6, 2.1, 2.6, 3.4 })
+			{
+				introBoard.Begin(sw, true); introBoard.Pause(sw);
+				introBoard.Seek(sw, TimeSpan.FromSeconds(at), System.Windows.Media.Animation.TimeSeekOrigin.BeginTime); Pump(150);
+				Snapshot(sw, Path.Combine(outDir, "intro-" + at.ToString("0.0").Replace('.', '_') + "s.png"));
+			}
+			var lastLetter = (FrameworkElement)sw.FindName("Tg13");
+			Check("시작 화면: logo animation ends with CLORIUM and AI PHOTO STATION shown (last letter opacity " + lastLetter.Opacity + ")", lastLetter.Opacity > 0.99 && ((System.Windows.Media.ScaleTransform)sw.FindName("WipeScale")).ScaleX > 0.99 && ((System.Windows.Media.RotateTransform)sw.FindName("SymbolRotate")).Angle == 0);
+			DateTime closeStart = DateTime.Now;
+			startup.GetMethod("CloseWhenReady").Invoke(sw, null);
+			DateTime until4 = DateTime.Now.AddSeconds(8);
+			while (sw.IsVisible && DateTime.Now < until4) Pump(50);
+			Check("시작 화면 closes after the intro with a fade (" + (DateTime.Now - closeStart).TotalSeconds.ToString("0.0") + " s)", !sw.IsVisible);
+
+			// 촬영음: the seven sounds next to the program, numbered 1..7, all playable (WAV and MP3).
+			Type sounds = typeof(Settings).Assembly.GetType("CameraControl.Core.Classes.ShutterSounds", true);
+			var all = (System.Collections.IEnumerable)sounds.GetProperty("All").GetValue(null, null);
+			var list = new List<object>(); foreach (object o in all) list.Add(o);
+			Func<object, string, object> P = (o, n) => o.GetType().GetProperty(n).GetValue(o, null);
+			Check("촬영음 list: " + string.Join(", ", list.ConvertAll(o => (string)P(o, "Label")).ToArray()), list.Count == 7 && (int)P(list[0], "Number") == 1 && ((string)P(list[0], "Path")).EndsWith(".mp3"));
+			Check("촬영음 default is 1", new Settings().ShutterSound == 1);
+			int playable = 0;
+			foreach (object o in list)
+			{
+				var mp = new System.Windows.Media.MediaPlayer(); bool done = false, ok = false;
+				mp.MediaOpened += (s2, a2) => { done = true; ok = mp.NaturalDuration.HasTimeSpan && mp.NaturalDuration.TimeSpan.TotalMilliseconds > 0; };
+				mp.MediaFailed += (s2, a2) => { done = true; Console.WriteLine("  sound failed: " + P(o, "Path") + " " + a2.ErrorException.Message); };
+				mp.Open(new Uri((string)P(o, "Path")));
+				DateTime u = DateTime.Now.AddSeconds(5); while (!done && DateTime.Now < u) Pump(50);
+				if (ok) playable++;
+				mp.Close();
+			}
+			Check("all 촬영음 files open in the player (" + playable + "/7)", playable == 7);
 
 			// 정사각형 판 keyword on a measurement copy: the same calls as MainWindow.WriteMetadata.
 			string value = "clorium-scale:v1;board=500;sx=0.2;sy=0.2001;kh=0.01;kv=0;rot=0.1;h=1,0,0,0,1,0,0,0,1;corners=1,1,2,1,2,2,1,2;at=2026-11-03T12:00:00";

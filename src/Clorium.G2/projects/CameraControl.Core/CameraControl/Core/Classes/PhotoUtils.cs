@@ -65,21 +65,10 @@ public class PhotoUtils
 		File.Copy(sourse, dest, overwrite: true);
 	}
 
+	// G2: the 촬영음 chosen in 클로리움 설정 (Data\ShutterSounds, default 1); Data\takephoto.wav when none is installed.
 	public static void PlayCaptureSound()
 	{
-		try
-		{
-			string basedir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-			if (basedir != null)
-			{
-				SoundPlayer mplayer = new SoundPlayer(Path.Combine(basedir, "Data", "takephoto.wav"));
-				mplayer.Play();
-			}
-		}
-		catch (Exception message)
-		{
-			Log.Debug(message);
-		}
+		ShutterSounds.Play(ServiceProvider.Settings?.ShutterSound ?? 1);
 	}
 
 	public static string GetFullPath(string path)

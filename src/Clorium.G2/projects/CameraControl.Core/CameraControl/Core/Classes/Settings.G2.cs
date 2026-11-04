@@ -17,6 +17,21 @@ public partial class Settings
         }
     }
 
+    private int _shutterSound = 1;
+
+    // G2: 촬영음 종류 — number of Data\ShutterSounds\NN_*.wav|mp3 played after a shot when UsePlaySound is on
+    // (see ShutterSounds). Persisted; default 1. A number with no file falls back to the first sound.
+    public int ShutterSound
+    {
+        get => _shutterSound;
+        set
+        {
+            if (_shutterSound == value) return;
+            _shutterSound = value;
+            NotifyPropertyChanged("ShutterSound");
+        }
+    }
+
     private bool _useLargeText;
 
     // G2 UI: 큰 글자 보기 — main screen text x1.35 (product name excluded). Persisted; default off.

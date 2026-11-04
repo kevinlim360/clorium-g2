@@ -96,6 +96,7 @@ public partial class SettingsWnd
 			"UseMonstarDeck",
 			"UseParallelTransfer",
 			"UsePlaySound",
+			"ShutterSound",
 			"UseSuperfocus",
 			"WebCam_DeviceName"
 	};
