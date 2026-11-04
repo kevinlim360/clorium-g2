@@ -59,6 +59,12 @@ public partial class App : System.Windows.Application
 		ServiceProvider.Settings = ServiceProvider.Settings.Load();
 		// G2 windows take their colours from G2Palette when they load; a theme change applies after a restart.
 		CameraControl.Classes.G2Palette.Dark = ServiceProvider.Settings.UseDarkScreen;
+		// G2: the start screen opens as soon as the settings are read (before the license/date checks and session clean-up),
+		// not topmost while those checks may show a message box.
+		if (ServiceProvider.Branding.ShowStartupScreen)
+		{
+			ShowStartScreen();
+		}
 		ServiceProvider.Settings.RemoveSessionFile(ServiceProvider.Settings.SessionFileKeepDays);
 		if (!CheckLicense())
 		{
@@ -68,6 +74,7 @@ public partial class App : System.Windows.Application
 		{
 			Environment.Exit(0);
 		}
+		OnStartScreen(w => w.Topmost = true);
 		if (ServiceProvider.Settings.UseWebserver)
 		{
 			RestartAsAdministrator();
@@ -76,12 +83,55 @@ public partial class App : System.Windows.Application
 		{
 			Directory.CreateDirectory(Path.GetDirectoryName("D:\\Clorium Data\\"));
 		}
-		if (ServiceProvider.Branding.ShowStartupScreen)
-		{
-			_startUpWindow = new StartUpWindow();
-			_startUpWindow.Show();
-		}
 		Task.Factory.StartNew(InitApplication);
+	}
+
+	// The start screen runs on its own UI thread, so the intro is drawn at once and keeps moving while this thread builds
+	// the main window and plugins (which blocks for seconds). It only uses its own resources.
+	private void ShowStartScreen()
+	{
+		using (ManualResetEventSlim shown = new ManualResetEventSlim())
+		{
+			Thread thread = new Thread(() =>
+			{
+				try
+				{
+					StartUpWindow window = new StartUpWindow { Topmost = false };
+					window.Closed += (s, e) => Dispatcher.CurrentDispatcher.BeginInvokeShutdown(DispatcherPriority.Background);
+					_startUpWindow = window;
+					window.Show();
+				}
+				catch (Exception ex)
+				{
+					_startUpWindow = null;
+					Log.Error("App : start screen failed", ex);
+					return;
+				}
+				finally
+				{
+					shown.Set();
+				}
+				Dispatcher.Run();
+			});
+			thread.SetApartmentState(ApartmentState.STA);
+			thread.IsBackground = true;
+			thread.Name = "Start screen";
+			thread.Start();
+			shown.Wait(5000);
+		}
+	}
+
+	private void OnStartScreen(Action<StartUpWindow> action)
+	{
+		StartUpWindow window = _startUpWindow;
+		if (window == null) return;
+		try
+		{
+			window.Dispatcher.BeginInvoke(action, window);
+		}
+		catch (InvalidOperationException)
+		{
+		}
 	}
 
 	private void InitApplication()
@@ -89,6 +139,7 @@ public partial class App : System.Windows.Application
 		try
 		{
 			Dispatcher.Invoke(ServiceProvider.Configure);
+			if (StartUpWindow.ShownAfterStart.HasValue) Log.Debug("App : start screen shown " + (int)StartUpWindow.ShownAfterStart.Value.TotalMilliseconds + " ms after process start");
 			ServiceProvider.Settings.LoadSessionData();
 			TranslationManager.LoadLanguage(ServiceProvider.Settings.SelectedLanguage);
 			ServiceProvider.PluginManager.CopyPlugins();
@@ -134,10 +185,7 @@ public partial class App : System.Windows.Application
 		Dispatcher.BeginInvoke((Action)(() =>
 		{
 			StartApplication();
-			if (_startUpWindow != null)
-			{
-				_startUpWindow.CloseWhenReady();
-			}
+			OnStartScreen(w => w.CloseWhenReady());
 		}));
 	}
 

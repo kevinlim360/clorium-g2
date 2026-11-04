@@ -17,9 +17,22 @@ public partial class StartUpWindow : Window, IComponentConnector
 {
 	private bool _closing;
 
+	// Time from process start to the first drawn frame of this window (written to the log once logging is set up).
+	public static TimeSpan? ShownAfterStart { get; private set; }
+
 	public StartUpWindow()
 	{
 		InitializeComponent();
+		// Always the main (primary) monitor: CenterScreen follows the mouse/active monitor.
+		Rect work = SystemParameters.WorkArea;
+		Left = work.Left + (work.Width - Width) / 2;
+		Top = work.Top + (work.Height - Height) / 2;
+	}
+
+	private void Window_ContentRendered(object sender, EventArgs e)
+	{
+		try { ShownAfterStart = DateTime.Now - System.Diagnostics.Process.GetCurrentProcess().StartTime; }
+		catch (InvalidOperationException) { }
 	}
 
 	private void Window_Loaded(object sender, RoutedEventArgs e)

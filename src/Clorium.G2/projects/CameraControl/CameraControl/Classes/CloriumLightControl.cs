@@ -179,7 +179,11 @@ internal static class CloriumLightControl
 		}
 		try
 		{
-			Process.Start(new ProcessStartInfo(path) { WorkingDirectory = Path.GetDirectoryName(path), UseShellExecute = true });
+			// G2 start-up (showErrors false) starts the app minimized so only the main screen opens; the rail button shows
+			// it. Told through the environment (light app 0.7.12+): older builds ignore it, while an unknown option would stop them.
+			ProcessStartInfo start = new ProcessStartInfo(path) { WorkingDirectory = Path.GetDirectoryName(path), UseShellExecute = false };
+			if (!showErrors) start.EnvironmentVariables["CLORIUM_LIGHT_START_MINIMIZED"] = "1";
+			Process.Start(start);
 			return true;
 		}
 		catch (Exception ex)
