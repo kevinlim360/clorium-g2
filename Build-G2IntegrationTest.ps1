@@ -63,6 +63,9 @@ try {
     if ($LASTEXITCODE -ge 8) { throw "robocopy shutter sounds $LASTEXITCODE" }
     # Korean wording file from the source (tools/KoreanText edits it).
     Copy-Item -LiteralPath 'projects/CameraControl/bin/Release/net48/Languages/ko.xml' -Destination (Join-Path $Target 'Languages/ko.xml') -Force
+    # G2 user messages in Korean/English (tools/KoreanText messages-apply), when the reviewed list has been applied.
+    $messages = 'projects/CameraControl/bin/Release/net48/Data/Messages.xml'
+    if (Test-Path -LiteralPath $messages) { Copy-Item -LiteralPath $messages -Destination (Join-Path $Target 'Data/Messages.xml') -Force }
     $global:LASTEXITCODE = 0
     Run @('tools/CoreWpfCompatibility/bin/Release/net10.0/CoreWpfCompatibility.dll', "$baseline/releases/Clorium_4.7.1.4_20261023/files/CameraControl.Core.dll", "$Target/CameraControl.Core.dll")
     Run @('tools/WiaMetadataFix/bin/Release/net10.0/WiaMetadataFix.dll', 'projects/CameraControl.Devices/bin/Release/net48/CameraControl.Devices.dll', "$Target/CameraControl.Devices.dll")
