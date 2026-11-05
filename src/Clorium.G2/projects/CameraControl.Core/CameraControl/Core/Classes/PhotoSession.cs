@@ -673,6 +673,36 @@ public class PhotoSession : BaseFieldClass
 		}
 	}
 
+	// Measurement-only shot (FrontBackMode 1 already set): the front photo this measurement belongs to. The front just taken
+	// (current counter) when it exists, otherwise the name the next front shot will get. The counter is not advanced.
+	public string MeasureBaseFileName(string file, ICameraDevice device, string tempfile)
+	{
+		lock (_locker)
+		{
+			string ext = Path.GetExtension(file);
+			if (string.IsNullOrEmpty(ext))
+			{
+				ext = ".jpg";
+			}
+			string current = Path.Combine(Folder, FormatFileName(device, file, tempfile, incremetCounter: false) + ext);
+			if (File.Exists(current) || FileNameTemplate == null || !FileNameTemplate.Contains("[Counter"))
+			{
+				return current;
+			}
+			CameraProperty property = ServiceProvider.Settings.CameraProperties.Get(device);
+			int propertyCounter = property.Counter, counter = Counter;
+			try
+			{
+				return Path.Combine(Folder, FormatFileName(device, file, tempfile) + ext);
+			}
+			finally
+			{
+				property.Counter = propertyCounter;
+				Counter = counter;
+			}
+		}
+	}
+
 	private string FormatFileName(ICameraDevice device, string file, string tempfile, bool incremetCounter = true)
 	{
 		CameraProperty property = ServiceProvider.Settings.CameraProperties.Get(device);

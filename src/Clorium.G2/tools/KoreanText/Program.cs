@@ -12,12 +12,14 @@
 using System.Text;
 using System.Text.RegularExpressions;
 
-static class Program
+static partial class Program
 {
 	sealed class Entry
 	{
 		public string Id, File, Kind, Context, Text, Line;
 		public int LineNo, Offset; // Offset: start of Text in the file (chars)
+		public int LitStart, LitEnd; // C# literal including prefix and quotes
+		public bool Interp, Verbatim, Raw;
 		public string Wording => Text;
 	}
 
@@ -28,6 +30,7 @@ static class Program
 	static int Main(string[] args)
 	{
 		Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+		if (args.Length >= 1 && args[0].StartsWith("messages-")) return Messages(args);
 		if (args.Length < 3 || (args[0] != "export" && args[0] != "apply"))
 		{
 			Console.Error.WriteLine("usage: KoreanText export|apply <projectsRoot> <folder> [--lang <ko.xml>] [--dry-run]");
@@ -61,15 +64,16 @@ static class Program
 		return list;
 	}
 
-	static void Add(List<Entry> list, string text, string rel, int offset, int length, string kind, string context)
+	static Entry Add(List<Entry> list, string text, string rel, int offset, int length, string kind, string context)
 	{
 		string value = text.Substring(offset, length);
-		if (!Hangul.IsMatch(value)) return;
+		if (!Hangul.IsMatch(value)) return null;
 		int lineNo = 1 + CountNewlines(text, offset);
 		int ls = text.LastIndexOf('\n', Math.Max(0, offset - 1)) + 1, le = text.IndexOf('\n', offset);
 		if (le < 0) le = text.Length;
 		string line = text.Substring(ls, le - ls).Trim();
 		list.Add(new Entry { File = rel, Kind = kind, Context = context, Text = value, LineNo = lineNo, Offset = offset, Line = line.Length > 200 ? line.Substring(0, 200) + "…" : line });
+		return list[list.Count - 1];
 	}
 
 	static int CountNewlines(string s, int end)
@@ -98,7 +102,8 @@ static class Program
 					int q = p; while (q < s.Length && s[q] == '"') q++;
 					int quotes = q - p, end = s.IndexOf(new string('"', quotes), q, StringComparison.Ordinal);
 					if (end < 0) return;
-					Add(list, s, rel, q, end - q, "C# 문자열", Context(s, i));
+					var raw = Add(list, s, rel, q, end - q, "C# 문자열", Context(s, i));
+					if (raw != null) { raw.Raw = true; raw.Interp = interp; raw.LitStart = i; raw.LitEnd = end + quotes; }
 					i = end + quotes; continue;
 				}
 				int start = p + 1, j = start;
@@ -109,7 +114,8 @@ static class Program
 					if (interp && s[j] == '{' && j + 1 < s.Length && s[j + 1] != '{') j = SkipHole(s, j);
 					else j++;
 				}
-				Add(list, s, rel, start, j - start, "C# 문자열", Context(s, i));
+				var lit = Add(list, s, rel, start, j - start, "C# 문자열", Context(s, i));
+				if (lit != null) { lit.Interp = interp; lit.Verbatim = verbatim; lit.LitStart = i; lit.LitEnd = j + 1; }
 				i = j + 1; continue;
 			}
 			i++;

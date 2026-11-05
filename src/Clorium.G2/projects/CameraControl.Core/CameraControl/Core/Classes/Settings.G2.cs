@@ -32,6 +32,47 @@ public partial class Settings
         }
     }
 
+    private bool _useMeasureCapture;
+
+    // 촬영 설정 > 치수 촬영 (M): shows the 치수 button (half width, left of 앞면) and the 치수자동저장 box above 앞면.
+    // Off (default): the screen keeps 앞면/뒷면 and 앞면 saves the measurement copy as before.
+    public bool UseMeasureCapture
+    {
+        get => _useMeasureCapture;
+        set
+        {
+            if (_useMeasureCapture == value) return;
+            _useMeasureCapture = value;
+            NotifyPropertyChanged("UseMeasureCapture");
+            NotifyPropertyChanged("FrontSavesMeasure");
+        }
+    }
+
+    private bool _measureAutoSave = true;
+
+    // 치수자동저장 (checked by default): 앞면 also saves 치수측정\*_M.jpeg. Unchecked: only the 치수 button makes it.
+    public bool MeasureAutoSave
+    {
+        get => _measureAutoSave;
+        set
+        {
+            if (_measureAutoSave == value) return;
+            _measureAutoSave = value;
+            NotifyPropertyChanged("MeasureAutoSave");
+            NotifyPropertyChanged("FrontSavesMeasure");
+        }
+    }
+
+    // Whether an 앞면 shot writes the measurement copy.
+    [System.Xml.Serialization.XmlIgnore]
+    [Newtonsoft.Json.JsonIgnore]
+    public bool FrontSavesMeasure => !UseMeasureCapture || MeasureAutoSave;
+
+    // Runtime only: the next download is a 치수 shot (only 치수측정\*_M.jpeg is kept, named after the item's 앞면).
+    [System.Xml.Serialization.XmlIgnore]
+    [Newtonsoft.Json.JsonIgnore]
+    public bool IsMeasureOnly { get; set; }
+
     private bool _useLargeText;
 
     // G2 UI: 큰 글자 보기 — main screen text x1.35 (product name excluded). Persisted; default off.

@@ -252,9 +252,14 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 				{
 					Dispatcher.BeginInvoke(new Action(() => G2TextScale.Apply(ServiceProvider.Settings.UseLargeText)));
 				}
+				if (e.PropertyName == "UseMeasureCapture" || e.PropertyName == "UseDefectCapture")
+				{
+					Dispatcher.BeginInvoke(new Action(UpdateCaptureFaceColumns));
+				}
 			};
 		}
 		InitializeComponent();
+		UpdateCaptureFaceColumns();
 		if (!string.IsNullOrEmpty(ServiceProvider.Branding.ApplicationTitle))
 		{
 			Title = ServiceProvider.Branding.ApplicationTitle;
@@ -591,6 +596,7 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 		ServiceProvider.Settings.FrontBackMode = 0;
 		ServiceProvider.Settings.ShowAPICommunication = false;
 		ServiceProvider.Settings.IsDefect = false;
+		ServiceProvider.Settings.IsMeasureOnly = false;
 	}
 
 	private void InitialzeDeivce()
@@ -1885,6 +1891,7 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 	{
 		// Restore the purpose before re-enabling capture after a start failure.
 		ServiceProvider.Settings.FrontBackMode = 0;
+		ServiceProvider.Settings.IsMeasureOnly = false;
 		ServiceProvider.Settings.GetMeasurePicture = false;
 		ServiceProvider.Settings.Background = false;
 		is270CaptureMode = false;
@@ -1991,6 +1998,111 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 		}
 	}
 
+	// 치수 button (촬영 설정 > 치수 촬영): one press captures a measurement photo. Only 치수측정\<앞면 name>_M.jpeg is saved,
+	// so an 앞면 already taken for the item is not touched.
+	// 촬영 면 row: 치수 (half of a tile) · 앞면 · 뒷면 · 하자; a button turned off in 촬영 설정 takes no space.
+	private void UpdateCaptureFaceColumns()
+	{
+		bool measure = ServiceProvider.Settings != null && ServiceProvider.Settings.UseMeasureCapture;
+		bool defect = ServiceProvider.Settings != null && ServiceProvider.Settings.UseDefectCapture;
+		MeasureColumn.Width = measure ? new GridLength(0.5, GridUnitType.Star) : new GridLength(0);
+		DefectColumn.Width = defect ? new GridLength(1, GridUnitType.Star) : new GridLength(0);
+	}
+
+	private void But_MeasureCapture_Click(object sender, RoutedEventArgs e)
+	{
+		if (IsMusinsaOK())
+		{
+			CaptureOfMeasure(isToggleRot);
+		}
+	}
+
+	private async void CaptureOfMeasure(bool rotate270)
+	{
+		if (ServiceProvider.Settings.isBtnPressed || !ServiceProvider.Settings.ThumbailLoaded)
+		{
+			return;
+		}
+		Log.Debug("치수 촬영 Click : " + (rotate270 ? "270 회전" : "무 회전"));
+		is270CaptureMode = rotate270;
+		setExifOrientation(rotate270);
+		ServiceProvider.Settings.IsDefect = false;
+		ServiceProvider.Settings.FrontBackMode = 1;
+		ServiceProvider.Settings.GetMeasurePicture = false;
+		ServiceProvider.Settings.Background = false;
+		ServiceProvider.Settings.IsMeasureOnly = true;
+		if (!await CaptureAsync(shouldWait: true))
+		{
+			ServiceProvider.Settings.IsMeasureOnly = false;
+		}
+	}
+
+	private void SaveMeasureOnly(string tempFile, PhotoCapturedEventArgs eventArgs, PhotoSession session)
+	{
+		string source = tempFile, resized = null;
+		try
+		{
+			ApplyCaptureOrientation(tempFile);
+			if (ServiceProvider.Settings.ResolutionChange)
+			{
+				// Same pixels as the 앞면 measurement copy, so the scale stays valid.
+				resized = Path.Combine(Path.GetDirectoryName(tempFile), Path.GetFileNameWithoutExtension(tempFile) + "Res" + Path.GetExtension(tempFile));
+				ImageResolution(tempFile, resized, ServiceProvider.Settings.ResolutionPixelWidth, ServiceProvider.Settings.ResolutionPixelHeight);
+				source = resized;
+			}
+			string front = session.MeasureBaseFileName(eventArgs.FileName, eventArgs.CameraDevice, tempFile);
+			string measure = WriteMetadata(source, ServiceProvider.Settings.CloriumID, ServiceProvider.Settings.MetaScale, ServiceProvider.Settings.APIHost, front);
+			if (ServiceProvider.Settings.UseAlwaysBackup && measure != null)
+			{
+				Backup(measure);
+			}
+			Log.Debug("치수 촬영 저장 : " + measure);
+			StaticHelper.Instance.SystemMessage = "치수 사진 저장 : " + Path.GetFileName(measure);
+		}
+		finally
+		{
+			foreach (string file in new[] { resized, tempFile })
+			{
+				if (file != null && File.Exists(file))
+				{
+					PhotoUtils.WaitForFile(file);
+					File.Delete(file);
+				}
+			}
+			ServiceProvider.Settings.ThumbailLoaded = true;
+		}
+	}
+
+	private void ApplyCaptureOrientation(string tempFile)
+	{
+		if (is270CaptureMode)
+		{
+			SetExifOrientation(tempFile, Exif_Rotate);
+		}
+		else
+		{
+			switch (ServiceProvider.Settings.RotateIndex)
+			{
+			case 0:
+				Exif_Rotate = 1;
+				break;
+			case 1:
+				Exif_Rotate = 6;
+				break;
+			case 2:
+				Exif_Rotate = 3;
+				break;
+			case 3:
+				Exif_Rotate = 8;
+				break;
+			}
+			if (ServiceProvider.Settings.RotateIndex != 0)
+			{
+				SetExifOrientation(tempFile, Exif_Rotate);
+			}
+		}
+	}
+
 	private async void CaptureOfDefect(bool rotate270)
 	{
 		if (ServiceProvider.Settings.isBtnPressed || !ServiceProvider.Settings.ThumbailLoaded)
@@ -2029,7 +2141,7 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 			return;
 		}
 		ServiceProvider.Settings.FrontBackMode = 1;
-		ServiceProvider.Settings.GetMeasurePicture = true;
+		ServiceProvider.Settings.GetMeasurePicture = ServiceProvider.Settings.FrontSavesMeasure;
 		if (!await CaptureAsync(shouldWait: true))
 		{
 			return;
@@ -2268,6 +2380,11 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 				}
 				Log.Debug("카메라 별명 : " + ServiceProvider.Settings.CameraAlias);
 			}
+			if (ServiceProvider.Settings.IsMeasureOnly)
+			{
+				SaveMeasureOnly(tempFile, eventArgs, session);
+				return;
+			}
 			string fileName = "";
 			if (!session.UseOriginalFilename || eventArgs.CameraDevice.CaptureInSdRam)
 			{
@@ -2338,32 +2455,7 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 			}
 			if (extension.ToLower() != ".mp4" && extension.ToLower() != ".mov")
 			{
-				if (is270CaptureMode)
-				{
-					SetExifOrientation(tempFile, Exif_Rotate);
-				}
-				else
-				{
-					switch (ServiceProvider.Settings.RotateIndex)
-					{
-					case 0:
-						Exif_Rotate = 1;
-						break;
-					case 1:
-						Exif_Rotate = 6;
-						break;
-					case 2:
-						Exif_Rotate = 3;
-						break;
-					case 3:
-						Exif_Rotate = 8;
-						break;
-					}
-					if (ServiceProvider.Settings.RotateIndex != 0)
-					{
-						SetExifOrientation(tempFile, Exif_Rotate);
-					}
-				}
+				ApplyCaptureOrientation(tempFile);
 				ImageProcess(tempFile, fileName);
 			}
 			else
@@ -2489,6 +2581,7 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 			isCalibrationMode = false;
 			ServiceProvider.Settings.Background = false;
 			ServiceProvider.Settings.IsDefect = false;
+			ServiceProvider.Settings.IsMeasureOnly = false;
 			ServiceProvider.Settings.isBtnPressed = false;
 		}
 	}
@@ -2662,7 +2755,8 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 		}
 	}
 
-	private string WriteMetadata(string fullpathfilename, string cloriumID, string scale, string host)
+	// nameAs: the photo the measurement copy belongs to (치수 shot: the item's 앞면, which may not exist yet); default the source.
+	private string WriteMetadata(string fullpathfilename, string cloriumID, string scale, string host, string nameAs = null)
 	{
 		if (scale == null)
 		{
@@ -2697,12 +2791,13 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 					Log.Error("정사각형 판 스케일 메타데이터 기록 실패", ex);
 				}
 			}
-			string measurePath = Path.Combine(Path.GetDirectoryName(fullpathfilename), "치수측정");
+			string namePath = nameAs ?? fullpathfilename;
+			string measurePath = Path.Combine(Path.GetDirectoryName(namePath), "치수측정");
 			if (!Directory.Exists(measurePath))
 			{
 				Directory.CreateDirectory(measurePath);
 			}
-			string metapathfile = Path.Combine(measurePath, System.Text.RegularExpressions.Regex.Replace(Path.GetFileNameWithoutExtension(fullpathfilename), "_PR(?=_[FB]$)", "") + "_M.jpeg");
+			string metapathfile = Path.Combine(measurePath, System.Text.RegularExpressions.Regex.Replace(Path.GetFileNameWithoutExtension(namePath), "_PR(?=_[FB]$)", "") + "_M.jpeg");
 			using (Stream outputFile = File.Open(metapathfile, FileMode.Create, FileAccess.Write))
 			{
 				JpegBitmapEncoder encoder = new JpegBitmapEncoder

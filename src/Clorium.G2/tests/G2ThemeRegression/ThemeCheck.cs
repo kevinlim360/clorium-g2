@@ -158,6 +158,41 @@ class ThemeCheck
 			}
 			apply.Invoke(null, new object[] { false });
 
+			// 수퍼포커스 (no real camera): MF notice first, arrow row order, a box click never reaches the lens, 가까운 곳/먼 곳 save.
+			{
+				Type sf = g2.GetType("CameraControl.windows.SuperfocusWindow", true);
+				var cam = new CameraControl.Devices.BaseCameraDevice { SerialNumber = "THEME-SF" };
+				var w = (Window)sf.GetMethod("For").Invoke(null, new object[] { cam, null });
+				w.Show(); Pump(400);
+				Snapshot(w, Path.Combine(outDir, "superfocus.png"));
+				var inst = BindingFlags.Instance | BindingFlags.NonPublic;
+				var notice = (Border)sf.GetField("mfNotice", inst).GetValue(w);
+				string noticeText = ((TextBlock)((DockPanel)notice.Child).Children[1]).Text;
+				Check("수퍼포커스 opens with the MF notice (" + noticeText + ")", notice.Visibility == Visibility.Visible && noticeText.Contains("MF"));
+				var markA = (Button)sf.GetField("markA", inst).GetValue(w);
+				var row = (Panel)markA.Parent;
+				var labels = new List<string>(); foreach (UIElement c in row.Children) labels.Add((string)((Button)c).Content);
+				Check("수퍼포커스 row: " + string.Join(" ", labels.ToArray()), string.Join("|", labels.ToArray()) == "◀◀◀|◀◀|◀|가까운 곳|▶|▶▶|▶▶▶|먼 곳");
+				var lvFrame = new CameraControl.Devices.Classes.LiveViewData { ImageWidth = 1000, ImageHeight = 800, FocusFrameXSize = 100, FocusFrameYSize = 100, FocusX = 500, FocusY = 400 };
+				bool taken = (bool)sf.GetMethod("TrySelectPreviewBox").Invoke(null, new object[] { cam, lvFrame, 200, 600 });
+				object box = sf.GetMethod("PreviewBoxFor").Invoke(null, new object[] { cam });
+				Check("box click while open only moves the box (handled, x " + box.GetType().GetProperty("X").GetValue(box, null) + ")", taken && Math.Abs((double)box.GetType().GetProperty("X").GetValue(box, null) - 0.2) < 1e-6);
+				Check("AF while open does not drive the lens", (bool)sf.GetMethod("TryFocusSelectedBox").Invoke(null, new object[] { cam }));
+				((System.Threading.Tasks.Task)sf.GetMethod("MarkSelectedAsync").Invoke(w, new object[] { true })).Wait();
+				Pump(100);
+				Check("가까운 곳 saves the current focus (" + markA.Content + ")", (string)markA.Content == "가까운 곳 ✓");
+				((System.Threading.Tasks.Task)sf.GetMethod("MarkSelectedAsync").Invoke(w, new object[] { false })).Wait();
+				Pump(100);
+				var markB = (Button)sf.GetField("markB", inst).GetValue(w);
+				Check("먼 곳 at the same focus is refused (" + sf.GetProperty("Feedback").GetValue(w, null) + ")", (string)markB.Content == "먼 곳" && ((string)sf.GetProperty("Feedback").GetValue(w, null)).Contains("같은 초점"));
+				Snapshot(w, Path.Combine(outDir, "superfocus-marked.png"));
+				w.Hide(); Pump(100);
+				Check("hidden window: clicks go to the camera again", !(bool)sf.GetMethod("TrySelectPreviewBox").Invoke(null, new object[] { cam, lvFrame, 200, 600 }));
+				w.Show(); Pump(200);
+				Check("MF notice shows again on reopen", notice.Visibility == Visibility.Visible);
+				sf.GetMethod("CloseAll").Invoke(null, null);
+			}
+
 			// 시작 화면: the Clorium intro control (real-time ribbon), captured while it plays; then CloseWhenReady.
 			ServiceProvider.Branding.ShowStartupScreenAnimation = true;
 			Type startup = g2.GetType("CameraControl.StartUpWindow", true);

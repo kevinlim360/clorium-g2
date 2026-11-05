@@ -682,26 +682,46 @@
                 <DockPanel Margin="0,0,0,8">
                   <TextBlock Style="{StaticResource G2SectionTitle}" Text="촬영 면" />
                 </DockPanel>
-                <UniformGrid Rows="1">
-                  <Button Style="{StaticResource G2TileButton}" Margin="0,0,4,0" ToolTip="앞면 촬영 (_F · 미감개선 ON: _PR_F)" Click="But_FrontCapture_Click">
+                <!-- 치수 (half width, 촬영 설정 > 치수 촬영) · 앞면 · 뒷면 · 하자. Column widths follow the shown buttons (CaptureFaceColumns). -->
+                <Grid Name="CaptureFaceGrid">
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Name="MeasureColumn" Width="0" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Name="DefectColumn" Width="0" />
+                  </Grid.ColumnDefinitions>
+                  <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                  </Grid.RowDefinitions>
+                  <CheckBox Name="Check_MeasureAutoSave" Grid.Row="0" Grid.Column="1" Margin="2,0,4,4" HorizontalAlignment="Left" FontSize="{DynamicResource G2Fs11}" Foreground="{DynamicResource G2Sub}" Content="치수자동저장" Cursor="Hand"
+                            IsChecked="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=MeasureAutoSave, Mode=TwoWay}"
+                            ToolTip="체크: 앞면을 찍으면 치수 사진(치수측정\_M)도 함께 저장합니다. 해제: 치수 버튼을 누를 때만 치수 사진을 찍습니다." Visibility="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=UseMeasureCapture, Converter={StaticResource BooleanToVisibilityConverter1}}" />
+                  <Button Name="but_MeasureCapture" Grid.Row="1" Grid.Column="0" Style="{StaticResource G2TileButton}" Margin="0,0,4,0" Padding="2,8" MinWidth="0" ToolTip="치수 촬영: 누르면 치수 사진(치수측정\_M)만 찍습니다" Click="But_MeasureCapture_Click" Visibility="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=UseMeasureCapture, Converter={StaticResource BooleanToVisibilityConverter1}}">
+                    <StackPanel>
+                      <TextBlock Text="M" HorizontalAlignment="Center" FontSize="{DynamicResource G2Fs16}" FontWeight="SemiBold" Foreground="{DynamicResource G2Accent}" FontFamily="{StaticResource G2Mono}" />
+                      <TextBlock Text="치수" HorizontalAlignment="Center" FontSize="{DynamicResource G2Fs11}" FontWeight="SemiBold" />
+                    </StackPanel>
+                  </Button>
+                  <Button Style="{StaticResource G2TileButton}" Grid.Row="1" Grid.Column="1" Margin="0,0,4,0" ToolTip="앞면 촬영 (_F · 미감개선 ON: _PR_F)" Click="But_FrontCapture_Click">
                     <StackPanel>
                       <TextBlock Text="F" HorizontalAlignment="Center" FontSize="{DynamicResource G2Fs22}" FontWeight="SemiBold" Foreground="{DynamicResource G2Accent}" FontFamily="{StaticResource G2Mono}" />
                       <TextBlock Text="앞면" HorizontalAlignment="Center" FontSize="{DynamicResource G2Fs12}" FontWeight="SemiBold" />
                     </StackPanel>
                   </Button>
-                  <Button Style="{StaticResource G2TileButton}" Margin="4,0" ToolTip="뒷면 촬영 (_B · 미감개선 ON: _PR_B)" Click="But_BackCapture_Click">
+                  <Button Style="{StaticResource G2TileButton}" Grid.Row="1" Grid.Column="2" Margin="4,0" ToolTip="뒷면 촬영 (_B · 미감개선 ON: _PR_B)" Click="But_BackCapture_Click">
                     <StackPanel>
                       <TextBlock Text="B" HorizontalAlignment="Center" FontSize="{DynamicResource G2Fs22}" FontWeight="SemiBold" Foreground="{DynamicResource G2Accent}" FontFamily="{StaticResource G2Mono}" />
                       <TextBlock Text="뒷면" HorizontalAlignment="Center" FontSize="{DynamicResource G2Fs12}" FontWeight="SemiBold" />
                     </StackPanel>
                   </Button>
-                  <Button Name="but_DefectCapture" Style="{StaticResource G2TileButton}" Margin="4,0,0,0" ToolTip="하자 촬영: 누르면 바로 _D로 촬영합니다" Click="But_DefectCapture_Click" Visibility="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=UseDefectCapture, Converter={StaticResource BooleanToVisibilityConverter1}}">
+                  <Button Name="but_DefectCapture" Style="{StaticResource G2TileButton}" Grid.Row="1" Grid.Column="3" Margin="4,0,0,0" ToolTip="하자 촬영: 누르면 바로 _D로 촬영합니다" Click="But_DefectCapture_Click" Visibility="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=UseDefectCapture, Converter={StaticResource BooleanToVisibilityConverter1}}">
                     <StackPanel>
                       <TextBlock Text="D" HorizontalAlignment="Center" FontSize="{DynamicResource G2Fs22}" FontWeight="SemiBold" Foreground="{DynamicResource G2Pr}" FontFamily="{StaticResource G2Mono}" />
                       <TextBlock Text="하자" HorizontalAlignment="Center" FontSize="{DynamicResource G2Fs12}" FontWeight="SemiBold" />
                     </StackPanel>
                   </Button>
-                </UniformGrid>
+                </Grid>
                 <UniformGrid Rows="1" Margin="0,10,0,0">
                   <CheckBox Name="Check_AestheticImprovement" Content="미감개선" Height="42" Margin="0,0,4,0" Cursor="Hand"
                             IsChecked="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=IsAestheticImprovement, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"

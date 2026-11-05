@@ -461,5 +461,7 @@
     <None Include="Data/ShutterSounds/*.*" CopyToOutputDirectory="PreserveNewest" Link="Data/ShutterSounds/%(Filename)%(Extension)" />
     <!-- Korean UI wording ({T:Translate}); edited with tools/KoreanText like the other Korean text -->
     <None Include="Languages/ko.xml" CopyToOutputDirectory="PreserveNewest" Link="Languages/ko.xml" />
+    <!-- G2 user messages in Korean/English (UiText), written by tools/KoreanText messages-apply from the reviewed Excel list -->
+    <None Include="Data/Messages.xml" Condition="Exists('Data/Messages.xml')" CopyToOutputDirectory="PreserveNewest" Link="Data/Messages.xml" />
   </ItemGroup>
 </Project>

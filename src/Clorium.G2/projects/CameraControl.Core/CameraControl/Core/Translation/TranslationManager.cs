@@ -88,6 +88,8 @@ public static class TranslationManager
 
 	public static int LoadLanguage(string lang_code)
 	{
+		// G2 user messages (UiText) follow the same language: Korean for ko*, English otherwise.
+		CameraControl.Devices.UiText.Language = lang_code;
 		XmlDocument doc = new XmlDocument();
 		TranslatedStrings = new Dictionary<string, string>();
 		string langPath = "";

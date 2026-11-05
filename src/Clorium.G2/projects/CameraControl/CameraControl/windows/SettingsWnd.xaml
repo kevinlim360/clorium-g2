@@ -384,7 +384,7 @@
     <TextBlock Style="{StaticResource G2Caption}" TextWrapping="Wrap" Margin="14,0,14,10" Text="촬영 화면에 F/B 버튼을 표시하고 파일 이름 끝에 _F, _B를 붙입니다." />
     
   </StackPanel>
-</Border><Border Style="{StaticResource G2Card}" Padding="0" Margin="0,0,0,10" Tag="하자 촬영 (D) D 버튼을 켠 채 앞면을 찍으면 _D로 저장합니다. 미감개선(PR)과 치수 측정에서 제외됩니다.">
+</Border><Border Style="{StaticResource G2Card}" Padding="0" Margin="0,0,0,10" Tag="하자 촬영 (D) 켜면 촬영 화면에 하자(D) 버튼이 생기고, 누르면 바로 _D로 저장합니다. 미감개선(PR)과 치수 측정에서 제외됩니다.">
   <StackPanel>
     <DockPanel Margin="14,12,12,4">
       <ContentControl DockPanel.Dock="Right" Focusable="False" VerticalAlignment="Center"><CheckBox x:Name="G2Feat_defect" Style="{StaticResource G2Switch}" IsChecked="{Binding UseDefectCapture}" /></ContentControl>
@@ -393,8 +393,18 @@
         <Border Style="{StaticResource G2Chip}" Background="{DynamicResource G2PrBg}" Margin="8,0,0,0"><TextBlock Text="무신사" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="{DynamicResource G2PrText}" /></Border>
       </StackPanel>
     </DockPanel>
-    <TextBlock Style="{StaticResource G2Caption}" TextWrapping="Wrap" Margin="14,0,14,10" Text="D 버튼을 켠 채 앞면을 찍으면 _D로 저장합니다. 미감개선(PR)과 치수 측정에서 제외됩니다." />
+    <TextBlock Style="{StaticResource G2Caption}" TextWrapping="Wrap" Margin="14,0,14,10" Text="켜면 촬영 화면에 하자(D) 버튼이 생기고, 누르면 바로 _D로 저장합니다. 미감개선(PR)과 치수 측정에서 제외됩니다." />
     
+  </StackPanel>
+</Border><Border Style="{StaticResource G2Card}" Padding="0" Margin="0,0,0,10" Tag="치수 촬영 (M) 치수 버튼 치수자동저장 앞면 왼쪽에 치수 버튼을 표시합니다.">
+  <StackPanel>
+    <DockPanel Margin="14,12,12,4">
+      <ContentControl DockPanel.Dock="Right" Focusable="False" VerticalAlignment="Center"><CheckBox x:Name="G2Feat_measure" Style="{StaticResource G2Switch}" IsChecked="{Binding UseMeasureCapture}" /></ContentControl>
+      <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+        <TextBlock Style="{StaticResource G2SectionTitle}" Text="치수 촬영 (M)" />
+      </StackPanel>
+    </DockPanel>
+    <TextBlock Style="{StaticResource G2Caption}" TextWrapping="Wrap" Margin="14,0,14,10" Text="켜면 촬영 화면 앞면 왼쪽에 치수 버튼이, 앞면 위에 치수자동저장 체크박스가 생깁니다. 체크하면 앞면을 찍을 때 치수 사진도 저장하고, 해제하면 치수 버튼을 누를 때만 치수 사진을 찍습니다. 끄면 지금처럼 앞면을 찍을 때 치수 사진을 함께 저장합니다." />
   </StackPanel>
 </Border><Border Style="{StaticResource G2Card}" Padding="0" Margin="0,0,0,10" Tag="미감개선 모드 (PR) 앞·뒷면을 _PR_F, _PR_B로 저장합니다. 켜면 세로·가로 버튼 옆에 미감개선 스위치가 생깁니다. 촬영·저장 중에는 바꿀 수 없습니다.">
   <StackPanel>
@@ -501,7 +511,7 @@
   </DockPanel>
 </Border><Border Style="{StaticResource G2SetRow}" Tag="스케일 보정 ">
   <DockPanel>
-    <ContentControl DockPanel.Dock="Right" VerticalAlignment="Center" Margin="12,0,0,0" Focusable="False"><Button Style="{StaticResource G2GhostButton}" Content="측정 시작" Click="Btn_Calibration_Click" /></ContentControl>
+    <ContentControl DockPanel.Dock="Right" VerticalAlignment="Center" Margin="12,0,0,0" Focusable="False"><Button Style="{StaticResource G2GhostButton}" Content="기준스케일" ToolTip="캘리브레이션 판을 촬영해 한 픽셀당 길이(mm)와 보정값을 계산합니다." Click="Btn_Calibration_Click" /></ContentControl>
     <StackPanel VerticalAlignment="Center">
       <StackPanel Orientation="Horizontal"><TextBlock FontSize="{DynamicResource G2Fs13}" VerticalAlignment="Center" Text="스케일 보정" /></StackPanel>
       

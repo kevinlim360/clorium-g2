@@ -2146,7 +2146,7 @@ public partial class Settings : BaseFieldClass
 		ModeBgPng = false;
 		ModeBgJpeg = false;
 		StartupWithWindows = false;
-		SelectedLanguage = "en_US";
+		SelectedLanguage = "ko"; // G2: Korean product; English messages when the user picks an English language
 		CurrentThemeNameNew = "Dark\\grey";
 		LightTemperatureMin = 2700;
 		LightTemperatureMax = 8500;
