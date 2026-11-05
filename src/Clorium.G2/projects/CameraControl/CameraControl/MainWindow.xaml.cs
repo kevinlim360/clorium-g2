@@ -345,6 +345,8 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 		WatcherFtpServer.StopFTPServer();
 		DisconnectBarcodeScanner();
 		if (CloriumLightControl.Enabled) CloriumLightControl.PowerAsync(false, 5000).Wait(6000);
+		// The light app belongs to G2: it closes with it (lights already off).
+		CloriumLightControl.Quit();
 		ExternProcess_Close();
 		_ManagementTimer.Stop();
 		_ManagementTimer.Tick -= ManagementTimer_Tick;

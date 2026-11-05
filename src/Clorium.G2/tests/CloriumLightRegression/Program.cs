@@ -49,6 +49,7 @@ static class Program
 		var start = new ProcessStartInfo(args[0]) { UseShellExecute = false };
 		if (args.Length > 1) start.ArgumentList.Add(args[1]);
 		foreach (string a in new[] { "--demo", "--language", "ko", "--control-pipe", "CloriumLightControl." + user }) start.ArgumentList.Add(a);
+		start.Environment["CLORIUM_G2_PID"] = Environment.ProcessId.ToString(); // owned by this "G2" (light app 0.7.13+)
 		using Process light = Process.Start(start);
 		try
 		{
@@ -73,6 +74,10 @@ static class Program
 			var older = CloriumLightControl.PowerAsync(false, 10000);
 			var newer = CloriumLightControl.PowerAsync(true, 10000);
 			Check("latest request applied, none hang", newer.Result && older.Wait(12000));
+			// G2 closing: the light app it owns closes too.
+			Check("quit accepted by the light app", CloriumLightControl.Quit());
+			Check("light app closed after quit", light.WaitForExit(15000));
+			Check("no light app left: quit is harmless", !CloriumLightControl.Quit());
 		}
 		finally
 		{

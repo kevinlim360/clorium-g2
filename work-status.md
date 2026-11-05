@@ -1,5 +1,7 @@
 # 클로리움 G2 작업 기록
 
+2026-11-05 조명 앱을 G2에 종속(사용자 요청: 조명 조절 앱은 클로리움에 완전히 종속, 독립 사용 안 함; 보고: 테스트 때마다 조명 제어 창이 따로 떠 있음 — G2 종료 후에도 조명 앱이 남아 다음 G2가 그대로 재사용했기 때문). G2: 조명 앱 실행 시 CLORIUM_G2_PID 전달, 종료 시 조명 끄기 후 quit 명령(CloriumLightControl.Quit). 조명 앱 0.7.13: G2 PID 없이 직접 실행하면 안내 상자만 띄우고 종료(데모·검사 옵션 제외), quit 명령, 창 닫기 버튼은 숨기기(G2 조명 버튼이 다시 표시), G2 시작 때는 숨긴 상태로 시작(작업 표시줄에도 없음), G2 프로세스가 끝나면(강제 종료 포함) 조명을 끈 뒤 스스로 종료. 검사: G2 빌드 오류 0, CloriumLightRegression 20(quit 3개 추가), 조명 앱 130(신규 4개), 테스트 실행본 실제: 단독 실행=안내만(파이프 없음), G2 시작=조명 앱 창 없음, show=창 표시, 닫기 버튼=숨김(실행 유지), G2 정상 종료=조명 2대 끄기(2/2) 후 조명 앱 종료, G2 강제 종료=2.6초 안에 조명 앱 종료.
+
 2026-11-05 시작 화면 인트로 교체(사용자 요청: Clorium Intro4_transparent.zip으로). 새 애니메이션: 네 모서리에서 3D 리본 4개가 굴러 들어와 평행하게 엇갈리며 로고 리본에 정착(RibbonFx 3D 조명·깊이 정렬), 원본 벡터 리본 2.0s, CLORIUM 2.35s, 글자 3.15s, 본편 4.15초, 대기 회전 2초 간격. CloriumIntro.xaml은 동일, CloriumIntro.xaml.cs·RibbonFx.cs 교체(네임스페이스·nullable 표기만 조정, ShowFinal 유지; 이번 RibbonFx에는 .NET 4.8 비호환 문법 없음). 검사: 빌드 오류 0, ThemeCheck 19(실시간 캡처: 1.2초 네 리본 비행, 4.7초 완성 로고), UiBinding 84, 테스트 실행본 재시작.
 
 2026-11-04 시작 화면 배경 없음(사용자 요청: CloriumIntro_WPF_Transparent3.zip으로). 바뀐 것: 박스 배경 Transparent(로고·글자만 화면 위에 표시), RibbonFx.ShowSeparators(변형 중 흰 분리선, 기본 꺼짐) — Intro 세 파일 교체(네임스페이스·.NET 4.8 수정·ShowFinal 유지), 투명 창에서 떠 보이던 버전 숫자는 숨김(Version_Debug 설정은 유지). 검사: 빌드 오류 0, ThemeCheck 19(캡처 모서리 알파 0), UiBinding 84, 테스트 실행본 재시작.

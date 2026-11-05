@@ -153,6 +153,15 @@ internal static class CloriumLightControl
 		});
 	}
 
+	// G2 is closing (after the lights were powered off): the light app closes too. It also closes by itself when the G2
+	// process ends; a light app before 0.7.13 answers "unknown command" and stays open.
+	public static bool Quit()
+	{
+		JsonElement? response = Send("{\"command\":\"quit\"}", 300, 3000);
+		Log.Debug("CloriumLight : quit -> " + (response?.GetRawText() ?? "not reachable"));
+		return response != null && response.Value.TryGetProperty("ok", out JsonElement ok) && ok.ValueKind == JsonValueKind.True;
+	}
+
 	// Fire-and-forget for paths that must not wait (after capture, power save, buttons).
 	public static void Power(bool on)
 	{
@@ -183,6 +192,8 @@ internal static class CloriumLightControl
 			// it. Told through the environment (light app 0.7.12+): older builds ignore it, while an unknown option would stop them.
 			ProcessStartInfo start = new ProcessStartInfo(path) { WorkingDirectory = Path.GetDirectoryName(path), UseShellExecute = false };
 			if (!showErrors) start.EnvironmentVariables["CLORIUM_LIGHT_START_MINIMIZED"] = "1";
+			// The light app belongs to G2 (0.7.13+): it only runs with this, hides on its close button and ends with G2.
+			start.EnvironmentVariables["CLORIUM_G2_PID"] = Process.GetCurrentProcess().Id.ToString();
 			Process.Start(start);
 			return true;
 		}
