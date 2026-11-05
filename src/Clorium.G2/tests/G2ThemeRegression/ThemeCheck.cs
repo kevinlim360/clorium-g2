@@ -191,6 +191,18 @@ class ThemeCheck
 				w.Show(); Pump(200);
 				Check("MF notice shows again on reopen", notice.Visibility == Visibility.Visible);
 				sf.GetMethod("CloseAll").Invoke(null, null);
+				// English (언어 설정 not Korean) once Data\Messages.xml carries the reviewed wording.
+				if (File.Exists(Path.Combine(bin, "Data", "Messages.xml")))
+				{
+					CameraControl.Devices.UiText.Language = "en_US";
+					var en = (Window)sf.GetMethod("For").Invoke(null, new object[] { new CameraControl.Devices.BaseCameraDevice { SerialNumber = "THEME-SF-EN" }, null });
+					en.Show(); Pump(400);
+					Snapshot(en, Path.Combine(outDir, "superfocus-en.png"));
+					string near = (string)((Button)sf.GetField("markA", inst).GetValue(en)).Content;
+					Check("English language shows English wording (" + near + ")", near.Length > 0 && near.All(ch => ch < 0x3131));
+					CameraControl.Devices.UiText.Language = "ko";
+					sf.GetMethod("CloseAll").Invoke(null, null);
+				}
 			}
 
 			// 시작 화면: the Clorium intro control (real-time ribbon), captured while it plays; then CloseWhenReady.

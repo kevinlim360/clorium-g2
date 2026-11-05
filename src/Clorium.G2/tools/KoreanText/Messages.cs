@@ -32,7 +32,7 @@ static partial class Program
 		public string Pid;
 	}
 
-	static readonly Regex ConvertedBefore = new Regex(@"UiText\.T\(\s*""(M\d{4,})""\s*,\s*$");
+	static readonly Regex ConvertedBefore = new Regex(@"UiText\.T\(\s*""(M\d{4,}(?:_\d+)?)""\s*,\s*$");
 
 	static int Messages(string[] args)
 	{
@@ -61,11 +61,12 @@ static partial class Program
 		foreach (Entry e in Collect(root, null))
 		{
 			if (e.Kind != "C# 문자열" || e.Raw) continue;
-			if (e.Context == "로그" || e.Context.StartsWith("비교")) continue;
+			if (e.Context == "로그") continue;
 			if (e.File.StartsWith("Clorium.Centering/", StringComparison.Ordinal)) continue; // separate program without UiText
 			if (!texts.TryGetValue(e.File, out string text)) texts[e.File] = text = ReadText(Path.Combine(root, e.File), out _);
 			int ls = text.LastIndexOf('\n', Math.Max(0, e.LitStart - 1)) + 1;
 			string before = text.Substring(ls, e.LitStart - ls);
+			if (e.Context.StartsWith("비교") && !Regex.IsMatch(before, @"[?:]\s*$") && !ConvertedBefore.IsMatch(before)) continue;
 			var p = new Place { Entry = e };
 			Match m = ConvertedBefore.Match(before);
 			if (m.Success) p.ConvertedId = m.Groups[1].Value;
@@ -131,7 +132,7 @@ static partial class Program
 	{
 		var messages = new List<Message>();
 		var byTemplate = new Dictionary<string, Message>(StringComparer.Ordinal);
-		int next = 1 + places.Where(p => p.ConvertedId != null).Select(p => int.Parse(p.ConvertedId.Substring(1))).DefaultIfEmpty(0).Max();
+		int next = 1 + places.Where(p => p.ConvertedId != null).Select(p => int.Parse(p.ConvertedId.Substring(1).Split('_')[0])).DefaultIfEmpty(0).Max();
 		// Converted ids first, so their numbers stay.
 		foreach (Place p in places.Where(p => p.Template != null).OrderBy(p => p.ConvertedId == null))
 		{
@@ -200,7 +201,7 @@ static partial class Program
 			new[] { "2. 대상: O = 이 문구를 언어 설정에 맞춰 바꿉니다. X = 소스 그대로 둡니다(경로·키·내부 값 등)." },
 			new[] { "3. {0}, {1:0.0} 같은 자리표시는 실제 값이 들어가는 곳입니다. 한글과 영어 모두 같은 자리표시를 그대로 남겨 주세요." },
 			new[] { "4. \\n은 줄바꿈입니다. 칸 안에서 Alt+Enter로 줄을 바꿔도 \\n으로 반영됩니다." },
-			new[] { "5. 같은 문구가 여러 곳에서 쓰이면 한 줄로 묶었습니다. 위치는 ‘위치’ 시트에 있습니다." },
+			new[] { "5. 같은 문구가 여러 곳에서 쓰이면 한 줄로 묶었습니다. 위치는 ‘위치’ 시트에 있습니다. 한 곳만 뜻이 다르면(예: 버튼 ‘중지’와 상태 ‘중지’) ‘위치’ 시트의 노란 칸 ‘이곳만 새 한글 / 이곳만 English’에 적습니다." },
 			new[] { "6. 언어 설정이 한국어이면 새 한글, 그 밖의 언어이면 English를 표시합니다. English가 비어 있으면 한글을 표시합니다." },
 			new[] { "7. 수정한 파일을 돌려주시면 소스의 제자리에 반영하고 Data\\Messages.xml을 만든 뒤 빌드·검사합니다." },
 			new[] { "" },
@@ -212,14 +213,14 @@ static partial class Program
 			Place f = m.Places[0];
 			rows.Add(new[] { m.Id, m.Target, m.Kinds, m.Template, m.Ko, m.En, m.Places.Count.ToString(), f.Entry.File + ":" + f.Entry.LineNo, m.Note });
 		}
-		var placeRows = new List<string[]> { new[] { "위치ID", "문구ID", "파일", "줄", "현재 문구", "원본 줄", "비고" } };
+		var placeRows = new List<string[]> { new[] { "위치ID", "문구ID", "파일", "줄", "현재 문구", "원본 줄", "비고", "이곳만 새 한글", "이곳만 English" } };
 		foreach (var p in messages.SelectMany(m => m.Places.Select(p => (m, p))).OrderBy(t => t.p.Pid, StringComparer.Ordinal))
-			placeRows.Add(new[] { p.p.Pid, p.m.Id, p.p.Entry.File, p.p.Entry.LineNo.ToString(), p.p.Template, p.p.Entry.Line, p.p.Blocked ?? (p.p.ConvertedId != null ? "반영됨" : "") });
+			placeRows.Add(new[] { p.p.Pid, p.m.Id, p.p.Entry.File, p.p.Entry.LineNo.ToString(), p.p.Template, p.p.Entry.Line, p.p.Blocked ?? (p.p.ConvertedId != null ? "반영됨" : ""), "", "" });
 		Xlsx.Write(xlsx, new[]
 		{
 			new Xlsx.Sheet { Name = "사용방법", Rows = usage, Widths = new[] { 120.0 } },
 			new Xlsx.Sheet { Name = "메시지", Rows = rows, Widths = new[] { 9.0, 6, 14, 48, 48, 48, 7, 34, 26 }, Editable = new[] { 1, 4, 5 }, Header = true, ListColumn = 1 },
-			new Xlsx.Sheet { Name = "위치", Rows = placeRows, Widths = new[] { 8.0, 9, 46, 6, 48, 70, 24 }, Header = true },
+			new Xlsx.Sheet { Name = "위치", Rows = placeRows, Widths = new[] { 8.0, 9, 46, 6, 40, 60, 16, 36, 36 }, Editable = new[] { 7, 8 }, Header = true },
 		});
 		Console.WriteLine($"messages {messages.Count} (target O {messages.Count(m => m.Target == "O")}, suggested {suggested}), places {messages.Sum(m => m.Places.Count)} -> {xlsx}");
 		return 0;
@@ -252,17 +253,40 @@ static partial class Program
 		}
 		var changes = new List<(Place p, string id, string replacement, int start, int length)>();
 		int missing = 0;
+		var used = new HashSet<Place>();
+		var ordinal = new Dictionary<string, int>();
+		var overrides = new Dictionary<string, (string target, string template, string ko, string en)>();
 		foreach (var r in placeRows.Skip(1))
 		{
 			string id = Cell(phead, r, "문구ID").Trim(), file = Cell(phead, r, "파일"), template = Cell(phead, r, "현재 문구");
 			if (!byId.TryGetValue(id, out var w)) continue;
+			ordinal[id] = ordinal.TryGetValue(id, out int n) ? n + 1 : 1;
+			string baseId = id;
+			string oKo = Normalize(Cell(phead, r, "이곳만 새 한글")), oEn = Normalize(Cell(phead, r, "이곳만 English"));
+			if (oKo.Length > 0 || oEn.Length > 0)
+			{
+				var own = (w.target, w.template, oKo.Length > 0 ? oKo : w.ko, oEn.Length > 0 ? oEn : w.en);
+				string bad = CheckWording(template, own.Item3, "이곳만 새 한글") ?? (own.Item4.Length > 0 ? CheckWording(template, own.Item4, "이곳만 English") : null);
+				if (bad != null) { refused++; report.AppendLine($"건너뜀 {id} {file} — {bad}"); continue; }
+				id = baseId + "_" + ordinal[baseId];
+				w = own;
+				overrides[id] = own;
+			}
 			int.TryParse(Cell(phead, r, "줄"), out int line);
-			Place p = places.Where(x => x.Entry.File == file && x.Template == template && x.Blocked == null && (x.ConvertedId == null || x.ConvertedId == id))
-				.OrderBy(x => Math.Abs(x.Entry.LineNo - line)).FirstOrDefault();
+			// Already converted places are found by their id (their wording may have changed since the list was made), the
+			// others by wording; a place is used once, so two equal strings on one line both change.
+			Place p = places.Where(x => x.Entry.File == file && x.Blocked == null && !used.Contains(x)
+					&& (x.ConvertedId == id || x.ConvertedId == baseId || (x.ConvertedId == null && x.Template == template)))
+				.OrderBy(x => x.ConvertedId == id ? 0 : x.ConvertedId == baseId ? 1 : 2).ThenBy(x => Math.Abs(x.Entry.LineNo - line)).ThenBy(x => x.Entry.Offset).FirstOrDefault();
 			if (p == null) { missing++; report.AppendLine($"건너뜀 {id} {file}:{line} — 지금 소스에서 '{template}'를 찾지 못함"); continue; }
-			if (changes.Any(c => c.p == p)) continue;
+			used.Add(p);
 			string literal = "\"" + w.ko + "\"";
-			if (p.ConvertedId != null) changes.Add((p, id, w.ko, p.Entry.Offset, p.Entry.Text.Length));
+			if (p.ConvertedId == id) changes.Add((p, id, w.ko, p.Entry.Offset, p.Entry.Text.Length));
+			else if (p.ConvertedId != null)
+			{
+				// converted under the shared id, now with its own wording: rename the id and the fallback
+				changes.Add((p, id, "\"" + id + "\", \"" + w.ko, p.Entry.Offset - (p.ConvertedId.Length + 5), p.Entry.Text.Length + p.ConvertedId.Length + 5));
+			}
 			else
 			{
 				string call = Call + "(\"" + id + "\", " + literal + ")";
@@ -286,7 +310,7 @@ static partial class Program
 		if (File.Exists(messagesXml))
 			foreach (XElement m in XDocument.Load(messagesXml).Root.Elements("m"))
 				table[(string)m.Attribute("id")] = ((string)m.Element("ko") ?? "", (string)m.Element("en") ?? "");
-		foreach (var kv in byId) table[kv.Key] = (Unescape(kv.Value.ko), Unescape(kv.Value.en));
+		foreach (var kv in byId.Concat(overrides)) table[kv.Key] = (Unescape(kv.Value.ko), Unescape(kv.Value.en));
 		var doc = new XDocument(new XDeclaration("1.0", "utf-8", null),
 			new XComment(" G2 사용자 메시지 (UiText). tools/KoreanText messages-apply가 검토된 엑셀에서 만듭니다. "),
 			new XElement("messages", table.Select(kv => new XElement("m", new XAttribute("id", kv.Key), new XElement("ko", kv.Value.ko), new XElement("en", kv.Value.en)))));
