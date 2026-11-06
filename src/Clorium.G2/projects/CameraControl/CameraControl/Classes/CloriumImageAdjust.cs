@@ -17,7 +17,7 @@ internal static class CloriumImageAdjust
 	private static readonly string[] SiblingExtensions = { ".jpg", ".jpeg", ".tif", ".tiff", ".png", ".bmp" };
 
 	// Replaced by tests; the defaults show a message box and the modal window.
-	internal static Action<string> ShowMessage = text => MessageBox.Show(text, "이미지보정", MessageBoxButton.OK, MessageBoxImage.Information);
+	internal static Action<string> ShowMessage = text => global::CameraControl.Core.Classes.G2Dialog.Show(text, "이미지보정", MessageBoxButton.OK, MessageBoxImage.Information);
 
 	internal static Action<string, Window> ShowWindow = (file, owner) => new G2ColorAdjustWnd(file) { Owner = owner }.ShowDialog();
 

@@ -49,7 +49,7 @@ public partial class App : System.Windows.Application
 		}
 		else if (Process.GetProcessesByName(procName).Length > 1)
 		{
-			System.Windows.MessageBox.Show("이미 실행 중입니다.");
+			global::CameraControl.Core.Classes.G2Dialog.Show("이미 실행 중입니다.");
 			System.Windows.Application.Current.Shutdown(-1);
 			return;
 		}
@@ -140,13 +140,16 @@ public partial class App : System.Windows.Application
 		{
 			Dispatcher.Invoke(ServiceProvider.Configure);
 			if (StartUpWindow.ShownAfterStart.HasValue) Log.Debug("App : start screen shown " + (int)StartUpWindow.ShownAfterStart.Value.TotalMilliseconds + " ms after process start");
+			// G2-styled message boxes: the G2 font, and the device layer's message boxes through the same dialog.
+			Dispatcher.Invoke(() => { if (TryFindResource("G2Font") is System.Windows.Media.FontFamily g2Font) CameraControl.Core.Classes.G2Dialog.Font = g2Font; });
+			CameraControl.Devices.UiMessage.Handler = CameraControl.Core.Classes.G2Dialog.Show;
 			CameraControl.Classes.UiHangWatchdog.Start(Dispatcher, Path.Combine(CameraControl.Core.Classes.Settings.DataFolder, "Log"));
 			ServiceProvider.Settings.LoadSessionData();
 			TranslationManager.LoadLanguage(ServiceProvider.Settings.SelectedLanguage);
 			ServiceProvider.PluginManager.CopyPlugins();
 			Dispatcher.Invoke(InitWindowManager);
 			ServiceProvider.Analytics.Start();
-			if (ServiceProvider.Settings.DisableNativeDrivers && System.Windows.MessageBox.Show(TranslationStrings.MsgDisabledDrivers, "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+			if (ServiceProvider.Settings.DisableNativeDrivers && global::CameraControl.Core.Classes.G2Dialog.Show(TranslationStrings.MsgDisabledDrivers, "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
 			{
 				ServiceProvider.Settings.DisableNativeDrivers = false;
 			}
@@ -172,7 +175,7 @@ public partial class App : System.Windows.Application
 					Log.Error("Unable to initialize device manager", ex);
 					if (ex.Message.Contains("0AF10CEC-2ECD-4B92-9581-34F6AE0637F3"))
 					{
-						System.Windows.MessageBox.Show("Unable to initialize device manager !\nMissing some components! Please install latest Windows Media Player!");
+						global::CameraControl.Core.Classes.G2Dialog.Show("Unable to initialize device manager !\nMissing some components! Please install latest Windows Media Player!");
 						System.Windows.Application.Current.Shutdown(1);
 					}
 				}
@@ -470,33 +473,33 @@ public partial class App : System.Windows.Application
 		if (e.Exception.GetType() == typeof(MissingMethodException))
 		{
 			Log.Error("Damaged installation. Application exiting ");
-			System.Windows.MessageBox.Show("Application crash !! Damaged installation!\nPlease unintall aplication from control panel and reinstall it!");
+			global::CameraControl.Core.Classes.G2Dialog.Show("Application crash !! Damaged installation!\nPlease unintall aplication from control panel and reinstall it!");
 			System.Windows.Application.Current?.Shutdown();
 		}
 		if (errorMessage.Contains("{E1C5D730-7E97-4D8A-9E42-BBAE87C2059F}"))
 		{
-			System.Windows.MessageBox.Show(TranslationStrings.LabelWiaNotInstalled);
+			global::CameraControl.Core.Classes.G2Dialog.Show(TranslationStrings.LabelWiaNotInstalled);
 			PhotoUtils.RunAndWait("regwia.bat", "");
-			System.Windows.MessageBox.Show(TranslationStrings.LabelRestartTheApplication);
+			global::CameraControl.Core.Classes.G2Dialog.Show(TranslationStrings.LabelRestartTheApplication);
 			System.Windows.Application.Current.Shutdown();
 			return;
 		}
 		if (e.Exception.GetType() == typeof(OutOfMemoryException))
 		{
 			Log.Error("Out of memory. Application exiting ");
-			System.Windows.MessageBox.Show(TranslationStrings.LabelOutOfMemory);
+			global::CameraControl.Core.Classes.G2Dialog.Show(TranslationStrings.LabelOutOfMemory);
 			if (System.Windows.Application.Current != null)
 			{
 				System.Windows.Application.Current.Shutdown();
 			}
 			return;
 		}
-		if (System.Windows.MessageBox.Show(TranslationStrings.LabelAskSendLogFile, TranslationStrings.LabelApplicationError, MessageBoxButton.YesNo, MessageBoxImage.Hand) == MessageBoxResult.Yes)
+		if (global::CameraControl.Core.Classes.G2Dialog.Show(TranslationStrings.LabelAskSendLogFile, TranslationStrings.LabelApplicationError, MessageBoxButton.YesNo, MessageBoxImage.Hand) == MessageBoxResult.Yes)
 		{
 			ErrorReportWnd wnd = new ErrorReportWnd("Application crash " + e.Exception.Message, e.Exception.StackTrace);
 			wnd.ShowDialog();
 		}
-		if (System.Windows.MessageBox.Show(errorMessage, TranslationStrings.LabelApplicationError, MessageBoxButton.YesNo, MessageBoxImage.Hand) == MessageBoxResult.No && System.Windows.Application.Current != null)
+		if (global::CameraControl.Core.Classes.G2Dialog.Show(errorMessage, TranslationStrings.LabelApplicationError, MessageBoxButton.YesNo, MessageBoxImage.Hand) == MessageBoxResult.No && System.Windows.Application.Current != null)
 		{
 			System.Windows.Application.Current.Shutdown();
 		}
@@ -530,7 +533,7 @@ public partial class App : System.Windows.Application
 			var keys = new[] { Encryption_key, LicenseFileMatcher.ReadCompatibilityKey() };
 			if (!keys.Any(key => !string.IsNullOrEmpty(key)))
 			{
-				System.Windows.MessageBox.Show("라이선스 확인 설정을 읽지 못했습니다. 최신 Clorium 업데이트를 다시 설치해 주세요.", "알림", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+				global::CameraControl.Core.Classes.G2Dialog.Show("라이선스 확인 설정을 읽지 못했습니다. 최신 Clorium 업데이트를 다시 설치해 주세요.", "알림", MessageBoxButton.OK, MessageBoxImage.Asterisk);
 				return false;
 			}
 			string matchedPath = LicenseFileMatcher.FindMatchingFile("D:\\", identifiers, keys, Encrypt, RemoveSpecialCharacters);
@@ -545,12 +548,12 @@ public partial class App : System.Windows.Application
 			}
 			string information = string.Join("\n", identifiers.Where(LicenseFileMatcher.IsUsableIdentifier).Distinct());
 			if (string.IsNullOrEmpty(information)) information = "PC 식별 정보를 읽지 못했습니다.";
-			System.Windows.MessageBox.Show("PC 정보와 일치하는 라이선스 키 파일이 D:\\에 없습니다.\n클로리움(주)에 아래 PC 정보를 알려주고 키 파일을 확인해 주세요.\n\n" + information, "알림", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+			global::CameraControl.Core.Classes.G2Dialog.Show("PC 정보와 일치하는 라이선스 키 파일이 D:\\에 없습니다.\n클로리움(주)에 아래 PC 정보를 알려주고 키 파일을 확인해 주세요.\n\n" + information, "알림", MessageBoxButton.OK, MessageBoxImage.Asterisk);
 			return false;
 		}
 		catch
 		{
-			System.Windows.MessageBox.Show("라이선스 키 확인 중 오류가 발생했습니다. D: 드라이브 접근 권한과 설치 상태를 확인해 주세요.", "에러", MessageBoxButton.OK, MessageBoxImage.Hand);
+			global::CameraControl.Core.Classes.G2Dialog.Show("라이선스 키 확인 중 오류가 발생했습니다. D: 드라이브 접근 권한과 설치 상태를 확인해 주세요.", "에러", MessageBoxButton.OK, MessageBoxImage.Hand);
 			return false;
 		}
 	}
@@ -705,7 +708,7 @@ public partial class App : System.Windows.Application
 		if (remainday > 0 && remainday < 30)
 		{
 			ServiceProvider.Settings.D_DayBefore = true;
-			System.Windows.MessageBox.Show("\ud83d\udea8 시스템 이상 감지되었습니다.\n\n\ud83d\udea8 프로그램이 정상 동작하지 않을 수 있습니다.\n\ud83d\udea8 클로리움(주) 담당자에게 연락 주시기 바랍니다.", "알림", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+			global::CameraControl.Core.Classes.G2Dialog.Show("\ud83d\udea8 시스템 이상 감지되었습니다.\n\n\ud83d\udea8 프로그램이 정상 동작하지 않을 수 있습니다.\n\ud83d\udea8 클로리움(주) 담당자에게 연락 주시기 바랍니다.", "알림", MessageBoxButton.OK, MessageBoxImage.Exclamation);
 		}
 		else
 		{
@@ -715,7 +718,7 @@ public partial class App : System.Windows.Application
 		{
 			if (remainday < -365)
 			{
-				System.Windows.MessageBox.Show("⚠\ufe0f 시스템 일부 파일이 손상되었습니다.\n\n⚠\ufe0f 클로리움(주) 담당자에게 연락 주시기 바랍니다.", "알림", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+				global::CameraControl.Core.Classes.G2Dialog.Show("⚠\ufe0f 시스템 일부 파일이 손상되었습니다.\n\n⚠\ufe0f 클로리움(주) 담당자에게 연락 주시기 바랍니다.", "알림", MessageBoxButton.OK, MessageBoxImage.Exclamation);
 				return true;
 			}
 			try
@@ -731,7 +734,7 @@ public partial class App : System.Windows.Application
 			}
 			catch (Exception ex)
 			{
-				System.Windows.MessageBox.Show("오류 발생: " + ex.Message);
+				global::CameraControl.Core.Classes.G2Dialog.Show("오류 발생: " + ex.Message);
 			}
 			return true;
 		}
@@ -771,7 +774,7 @@ public partial class App : System.Windows.Application
 	{
 		if (!IsRunningAsAdministrator())
 		{
-			System.Windows.MessageBox.Show("웹서버 가동을 위해서는 관리자 권한이 필요합니다. 프로그램을 재시작합니다.");
+			global::CameraControl.Core.Classes.G2Dialog.Show("웹서버 가동을 위해서는 관리자 권한이 필요합니다. 프로그램을 재시작합니다.");
 			ProcessStartInfo processInfo = new ProcessStartInfo
 			{
 				FileName = System.Windows.Forms.Application.ExecutablePath,
@@ -786,7 +789,7 @@ public partial class App : System.Windows.Application
 			}
 			catch (Exception)
 			{
-				System.Windows.MessageBox.Show("관리자 권한 승인이 거부되어 웹서버를 시작할 수 없습니다.");
+				global::CameraControl.Core.Classes.G2Dialog.Show("관리자 권한 승인이 거부되어 웹서버를 시작할 수 없습니다.");
 			}
 		}
 	}

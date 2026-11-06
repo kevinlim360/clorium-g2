@@ -2145,7 +2145,7 @@ public class LiveViewViewModel : ViewModelBase
 				Application.Current.Dispatcher.Invoke(() =>
 				{
 					Log.Error("라이브 뷰 에러 발생");
-					MessageBox.Show("⛔ 라이브 뷰가 정지되었습니다.", "알림", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+					global::CameraControl.Core.Classes.G2Dialog.Show("⛔ 라이브 뷰가 정지되었습니다.", "알림", MessageBoxButton.OK, MessageBoxImage.Exclamation);
 				});
 				return;
 			}
@@ -2567,7 +2567,7 @@ public class LiveViewViewModel : ViewModelBase
 	{
 		if (ServiceProvider.DeviceManager.SelectedCameraDevice.IsBusy)
 		{
-			MessageBox.Show("이미지 다운로드 중입니다. 다시 시도하세요.", "알림", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+			global::CameraControl.Core.Classes.G2Dialog.Show("이미지 다운로드 중입니다. 다시 시도하세요.", "알림", MessageBoxButton.OK, MessageBoxImage.Asterisk);
 			return;
 		}
 		Thread thread = new Thread(() =>
@@ -3167,7 +3167,7 @@ public class LiveViewViewModel : ViewModelBase
 			return;
 		}
 		string message = "'" + itemToRemove.Name + "' 정말 삭제하시겠습니까?";
-		MessageBoxResult result = MessageBox.Show(message, "파일 삭제 확인", MessageBoxButton.OKCancel, MessageBoxImage.Exclamation);
+		MessageBoxResult result = global::CameraControl.Core.Classes.G2Dialog.Show(message, "파일 삭제 확인", MessageBoxButton.OKCancel, MessageBoxImage.Exclamation);
 		if (result != MessageBoxResult.OK)
 		{
 			return;
@@ -3190,11 +3190,11 @@ public class LiveViewViewModel : ViewModelBase
 		}
 		catch (IOException ex)
 		{
-			MessageBox.Show("파일을 삭제중 오류가 발생했습니다:\n" + ex.Message, "오류", MessageBoxButton.OK, MessageBoxImage.Hand);
+			global::CameraControl.Core.Classes.G2Dialog.Show("파일을 삭제중 오류가 발생했습니다:\n" + ex.Message, "오류", MessageBoxButton.OK, MessageBoxImage.Hand);
 		}
 		catch (Exception ex2)
 		{
-			MessageBox.Show("알 수 없는 오류가 발생했습니다:\n" + ex2.Message, "오류", MessageBoxButton.OK, MessageBoxImage.Hand);
+			global::CameraControl.Core.Classes.G2Dialog.Show("알 수 없는 오류가 발생했습니다:\n" + ex2.Message, "오류", MessageBoxButton.OK, MessageBoxImage.Hand);
 		}
 	}
 
@@ -3333,7 +3333,7 @@ public class LiveViewViewModel : ViewModelBase
 	{
 		try
 		{
-			if (MessageBox.Show("Do you want to change Measure Scale Value?", "YesOrNo", MessageBoxButton.YesNo) == MessageBoxResult.No)
+			if (global::CameraControl.Core.Classes.G2Dialog.Show("Do you want to change Measure Scale Value?", "YesOrNo", MessageBoxButton.YesNo) == MessageBoxResult.No)
 			{
 				SettingArea = false;
 				return;
@@ -3355,7 +3355,7 @@ public class LiveViewViewModel : ViewModelBase
 		catch (Exception ex)
 		{
 			string msg = ex?.ToString() + "\r\nTry Again....";
-			MessageBox.Show(msg);
+			global::CameraControl.Core.Classes.G2Dialog.Show(msg);
 		}
 	}
 

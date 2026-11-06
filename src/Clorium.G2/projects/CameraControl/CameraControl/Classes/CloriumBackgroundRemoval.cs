@@ -319,7 +319,7 @@ internal static class CloriumBackgroundRemoval
 
 	private static void ShowError(string message)
 	{
-		Action show = () => MessageBox.Show(message, "배경제거", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+		Action show = () => global::CameraControl.Core.Classes.G2Dialog.Show(message, "배경제거", MessageBoxButton.OK, MessageBoxImage.Exclamation);
 		var dispatcher = Application.Current?.Dispatcher;
 		if (dispatcher != null && !dispatcher.CheckAccess()) dispatcher.Invoke(show);
 		else show();

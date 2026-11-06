@@ -306,7 +306,7 @@ public partial class BulbWnd : Window, INotifyPropertyChanged, IWindow, ICompone
 		{
 			if (!command.HaveEditControl)
 			{
-				MessageBox.Show("Use script editor to edit this script");
+				global::CameraControl.Core.Classes.G2Dialog.Show("Use script editor to edit this script");
 				return;
 			}
 			ScriptCommandEdit dlg = new ScriptCommandEdit(command.GetConfig());
@@ -413,7 +413,7 @@ public partial class BulbWnd : Window, INotifyPropertyChanged, IWindow, ICompone
 					}
 					else
 					{
-						MessageBox.Show(TranslationStrings.LabelNoExternalDeviceSelected);
+						global::CameraControl.Core.Classes.G2Dialog.Show(TranslationStrings.LabelNoExternalDeviceSelected);
 					}
 				}
 				else if (CameraDevice.GetCapability(CapabilityEnum.Bulb))
@@ -503,7 +503,7 @@ public partial class BulbWnd : Window, INotifyPropertyChanged, IWindow, ICompone
 					}
 					else
 					{
-						MessageBox.Show(TranslationStrings.LabelNoExternalDeviceSelected);
+						global::CameraControl.Core.Classes.G2Dialog.Show(TranslationStrings.LabelNoExternalDeviceSelected);
 					}
 				}
 				else if (CameraDevice.GetCapability(CapabilityEnum.Bulb))
@@ -557,7 +557,7 @@ public partial class BulbWnd : Window, INotifyPropertyChanged, IWindow, ICompone
 			}
 			catch (Exception ex)
 			{
-				MessageBox.Show("Error saving script file" + ex.Message);
+				global::CameraControl.Core.Classes.G2Dialog.Show("Error saving script file" + ex.Message);
 				Log.Error("Error saving script file", ex);
 			}
 		}
@@ -575,7 +575,7 @@ public partial class BulbWnd : Window, INotifyPropertyChanged, IWindow, ICompone
 			}
 			catch (Exception ex)
 			{
-				MessageBox.Show("Error loading script file" + ex.Message);
+				global::CameraControl.Core.Classes.G2Dialog.Show("Error loading script file" + ex.Message);
 				Log.Error("Error loading script file", ex);
 			}
 		}

@@ -213,7 +213,7 @@ public class LayoutBase : UserControl
 			}
 			int selectedindex = ImageLIst.Items.IndexOf(filestodelete[0]);
 			bool delete = false;
-			if (!((filestodelete.Count > 1) ? (MessageBox.Show("Multiple files are selected!! Do you really want to delete selected files?", "Delete files", MessageBoxButton.YesNo) == MessageBoxResult.Yes) : (!messageShow || MessageBox.Show("Do you really want to delete selected file ?", "Delete file", MessageBoxButton.YesNo) == MessageBoxResult.Yes)))
+			if (!((filestodelete.Count > 1) ? (global::CameraControl.Core.Classes.G2Dialog.Show("Multiple files are selected!! Do you really want to delete selected files?", "Delete files", MessageBoxButton.YesNo) == MessageBoxResult.Yes) : (!messageShow || global::CameraControl.Core.Classes.G2Dialog.Show("Do you really want to delete selected file ?", "Delete file", MessageBoxButton.YesNo) == MessageBoxResult.Yes)))
 			{
 				return;
 			}

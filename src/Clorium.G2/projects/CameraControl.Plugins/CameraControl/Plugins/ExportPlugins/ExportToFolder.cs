@@ -47,7 +47,7 @@ public class ExportToFolder : IExportPlugin
 		{
 			return true;
 		}
-		MessageBox.Show("All existing files will be overwritten !");
+		global::CameraControl.Core.Classes.G2Dialog.Show("All existing files will be overwritten !");
 		FolderBrowserDialog dialog = new FolderBrowserDialog();
 		if ((int)((System.Windows.Forms.CommonDialog)dialog).ShowDialog() == 1)
 		{

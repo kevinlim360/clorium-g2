@@ -385,7 +385,7 @@ public class GenMovieViewModel : ViewModelBase
 		//IL_0019: Unknown result type (might be due to invalid IL or missing references)
 		if (!File.Exists(OutPutFile))
 		{
-			MessageBox.Show("Video file not found !");
+			global::CameraControl.Core.Classes.G2Dialog.Show("Video file not found !");
 		}
 		else
 		{
@@ -401,7 +401,7 @@ public class GenMovieViewModel : ViewModelBase
 		{
 			if (File.Exists(OutPutFile))
 			{
-				if ((int)MessageBox.Show("Video file already exist. Do you want to continue ?", "Warning ", (MessageBoxButton)4) != 6)
+				if ((int)global::CameraControl.Core.Classes.G2Dialog.Show("Video file already exist. Do you want to continue ?", "Warning ", (MessageBoxButton)4) != 6)
 				{
 					return;
 				}
@@ -537,7 +537,7 @@ public class GenMovieViewModel : ViewModelBase
 			string ffmpegPath = Path.Combine(Settings.ApplicationFolder, "ffmpeg.exe");
 			if (!File.Exists(ffmpegPath))
 			{
-				MessageBox.Show("ffmpeg not found! Please reinstall the application.");
+				global::CameraControl.Core.Classes.G2Dialog.Show("ffmpeg not found! Please reinstall the application.");
 				return;
 			}
 			string parameters = "-r {0} -i {1}\\img00%04d.jpg -c:v libx264 -vf fps=25 -pix_fmt yuv420p";

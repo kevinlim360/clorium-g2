@@ -42,7 +42,7 @@ namespace CameraControl.Core.Scripting.ScriptCommands
     {
         public override bool Execute(ScriptObject scriptObject)
         {
-            MessageBox.Show(scriptObject.ParseString(LoadedParams["text"]), "DCC Script");
+            global::CameraControl.Core.Classes.G2Dialog.Show(scriptObject.ParseString(LoadedParams["text"]), "DCC Script");
             return true;
         }
 

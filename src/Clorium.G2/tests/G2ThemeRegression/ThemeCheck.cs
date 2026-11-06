@@ -20,6 +20,8 @@ class ThemeCheck
 {
 	static int count;
 	static string lastError = "";
+	[System.Runtime.InteropServices.DllImport("user32.dll", CharSet = System.Runtime.InteropServices.CharSet.Unicode)] static extern IntPtr FindWindow(string cls, string title);
+	[System.Runtime.InteropServices.DllImport("user32.dll")] static extern bool PostMessage(IntPtr h, uint msg, IntPtr w, IntPtr l);
 	static void Check(string name, bool ok) { if (!ok) throw new Exception("FAIL: " + name); Console.WriteLine("PASS: " + name); count++; }
 
 	static void Pump(int ms)
@@ -287,6 +289,54 @@ class ThemeCheck
 				var order = new List<int>(); foreach (var p in pts) { lens.Focus((int)(p.X * 400), 150); lens.AutoFocus(); order.Add(lens.Position); }
 				Check("each AF point focuses nearer than the last (lens " + string.Join(",", order.Select(v => v.ToString()).ToArray()) + ")", order[0] == FakeLens.Far && order[4] == FakeLens.Near && order.Zip(order.Skip(1), (x, y) => y < x).All(v => v));
 				sf.GetMethod("CloseAll").Invoke(null, null);
+			}
+
+			// G2 message box (G2Dialog): every kind in both themes, buttons, Enter/Esc results.
+			{
+				Func<Window, List<Button>> ButtonsIn = null;
+				ButtonsIn = win => { var found = new List<Button>(); var stack = new Stack<DependencyObject>(); stack.Push(win); while (stack.Count > 0) { var d = stack.Pop(); if (d is Button) found.Add((Button)d); for (int i = 0; i < VisualTreeHelper.GetChildrenCount(d); i++) stack.Push(VisualTreeHelper.GetChild(d, i)); } return found; };
+				Func<Button, string> LabelOf = b => ((TextBlock)((Border)b.Content).Child).Text;
+				var kinds = new[] { MessageBoxImage.Information, MessageBoxImage.Warning, MessageBoxImage.Error, MessageBoxImage.Question };
+				foreach (bool d in new[] { false, true })
+				{
+					G2Dialog.Dark = d;
+					foreach (var kind in kinds)
+					{
+						MessageBoxResult got = MessageBoxResult.None;
+						var buttons = kind == MessageBoxImage.Question ? MessageBoxButton.YesNo : kind == MessageBoxImage.Warning ? MessageBoxButton.OKCancel : MessageBoxButton.OK;
+						var dw = G2Dialog.Create("카메라 초기화에 실패했습니다.\n카메라 전원을 껐다 켠 뒤 다시 시도해 주세요.", kind == MessageBoxImage.Question ? "" : "알림", buttons, kind, MessageBoxResult.None, r => got = r);
+						dw.Show(); Pump(200);
+						Snapshot(dw, Path.Combine(outDir, "dialog-" + kind + "-" + (d ? "dark" : "light") + ".png"));
+						var labels = ButtonsIn(dw).Select(LabelOf).ToList();
+						labels.Reverse();
+						string expect = buttons == MessageBoxButton.YesNo ? "아니요,예" : buttons == MessageBoxButton.OKCancel ? "취소,확인" : "확인";
+						Check("dialog " + kind + " (" + (d ? "dark" : "light") + ") buttons " + string.Join(",", labels.ToArray()), string.Join(",", labels.ToArray()) == expect || string.Join(",", Enumerable.Reverse(labels).ToArray()) == expect);
+						if (kind == MessageBoxImage.Question)
+						{
+							var no = ButtonsIn(dw).First(b => LabelOf(b) == "아니요");
+							no.RaiseEvent(new RoutedEventArgs(System.Windows.Controls.Primitives.ButtonBase.ClickEvent)); Pump(100);
+							Check("아니요 returns No (" + got + ")", got == MessageBoxResult.No && !dw.IsVisible);
+						}
+						else if (kind == MessageBoxImage.Warning)
+						{
+							dw.RaiseEvent(new System.Windows.Input.KeyEventArgs(System.Windows.Input.Keyboard.PrimaryDevice, PresentationSource.FromVisual(dw), 0, System.Windows.Input.Key.Escape) { RoutedEvent = System.Windows.Input.Keyboard.PreviewKeyDownEvent }); Pump(100);
+							Check("Esc on 확인/취소 returns Cancel (" + got + ")", got == MessageBoxResult.Cancel && !dw.IsVisible);
+						}
+						else
+						{
+							dw.RaiseEvent(new System.Windows.Input.KeyEventArgs(System.Windows.Input.Keyboard.PrimaryDevice, PresentationSource.FromVisual(dw), 0, System.Windows.Input.Key.Escape) { RoutedEvent = System.Windows.Input.Keyboard.PreviewKeyDownEvent }); Pump(100);
+							Check("Esc on 확인 returns OK (" + got + ")", got == MessageBoxResult.OK && !dw.IsVisible);
+						}
+					}
+				}
+				G2Dialog.Dark = false;
+				// From a worker thread (camera events): runs on its own STA thread and returns a result.
+				MessageBoxResult workerResult = MessageBoxResult.None;
+				var worker = System.Threading.Tasks.Task.Run(() => workerResult = G2Dialog.Show("다운로드하지 못했습니다.\n다시 촬영해 주세요.", "알림", MessageBoxButton.OK, MessageBoxImage.Warning));
+				DateTime untilDialog = DateTime.Now.AddSeconds(10); IntPtr dialogHandle = IntPtr.Zero;
+				while (DateTime.Now < untilDialog && dialogHandle == IntPtr.Zero) { Pump(100); dialogHandle = FindWindow(null, "알림"); }
+				if (dialogHandle != IntPtr.Zero) PostMessage(dialogHandle, 0x0010, IntPtr.Zero, IntPtr.Zero); // WM_CLOSE
+				Check("worker-thread dialog opens on its own thread and returns (" + workerResult + ")", dialogHandle != IntPtr.Zero && worker.Wait(5000) && workerResult == MessageBoxResult.OK);
 			}
 
 			// 시작 화면: the Clorium intro control (real-time ribbon), captured while it plays; then CloseWhenReady.

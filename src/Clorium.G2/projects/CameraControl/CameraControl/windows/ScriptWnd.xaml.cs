@@ -322,7 +322,7 @@ public partial class ScriptWnd : Window, IWindow, IToolPlugin, IComponentConnect
 			}
 			catch (Exception ex)
 			{
-				System.Windows.Forms.MessageBox.Show("Error loading script file" + ex.Message);
+				global::CameraControl.Core.Classes.G2Dialog.Show("Error loading script file" + ex.Message);
 				Log.Error("Error loading script file", ex);
 			}
 		}
@@ -367,7 +367,7 @@ public partial class ScriptWnd : Window, IWindow, IToolPlugin, IComponentConnect
 			}
 			catch (Exception ex)
 			{
-				System.Windows.Forms.MessageBox.Show("Error saving script file" + ex.Message);
+				global::CameraControl.Core.Classes.G2Dialog.Show("Error saving script file" + ex.Message);
 				Log.Error("Error saving script file", ex);
 			}
 		}

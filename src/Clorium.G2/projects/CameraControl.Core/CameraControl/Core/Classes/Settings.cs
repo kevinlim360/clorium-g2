@@ -2305,7 +2305,7 @@ public partial class Settings : BaseFieldClass
 		catch (Exception exception)
 		{
 			Log.Error("설정 저장 실패", exception);
-			MessageBox.Show("쓰기 권한이 없습니다.");
+			global::CameraControl.Core.Classes.G2Dialog.Show("쓰기 권한이 없습니다.");
 		}
 	}
 
@@ -2573,7 +2573,7 @@ public partial class Settings : BaseFieldClass
 			{
 				ProcessCounter = 0;
 				Save();
-				MessageBox.Show("\ud83d\udea8 프로그램 최적화 작업중으로 최대 1~2분 소요됩니다.\n\n\ud83d\udea8 만일 프로그램이 자동으로 실행되지 않으면 1~2분 후 직접 재 시작해 주세요.", "알림", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+				global::CameraControl.Core.Classes.G2Dialog.Show("\ud83d\udea8 프로그램 최적화 작업중으로 최대 1~2분 소요됩니다.\n\n\ud83d\udea8 만일 프로그램이 자동으로 실행되지 않으면 1~2분 후 직접 재 시작해 주세요.", "알림", MessageBoxButton.OK, MessageBoxImage.Asterisk);
 				Process.Start(new ProcessStartInfo
 				{
 					FileName = "cmd.exe",
@@ -2598,7 +2598,7 @@ public partial class Settings : BaseFieldClass
 		}
 		catch (Exception ex)
 		{
-			MessageBox.Show("\ud83d\udea8 세션 파일 오류 발생: " + ex.Message);
+			global::CameraControl.Core.Classes.G2Dialog.Show("\ud83d\udea8 세션 파일 오류 발생: " + ex.Message);
 		}
 	}
 
@@ -2619,7 +2619,7 @@ public partial class Settings : BaseFieldClass
 		}
 		catch (Exception ex)
 		{
-			MessageBox.Show("\ud83d\udea8 캐시 파일 오류 발생: " + ex.Message);
+			global::CameraControl.Core.Classes.G2Dialog.Show("\ud83d\udea8 캐시 파일 오류 발생: " + ex.Message);
 		}
 	}
 
@@ -2658,7 +2658,7 @@ public partial class Settings : BaseFieldClass
 		}
 		if (ServiceProvider.Settings.PresetPassword != inputPassword)
 		{
-			MessageBox.Show("\ud83e\udd14올바른 비밀번호를 입력하세요.", "알림", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+			global::CameraControl.Core.Classes.G2Dialog.Show("\ud83e\udd14올바른 비밀번호를 입력하세요.", "알림", MessageBoxButton.OK, MessageBoxImage.Asterisk);
 			return false;
 		}
 		return true;

@@ -201,11 +201,11 @@ public class AutoExportPluginEditViewModel : ViewModelBase
 	{
 		try
 		{
-			System.Windows.Forms.MessageBox.Show(Config.Evaluate(ServiceProvider.DeviceManager.SelectedCameraDevice) ? "Conditions is evaluated : True" : "Conditions is evaluated : False");
+			global::CameraControl.Core.Classes.G2Dialog.Show(Config.Evaluate(ServiceProvider.DeviceManager.SelectedCameraDevice) ? "Conditions is evaluated : True" : "Conditions is evaluated : False");
 		}
 		catch (Exception ex)
 		{
-			System.Windows.Forms.MessageBox.Show("Evaluation error " + ex.Message);
+			global::CameraControl.Core.Classes.G2Dialog.Show("Evaluation error " + ex.Message);
 		}
 	}
 
@@ -224,7 +224,7 @@ public class AutoExportPluginEditViewModel : ViewModelBase
 		PhotoSession.ApplyPlugin(Config);
 		if (Config.IsError)
 		{
-			System.Windows.Forms.MessageBox.Show(Config.Error);
+			global::CameraControl.Core.Classes.G2Dialog.Show(Config.Error);
 		}
 	}
 
@@ -249,7 +249,7 @@ public class AutoExportPluginEditViewModel : ViewModelBase
 		}
 		catch (Exception ex)
 		{
-			System.Windows.Forms.MessageBox.Show("Error to preview filter \n" + ex.Message);
+			global::CameraControl.Core.Classes.G2Dialog.Show("Error to preview filter \n" + ex.Message);
 		}
 	}
 

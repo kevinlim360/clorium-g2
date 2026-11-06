@@ -126,7 +126,7 @@ public partial class SettingsWnd : Window, IComponentConnector
 		string folder = Path.GetDirectoryName(CameraControl.Classes.G2ColorTemplateStore.DefaultPath);
 		if (!Directory.Exists(folder))
 		{
-			System.Windows.MessageBox.Show("아직 저장한 보정 템플릿이 없습니다.\n\n" + folder, "이미지보정");
+			global::CameraControl.Core.Classes.G2Dialog.Show("아직 저장한 보정 템플릿이 없습니다.\n\n" + folder, "이미지보정");
 			return;
 		}
 		try
@@ -135,7 +135,7 @@ public partial class SettingsWnd : Window, IComponentConnector
 		}
 		catch (Exception ex)
 		{
-			System.Windows.MessageBox.Show("폴더를 열지 못했습니다.\n\n" + ex.Message, "이미지보정");
+			global::CameraControl.Core.Classes.G2Dialog.Show("폴더를 열지 못했습니다.\n\n" + ex.Message, "이미지보정");
 		}
 	}
 
@@ -162,7 +162,7 @@ public partial class SettingsWnd : Window, IComponentConnector
 	{
 		if (ServiceProvider.ExternalDeviceManager.ExternalDevices.Count == 0)
 		{
-			System.Windows.MessageBox.Show("No external devices are defined");
+			global::CameraControl.Core.Classes.G2Dialog.Show("No external devices are defined");
 			return;
 		}
 		ServiceProvider.Settings.DeviceConfigs.Items.Add(new CustomConfig
@@ -175,7 +175,7 @@ public partial class SettingsWnd : Window, IComponentConnector
 
 	private void Btn_del_device_Click(object sender, RoutedEventArgs e)
 	{
-		if (lst_device.SelectedItem != null && System.Windows.MessageBox.Show("Do you want to delete the selected device configuration ?", "Delete", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+		if (lst_device.SelectedItem != null && global::CameraControl.Core.Classes.G2Dialog.Show("Do you want to delete the selected device configuration ?", "Delete", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
 		{
 			CustomConfig config = lst_device.SelectedItem as CustomConfig;
 			ServiceProvider.Settings.DeviceConfigs.Items.Remove(config);
@@ -226,7 +226,7 @@ public partial class SettingsWnd : Window, IComponentConnector
 			{
 				if (dialog.SelectedPath.Contains("새 폴더"))
 				{
-					System.Windows.MessageBox.Show("폴더 이름을 바꾸고 엔터를 눌러 주세요.", "알림", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+					global::CameraControl.Core.Classes.G2Dialog.Show("폴더 이름을 바꾸고 엔터를 눌러 주세요.", "알림", MessageBoxButton.OK, MessageBoxImage.Asterisk);
 				}
 				ServiceProvider.Settings.DownloadFolder = dialog.SelectedPath + "\\";
 			}
@@ -234,7 +234,7 @@ public partial class SettingsWnd : Window, IComponentConnector
 		catch (Exception exception)
 		{
 			Log.Error("폴더를 만들 수 없습니다.", exception);
-			System.Windows.MessageBox.Show("폴더를 만들 수 없습니다.", "에러", MessageBoxButton.OK, MessageBoxImage.Hand);
+			global::CameraControl.Core.Classes.G2Dialog.Show("폴더를 만들 수 없습니다.", "에러", MessageBoxButton.OK, MessageBoxImage.Hand);
 		}
 	}
 
@@ -249,7 +249,7 @@ public partial class SettingsWnd : Window, IComponentConnector
 	{
 		try
 		{
-			if (System.Windows.MessageBox.Show("모든 작업 데이터가 삭제되고 프로그램은 다시 시작됩니다.", "경고", MessageBoxButton.YesNo) != MessageBoxResult.No)
+			if (global::CameraControl.Core.Classes.G2Dialog.Show("모든 작업 데이터가 삭제되고 프로그램은 다시 시작됩니다.", "경고", MessageBoxButton.YesNo) != MessageBoxResult.No)
 			{
 				Log.Debug("공장 초기화 Click");
 				Directory.Delete(Path.Combine(Settings.DataFolder, "Cache"), recursive: true);
@@ -266,7 +266,7 @@ public partial class SettingsWnd : Window, IComponentConnector
 		}
 		catch (Exception ex)
 		{
-			System.Windows.MessageBox.Show("모든 작업 데이터 삭제에 실패했습니다.\r\n" + ex);
+			global::CameraControl.Core.Classes.G2Dialog.Show("모든 작업 데이터 삭제에 실패했습니다.\r\n" + ex);
 		}
 	}
 
@@ -316,7 +316,7 @@ public partial class SettingsWnd : Window, IComponentConnector
 			{
 				if (dialog.SelectedPath.Contains("새 폴더"))
 				{
-					System.Windows.MessageBox.Show("폴더 이름을 바꾸고 엔터를 눌러 주세요.", "알림", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+					global::CameraControl.Core.Classes.G2Dialog.Show("폴더 이름을 바꾸고 엔터를 눌러 주세요.", "알림", MessageBoxButton.OK, MessageBoxImage.Asterisk);
 				}
 				ServiceProvider.Settings.ElapsedDownloadFolder = dialog.SelectedPath + "\\";
 			}
@@ -324,7 +324,7 @@ public partial class SettingsWnd : Window, IComponentConnector
 		catch (Exception exception)
 		{
 			Log.Error("폴더를 만들 수 없습니다.", exception);
-			System.Windows.MessageBox.Show("폴더를 만들 수 없습니다.", "에러", MessageBoxButton.OK, MessageBoxImage.Hand);
+			global::CameraControl.Core.Classes.G2Dialog.Show("폴더를 만들 수 없습니다.", "에러", MessageBoxButton.OK, MessageBoxImage.Hand);
 		}
 	}
 
@@ -342,7 +342,7 @@ public partial class SettingsWnd : Window, IComponentConnector
 				Log.Error("Setting : 카메라 시간을 동기화 할 수 없습니다.", exception);
 			}
 		}
-		System.Windows.MessageBox.Show("⚠\ufe0f 모든 카메라 날짜/시간 동기화했습니다.\n\n⚠\ufe0f 모든 카메라 전원을 껏다 다시 켜 주세요.", "Info", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+		global::CameraControl.Core.Classes.G2Dialog.Show("⚠\ufe0f 모든 카메라 날짜/시간 동기화했습니다.\n\n⚠\ufe0f 모든 카메라 전원을 껏다 다시 켜 주세요.", "Info", MessageBoxButton.OK, MessageBoxImage.Asterisk);
 	}
 
 	private void Expander_Click(object sender, RoutedEventArgs e)

@@ -39,7 +39,7 @@ public partial class NewVersionWnd : Window, IComponentConnector
 		}
 		catch (Exception)
 		{
-			System.Windows.Forms.MessageBox.Show("Error initialize download !");
+			global::CameraControl.Core.Classes.G2Dialog.Show("Error initialize download !");
 		}
 	}
 
@@ -81,7 +81,7 @@ public partial class NewVersionWnd : Window, IComponentConnector
 			}
 			else if (notify)
 			{
-				System.Windows.Forms.MessageBox.Show(TranslationStrings.MsgApplicationUpToDate);
+				global::CameraControl.Core.Classes.G2Dialog.Show(TranslationStrings.MsgApplicationUpToDate);
 			}
 			File.Delete(tempfile);
 		}

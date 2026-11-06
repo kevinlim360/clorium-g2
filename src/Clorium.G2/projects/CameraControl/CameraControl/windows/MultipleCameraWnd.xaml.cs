@@ -257,12 +257,12 @@ public partial class MultipleCameraWnd : Window, IWindow, INotifyPropertyChanged
 
 	private void chk_noautofocus_Checked(object sender, RoutedEventArgs e)
 	{
-		System.Windows.Forms.MessageBox.Show("This feature not working reliable ");
+		global::CameraControl.Core.Classes.G2Dialog.Show("This feature not working reliable ");
 	}
 
 	private void btn_format_Click(object sender, RoutedEventArgs e)
 	{
-		if (System.Windows.Forms.MessageBox.Show(TranslationStrings.LabelAskForDelete, "", MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
+		if (global::CameraControl.Core.Classes.G2Dialog.Show(TranslationStrings.LabelAskForDelete, "", System.Windows.MessageBoxButton.YesNo, System.Windows.MessageBoxImage.Question) == System.Windows.MessageBoxResult.Yes)
 		{
 			dlg.Show();
 			Thread thread = new Thread(Format);

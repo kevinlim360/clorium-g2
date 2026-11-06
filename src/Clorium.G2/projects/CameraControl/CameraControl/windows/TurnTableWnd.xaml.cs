@@ -67,7 +67,7 @@ public partial class TurnTableWnd : Window, IWindow, IComponentConnector, IStyle
 		case "TurnTableWnd_Show":
 			if (!ServiceProvider.DeviceManager.SelectedCameraDevice.IsConnected)
 			{
-				MessageBox.Show("⚠\ufe0f 카메라가 연결되지 않았습니다. 참고하세요.", "알림", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+				global::CameraControl.Core.Classes.G2Dialog.Show("⚠\ufe0f 카메라가 연결되지 않았습니다. 참고하세요.", "알림", MessageBoxButton.OK, MessageBoxImage.Asterisk);
 			}
 			else
 			{
@@ -450,7 +450,7 @@ public partial class TurnTableWnd : Window, IWindow, IComponentConnector, IStyle
 		}
 		catch (Exception ex)
 		{
-			MessageBox.Show(ex.ToString(), "에러", MessageBoxButton.OK, MessageBoxImage.Hand);
+			global::CameraControl.Core.Classes.G2Dialog.Show(ex.ToString(), "에러", MessageBoxButton.OK, MessageBoxImage.Hand);
 		}
 	}
 
@@ -502,7 +502,7 @@ public partial class TurnTableWnd : Window, IWindow, IComponentConnector, IStyle
 		if (!LiveViewManager.Active)
 		{
 			((TurnTableViewModel)DataContext).Record_Running = false;
-			MessageBox.Show("⚠\ufe0f 먼저 Live 화면을 실행하세요.", "알림", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+			global::CameraControl.Core.Classes.G2Dialog.Show("⚠\ufe0f 먼저 Live 화면을 실행하세요.", "알림", MessageBoxButton.OK, MessageBoxImage.Asterisk);
 		}
 		else if (DataContext != null)
 		{

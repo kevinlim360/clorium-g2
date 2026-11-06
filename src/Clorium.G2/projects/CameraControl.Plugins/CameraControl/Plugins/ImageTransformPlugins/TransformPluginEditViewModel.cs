@@ -105,7 +105,7 @@ public class TransformPluginEditViewModel : ViewModelBase
 		}
 		catch (Exception ex)
 		{
-			MessageBox.Show("Error to preview filter " + ex.Message);
+			global::CameraControl.Core.Classes.G2Dialog.Show("Error to preview filter " + ex.Message);
 		}
 	}
 

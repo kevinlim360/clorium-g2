@@ -89,7 +89,7 @@ public partial class DCCUSBShutterReleaseConfig : UserControl
         }
         catch (Exception ex)
         {
-            MessageBox.Show(ex.Message);
+            global::CameraControl.Core.Classes.G2Dialog.Show(ex.Message);
             Log.Error("Serial error", ex);
             ((DispatcherObject)this).Dispatcher.Invoke((Action)(() =>
             {

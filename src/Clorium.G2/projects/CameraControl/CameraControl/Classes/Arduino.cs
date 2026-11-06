@@ -181,7 +181,7 @@ internal class Arduino
 			Exception ex3 = ex2;
 			Application.Current.Dispatcher.Invoke(() =>
 			{
-				MessageBox.Show("⚠\ufe0f 시리얼 수신 중 예외 발생: " + ex3.Message, "알림", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+				global::CameraControl.Core.Classes.G2Dialog.Show("⚠\ufe0f 시리얼 수신 중 예외 발생: " + ex3.Message, "알림", MessageBoxButton.OK, MessageBoxImage.Exclamation);
 			});
 		}
 	}

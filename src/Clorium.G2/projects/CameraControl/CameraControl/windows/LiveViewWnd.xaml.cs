@@ -206,7 +206,7 @@ public partial class LiveViewWnd : Window, IWindow, INotifyPropertyChanged, ICom
 		case "LiveViewWnd_Message":
 			Dispatcher.Invoke(() =>
 			{
-				MessageBox.Show((string)param);
+				global::CameraControl.Core.Classes.G2Dialog.Show((string)param);
 			});
 			break;
 		case "All_Close":

@@ -201,7 +201,7 @@ namespace CameraControl.ViewModel
             catch (Exception ex)
             {
                 Log.Debug("Unable to show printer window ",ex);
-                MessageBox.Show("Unable to show printer window "+ex.Message);
+                global::CameraControl.Core.Classes.G2Dialog.Show("Unable to show printer window "+ex.Message);
             }
         }
 

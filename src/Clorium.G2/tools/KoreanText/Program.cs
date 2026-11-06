@@ -143,7 +143,7 @@ static partial class Program
 		int ls = s.LastIndexOf('\n', Math.Max(0, at - 1)) + 1;
 		string before = s.Substring(ls, at - ls);
 		if (Regex.IsMatch(before, @"\bLog\.(Debug|Error|Info)\b")) return "로그";
-		if (Regex.IsMatch(before, @"MessageBox\.Show|ShowError|ShowMessage|Notify|DisplayMessage")) return "메시지 상자";
+		if (Regex.IsMatch(before, @"MessageBox\.Show|G2Dialog\.Show|UiMessage\.Show|ShowError|ShowMessage|Notify|DisplayMessage")) return "메시지 상자";
 		if (Regex.IsMatch(before, @"\bthrow\b|Exception\(")) return "오류";
 		if (Regex.IsMatch(before, @"\.(Text|Content|Title|Header|ToolTip)\s*=")) return "화면 문구";
 		if (Regex.IsMatch(before, @"\b(case|==|!=|Contains|StartsWith|EndsWith|Equals)\b")) return "비교/키 (바꾸면 동작이 달라질 수 있음)";

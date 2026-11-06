@@ -43,7 +43,7 @@ public partial class SimpleMainWindow : Window, IMainWindowPlugin, INotifyProper
     private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
     {
         //IL_0006: Unknown result type (might be due to invalid IL or missing references)
-        MessageBox.Show("This is a demostration of Clorium plugin usage.\nFor normal usage please restart the application and select Default window!");
+        global::CameraControl.Core.Classes.G2Dialog.Show("This is a demostration of Clorium plugin usage.\nFor normal usage please restart the application and select Default window!");
         SaveFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
         ServiceProvider.DeviceManager.PhotoCaptured += DeviceManager_PhotoCaptured;
     }
@@ -75,7 +75,7 @@ public partial class SimpleMainWindow : Window, IMainWindowPlugin, INotifyProper
         }
         catch (Exception ex)
         {
-            MessageBox.Show("Error occurred :" + ex.Message);
+            global::CameraControl.Core.Classes.G2Dialog.Show("Error occurred :" + ex.Message);
         }
     }
 
@@ -120,7 +120,7 @@ public partial class SimpleMainWindow : Window, IMainWindowPlugin, INotifyProper
         catch (Exception ex)
         {
             eventArgs.CameraDevice.IsBusy = false;
-            MessageBox.Show("Error download photo from camera :\n" + ex.Message);
+            global::CameraControl.Core.Classes.G2Dialog.Show("Error download photo from camera :\n" + ex.Message);
         }
     }
 

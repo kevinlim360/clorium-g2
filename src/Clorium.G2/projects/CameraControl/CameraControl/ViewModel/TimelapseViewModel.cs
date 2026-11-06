@@ -654,7 +654,7 @@ public class TimelapseViewModel : ViewModelBase
 		catch (Exception ex)
 		{
 			Log.Error("Error starting timelapse", ex);
-			System.Windows.Forms.MessageBox.Show("Error starting timelapse " + ex.Message);
+			global::CameraControl.Core.Classes.G2Dialog.Show("Error starting timelapse " + ex.Message);
 		}
 	}
 
@@ -763,7 +763,7 @@ public class TimelapseViewModel : ViewModelBase
 		}
 		catch (Exception ex)
 		{
-			System.Windows.Forms.MessageBox.Show("Unable to start timelapse " + ex.Message);
+			global::CameraControl.Core.Classes.G2Dialog.Show("Unable to start timelapse " + ex.Message);
 			Log.Debug("Unable to start timelapse ", ex);
 		}
 	}

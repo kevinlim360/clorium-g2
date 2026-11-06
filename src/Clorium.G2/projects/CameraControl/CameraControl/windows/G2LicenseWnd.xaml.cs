@@ -51,7 +51,7 @@ public partial class G2LicenseWnd : Window
 	{
 		if (!System.IO.File.Exists(ChangeLogPath))
 		{
-			MessageBox.Show("변경 내역 파일이 없습니다.\n" + ChangeLogPath, "변경 내역", MessageBoxButton.OK, MessageBoxImage.Information);
+			global::CameraControl.Core.Classes.G2Dialog.Show("변경 내역 파일이 없습니다.\n" + ChangeLogPath, "변경 내역", MessageBoxButton.OK, MessageBoxImage.Information);
 			return;
 		}
 		try
@@ -60,7 +60,7 @@ public partial class G2LicenseWnd : Window
 		}
 		catch (Exception ex)
 		{
-			MessageBox.Show("파일을 열 수 없습니다: " + ex.Message, "변경 내역");
+			global::CameraControl.Core.Classes.G2Dialog.Show("파일을 열 수 없습니다: " + ex.Message, "변경 내역");
 		}
 	}
 

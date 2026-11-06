@@ -176,7 +176,7 @@ internal static class CloriumLightControl
 			Log.Error("CloriumLight : executable not found " + path);
 			if (showErrors)
 			{
-				MessageBox.Show("클로리움 조명 제어 프로그램을 찾을 수 없습니다.\n\n" + path + "\n\n클로리움 설정 > 확장 기능 > 조명 조절에서 실행 파일 경로를 확인해 주세요.", "조명 조절", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+				global::CameraControl.Core.Classes.G2Dialog.Show("클로리움 조명 제어 프로그램을 찾을 수 없습니다.\n\n" + path + "\n\n클로리움 설정 > 확장 기능 > 조명 조절에서 실행 파일 경로를 확인해 주세요.", "조명 조절", MessageBoxButton.OK, MessageBoxImage.Exclamation);
 			}
 			return false;
 		}
@@ -202,7 +202,7 @@ internal static class CloriumLightControl
 			Log.Error("CloriumLight : unable to start " + path, ex);
 			if (showErrors)
 			{
-				MessageBox.Show("클로리움 조명 제어 프로그램을 시작하지 못했습니다.\n\n" + ex.Message, "조명 조절", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+				global::CameraControl.Core.Classes.G2Dialog.Show("클로리움 조명 제어 프로그램을 시작하지 못했습니다.\n\n" + ex.Message, "조명 조절", MessageBoxButton.OK, MessageBoxImage.Exclamation);
 			}
 			return false;
 		}

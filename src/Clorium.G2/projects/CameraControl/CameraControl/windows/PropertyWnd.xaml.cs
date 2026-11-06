@@ -99,7 +99,7 @@ public partial class PropertyWnd : Window, IComponentConnector
 				}
 				catch (Exception ex)
 				{
-					System.Windows.Forms.MessageBox.Show("Error rename file" + ex.Message);
+					global::CameraControl.Core.Classes.G2Dialog.Show("Error rename file" + ex.Message);
 					Log.Error("Error rename file", ex);
 				}
 			}
@@ -108,7 +108,7 @@ public partial class PropertyWnd : Window, IComponentConnector
 		catch (Exception ex2)
 		{
 			Log.Error("Error set property ", ex2);
-			System.Windows.Forms.MessageBox.Show("Error set property !" + ex2.Message);
+			global::CameraControl.Core.Classes.G2Dialog.Show("Error set property !" + ex2.Message);
 		}
 	}
 }

@@ -454,7 +454,7 @@ public class CameraDeviceManager : BaseFieldClass
 			catch (Exception)
 			{
 				Log.Error("카메라 초기화 실패했습니다. 카메라 전원 On/Off 시도해 주세요.");
-				MessageBox.Show("카메라 초기화 실패했습니다. 카메라 전원 On/Off 시도해 주세요.", "에러", (MessageBoxButton)0, (MessageBoxImage)16);
+				UiMessage.Show("카메라 초기화 실패했습니다. 카메라 전원 On/Off 시도해 주세요.", "에러", (MessageBoxButton)0, (MessageBoxImage)16);
 			}
 		}
 	}

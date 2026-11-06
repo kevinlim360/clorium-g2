@@ -287,7 +287,7 @@ public partial class DownloadPhotosWnd : Window, INotifyPropertyChanged, IWindow
 
 	private void btn_download_Click(object sender, RoutedEventArgs e)
 	{
-		if ((chk_delete.IsChecked != true && chk_format.IsChecked != true) || System.Windows.Forms.MessageBox.Show(TranslationStrings.LabelAskForDelete, "", MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
+		if ((chk_delete.IsChecked != true && chk_format.IsChecked != true) || global::CameraControl.Core.Classes.G2Dialog.Show(TranslationStrings.LabelAskForDelete, "", System.Windows.MessageBoxButton.YesNo, System.Windows.MessageBoxImage.Question) == System.Windows.MessageBoxResult.Yes)
 		{
 			dlg.Show();
 			delete = chk_delete.IsChecked == true;
@@ -366,7 +366,7 @@ public partial class DownloadPhotosWnd : Window, INotifyPropertyChanged, IWindow
 				}
 				if (!File.Exists(fileName))
 				{
-					System.Windows.Forms.MessageBox.Show("Unable download file. Aborting!");
+					global::CameraControl.Core.Classes.G2Dialog.Show("Unable download file. Aborting!");
 					break;
 				}
 				totalbytes += new System.IO.FileInfo(fileName).Length;

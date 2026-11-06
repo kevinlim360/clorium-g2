@@ -635,7 +635,7 @@ public partial class G2BackgroundRemovalWnd : Window
 	private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
 	{
 		if (!_running || _jobId == null) return;
-		MessageBoxResult answer = MessageBox.Show(this, "배경 제거가 진행 중입니다.\n\n중지하고 닫을까요? (이미 저장된 결과는 유지됩니다)\n\n아니요를 누르면 계속 처리하고 창은 닫지 않습니다.", "배경제거", MessageBoxButton.YesNo, MessageBoxImage.Question);
+		MessageBoxResult answer = global::CameraControl.Core.Classes.G2Dialog.Show(this, "배경 제거가 진행 중입니다.\n\n중지하고 닫을까요? (이미 저장된 결과는 유지됩니다)\n\n아니요를 누르면 계속 처리하고 창은 닫지 않습니다.", "배경제거", MessageBoxButton.YesNo, MessageBoxImage.Question);
 		if (answer != MessageBoxResult.Yes)
 		{
 			e.Cancel = true;

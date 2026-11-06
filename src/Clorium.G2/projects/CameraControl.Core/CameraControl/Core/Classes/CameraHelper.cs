@@ -24,7 +24,7 @@ public static class CameraHelper
 			StaticHelper.Instance.SystemMessage = ex.Message;
 			Application.Current.Dispatcher.Invoke(() =>
 			{
-				MessageBox.Show("포커스가 맞지 않습니다.\r\n박스내 포커스를 맞추고 다시 시도해 주세요.", "알림", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+				global::CameraControl.Core.Classes.G2Dialog.Show("포커스가 맞지 않습니다.\r\n박스내 포커스를 맞추고 다시 시도해 주세요.", "알림", MessageBoxButton.OK, MessageBoxImage.Exclamation);
 				Log.Debug("포커스가 맞지 않습니다.");
 			});
 		}
@@ -289,7 +289,7 @@ public static class CameraHelper
 			StaticHelper.Instance.SystemMessage = e.Message;
 			Application.Current.Dispatcher.Invoke(() =>
 			{
-				MessageBox.Show("포커스가 맞지 않습니다.\r\n박스내 포커스를 맞추고 다시 시도해 주세요.", "알림", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+				global::CameraControl.Core.Classes.G2Dialog.Show("포커스가 맞지 않습니다.\r\n박스내 포커스를 맞추고 다시 시도해 주세요.", "알림", MessageBoxButton.OK, MessageBoxImage.Exclamation);
 				Log.Debug("포커스가 맞지 않습니다.");
 			});
 			return false;

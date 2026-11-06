@@ -951,7 +951,7 @@ public class PhotoSession : BaseFieldClass
 		catch (Exception ex)
 		{
 			Log.Error("Unable to start Lightroom", ex);
-			MessageBox.Show("Unable to start Lightroom " + ex.Message);
+			global::CameraControl.Core.Classes.G2Dialog.Show("Unable to start Lightroom " + ex.Message);
 		}
 	}
 
@@ -972,7 +972,7 @@ public class PhotoSession : BaseFieldClass
 			}
 			if (string.IsNullOrEmpty(ps.Arguments))
 			{
-				MessageBox.Show("Please Select an image first");
+				global::CameraControl.Core.Classes.G2Dialog.Show("Please Select an image first");
 			}
 			else
 			{
@@ -982,7 +982,7 @@ public class PhotoSession : BaseFieldClass
 		catch (Exception ex)
 		{
 			Log.Error("Unable to start Photoshop", ex);
-			MessageBox.Show("Unable to start Photoshop " + ex.Message);
+			global::CameraControl.Core.Classes.G2Dialog.Show("Unable to start Photoshop " + ex.Message);
 		}
 	}
 

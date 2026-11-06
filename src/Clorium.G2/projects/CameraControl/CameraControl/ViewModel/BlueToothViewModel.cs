@@ -65,7 +65,7 @@ namespace CameraControl.ViewModel
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error to connect to the device " + ex.Message);
+                global::CameraControl.Core.Classes.G2Dialog.Show("Error to connect to the device " + ex.Message);
             }
         }
 
@@ -85,7 +85,7 @@ namespace CameraControl.ViewModel
                 
                 if (!mBLED.DeviceInformation.Pairing.IsPaired)
                 {
-                    MessageBox.Show("Device not paired");
+                    global::CameraControl.Core.Classes.G2Dialog.Show("Device not paired");
                     Log.Debug("Device not paired");
                     IsNotBusy = true;
                     RaisePropertyChanged(() => IsNotBusy);
@@ -104,7 +104,7 @@ namespace CameraControl.ViewModel
             catch (Exception ex)
             {
                 Log.Error("Error to connect to the bluetooth device", ex);
-                MessageBox.Show("Error to connect to the device " + ex.Message);
+                global::CameraControl.Core.Classes.G2Dialog.Show("Error to connect to the device " + ex.Message);
                 if (mBLED != null)
                     mBLED.Dispose();
             }

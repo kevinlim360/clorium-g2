@@ -64,7 +64,7 @@ public partial class PrintWnd : Window, IWindow, IComponentConnector
 		}
 		catch (Exception ex)
 		{
-			MessageBox.Show(ex.Message);
+			global::CameraControl.Core.Classes.G2Dialog.Show(ex.Message);
 			Log.Error("Error print", ex);
 		}
 	}
@@ -84,7 +84,7 @@ public partial class PrintWnd : Window, IWindow, IComponentConnector
 		}
 		catch (Exception ex)
 		{
-			MessageBox.Show(ex.Message, "Save error");
+			global::CameraControl.Core.Classes.G2Dialog.Show(ex.Message, "Save error");
 			Log.Error("Save error", ex);
 		}
 	}

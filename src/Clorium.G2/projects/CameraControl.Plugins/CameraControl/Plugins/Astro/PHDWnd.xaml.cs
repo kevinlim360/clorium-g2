@@ -63,7 +63,7 @@ public partial class PHDWnd : Window
         }
         catch (Exception ex2)
         {
-            MessageBox.Show("Unable to comunicate with PhD" + ex2.Message);
+            global::CameraControl.Core.Classes.G2Dialog.Show("Unable to comunicate with PhD" + ex2.Message);
         }
 
         return 0;

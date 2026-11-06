@@ -1007,7 +1007,7 @@ namespace CameraControl.windows
 		{
 			G2ColorTemplate sel = SelectedTemplate;
 			if (_busy || sel == null) return;
-			if (System.Windows.MessageBox.Show(this, "템플릿 '" + sel.Name + "'을(를) 지금 보정값으로 바꿀까요?\n\n" + _settings.Describe(), "템플릿 덮어쓰기", MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK)
+			if (global::CameraControl.Core.Classes.G2Dialog.Show(this, "템플릿 '" + sel.Name + "'을(를) 지금 보정값으로 바꿀까요?\n\n" + _settings.Describe(), "템플릿 덮어쓰기", MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK)
 			{
 				return;
 			}
@@ -1030,7 +1030,7 @@ namespace CameraControl.windows
 		{
 			G2ColorTemplate sel = SelectedTemplate;
 			if (_busy || sel == null) return;
-			if (System.Windows.MessageBox.Show(this, "템플릿 '" + sel.Name + "'을(를) 삭제할까요?\n사진의 현재 보정값은 그대로 둡니다.", "템플릿 삭제", MessageBoxButton.OKCancel, MessageBoxImage.Warning) != MessageBoxResult.OK)
+			if (global::CameraControl.Core.Classes.G2Dialog.Show(this, "템플릿 '" + sel.Name + "'을(를) 삭제할까요?\n사진의 현재 보정값은 그대로 둡니다.", "템플릿 삭제", MessageBoxButton.OKCancel, MessageBoxImage.Warning) != MessageBoxResult.OK)
 			{
 				return;
 			}
@@ -1112,7 +1112,7 @@ namespace CameraControl.windows
 				StatusText.Foreground = (Brush)FindResource("G2Err");
 				return null;
 			}
-			if (ConfirmBatch && System.Windows.MessageBox.Show(this,
+			if (ConfirmBatch && global::CameraControl.Core.Classes.G2Dialog.Show(this,
 				"템플릿 '" + t.Name + "'을(를) " + count + "장에 적용합니다.\n\n" + t.Summary + "\n\n폴더: " + folder + "\n저장: " + Path.Combine(folder, G2ColorBatch.OutputFolderName) + "\n원본은 바꾸지 않습니다.",
 				"일괄 적용", MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK)
 			{
@@ -1168,7 +1168,7 @@ namespace CameraControl.windows
 			if (result != null && ConfirmBatch && result.Saved > 0 && !_closed)
 			{
 				string text = StatusText.Text + (result.Errors.Count > 0 ? "\n\n실패:\n" + string.Join("\n", result.Errors.Take(8)) + (result.Errors.Count > 8 ? "\n…" : "") : "") + "\n\n결과 폴더를 열까요?";
-				if (System.Windows.MessageBox.Show(this, text, "일괄 적용", MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes)
+				if (global::CameraControl.Core.Classes.G2Dialog.Show(this, text, "일괄 적용", MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes)
 				{
 					try { System.Diagnostics.Process.Start("explorer.exe", "\"" + result.OutputFolder + "\""); } catch (Exception) { }
 				}

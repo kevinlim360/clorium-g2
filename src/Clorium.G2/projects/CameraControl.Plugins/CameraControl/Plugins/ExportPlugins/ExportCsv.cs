@@ -45,7 +45,7 @@ public class ExportCsv : IExportPlugin
 			}
 			catch (Exception ex)
 			{
-				MessageBox.Show("Error to export " + ex.Message);
+				global::CameraControl.Core.Classes.G2Dialog.Show("Error to export " + ex.Message);
 				Log.Error("Error to export ", ex);
 			}
 		}

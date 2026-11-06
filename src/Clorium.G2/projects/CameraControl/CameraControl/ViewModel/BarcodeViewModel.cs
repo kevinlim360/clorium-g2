@@ -142,7 +142,7 @@ namespace CameraControl.ViewModel
                             ImportCsv(dialog.FileName);
                             break;
                         default:
-                            MessageBox.Show("Unknow file format");
+                            global::CameraControl.Core.Classes.G2Dialog.Show("Unknow file format");
                             break;
                     }
                 }

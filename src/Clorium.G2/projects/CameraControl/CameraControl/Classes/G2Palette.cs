@@ -11,7 +11,13 @@ namespace CameraControl.Classes;
 public sealed class G2Palette : ResourceDictionary
 {
 	// Value for dictionaries created from now on; Apply() also refreshes the live ones.
-	public static bool Dark { get; set; }
+	// G2Dialog (Core) draws its own frozen colours from the same theme switch.
+	private static bool _dark;
+	public static bool Dark
+	{
+		get => _dark;
+		set { _dark = value; CameraControl.Core.Classes.G2Dialog.Dark = value; }
+	}
 
 	// key, light, dark (ARGB)
 	private static readonly (string Key, uint Light, uint Dark)[] Tokens =

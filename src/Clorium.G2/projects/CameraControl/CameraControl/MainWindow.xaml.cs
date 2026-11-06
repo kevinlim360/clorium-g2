@@ -620,7 +620,7 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 			if (!ServiceProvider.Settings.ShowDebugTest)
 			{
 				Log.Debug("⚠\ufe0f 메모리 사용량이 90%가 넘었습니다.");
-				System.Windows.MessageBox.Show("⚠\ufe0f 메모리 사용량이 90%가 넘었습니다.\n⚠\ufe0f 프로그램 사용에는 지장없습니다.\n⚠\ufe0f 실행이 느려지면 재시작하는 것을 권장합니다.", "알림", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+				global::CameraControl.Core.Classes.G2Dialog.Show("⚠\ufe0f 메모리 사용량이 90%가 넘었습니다.\n⚠\ufe0f 프로그램 사용에는 지장없습니다.\n⚠\ufe0f 실행이 느려지면 재시작하는 것을 권장합니다.", "알림", MessageBoxButton.OK, MessageBoxImage.Exclamation);
 			}
 			lastWarningTime = DateTime.Now;
 			_ManagementTimer.Start();
@@ -869,7 +869,7 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 		CaptureScreenToJpg(0, dst);
 		dst = folderPath + date + " LiveView.jpg";
 		CaptureScreenToJpg(1, dst);
-		System.Windows.MessageBox.Show("\ud83d\udccd 에러 관련 정보 저장 완료했습니다.");
+		global::CameraControl.Core.Classes.G2Dialog.Show("\ud83d\udccd 에러 관련 정보 저장 완료했습니다.");
 	}
 
 	private void but_LightingOn_Click(object sender, RoutedEventArgs e)
@@ -1568,7 +1568,7 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 	{
 		if (ServiceProvider.Settings.UseAlarm && !ServiceProvider.Settings.IsTimerRunning)
 		{
-			System.Windows.MessageBox.Show("\ud83d\udce2일시 정지 중입니다.\ud83d\udce2\r\n촬영을 시작하려면 작업시작 버튼을 누르세요.", "알림", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+			global::CameraControl.Core.Classes.G2Dialog.Show("\ud83d\udce2일시 정지 중입니다.\ud83d\udce2\r\n촬영을 시작하려면 작업시작 버튼을 누르세요.", "알림", MessageBoxButton.OK, MessageBoxImage.Asterisk);
 			return false;
 		}
 		return true;
@@ -1765,7 +1765,7 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 		string filename = Path.Combine(directory, ServiceProvider.Settings.CloriumID + DateTime.Now.ToString("yyMMdd") + ".csv");
 		if (!File.Exists(filename))
 		{
-			System.Windows.MessageBox.Show("\ud83d\udea8 CSV 파일이 존재하지 않습니다.");
+			global::CameraControl.Core.Classes.G2Dialog.Show("\ud83d\udea8 CSV 파일이 존재하지 않습니다.");
 			return;
 		}
 		try
@@ -1781,7 +1781,7 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 				string totalLine = lines[lines.Length - 3];
 				if (avgLine.Contains("평균시간(초)") || totalLine.Contains("누적시간(초)"))
 				{
-					System.Windows.MessageBox.Show("\ud83d\udea8 이미 통계 데이터가 작성된 파일입니다. 작업을 종료합니다.");
+					global::CameraControl.Core.Classes.G2Dialog.Show("\ud83d\udea8 이미 통계 데이터가 작성된 파일입니다. 작업을 종료합니다.");
 					return;
 				}
 			}
@@ -1802,13 +1802,13 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 			}
 			else
 			{
-				System.Windows.MessageBox.Show("\ud83d\udea8 통계를 계산할 데이터가 없습니다.");
+				global::CameraControl.Core.Classes.G2Dialog.Show("\ud83d\udea8 통계를 계산할 데이터가 없습니다.");
 			}
-			System.Windows.MessageBox.Show("\ud83d\udc4d\ud83c\udffb 오늘도 많은 작업하시느라 수고하셨습니다. \ud83d\udc4f\ud83c\udffb");
+			global::CameraControl.Core.Classes.G2Dialog.Show("\ud83d\udc4d\ud83c\udffb 오늘도 많은 작업하시느라 수고하셨습니다. \ud83d\udc4f\ud83c\udffb");
 		}
 		catch (IOException)
 		{
-			System.Windows.MessageBox.Show("\ud83d\udea8 csv 파일이 열려있습니다. 닫고 다시 시도해 주세요", "경고", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+			global::CameraControl.Core.Classes.G2Dialog.Show("\ud83d\udea8 csv 파일이 열려있습니다. 닫고 다시 시도해 주세요", "경고", MessageBoxButton.OK, MessageBoxImage.Exclamation);
 		}
 	}
 
@@ -1855,7 +1855,7 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 	{
 		if (ServiceProvider.DeviceManager.SelectedCameraDevice.DeviceName == "Z-FTP camera")
 		{
-			System.Windows.MessageBox.Show("⚠\ufe0f FTP Fake Camera는 촬영은 지원하지 않습니다.");
+			global::CameraControl.Core.Classes.G2Dialog.Show("⚠\ufe0f FTP Fake Camera는 촬영은 지원하지 않습니다.");
 		}
 		else
 		{
@@ -1865,7 +1865,7 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 			}
 			if (!ServiceProvider.Settings.ThumbailLoaded)
 			{
-				System.Windows.MessageBox.Show("썸네일 생성중입니다. 다시 캡쳐 시도하세요.");
+				global::CameraControl.Core.Classes.G2Dialog.Show("썸네일 생성중입니다. 다시 캡쳐 시도하세요.");
 				ServiceProvider.Settings.ThumbailLoaded = true;
 				return;
 			}
@@ -1934,7 +1934,7 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 		{
 			System.Windows.Application.Current.Dispatcher.Invoke(() =>
 			{
-				System.Windows.MessageBox.Show("⚠\ufe0f 연결된 카메라가 없습니다..");
+				global::CameraControl.Core.Classes.G2Dialog.Show("⚠\ufe0f 연결된 카메라가 없습니다..");
 			});
 			return;
 		}
@@ -1990,7 +1990,7 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 		if (!ServiceProvider.DeviceManager.SelectedCameraDevice.IsConnected)
 		{
 			ResetFailedCaptureState();
-			System.Windows.MessageBox.Show("⚠\ufe0f 연결된 카메라가 없습니다..");
+			global::CameraControl.Core.Classes.G2Dialog.Show("⚠\ufe0f 연결된 카메라가 없습니다..");
 			return false;
 		}
 		ServiceProvider.Settings.isBtnPressed = true;
@@ -2287,7 +2287,7 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 			string folder = ServiceProvider.Settings?.DefaultSession?.Folder;
 			if (string.IsNullOrWhiteSpace(folder) || !Directory.Exists(folder))
 			{
-				System.Windows.MessageBox.Show("현재 세션 폴더를 찾을 수 없습니다.\n" + folder, "열기");
+				global::CameraControl.Core.Classes.G2Dialog.Show("현재 세션 폴더를 찾을 수 없습니다.\n" + folder, "열기");
 				return;
 			}
 			Process.Start(new ProcessStartInfo("explorer.exe", "\"" + folder + "\"") { UseShellExecute = true });
@@ -2306,7 +2306,7 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 			FileItem item = ServiceProvider.Settings?.SelectedBitmap?.FileItem;
 			if (item == null || string.IsNullOrEmpty(item.FileName) || !File.Exists(item.FileName))
 			{
-				System.Windows.MessageBox.Show("저장할 사진을 먼저 선택해 주세요.", "다른 이름으로 저장");
+				global::CameraControl.Core.Classes.G2Dialog.Show("저장할 사진을 먼저 선택해 주세요.", "다른 이름으로 저장");
 				return;
 			}
 			string ext = Path.GetExtension(item.FileName);
@@ -2326,7 +2326,7 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 			}
 			if (string.Equals(Path.GetFullPath(dialog.FileName), Path.GetFullPath(item.FileName), StringComparison.OrdinalIgnoreCase))
 			{
-				System.Windows.MessageBox.Show("원본과 다른 이름을 지정해 주세요.", "다른 이름으로 저장");
+				global::CameraControl.Core.Classes.G2Dialog.Show("원본과 다른 이름을 지정해 주세요.", "다른 이름으로 저장");
 				return;
 			}
 			File.Copy(item.FileName, dialog.FileName, overwrite: true);
@@ -2334,7 +2334,7 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 		catch (Exception ex)
 		{
 			Log.Error("G2 save as", ex);
-			System.Windows.MessageBox.Show("저장하지 못했습니다.\n" + ex.Message, "다른 이름으로 저장");
+			global::CameraControl.Core.Classes.G2Dialog.Show("저장하지 못했습니다.\n" + ex.Message, "다른 이름으로 저장");
 		}
 	}
 
@@ -2361,7 +2361,7 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 	private void OpenSuperfocus_Click(object sender, RoutedEventArgs e)
 	{
 		var camera = ServiceProvider.DeviceManager.SelectedCameraDevice;
-		if (camera == null) { System.Windows.MessageBox.Show("카메라를 연결해 주세요.", "수퍼포커스"); return; }
+		if (camera == null) { global::CameraControl.Core.Classes.G2Dialog.Show("카메라를 연결해 주세요.", "수퍼포커스"); return; }
 		Window owner = System.Windows.Application.Current.Windows.OfType<LiveViewWnd>().FirstOrDefault(w => ReferenceEquals(w.SelectedPortableDevice, camera));
 		if (owner == null || !owner.IsVisible) {
 			ServiceProvider.WindowsManager.ExecuteCommand("LiveViewWnd_Show", camera);
@@ -2654,7 +2654,7 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 			Log.Error("다운로드 실패", exception);
 			System.Windows.Application.Current.Dispatcher.Invoke(() =>
 			{
-				System.Windows.MessageBox.Show("\ud83d\udea8다운로드하지 못했습니다.\ud83d\udea8\r\n다시 촬영해 주세요.", "알림", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+				global::CameraControl.Core.Classes.G2Dialog.Show("\ud83d\udea8다운로드하지 못했습니다.\ud83d\udea8\r\n다시 촬영해 주세요.", "알림", MessageBoxButton.OK, MessageBoxImage.Exclamation);
 			});
 		}
 		finally
@@ -2787,7 +2787,7 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 			PhotoUtils.WaitForFile(filename);
 			if (!File.Exists(filename))
 			{
-				System.Windows.MessageBox.Show("파일이 존재하지 않습니다.\r\n" + filename, "파일 오류", MessageBoxButton.OK, MessageBoxImage.Hand);
+				global::CameraControl.Core.Classes.G2Dialog.Show("파일이 존재하지 않습니다.\r\n" + filename, "파일 오류", MessageBoxButton.OK, MessageBoxImage.Hand);
 			}
 			using Bitmap bitmap = new Bitmap(filename);
 			if (angle_Index == 0)
@@ -3011,12 +3011,12 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 	{
 		if (!ServiceProvider.DeviceManager.SelectedCameraDevice.IsModeColorTemperature())
 		{
-			System.Windows.MessageBox.Show("⚠\ufe0f ColorTemperature 모드가 아닙니다.");
+			global::CameraControl.Core.Classes.G2Dialog.Show("⚠\ufe0f ColorTemperature 모드가 아닙니다.");
 			return false;
 		}
 		if (ServiceProvider.DeviceManager.SelectedCameraDevice.IsBusy)
 		{
-			System.Windows.MessageBox.Show("⚠\ufe0f 색보정 슬라이더 동작시 카메라가 Busy 상태입니다.");
+			global::CameraControl.Core.Classes.G2Dialog.Show("⚠\ufe0f 색보정 슬라이더 동작시 카메라가 Busy 상태입니다.");
 			return false;
 		}
 		return true;
@@ -3058,7 +3058,7 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 			_isInternalChange = true;
 			slider.Value = e.OldValue;
 			_isInternalChange = false;
-			System.Windows.MessageBox.Show("⚠\ufe0f 색온도 모드가 아닙니다.");
+			global::CameraControl.Core.Classes.G2Dialog.Show("⚠\ufe0f 색온도 모드가 아닙니다.");
 			return;
 		}
 		DateTime currentTime = DateTime.Now;
@@ -3143,7 +3143,7 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 		else if (File.Exists(filename_Calibration))
 		{
 			double scale = GetScaleWithSquareROI(filename_Calibration, ServiceProvider.Settings.DiskSize);
-			MessageBoxResult ret = System.Windows.MessageBox.Show("스케일 값 : " + scale, "알림", MessageBoxButton.YesNo);
+			MessageBoxResult ret = global::CameraControl.Core.Classes.G2Dialog.Show("스케일 값 : " + scale, "알림", MessageBoxButton.YesNo);
 			if (ret == MessageBoxResult.Yes && scale > 0.0)
 			{
 				ServiceProvider.Settings.MetaScale = scale.ToString();
@@ -3195,7 +3195,7 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 			}
 			Process.Start(new ProcessStartInfo { FileName = outPath, UseShellExecute = true });
 
-			if (System.Windows.MessageBox.Show(result.Summary() + "\n\n이 값을 치수 촬영 스케일로 저장할까요?", "정사각형 판 캘리브레이션", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+			if (global::CameraControl.Core.Classes.G2Dialog.Show(result.Summary() + "\n\n이 값을 치수 촬영 스케일로 저장할까요?", "정사각형 판 캘리브레이션", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
 			{
 				ServiceProvider.Settings.SquareCalibration = result.Format();
 				ServiceProvider.Settings.MetaScale = result.Scale.ToString(CultureInfo.InvariantCulture);
@@ -3204,12 +3204,12 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 		}
 		catch (SquareBoardCalibration.DetectionException ex)
 		{
-			System.Windows.MessageBox.Show(ex.Message, "정사각형 판 캘리브레이션");
+			global::CameraControl.Core.Classes.G2Dialog.Show(ex.Message, "정사각형 판 캘리브레이션");
 		}
 		catch (Exception ex)
 		{
 			Log.Error("정사각형 판 캘리브레이션 실패", ex);
-			System.Windows.MessageBox.Show("캘리브레이션 사진을 처리하지 못했습니다.\n\n" + ex.Message, "정사각형 판 캘리브레이션");
+			global::CameraControl.Core.Classes.G2Dialog.Show("캘리브레이션 사진을 처리하지 못했습니다.\n\n" + ex.Message, "정사각형 판 캘리브레이션");
 		}
 	}
 
@@ -3352,7 +3352,7 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 			StartBarcodeUSBWatcher();
 			return true;
 		}
-		System.Windows.MessageBox.Show("\ud83d\udea8 바코드 USB 드라이브를 찾을 수 없습니다.\ud83d\udea8\n\n⚠\ufe0f 바코드 USB 포트 확인 바랍니다.⚠\ufe0f", "알림", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+		global::CameraControl.Core.Classes.G2Dialog.Show("\ud83d\udea8 바코드 USB 드라이브를 찾을 수 없습니다.\ud83d\udea8\n\n⚠\ufe0f 바코드 USB 포트 확인 바랍니다.⚠\ufe0f", "알림", MessageBoxButton.OK, MessageBoxImage.Asterisk);
 		return false;
 	}
 
@@ -3457,7 +3457,7 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 			Exception ex3 = ex2;
 			System.Windows.Application.Current.Dispatcher.BeginInvoke((Action)(() =>
 			{
-				System.Windows.MessageBox.Show("\ud83d\udd25 시리얼 수신 중 예외 발생: " + ex3.Message, "알림", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+				global::CameraControl.Core.Classes.G2Dialog.Show("\ud83d\udd25 시리얼 수신 중 예외 발생: " + ex3.Message, "알림", MessageBoxButton.OK, MessageBoxImage.Exclamation);
 			}));
 		}
 	}
@@ -3525,7 +3525,7 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 		}
 		catch (Exception ex)
 		{
-			System.Windows.MessageBox.Show("Command : " + cmd + "\nData Error: " + ex.Message + "\nRaw Data: " + data);
+			global::CameraControl.Core.Classes.G2Dialog.Show("Command : " + cmd + "\nData Error: " + ex.Message + "\nRaw Data: " + data);
 		}
 	}
 
@@ -3533,7 +3533,7 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 	{
 		if (ServiceProvider.Settings.UseLEDDimmer && !arduino.Init())
 		{
-			System.Windows.MessageBox.Show("\ud83d\udea8 LED 조명 USB 드라이브를 찾을 수 없습니다.\ud83d\udea8\n\n⚠\ufe0f USB 포트 확인 바랍니다.⚠\ufe0f", "알림", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+			global::CameraControl.Core.Classes.G2Dialog.Show("\ud83d\udea8 LED 조명 USB 드라이브를 찾을 수 없습니다.\ud83d\udea8\n\n⚠\ufe0f USB 포트 확인 바랍니다.⚠\ufe0f", "알림", MessageBoxButton.OK, MessageBoxImage.Asterisk);
 		}
 	}
 

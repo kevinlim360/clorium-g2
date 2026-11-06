@@ -51,7 +51,7 @@ public partial class EditSession : Window, IComponentConnector
 		}
 		catch (Exception exception)
 		{
-			System.Windows.MessageBox.Show("폴더를 만들 수 없습니다.");
+			global::CameraControl.Core.Classes.G2Dialog.Show("폴더를 만들 수 없습니다.");
 			Log.Error("폴더를 만들 수 없습니다.", exception);
 		}
 	}
