@@ -38,7 +38,7 @@ public sealed class SuperfocusWindow : Window
     public static bool FindsFocusAutomatically(string lens)=>!string.IsNullOrEmpty(lens)&&lens.IndexOf("24-240",StringComparison.OrdinalIgnoreCase)>=0;
     const string MfNotice="렌즈를 MF(초점 수동 조절)로 설정해 주세요.";
     const string AutoNotice="이 렌즈는 AF/MF 스위치가 없습니다. 카메라 포커스 모드는 AF로 두세요. 가까운 물체와 먼 물체에 각각 박스를 놓고 ‘박스에 초점 맞추기’ 뒤 ‘가까운 곳’, ‘먼 곳’으로 저장하면, 촬영 때 두 박스 사이를 차례로 AF하며 찍습니다.";
-    private readonly TextBox cuts = new TextBox { Width=42, Height=24, Margin=new Thickness(4,0,8,0), Padding=new Thickness(3), Background=Brushes.White, Foreground=Brushes.Black, VerticalContentAlignment=VerticalAlignment.Center };
+    private readonly TextBox cuts = new TextBox { Width=48, Height=26, FontSize=13, Margin=new Thickness(4,0,8,0), Padding=new Thickness(3), Background=Brushes.White, Foreground=Brushes.Black, VerticalContentAlignment=VerticalAlignment.Center };
     private readonly TextBox settle = new TextBox { Text="700" }, python = new TextBox(), engine = new TextBox();
     private readonly TextBlock status = new TextBlock { Foreground=Brushes.White, FontSize=12, TextTrimming=TextTrimming.CharacterEllipsis, Margin=new Thickness(2,4,2,0), Visibility=Visibility.Collapsed };
     private readonly Button markA=Button("가까운 곳","지금 초점을 가까운 곳(A)으로 저장합니다."), markB=Button("먼 곳","지금 초점을 먼 곳(B)으로 저장합니다.");
@@ -130,6 +130,10 @@ public sealed class SuperfocusWindow : Window
         cuts.IsReadOnly=false;cuts.Focusable=true;cuts.Cursor=System.Windows.Input.Cursors.IBeam;
         cuts.GotKeyboardFocus+=(s,e)=>cuts.Dispatcher.BeginInvoke(new Action(()=>{if(cuts.IsKeyboardFocusWithin)cuts.SelectAll();}),System.Windows.Threading.DispatcherPriority.Input);
         cuts.PreviewTextInput+=(s,e)=>e.Handled=e.Text.Any(c=>c<'0'||c>'9')||cuts.Text.Length-cuts.SelectionLength+e.Text.Length>3;
+        // Digits typed on the keyboard did not reach the box in G2 (Korean IME / keypad) although injected keys did: digits are
+        // taken straight from the key press (top row, keypad, IME-processed) and the IME is off for this number box.
+        System.Windows.Input.InputMethod.SetIsInputMethodEnabled(cuts,false);
+        cuts.PreviewKeyDown+=(s,e)=>{int digit=DigitOf(e.Key==System.Windows.Input.Key.ImeProcessed?e.ImeProcessedKey:e.Key);if(digit<0||System.Windows.Input.Keyboard.Modifiers!=System.Windows.Input.ModifierKeys.None)return;e.Handled=true;TypeDigit(digit);};
         DataObject.AddPastingHandler(cuts,(s,e)=>{var text=e.DataObject.GetData(typeof(string)) as string;if(text==null||text.Any(c=>c<'0'||c>'9'))e.CancelCommand();});
         cuts.TextChanged+=(s,e)=>{if(!updatingCuts){automaticCuts=false;Refresh();}};qualityRow.Children.Add(cuts);
         settings.Children.Add(qualityRow);panel.Children.Add(settings);
@@ -149,6 +153,15 @@ public sealed class SuperfocusWindow : Window
         for(var dir=new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);dir!=null;dir=dir.Parent){string script=Path.Combine(dir.FullName,"modules","Clorium.Stack","clorium_stack.py");if(File.Exists(script)){engine.Text=script;break;}}
         Closing+=(s,e)=>{if(IsWorking){e.Cancel=true;RequestStop();SetStatus("중지 중");}else if(!allowClose){e.Cancel=true;Hide();}};
         camera.CameraDisconnected+=Disconnected;Closed+=(s,e)=>camera.CameraDisconnected-=Disconnected;Refresh();
+    }
+    private static int DigitOf(System.Windows.Input.Key key){if(key>=System.Windows.Input.Key.D0&&key<=System.Windows.Input.Key.D9)return key-System.Windows.Input.Key.D0;if(key>=System.Windows.Input.Key.NumPad0&&key<=System.Windows.Input.Key.NumPad9)return key-System.Windows.Input.Key.NumPad0;return -1;}
+    // Replaces the selection with the digit (at most 3 digits), like typing.
+    public void TypeDigit(int digit){
+        if(!cuts.IsEnabled||digit<0||digit>9)return;
+        int start=Math.Min(cuts.SelectionStart,cuts.Text.Length),length=Math.Min(cuts.SelectionLength,cuts.Text.Length-start);
+        string text=cuts.Text.Remove(start,length).Insert(start,digit.ToString());
+        if(text.Length>3)return;
+        cuts.Text=text;cuts.SelectionStart=start+1;cuts.SelectionLength=0;
     }
     private static Button Button(string label,string hint)=>WithTip(new Button {Content=label,Margin=new Thickness(2),Padding=new Thickness(6,4,6,4),MinHeight=30,FontSize=13,Background=Brushes.LightGray,Foreground=Brushes.Black},hint);
     private static T WithTip<T>(T control,string text) where T:FrameworkElement {Tip(control,text);return control;}

@@ -264,6 +264,17 @@ class ThemeCheck
 				Check("typed 7 cuts can be shot", (bool)sf.GetProperty("CanCapture").GetValue(w, null) && (int)sf.GetMethod("AfCount", inst).Invoke(w, null) == 7);
 				cutsBox.Text = "1"; Pump(50);
 				Check("1 cut is refused", !(bool)sf.GetProperty("CanCapture").GetValue(w, null));
+				// Real keyboard path: pick 저, click into the box (focus selects all), type 6.
+				sf.GetMethod("SelectQuality").Invoke(w, new object[] { 2 }); Pump(50);
+				w.Activate(); cutsBox.Focus(); System.Windows.Input.Keyboard.Focus(cutsBox); Pump(150);
+				System.Windows.Input.TextCompositionManager.StartComposition(new System.Windows.Input.TextComposition(System.Windows.Input.InputManager.Current, cutsBox, "6")); Pump(150);
+				Check("typing 6 after choosing 저 gives 6 (text '" + cutsBox.Text + "', focus " + cutsBox.IsKeyboardFocusWithin + ", start " + ((Button)sf.GetField("start", inst).GetValue(w)).IsEnabled + ")", cutsBox.Text == "6" && (bool)sf.GetProperty("CanCapture").GetValue(w, null));
+				// Key presses themselves (keypad 1, top-row 2) are taken as digits even when no text input follows (IME, keypad).
+				cutsBox.SelectAll();
+				foreach (var key in new[] { System.Windows.Input.Key.NumPad1, System.Windows.Input.Key.D2 })
+					cutsBox.RaiseEvent(new System.Windows.Input.KeyEventArgs(System.Windows.Input.Keyboard.PrimaryDevice, PresentationSource.FromVisual(cutsBox), 0, key) { RoutedEvent = System.Windows.Input.Keyboard.PreviewKeyDownEvent });
+				Pump(50);
+				Check("keypad 1 + key 2 give 12 (text '" + cutsBox.Text + "')", cutsBox.Text == "12" && (int)sf.GetMethod("AfCount", inst).Invoke(w, null) == 12);
 				sf.GetMethod("SelectQuality").Invoke(w, new object[] { 1 }); Pump(50);
 				Check("choosing 중 goes back to its count (" + cutsBox.Text + ")", cutsBox.Text == "10" && (bool)sf.GetProperty("CanCapture").GetValue(w, null));
 				Snapshot(w, Path.Combine(outDir, "superfocus-af-marked.png"));
