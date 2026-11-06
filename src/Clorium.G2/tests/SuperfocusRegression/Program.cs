@@ -68,7 +68,7 @@ class Program
         Check(range.Positions(2).Count == 101, "larger interval count");
         Console.WriteLine("PASS A/B count, endpoints, remainder, negative origin, invalid range, 200-frame limit");
         range.Reset(); range.MarkA(); range.Moved(72); range.MarkB();
-        Check(range.FineCount()==25 && range.QualityCount(0)==5 && range.QualityCount(1)==3 && range.QualityCount(2)==2,"presets are 1/5 of the fine count (A0/B72 25 -> 5/3/2)");
+        Check(range.FineCount()==25 && range.QualityCount(0)==15 && range.QualityCount(1)==10 && range.QualityCount(2)==5,"presets are 3/5 of the fine count (A0/B72 25 -> 15/10/5)");
         foreach(int quality in new[]{0,1,2}) {
             var planned=range.PositionsForQuality(quality);
             Check(planned.Count==range.QualityCount(quality) && planned[0]==0 && planned[planned.Count-1]==72,"quality endpoints/count");
@@ -81,11 +81,12 @@ class Program
         range.Reset();range.Moved(-10);range.MarkA();range.Moved(10);range.MarkB();
         Check(string.Join(",",range.PositionsForQuality(1))=="-10,0","negative origin quality distribution");
         range.Reset();range.MarkA();range.Moved(1200);range.MarkB();
-        Check(range.FineCount()==401 && range.PositionsForQuality(0).Count==81 && range.PositionsForQuality(1).Count==54 && range.PositionsForQuality(2).Count==27,"wide range presets stay under the 200 limit");
+        try{range.PositionsForQuality(0);throw new Exception("high silently capped");}catch(InvalidOperationException){}
+        Check(range.FineCount()==401 && range.PositionsForQuality(1).Count==161 && range.PositionsForQuality(2).Count==80,"lower presets stay available when 고 exceeds 200");
         Console.WriteLine("PASS quality ratios, rounding, inclusive endpoints, even gaps, negative origin, minimum and limit");
         range.Reset();range.MarkA();range.Moved(10);range.MarkB();
-        Check(string.Join(",",range.PositionsForQuality(0))=="0,10","short range keeps both ends");
-        Check(range.FineCount()==5 && range.QualityCount(0)==2 && range.QualityCount(1)==2 && range.QualityCount(2)==2,"short range presets never below two");
+        Check(string.Join(",",range.PositionsForQuality(0))=="0,5,10","short range even spacing with both ends");
+        Check(range.FineCount()==5 && range.QualityCount(0)==3 && range.QualityCount(1)==2 && range.QualityCount(2)==2,"short range presets never below two");
         Check(string.Join(",",range.CapturePositionsForCount(4))=="10,6,3,0","custom count includes both ends in reverse");
         range.Moved(-10);
         Check(string.Join(",",range.CapturePositionsForCount(4))=="0,3,6,10","custom count starts at nearest end");
@@ -93,7 +94,7 @@ class Program
             try{range.CapturePositionsForCount(invalidCount);throw new Exception("invalid custom count accepted");}catch(InvalidOperationException){}
         }
         range.Reset();range.MarkB();range.Moved(-10);range.MarkA();
-        Check(string.Join(",",range.PositionsForQuality(0))=="-10,0","B-first plan");
+        Check(string.Join(",",range.PositionsForQuality(0))=="-10,-5,0","B-first plan");
         Console.WriteLine("PASS three-unit presets, remainder, custom count, nearest direction and invalid counts");
         range.Reset();range.MarkA();range.Moved(72);range.MarkB();
         Check(range.MaximumUserCuts==25,"maximum user cuts must use high quality");

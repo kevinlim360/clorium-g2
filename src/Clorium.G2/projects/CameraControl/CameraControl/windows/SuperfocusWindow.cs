@@ -270,7 +270,7 @@ public sealed class SuperfocusWindow : Window
         for(int i=0;i<qualityButtons.Count;i++){
             var b=qualityButtons[i];string name=i==0?"고":i==1?"중":"저";
             b.Content=name;
-            Tip(b,QualityDescription(i)+(i==0?" · 3단계마다 한 장 찍던 컷수의 1/5":i==1?" · 고 컷수의 약 2/3":" · 고 컷수의 약 1/3")+". 양 끝을 포함하며 최소 2컷. 해상도는 동일합니다.");
+            Tip(b,QualityDescription(i)+(i==0?" · 3단계마다 한 장 찍던 컷수의 3/5":i==1?" · 고 컷수의 약 2/3":" · 고 컷수의 약 1/3")+". 양 끝을 포함하며 최소 2컷. 해상도는 동일합니다.");
             bool selected=i==Quality&&automaticCuts;b.Background=selected?Brushes.SteelBlue:Brushes.LightGray;b.Foreground=selected?Brushes.White:Brushes.Black;b.IsEnabled=!IsWorking||registeringAnchor;
         }
         settings.IsEnabled=!IsWorking||registeringAnchor||manualDriving;foreach(var b in focusMoveButtons)b.IsEnabled=!IsWorking||registeringAnchor||manualDriving;

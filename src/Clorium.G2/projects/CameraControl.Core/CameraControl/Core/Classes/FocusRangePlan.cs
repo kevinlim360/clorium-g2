@@ -26,13 +26,13 @@ public sealed class FocusRangePlan
         return (Math.Abs((long)B.Value - A.Value) + 2) / 3 + 1;
     }
 
-    // 2026-11-06: presets are 1/5 of the earlier counts (stacking took too long). 고 = FineCount / 5 (rounded up), 중 ≈ 2/3 and
-    // 저 ≈ 1/3 of 고, evenly spaced, never fewer than the two ends. A0/B72: 5/3/2 (was 25/17/8).
+    // Presets: 고 = 3/5 of FineCount (rounded up; 2026-11-06 1/5 for speed, then x3 on request), 중 ≈ 2/3 and 저 ≈ 1/3 of 고,
+    // evenly spaced, never fewer than the two ends. A0/B72: 15/10/5 (originally 25/17/8).
     public long QualityCount(int quality)
     {
         long fine = FineCount();
         if (quality < 0 || quality > 2) throw new ArgumentOutOfRangeException(nameof(quality));
-        long high = Math.Max(2, (fine + 4) / 5);
+        long high = Math.Max(2, (fine * 3 + 4) / 5);
         return quality == 0 ? high : Math.Max(2, (high * (quality == 1 ? 2 : 1) + 1) / 3);
     }
 
