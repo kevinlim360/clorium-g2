@@ -45,7 +45,7 @@ public sealed class SuperfocusWindow : Window
     private readonly Border mfNotice;
     private readonly Button focusHere=Button("박스에 초점 맞추기","라이브뷰에서 고른 박스에 초점을 자동으로 맞춥니다. 맞춘 뒤 ‘가까운 곳’ 또는 ‘먼 곳’을 누르면 그 위치를 저장합니다.");
     private readonly StackPanel autoRow=new StackPanel {Orientation=Orientation.Horizontal,HorizontalAlignment=HorizontalAlignment.Center,Margin=new Thickness(0,0,0,6)};
-    private readonly Button start=Button("촬영","현재 초점에서 가까운 끝점부터 반대쪽 끝점까지 촬영하고 합성합니다."), cancel=Button("중지","초점 탐색·촬영·합성을 중지합니다. 원본은 보존됩니다."), result=Button("↗","완료된 합성 이미지를 엽니다.");
+    private readonly Button start=Button("촬영","현재 초점에서 가까운 끝점부터 반대쪽 끝점까지 촬영하고 합성합니다."), cancel=Button("중지","초점 탐색·촬영·합성을 중지합니다. 원본은 보존됩니다."), result=Button("결과보기","완료된 합성 이미지를 엽니다.");
     private FocusBoxContrast boxA,boxB;
     private CancellationTokenSource cancellation;
     private bool allowClose;
@@ -121,26 +121,23 @@ public sealed class SuperfocusWindow : Window
         foreach(int step in new[]{1,5,20})AddNudge(focusRow,step);
         focusRow.Children.Add(markB);
         settings.Children.Add(autoRow);settings.Children.Add(focusRow);
-        var directions=new DockPanel {Margin=new Thickness(4,0,4,6)};
-        var far=new TextBlock {Text="멀리 ▶",Foreground=Gray,FontSize=11};DockPanel.SetDock(far,Dock.Right);directions.Children.Add(far);
-        directions.Children.Add(new TextBlock {Text="◀ 가까이",Foreground=Gray,FontSize=11});settings.Children.Add(directions);
         Section(settings,"② 품질","고 · 중 · 저를 고르거나 컷수를 직접 입력하세요.");
         var qualityRow=new StackPanel {Orientation=Orientation.Horizontal,HorizontalAlignment=HorizontalAlignment.Center};
         qualityRow.Children.Add(new TextBlock {Text="품질",Foreground=Brushes.White,VerticalAlignment=VerticalAlignment.Center,Margin=new Thickness(0,0,4,0)});
         for(int i=0;i<3;i++){int choice=i;var b=Button("","합성 품질을 선택합니다.");b.Width=56;b.Padding=new Thickness(3,4,3,4);b.Click+=(s,e)=>SelectQuality(choice);qualityButtons.Add(b);qualityRow.Children.Add(b);}
         qualityRow.Children.Add(new TextBlock {Text="컷수",Foreground=Brushes.White,VerticalAlignment=VerticalAlignment.Center,Margin=new Thickness(12,0,0,0)});
         Tip(cuts,"직접 촬영할 컷수(2–200)를 입력합니다. 비우거나 품질 버튼을 누르면 자동 계산합니다. A/B 양 끝을 포함해 균등 배치합니다.");
-        cuts.IsReadOnly=false;cuts.Focusable=true;cuts.Cursor=System.Windows.Input.Cursors.IBeam;cuts.MaxLength=3;
+        cuts.IsReadOnly=false;cuts.Focusable=true;cuts.Cursor=System.Windows.Input.Cursors.IBeam;
         cuts.GotKeyboardFocus+=(s,e)=>cuts.Dispatcher.BeginInvoke(new Action(()=>{if(cuts.IsKeyboardFocusWithin)cuts.SelectAll();}),System.Windows.Threading.DispatcherPriority.Input);
-        cuts.PreviewTextInput+=(s,e)=>e.Handled=e.Text.Any(c=>c<'0'||c>'9');
+        cuts.PreviewTextInput+=(s,e)=>e.Handled=e.Text.Any(c=>c<'0'||c>'9')||cuts.Text.Length-cuts.SelectionLength+e.Text.Length>3;
         DataObject.AddPastingHandler(cuts,(s,e)=>{var text=e.DataObject.GetData(typeof(string)) as string;if(text==null||text.Any(c=>c<'0'||c>'9'))e.CancelCommand();});
         cuts.TextChanged+=(s,e)=>{if(!updatingCuts){automaticCuts=false;Refresh();}};qualityRow.Children.Add(cuts);
         settings.Children.Add(qualityRow);panel.Children.Add(settings);
         Section(panel,"③ 촬영","가까운 끝점부터 반대쪽 끝점까지 찍고 한 장으로 합성합니다.");
         var captureRow=new StackPanel {Orientation=Orientation.Horizontal,HorizontalAlignment=HorizontalAlignment.Center};
-        start.Width=170;start.Background=Brushes.SteelBlue;start.Foreground=Brushes.White;start.FontWeight=FontWeights.SemiBold;start.Click+=async(s,e)=>await RunAsync();
-        cancel.Width=56;cancel.Click+=(s,e)=>RequestStop();result.Width=34;result.Click+=(s,e)=>{if(File.Exists(lastResult))System.Diagnostics.Process.Start(lastResult);};
-        var reset=Button("↺","가까운 곳·먼 곳을 지웁니다. 렌즈 링·줌·카메라·렌즈를 바꾼 뒤에는 다시 저장하세요.");reset.Width=34;reset.Click+=(s,e)=>InvalidateRange();
+        start.Width=140;start.Background=Brushes.SteelBlue;start.Foreground=Brushes.White;start.FontWeight=FontWeights.SemiBold;start.Click+=async(s,e)=>await RunAsync();
+        cancel.Width=60;cancel.Click+=(s,e)=>RequestStop();result.Width=80;result.Click+=(s,e)=>{if(File.Exists(lastResult))System.Diagnostics.Process.Start(lastResult);};
+        var reset=Button("초기화","가까운 곳·먼 곳을 지웁니다. 렌즈 링·줌·카메라·렌즈를 바꾼 뒤에는 다시 저장하세요.");reset.Width=68;reset.Click+=(s,e)=>InvalidateRange();
         var gear=Button("⚙","안정화 시간과 합성 엔진 경로 설정을 펼칩니다.");gear.Width=34;gear.Click+=(s,e)=>advanced.Visibility=advanced.Visibility==Visibility.Visible?Visibility.Collapsed:Visibility.Visible;
         captureRow.Children.Add(start);captureRow.Children.Add(cancel);captureRow.Children.Add(result);captureRow.Children.Add(reset);captureRow.Children.Add(gear);panel.Children.Add(captureRow);panel.Children.Add(status);
         advanced.Margin=new Thickness(4,8,4,0);advanced.Visibility=Visibility.Collapsed;
@@ -160,7 +157,8 @@ public sealed class SuperfocusWindow : Window
     // brush made there cannot be used by the window (it then opened blank).
     private static readonly Brush Gray=Frozen(new SolidColorBrush(Color.FromRgb(160,172,188)));
     private static Brush Frozen(Brush b){b.Freeze();return b;}
-    private static void Section(Panel panel,string title,string hint){panel.Children.Add(new TextBlock {Text=title,Foreground=Brushes.White,FontWeight=FontWeights.SemiBold,FontSize=13,Margin=new Thickness(2,4,2,0)});panel.Children.Add(new TextBlock {Text=hint,Foreground=Gray,FontSize=11,TextWrapping=TextWrapping.Wrap,Margin=new Thickness(2,1,2,4)});}
+    private static void Section(Panel panel,string title,string hint){panel.Children.Add(new TextBlock {Text=title,Foreground=Brushes.White,FontWeight=FontWeights.SemiBold,FontSize=13,Margin=new Thickness(2,8,2,4)});// hint text is kept only as the title tooltip (small grey lines removed on request)
+        Tip((FrameworkElement)panel.Children[panel.Children.Count-1],hint);}
     private void AddNudge(Panel panel,int step){int value=step;var b=Button(step<0?(step==-20?"◀◀◀":step==-5?"◀◀":"◀"):(step==20?"▶▶▶":step==5?"▶▶":"▶"),(step<0?"가까이 ":"멀리 ")+Math.Abs(step)+"단계 이동");b.Width=36;b.FontSize=11;b.Padding=new Thickness(1);b.Click+=async(s,e)=>await NudgeAsync(value);focusMoveButtons.Add(b);panel.Children.Add(b);}
     private static void Field(Panel panel,string label,Control control){panel.Children.Add(new TextBlock {Text=label,Foreground=Brushes.White,Margin=new Thickness(0,4,0,2)});control.Padding=new Thickness(4);control.Background=Brushes.White;control.Foreground=Brushes.Black;panel.Children.Add(control);}
     private void PathField(Panel panel,string label,TextBox box,string filter){Field(panel,label,box);Tip(box,label+" 파일 경로");var b=Button("…",label+" 파일 선택");b.HorizontalAlignment=HorizontalAlignment.Right;b.Click+=(s,e)=>{var dialog=new Microsoft.Win32.OpenFileDialog {Filter=filter};if(dialog.ShowDialog(this)==true)box.Text=dialog.FileName;};panel.Children.Add(b);}
