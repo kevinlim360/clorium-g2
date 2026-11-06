@@ -111,6 +111,50 @@ class ThemeCheck
 			Check("and light again", Bg(live).R > 0xE0);
 			live.Close();
 
+			// Status icon tooltips (StatusTip): camera mode + battery glyph, PC RAM/SSD bars with the percentage after them.
+			{
+				Type tipType = g2.GetType("CameraControl.Classes.StatusTip", true);
+				MethodInfo tipText = tipType.GetMethod("Text"), tipBattery = tipType.GetMethod("Battery"), tipUsage = tipType.GetMethod("Usage"), tipNote = tipType.GetMethod("Note"), tipMode = tipType.GetMethod("ModeName");
+				PropertyInfo tipPanel = tipType.GetProperty("Panel");
+				Check("mode 3 is M (" + tipMode.Invoke(null, new object[] { 3L, "" }) + ")", ((string)tipMode.Invoke(null, new object[] { 3L, "" })).StartsWith("M "));
+				foreach (bool d in new[] { false, true })
+				{
+					apply.Invoke(null, new object[] { d }); Pump(200);
+					string mode = d ? "dark" : "light";
+					var tw = new Window { Width = 1100, Height = 260, WindowStyle = WindowStyle.None, ShowInTaskbar = false };
+					tw.Resources.MergedDictionaries.Add((ResourceDictionary)Activator.CreateInstance(g2.GetType("CameraControl.Classes.G2Palette", true)));
+					tw.Background = (Brush)tw.TryFindResource("G2Page") ?? Brushes.White;
+					var row = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(14) };
+					System.Windows.Documents.TextElement.SetForeground(row, (Brush)tw.TryFindResource("G2Text") ?? Brushes.Black);
+					tw.Content = row;
+					tw.Show(); Pump(100);
+					object cam = Activator.CreateInstance(tipType, row, "카메라 연결됨");
+					tipText.Invoke(cam, new object[] { "모델", "Canon EOS R" });
+					tipText.Invoke(cam, new object[] { "모드", tipMode.Invoke(null, new object[] { 3L, "" }) });
+					tipBattery.Invoke(cam, new object[] { "배터리", 64 });
+					tipText.Invoke(cam, new object[] { "오늘 촬영", "51컷" });
+					tipText.Invoke(cam, new object[] { "오늘 세션", "1개" });
+					object low = Activator.CreateInstance(tipType, row, "배터리 낮음");
+					tipBattery.Invoke(low, new object[] { "배터리", 15 });
+					object pc = Activator.CreateInstance(tipType, row, "PC 상태");
+					tipUsage.Invoke(pc, new object[] { "RAM", 68.2, "21.6 GB / 31.7 GB" });
+					tipUsage.Invoke(pc, new object[] { "SSD C:", 92.4, "880.1 GB / 952.6 GB" });
+					tipUsage.Invoke(pc, new object[] { "SSD D:", 41.0, "763.0 GB / 1863.0 GB" });
+					tipNote.Invoke(pc, new object[] { "90% 이상이면 아이콘이 빨갛게 깜빡입니다." });
+					foreach (object t in new[] { cam, low, pc })
+					{
+						var card = new Border { Child = (UIElement)tipPanel.GetValue(t, null), Padding = new Thickness(10, 8, 10, 8), Margin = new Thickness(0, 0, 14, 0), CornerRadius = new CornerRadius(6), BorderThickness = new Thickness(1), BorderBrush = (Brush)tw.TryFindResource("G2Line") ?? Brushes.Gray, VerticalAlignment = VerticalAlignment.Top };
+						row.Children.Add(card);
+					}
+					Pump(300);
+					Snapshot(tw, Path.Combine(outDir, "status-tips-" + mode + ".png"));
+					var pcPanel = (StackPanel)tipPanel.GetValue(pc, null);
+					Check("PC tooltip has RAM + 2 drive rows with a percentage in " + mode, pcPanel.Children.Count == 5 && ((TextBlock)((Grid)pcPanel.Children[2]).Children[2]).Text == "92%");
+					tw.Close();
+				}
+				apply.Invoke(null, new object[] { false }); Pump(200);
+			}
+
 			// 라이브뷰 (no camera) and 배경제거 (needs the engine on 8765, e.g. the G2 test runtime's) in both themes.
 			// The legacy live view expects G2's App.xaml theme dictionaries (MahApps / MaterialDesign) at application level.
 			foreach (string src in new[] { "MahApps.Metro;component/Styles/Controls.xaml", "MahApps.Metro;component/Styles/Fonts.xaml", "MahApps.Metro;component/Styles/Themes/Light.Blue.xaml", "MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml", "MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml", "MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Grey.xaml", "MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Blue.xaml" })

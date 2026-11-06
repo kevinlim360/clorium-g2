@@ -554,24 +554,23 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 
 	private void PcStatusIcon_ToolTipOpening(object sender, System.Windows.Controls.ToolTipEventArgs e)
 	{
-		var text = new System.Text.StringBuilder("PC 상태");
+		var tip = new StatusTip(PcStatusIcon, "PC 상태");
 		try
 		{
 			var ci = new ComputerInfo();
 			double total = ci.TotalPhysicalMemory, used = total - ci.AvailablePhysicalMemory;
-			text.Append("\n메모리  " + Gb(used) + " / " + Gb(total) + "  (" + (used * 100 / total).ToString("0") + "%)" + (used * 100 / total >= 90 ? "  ⚠" : ""));
+			tip.Usage("RAM", used * 100 / total, Gb(used) + " / " + Gb(total));
 		}
 		catch (Exception)
 		{
-			text.Append("\n메모리  확인할 수 없음");
+			tip.Text("RAM", "확인할 수 없음");
 		}
 		foreach (DriveInfo d in StatusDrives())
 		{
-			double p = DriveUsedPercent(d);
-			text.Append("\n" + d.Name.TrimEnd('\\') + " 드라이브  " + Gb(d.TotalSize - d.TotalFreeSpace) + " / " + Gb(d.TotalSize) + "  (" + p.ToString("0") + "%)" + (p >= 90 ? "  ⚠" : ""));
+			tip.Usage("SSD " + d.Name.TrimEnd('\\'), DriveUsedPercent(d), Gb(d.TotalSize - d.TotalFreeSpace) + " / " + Gb(d.TotalSize));
 		}
-		text.Append("\n90% 이상이면 아이콘이 빨갛게 깜빡입니다.");
-		PcStatusIcon.ToolTip = text.ToString();
+		tip.Note("90% 이상이면 아이콘이 빨갛게 깜빡입니다.");
+		PcStatusIcon.ToolTip = tip.Panel;
 	}
 
 	private void CheckPcStatus()
@@ -594,18 +593,27 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 	{
 		ICameraDevice camera = ServiceProvider.DeviceManager?.SelectedCameraDevice;
 		bool connected = camera != null && camera.IsConnected;
-		var text = new System.Text.StringBuilder(connected ? "카메라 연결됨" : "카메라 연결 안 됨");
+		var tip = new StatusTip(CameraStatusIcon, connected ? "카메라 연결됨" : "카메라 연결 안 됨");
 		if (connected)
 		{
-			text.Append("\n모델  " + camera.DisplayName);
-			if (!string.IsNullOrEmpty(camera.SerialNumber)) text.Append("\n시리얼  " + camera.SerialNumber);
-			text.Append("\n배터리  " + camera.Battery + "%");
+			tip.Text("모델", camera.DisplayName);
+			string mode;
+			try
+			{
+				mode = camera.Mode == null ? StatusTip.ModeName(-1, "") : StatusTip.ModeName(camera.Mode.NumericValue, camera.Mode.Value);
+			}
+			catch (Exception)
+			{
+				mode = StatusTip.ModeName(-1, "");
+			}
+			tip.Text("모드", mode);
+			tip.Battery("배터리", camera.Battery);
 		}
-		string head = text.ToString();
 		// Today's counts come from the session folders on disk (TodayCaptures): the old counters only saw normal
-		// captures since this start and barcode sessions. The text block is updated in place when the scan finishes.
-		if (!(CameraStatusIcon.ToolTip is System.Windows.Controls.TextBlock tip)) CameraStatusIcon.ToolTip = tip = new System.Windows.Controls.TextBlock();
-		tip.Text = head + (todayCounts.HasValue ? TodayLines(todayCounts.Value) : "\n오늘 촬영  확인 중…");
+		// captures since this start and barcode sessions. The two lines are updated in place when the scan finishes.
+		var cuts = tip.Text("오늘 촬영", todayCounts.HasValue ? todayCounts.Value.Cuts + "컷" : "확인 중…");
+		var sessions = tip.Text("오늘 세션", todayCounts.HasValue ? todayCounts.Value.Sessions + "개" : "확인 중…");
+		CameraStatusIcon.ToolTip = tip.Panel;
 		if (todayScanRunning) return;
 		todayScanRunning = true;
 		var folders = (ServiceProvider.Settings?.PhotoSessions?.Select(s => s.Folder).ToList()) ?? new List<string>();
@@ -618,18 +626,14 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 				return;
 			}
 			todayCounts = t.Result;
-			tip.Text = head + TodayLines(t.Result);
+			cuts.Text = t.Result.Cuts + "컷";
+			sessions.Text = t.Result.Sessions + "개";
 		}, TaskScheduler.FromCurrentSynchronizationContext());
 	}
 
 	private (int Cuts, int Sessions)? todayCounts;
 
 	private bool todayScanRunning;
-
-	private static string TodayLines((int Cuts, int Sessions) c)
-	{
-		return "\n오늘 촬영  " + c.Cuts + "컷\n오늘 세션  " + c.Sessions + "개";
-	}
 
 	private void ManagementTimer_Tick(object sender, EventArgs e)
 	{
