@@ -42,6 +42,7 @@
   <!-- 세로/가로 촬영: tall vs wide photo frame with a small landscape inside -->
   <Geometry x:Key="G2IcoPortrait">M8.5,2.5 H15.5 A1.5,1.5 0 0 1 17,4 V20 A1.5,1.5 0 0 1 15.5,21.5 H8.5 A1.5,1.5 0 0 1 7,20 V4 A1.5,1.5 0 0 1 8.5,2.5 Z M7,17 L10,13.5 L12.5,16 L14.5,14 L17,16.5 M13.5,8 L13.51,8</Geometry>
   <Geometry x:Key="G2IcoLandscape">M4,7 H20 A1.5,1.5 0 0 1 21.5,8.5 V15.5 A1.5,1.5 0 0 1 20,17 H4 A1.5,1.5 0 0 1 2.5,15.5 V8.5 A1.5,1.5 0 0 1 4,7 Z M2.5,15 L7.5,11 L11,14 L14,11.5 L21.5,16 M16.5,10 L16.51,10</Geometry>
+  <Geometry x:Key="G2IcoMonitor">M3,4 H21 V15 H3 Z M8,20 H16 M12,15 V20</Geometry>
   <Geometry x:Key="G2IcoCamera">M3,8 H7 L9,5 H15 L17,8 H21 V19 H3 Z M12,10 A3.5,3.5 0 1 0 12.001,10 Z</Geometry>
   <Geometry x:Key="G2IcoExpand">M15,3 H21 V9 M9,21 H3 V15 M21,3 L14,10 M3,21 L10,14</Geometry>
   <Geometry x:Key="G2IcoGrid">M4,4 H10 V10 H4 Z M14,4 H20 V10 H14 Z M4,14 H10 V20 H4 Z M14,14 H20 V20 H14 Z</Geometry>

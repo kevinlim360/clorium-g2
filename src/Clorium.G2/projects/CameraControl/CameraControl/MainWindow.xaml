@@ -248,9 +248,23 @@
           <TextBlock VerticalAlignment="Center" FontFamily="{StaticResource G2Mono}" FontSize="{DynamicResource G2Fs11}" Foreground="{DynamicResource G2Sub}" TextTrimming="CharacterEllipsis" Text="{Binding Path=DefaultSession.Folder}" />
         </StackPanel>
 
-        <!-- camera + battery -->
-        <StackPanel Grid.Column="4" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,14,0" DataContext="{Binding Source={x:Static Core:ServiceProvider.DeviceManager}}">
-          <Ellipse Width="8" Height="8" VerticalAlignment="Center" Margin="0,0,8,0">
+        <!-- camera: icon grey when not connected, green dot when connected; model, battery and today's work in the tooltip -->
+        <Grid x:Name="CameraStatusIcon" Grid.Column="4" Width="40" Height="40" VerticalAlignment="Center" Margin="0,0,10,0" Background="Transparent" DataContext="{Binding Source={x:Static Core:ServiceProvider.DeviceManager}}" ToolTip="카메라" ToolTipService.InitialShowDelay="200" ToolTipService.ShowDuration="20000" ToolTipOpening="CameraStatusIcon_ToolTipOpening">
+          <Viewbox Width="24" Height="24">
+            <Path StrokeThickness="1.8" StrokeLineJoin="Round" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Data="{StaticResource G2IcoCamera}">
+              <Path.Style>
+                <Style TargetType="Path">
+                  <Setter Property="Stroke" Value="{DynamicResource G2SwitchOff}" />
+                  <Style.Triggers>
+                    <DataTrigger Binding="{Binding SelectedCameraDevice.IsConnected}" Value="True">
+                      <Setter Property="Stroke" Value="{DynamicResource G2Text}" />
+                    </DataTrigger>
+                  </Style.Triggers>
+                </Style>
+              </Path.Style>
+            </Path>
+          </Viewbox>
+          <Ellipse Width="10" Height="10" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,5,7" StrokeThickness="1.5" Stroke="{DynamicResource G2Panel}">
             <Ellipse.Style>
               <Style TargetType="Ellipse">
                 <Setter Property="Fill" Value="{DynamicResource G2SwitchOff}" />
@@ -262,36 +276,7 @@
               </Style>
             </Ellipse.Style>
           </Ellipse>
-          <StackPanel VerticalAlignment="Center">
-            <TextBlock FontSize="{DynamicResource G2Fs12}">
-              <TextBlock.Style>
-                <Style TargetType="TextBlock">
-                  <Setter Property="Text" Value="{Binding SelectedCameraDevice.DisplayName}" />
-                  <Style.Triggers>
-                    <DataTrigger Binding="{Binding SelectedCameraDevice.IsConnected}" Value="False">
-                      <Setter Property="Text" Value="카메라 연결 안 됨" />
-                      <Setter Property="Foreground" Value="{DynamicResource G2Sub}" />
-                    </DataTrigger>
-                  </Style.Triggers>
-                </Style>
-              </TextBlock.Style>
-            </TextBlock>
-            <StackPanel Orientation="Horizontal" Visibility="{Binding Source={x:Static Core:ServiceProvider.Branding}, Path=ShowBattery, Converter={StaticResource BooleanToVisibilityConverter1}}" ToolTip="카메라 배터리">
-              <Border Width="18" Height="9" BorderBrush="{DynamicResource G2Sub}" BorderThickness="1" CornerRadius="2" Padding="1" VerticalAlignment="Center">
-                <ProgressBar Minimum="0" Maximum="100" Value="{Binding SelectedCameraDevice.Battery, Mode=OneWay}" Background="Transparent" BorderThickness="0" Foreground="{DynamicResource G2Ok}" Height="5">
-                  <ProgressBar.Template>
-                    <ControlTemplate TargetType="ProgressBar">
-                      <Grid x:Name="PART_Track">
-                        <Border x:Name="PART_Indicator" HorizontalAlignment="Left" CornerRadius="1" Background="{TemplateBinding Foreground}" />
-                      </Grid>
-                    </ControlTemplate>
-                  </ProgressBar.Template>
-                </ProgressBar>
-              </Border>
-              <TextBlock Margin="5,0,0,0" FontSize="{DynamicResource G2Fs10}" FontFamily="{StaticResource G2Mono}" Foreground="{DynamicResource G2Sub}" Text="{Binding SelectedCameraDevice.Battery, StringFormat={}{0}%}" />
-            </StackPanel>
-          </StackPanel>
-        </StackPanel>
+        </Grid>
 
         <!-- settings + right panel toggle -->
         <StackPanel Grid.Column="5" Orientation="Horizontal" VerticalAlignment="Center">
@@ -315,9 +300,11 @@
           <Border Style="{StaticResource G2Divider}" Margin="10,0,10,8" />
           <TextBlock HorizontalAlignment="Center" FontSize="{DynamicResource G2Fs10}" FontWeight="SemiBold" Foreground="{DynamicResource G2Accent}" Text="웹서버" ToolTip="모바일용 웹서버 가동중" Visibility="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=UseWebserver, Converter={StaticResource BooleanToVisibilityConverter1}}" />
           <TextBlock HorizontalAlignment="Center" FontSize="{DynamicResource G2Fs10}" FontWeight="SemiBold" Foreground="{DynamicResource G2Accent}" Text="FTP" ToolTip="FTP서버 가동중" Visibility="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=UseFTPserver, Converter={StaticResource BooleanToVisibilityConverter1}}" />
-          <TextBlock HorizontalAlignment="Center" FontSize="{DynamicResource G2Fs10}" FontFamily="{StaticResource G2Mono}" Foreground="{DynamicResource G2Sub}" ToolTip="오늘 촬영 컷수" Text="{Binding ElementName=Window, Path=CaptureCount, StringFormat={}{0}컷}" />
-          <TextBlock HorizontalAlignment="Center" FontSize="{DynamicResource G2Fs10}" FontFamily="{StaticResource G2Mono}" Foreground="{DynamicResource G2Sub}" ToolTip="메모리 사용률" Text="{Binding ElementName=Window, Path=UsingMemory, StringFormat=메모리 {0:F0}%}" />
-          <Label HorizontalAlignment="Center" FontSize="{DynamicResource G2Fs9}" FontFamily="{StaticResource G2Mono}" Foreground="{DynamicResource G2Sub}" ToolTip="버전 (더블클릭: 변경 내역)" Content="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=Version_Debug}" MouseDoubleClick="Version_DoubleClick" />
+          <!-- PC status: memory and drive use in the tooltip; the icon blinks red (5x every 3 min) at 90 % or more -->
+          <Grid x:Name="PcStatusIcon" Width="34" Height="30" HorizontalAlignment="Center" Background="Transparent" ToolTip="PC 상태" ToolTipService.InitialShowDelay="200" ToolTipService.ShowDuration="20000" ToolTipOpening="PcStatusIcon_ToolTipOpening">
+            <Viewbox Width="22" Height="22"><Path x:Name="PcStatusPath" Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoMonitor}" Stroke="{DynamicResource G2Sub}" /></Viewbox>
+            <Viewbox Width="22" Height="22"><Path x:Name="PcStatusAlarm" Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoMonitor}" Stroke="#FFE5484D" StrokeThickness="2.4" Opacity="0" /></Viewbox>
+          </Grid>
         </StackPanel>
         <StackPanel Margin="7,10,7,6">
           <Button Name="btn_liveview" Style="{StaticResource G2RailButton}" ToolTip="{T:Translate LiveViewToolTip}" Command="{Binding Source={x:Static myClasess:WpfCommands.ShowLiveViewCommand}}" CommandParameter="{Binding Source={x:Static Core:ServiceProvider.DeviceManager}, Path=SelectedCameraDevice}">

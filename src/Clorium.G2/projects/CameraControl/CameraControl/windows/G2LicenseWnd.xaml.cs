@@ -44,6 +44,26 @@ public partial class G2LicenseWnd : Window
 		}
 	}
 
+	// Moved here from the main window's version label (double-click) with the version itself.
+	public const string ChangeLogPath = "D:\\Clorium Data\\Clorium_Version.md";
+
+	private void ChangeLog_Click(object sender, RoutedEventArgs e)
+	{
+		if (!System.IO.File.Exists(ChangeLogPath))
+		{
+			MessageBox.Show("변경 내역 파일이 없습니다.\n" + ChangeLogPath, "변경 내역", MessageBoxButton.OK, MessageBoxImage.Information);
+			return;
+		}
+		try
+		{
+			System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo("notepad.exe", "\"" + ChangeLogPath + "\"") { UseShellExecute = false });
+		}
+		catch (Exception ex)
+		{
+			MessageBox.Show("파일을 열 수 없습니다: " + ex.Message, "변경 내역");
+		}
+	}
+
 	private void Close_Click(object sender, RoutedEventArgs e)
 	{
 		Close();

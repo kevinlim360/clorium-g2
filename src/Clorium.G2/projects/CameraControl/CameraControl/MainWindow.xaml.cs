@@ -507,6 +507,105 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 	[DllImport("user32.dll")]
 	private static extern bool GetLastInputInfo(ref LASTINPUTINFO plii);
 
+	// ---- G2 status icons (left rail PC, top bar camera) ----
+	// PC: memory and drive use in the tooltip; at 90 % or more the icon blinks red five times, again every 3 minutes.
+	private DateTime _lastPcCheck = DateTime.MinValue, _lastPcBlink = DateTime.MinValue;
+
+	private static IEnumerable<DriveInfo> StatusDrives()
+	{
+		var roots = new List<string>();
+		foreach (string path in new[] { Environment.SystemDirectory, ServiceProvider.Settings?.DefaultSession?.Folder, "D:\\" })
+		{
+			try
+			{
+				string root = string.IsNullOrWhiteSpace(path) ? null : Path.GetPathRoot(Path.GetFullPath(path));
+				if (!string.IsNullOrEmpty(root) && !roots.Contains(root.ToUpperInvariant())) roots.Add(root.ToUpperInvariant());
+			}
+			catch (Exception)
+			{
+			}
+		}
+		foreach (string root in roots)
+		{
+			DriveInfo drive = null;
+			try
+			{
+				drive = new DriveInfo(root);
+				if (!drive.IsReady || drive.TotalSize <= 0) drive = null;
+			}
+			catch (Exception)
+			{
+				drive = null;
+			}
+			if (drive != null) yield return drive;
+		}
+	}
+
+	private static double DriveUsedPercent(DriveInfo d) => (d.TotalSize - d.TotalFreeSpace) * 100.0 / d.TotalSize;
+
+	private static string Gb(double bytes) => (bytes / 1024 / 1024 / 1024).ToString("0.0") + " GB";
+
+	private bool PcNeedsAttention()
+	{
+		if (UsingMemory >= 90.0) return true;
+		foreach (DriveInfo d in StatusDrives()) if (DriveUsedPercent(d) >= 90.0) return true;
+		return false;
+	}
+
+	private void PcStatusIcon_ToolTipOpening(object sender, System.Windows.Controls.ToolTipEventArgs e)
+	{
+		var text = new System.Text.StringBuilder("PC 상태");
+		try
+		{
+			var ci = new ComputerInfo();
+			double total = ci.TotalPhysicalMemory, used = total - ci.AvailablePhysicalMemory;
+			text.Append("\n메모리  " + Gb(used) + " / " + Gb(total) + "  (" + (used * 100 / total).ToString("0") + "%)" + (used * 100 / total >= 90 ? "  ⚠" : ""));
+		}
+		catch (Exception)
+		{
+			text.Append("\n메모리  확인할 수 없음");
+		}
+		foreach (DriveInfo d in StatusDrives())
+		{
+			double p = DriveUsedPercent(d);
+			text.Append("\n" + d.Name.TrimEnd('\\') + " 드라이브  " + Gb(d.TotalSize - d.TotalFreeSpace) + " / " + Gb(d.TotalSize) + "  (" + p.ToString("0") + "%)" + (p >= 90 ? "  ⚠" : ""));
+		}
+		text.Append("\n90% 이상이면 아이콘이 빨갛게 깜빡입니다.");
+		PcStatusIcon.ToolTip = text.ToString();
+	}
+
+	private void CheckPcStatus()
+	{
+		if ((DateTime.Now - _lastPcCheck).TotalSeconds < 10) return;
+		_lastPcCheck = DateTime.Now;
+		if (!PcNeedsAttention() || (DateTime.Now - _lastPcBlink).TotalMinutes < 3) return;
+		_lastPcBlink = DateTime.Now;
+		Log.Debug("Main : PC memory or drive 90 % or more - status icon blinks");
+		var blink = new System.Windows.Media.Animation.DoubleAnimation(0, 1, new Duration(TimeSpan.FromMilliseconds(350)))
+		{
+			AutoReverse = true,
+			RepeatBehavior = new System.Windows.Media.Animation.RepeatBehavior(5)
+		};
+		PcStatusAlarm.BeginAnimation(OpacityProperty, blink);
+	}
+
+	// Camera: model, battery and today's work in the tooltip.
+	private void CameraStatusIcon_ToolTipOpening(object sender, System.Windows.Controls.ToolTipEventArgs e)
+	{
+		ICameraDevice camera = ServiceProvider.DeviceManager?.SelectedCameraDevice;
+		bool connected = camera != null && camera.IsConnected;
+		var text = new System.Text.StringBuilder(connected ? "카메라 연결됨" : "카메라 연결 안 됨");
+		if (connected)
+		{
+			text.Append("\n모델  " + camera.DisplayName);
+			if (!string.IsNullOrEmpty(camera.SerialNumber)) text.Append("\n시리얼  " + camera.SerialNumber);
+			text.Append("\n배터리  " + camera.Battery + "%");
+		}
+		text.Append("\n오늘 촬영  " + CaptureCount + "컷");
+		text.Append("\n오늘 세션  " + (ServiceProvider.Settings?.TodaySessionCounter ?? 0) + "개");
+		CameraStatusIcon.ToolTip = text.ToString();
+	}
+
 	private void ManagementTimer_Tick(object sender, EventArgs e)
 	{
 		ComputerInfo ci = new ComputerInfo();
@@ -514,6 +613,7 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 		ulong availableMemory = ci.AvailablePhysicalMemory;
 		double usedMemory = totalMemory - availableMemory;
 		double usagePercent = (UsingMemory = usedMemory / (double)totalMemory * 100.0);
+		CheckPcStatus();
 		if (usagePercent > 90.0 && (DateTime.Now - lastWarningTime).TotalMinutes >= 10.0)
 		{
 			_ManagementTimer.Stop();
@@ -770,21 +870,6 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 		dst = folderPath + date + " LiveView.jpg";
 		CaptureScreenToJpg(1, dst);
 		System.Windows.MessageBox.Show("\ud83d\udccd 에러 관련 정보 저장 완료했습니다.");
-	}
-
-	private void Version_DoubleClick(object sender, RoutedEventArgs e)
-	{
-		string filePath = "D:\\Clorium Data\\Clorium_Version.md";
-		ProcessStartInfo psi = new ProcessStartInfo("notepad.exe", "\"" + filePath + "\"");
-		psi.UseShellExecute = false;
-		try
-		{
-			Process.Start(psi);
-		}
-		catch (Exception ex)
-		{
-			System.Windows.MessageBox.Show("\ud83d\udccd 파일을 열 수 없습니다: " + ex.Message);
-		}
 	}
 
 	private void but_LightingOn_Click(object sender, RoutedEventArgs e)
