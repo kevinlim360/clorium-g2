@@ -24,7 +24,7 @@ public sealed class FocusCaptureSequence
 
     public async Task<IReadOnlyList<string>> RunPlannedRangeAsync(IFocusCaptureCamera camera,
         FocusRangePlan range, IReadOnlyList<int> positions, int settleMilliseconds, TimeSpan timeout,
-        IProgress<string> progress, CancellationToken token)
+        IProgress<string> progress, CancellationToken token, FocusAmount unit = FocusAmount.Small)
     {
         if (positions == null || positions.Count < 2 || positions.Count > 200 ||
             !range.A.HasValue || !range.B.HasValue)
@@ -49,7 +49,7 @@ public sealed class FocusCaptureSequence
                     token.ThrowIfCancellationRequested();
                     if (!camera.IsConnected) throw new InvalidOperationException("카메라 연결이 끊겼습니다.");
                     int step = Math.Sign((long)targets[i] - range.Position);
-                    camera.MoveFocus(step > 0 ? FocusDirection.Far : FocusDirection.Near, FocusAmount.Small);
+                    camera.MoveFocus(step > 0 ? FocusDirection.Far : FocusDirection.Near, unit); // one range unit
                     range.Moved(step);
                     moved = true;
                     await Task.Delay(100, token).ConfigureAwait(false);

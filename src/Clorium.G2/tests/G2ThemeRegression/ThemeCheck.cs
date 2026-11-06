@@ -227,17 +227,18 @@ class ThemeCheck
 				}
 			}
 
-			// 수퍼포커스 자동 초점 찾기 with a simulated lens: near subject sharp at -40, far at +50 (small steps). AF on each box, then
-			// saving 먼 곳 measures the distance back to 가까운 곳 by counted steps.
+			// 수퍼포커스 자동 초점 찾기 with a simulated lens: near subject sharp at -40, far at +50 (one unit per drive command).
+			// Saving 가까운 곳/먼 곳 never moves the lens; quality buttons show their counts; the count can be typed; the distance is
+			// measured from one end to the other (as 촬영 does before shooting).
 			{
 				Type sf = g2.GetType("CameraControl.windows.SuperfocusWindow", true);
 				var lens = new FakeLens { SerialNumber = "THEME-LENS" };
 				var w = (Window)sf.GetMethod("For").Invoke(null, new object[] { lens, null });
 				var inst = BindingFlags.Instance | BindingFlags.NonPublic;
-				sf.GetField("focusCameraFactory", inst).SetValue(w, (Func<IFocusCaptureCamera>)(() => new FakeLensAdapter(lens)));
 				sf.GetField("stopNativeAutofocus", inst).SetValue(w, (Action)(() => { }));
 				w.Show(); Pump(200);
 				sf.GetProperty("UseFocusBox").SetValue(w, true, null);
+				sf.GetMethod("InvalidateRange").Invoke(w, null);
 				Func<System.Threading.Tasks.Task, bool> Run = t => { DateTime until = DateTime.Now.AddSeconds(120); while (!t.IsCompleted && DateTime.Now < until) Pump(20); return t.IsCompleted; };
 				object range = sf.GetField("range", inst).GetValue(w);
 				Func<string, object> R = n => range.GetType().GetProperty(n).GetValue(range, null);
@@ -246,16 +247,33 @@ class ThemeCheck
 				Check("박스에 초점 맞추기 (near box) finishes and unlocks", Run((System.Threading.Tasks.Task)sf.GetMethod("FocusHereAsync").Invoke(w, null)) && !(bool)sf.GetProperty("IsWorking").GetValue(w, null));
 				Check("AF went to the near subject (lens " + lens.Position + ")", lens.Position == FakeLens.Near);
 				Run((System.Threading.Tasks.Task)sf.GetMethod("MarkSelectedAsync").Invoke(w, new object[] { true }));
-				Check("가까운 곳 saved right after AF", (int?)R("A") == 0);
 				sf.GetMethod("TrySelectPreviewBox").Invoke(null, new object[] { lens, lensFrame, (int)(0.7 * lensFrame.ImageWidth), lensFrame.ImageHeight / 2 });
 				Run((System.Threading.Tasks.Task)sf.GetMethod("FocusHereAsync").Invoke(w, null));
 				Check("AF went to the far subject (lens " + lens.Position + ")", lens.Position == FakeLens.Far);
-				var lensClock = System.Diagnostics.Stopwatch.StartNew();
-				Check("먼 곳 save measures back to 가까운 곳", Run((System.Threading.Tasks.Task)sf.GetMethod("MarkSelectedAsync").Invoke(w, new object[] { false })));
-				int? a = (int?)R("A"), b = (int?)R("B");
-				Check("two ends " + (FakeLens.Far - FakeLens.Near) + " steps apart (A " + a + ", B " + b + ", " + sf.GetProperty("Feedback").GetValue(w, null) + ", " + lensClock.Elapsed.TotalSeconds.ToString("0") + " s)", a.HasValue && b.HasValue && b.Value - a.Value == FakeLens.Far - FakeLens.Near);
-				Check("lens ends on 가까운 곳 with the count in step (lens " + lens.Position + ", position " + R("Position") + ")", lens.Position == FakeLens.Near && (int)R("Position") == a.Value);
-				Snapshot(w, Path.Combine(outDir, "superfocus-measured.png"));
+				var saveClock = System.Diagnostics.Stopwatch.StartNew();
+				var save = (System.Threading.Tasks.Task)sf.GetMethod("MarkSelectedAsync").Invoke(w, new object[] { false });
+				Check("먼 곳 saves at once without moving the lens (" + saveClock.ElapsedMilliseconds + " ms, lens " + lens.Position + ")", save.IsCompleted && lens.Position == FakeLens.Far && saveClock.ElapsedMilliseconds < 500);
+				Pump(100);
+				var markA = (Button)sf.GetField("markA", inst).GetValue(w); var markB = (Button)sf.GetField("markB", inst).GetValue(w);
+				var qb = (System.Collections.IList)sf.GetField("qualityButtons", inst).GetValue(w);
+				string labels = ((Button)qb[0]).Content + " / " + ((Button)qb[1]).Content + " / " + ((Button)qb[2]).Content;
+				Check("both ends marked (" + markA.Content + ", " + markB.Content + ") and quality buttons show counts (" + labels + ")", (string)markA.Content == "가까운 곳 ✓" && (string)markB.Content == "먼 곳 ✓" && labels == "고 15 / 중 10 / 저 5");
+				var cutsBox = (TextBox)sf.GetField("cuts", inst).GetValue(w);
+				Check("cuts box is editable and shows 고 (" + cutsBox.Text + ")", cutsBox.IsEnabled && cutsBox.Text == "15");
+				cutsBox.Text = "7"; Pump(50);
+				Check("typed 7 cuts can be shot", (bool)sf.GetProperty("CanCapture").GetValue(w, null) && (int)sf.GetMethod("AfCount", inst).Invoke(w, null) == 7);
+				cutsBox.Text = "1"; Pump(50);
+				Check("1 cut is refused", !(bool)sf.GetProperty("CanCapture").GetValue(w, null));
+				sf.GetMethod("SelectQuality").Invoke(w, new object[] { 1 }); Pump(50);
+				Check("choosing 중 goes back to its count (" + cutsBox.Text + ")", cutsBox.Text == "10" && (bool)sf.GetProperty("CanCapture").GetValue(w, null));
+				Snapshot(w, Path.Combine(outDir, "superfocus-af-marked.png"));
+				// The distance measurement 촬영 runs first: from 먼 곳 (lens there) towards 가까운 곳's box.
+				range.GetType().GetMethod("Reset").Invoke(range, null); range.GetType().GetMethod("MarkB").Invoke(range, null);
+				var boxA = sf.GetField("boxA", inst).GetValue(w);
+				var measureClock = System.Diagnostics.Stopwatch.StartNew();
+				var measure = (System.Threading.Tasks.Task<int>)sf.GetMethod("MeasureAsync", inst).Invoke(w, new object[] { new FakeLensAdapter(lens), boxA, -1, null, System.Threading.CancellationToken.None });
+				Run(measure);
+				Check("distance measured from 먼 곳 to 가까운 곳: " + measure.Result + " units in " + measureClock.Elapsed.TotalSeconds.ToString("0.0") + " s, lens " + lens.Position, measure.Result == FakeLens.Far - FakeLens.Near && lens.Position == FakeLens.Near && (int)R("Position") == -(FakeLens.Far - FakeLens.Near));
 				sf.GetMethod("CloseAll").Invoke(null, null);
 			}
 

@@ -1729,13 +1729,18 @@ public class CanonSDKBase : BaseMTPCamera
 		{
 			if (!IsConnected || Camera == null || !Camera.IsInHostLiveViewMode)
 				throw new InvalidOperationException("수퍼포커스 초점 이동에는 연결된 카메라의 라이브뷰가 필요합니다.");
-			PrepareFocusStack();
+			// EVF AF off / shutter released once per run of steps, not before every step (two extra SDK commands each).
+			if ((DateTime.Now - _lastStackDrive).TotalMilliseconds > 1000)
+				PrepareFocusStack();
 			uint lens = direction == FocusDirection.Near
 				? (amount == FocusAmount.Small ? Edsdk.EvfDriveLens_Near1 : amount == FocusAmount.Medium ? Edsdk.EvfDriveLens_Near2 : Edsdk.EvfDriveLens_Near3)
 				: (amount == FocusAmount.Small ? Edsdk.EvfDriveLens_Far1 : amount == FocusAmount.Medium ? Edsdk.EvfDriveLens_Far2 : Edsdk.EvfDriveLens_Far3);
 			ErrorCodes.GetCanonException(Camera.SendCommand(Edsdk.CameraCommand_DriveLensEvf, (int)lens));
+			_lastStackDrive = DateTime.Now;
 		}
 	}
+
+	private DateTime _lastStackDrive = DateTime.MinValue;
 
 	public void ReleaseButton()
 	{
