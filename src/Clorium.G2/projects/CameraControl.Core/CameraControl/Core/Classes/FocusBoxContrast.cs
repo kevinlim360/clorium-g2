@@ -15,8 +15,11 @@ public sealed class FocusBoxContrast
     public double Height { get; private set; }
     public static FocusBoxContrast From(LiveViewData frame)
     {
-        if (frame == null || frame.ImageWidth <= 0 || frame.ImageHeight <= 0 || frame.FocusFrameXSize <= 0 || frame.FocusFrameYSize <= 0)
+        if (frame == null || frame.ImageWidth <= 0 || frame.ImageHeight <= 0)
             throw new InvalidOperationException("라이브뷰에서 포커스 박스를 선택해 주세요.");
+        // A frame without the camera's AF box (size 0, e.g. after the stack turned EVF AF off) gets a 10 % box at its centre.
+        if (frame.FocusFrameXSize <= 0 || frame.FocusFrameYSize <= 0)
+            return new FocusBoxContrast { X = frame.FocusX > 0 ? (double)frame.FocusX / frame.ImageWidth : 0.5, Y = frame.FocusY > 0 ? (double)frame.FocusY / frame.ImageHeight : 0.5, Width = 0.1, Height = 0.1 };
         return new FocusBoxContrast { X = (double)frame.FocusX / frame.ImageWidth, Y = (double)frame.FocusY / frame.ImageHeight,
             Width = (double)frame.FocusFrameXSize / frame.ImageWidth, Height = (double)frame.FocusFrameYSize / frame.ImageHeight };
     }

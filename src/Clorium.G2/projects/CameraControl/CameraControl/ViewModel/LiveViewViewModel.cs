@@ -2941,13 +2941,16 @@ public class LiveViewViewModel : ViewModelBase
                 var selected=CameraControl.windows.SuperfocusWindow.PreviewBoxFor(CameraDevice);
                 double focusX=selected==null?LiveViewData.FocusX:selected.X*LiveViewData.ImageWidth;
                 double focusY=selected==null?LiveViewData.FocusY:selected.Y*LiveViewData.ImageHeight;
+                // 수퍼포커스 box: its own size, so it stays visible when the camera reports no AF box.
+                double sizeX=selected==null?LiveViewData.FocusFrameXSize:selected.Width*LiveViewData.ImageWidth;
+                double sizeY=selected==null?LiveViewData.FocusFrameYSize:selected.Height*LiveViewData.ImageHeight;
 				if (fill)
 				{
-					bitmap.FillRectangle2((int)(focusX * xt - (double)LiveViewData.FocusFrameXSize * xt / 2.0), (int)(focusY * yt - (double)LiveViewData.FocusFrameYSize * yt / 2.0), (int)(focusX * xt + (double)LiveViewData.FocusFrameXSize * xt / 2.0), (int)(focusY * yt + (double)LiveViewData.FocusFrameYSize * yt / 2.0), LiveViewData.HaveFocusData ? System.Windows.Media.Color.FromArgb(96, 0, byte.MaxValue, 0) : System.Windows.Media.Color.FromArgb(96, byte.MaxValue, 0, 0));
+					bitmap.FillRectangle2((int)(focusX * xt - sizeX * xt / 2.0), (int)(focusY * yt - sizeY * yt / 2.0), (int)(focusX * xt + sizeX * xt / 2.0), (int)(focusY * yt + sizeY * yt / 2.0), LiveViewData.HaveFocusData ? System.Windows.Media.Color.FromArgb(96, 0, byte.MaxValue, 0) : System.Windows.Media.Color.FromArgb(96, byte.MaxValue, 0, 0));
 				}
 				else
 				{
-					bitmap.DrawRectangle((int)(focusX * xt - (double)LiveViewData.FocusFrameXSize * xt / 2.0), (int)(focusY * yt - (double)LiveViewData.FocusFrameYSize * yt / 2.0), (int)(focusX * xt + (double)LiveViewData.FocusFrameXSize * xt / 2.0), (int)(focusY * yt + (double)LiveViewData.FocusFrameYSize * yt / 2.0), LiveViewData.HaveFocusData ? Colors.Green : Colors.Red);
+					bitmap.DrawRectangle((int)(focusX * xt - sizeX * xt / 2.0), (int)(focusY * yt - sizeY * yt / 2.0), (int)(focusX * xt + sizeX * xt / 2.0), (int)(focusY * yt + sizeY * yt / 2.0), LiveViewData.HaveFocusData ? Colors.Green : Colors.Red);
 				}
 			}
 		}

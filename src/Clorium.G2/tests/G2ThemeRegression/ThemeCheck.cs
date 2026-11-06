@@ -201,10 +201,16 @@ class ThemeCheck
 				var finds = sf.GetMethod("FindsFocusAutomatically");
 				Check("RF24-240 finds focus automatically, other lenses do not", (bool)finds.Invoke(null, new object[] { "RF24-240mm F4-6.3 IS USM" }) && !(bool)finds.Invoke(null, new object[] { "RF24-105mm F4 L IS USM" }) && !(bool)finds.Invoke(null, new object[] { "" }));
 				sf.GetProperty("UseFocusBox").SetValue(w, true, null);
+				sf.GetMethod("TrySelectPreviewBox").Invoke(null, new object[] { cam, lvFrame, 300, 300 });
 				sf.GetMethod("InvalidateRange").Invoke(w, null); Pump(100);
 				Snapshot(w, Path.Combine(outDir, "superfocus-auto.png"));
 				string autoText = ((TextBlock)((DockPanel)notice.Child).Children[1]).Text;
 				Check("자동 초점 찾기 shows the AF notice (" + autoText + ")", autoText.Contains("AF로"));
+				var focusHere = (Button)sf.GetField("focusHere", inst).GetValue(w);
+				Check("자동 초점 찾기 shows the ‘" + focusHere.Content + "’ button", focusHere.IsVisible && ((string)focusHere.Content).Contains("초점 맞추기"));
+				Check("↺ keeps the chosen box on screen", sf.GetMethod("PreviewBoxFor").Invoke(null, new object[] { cam }) != null);
+				var noAfBox = FocusBoxContrast.From(new CameraControl.Devices.Classes.LiveViewData { ImageWidth = 1000, ImageHeight = 800 });
+				Check("a frame without the camera AF box still gives a box (" + noAfBox.Width + ")", Math.Abs(noAfBox.Width - 0.1) < 1e-9 && Math.Abs(noAfBox.X - 0.5) < 1e-9);
 				sf.GetProperty("UseFocusBox").SetValue(w, false, null);
 				sf.GetMethod("CloseAll").Invoke(null, null);
 				// English (언어 설정 not Korean) once Data\Messages.xml carries the reviewed wording.

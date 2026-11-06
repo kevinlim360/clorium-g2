@@ -43,6 +43,8 @@ public sealed class SuperfocusWindow : Window
     private readonly TextBlock status = new TextBlock { Foreground=Brushes.White, FontSize=12, TextTrimming=TextTrimming.CharacterEllipsis, Margin=new Thickness(2,4,2,0), Visibility=Visibility.Collapsed };
     private readonly Button markA=Button("가까운 곳","지금 초점을 가까운 곳(A)으로 저장합니다."), markB=Button("먼 곳","지금 초점을 먼 곳(B)으로 저장합니다.");
     private readonly Border mfNotice;
+    private readonly Button focusHere=Button("박스에 초점 맞추기","라이브뷰에서 고른 박스에 초점을 자동으로 맞춥니다. 맞춘 뒤 ‘가까운 곳’ 또는 ‘먼 곳’을 누르면 그 위치를 저장합니다.");
+    private readonly StackPanel autoRow=new StackPanel {Orientation=Orientation.Horizontal,HorizontalAlignment=HorizontalAlignment.Center,Margin=new Thickness(0,0,0,6)};
     private readonly Button start=Button("촬영","현재 초점에서 가까운 끝점부터 반대쪽 끝점까지 촬영하고 합성합니다."), cancel=Button("중지","초점 탐색·촬영·합성을 중지합니다. 원본은 보존됩니다."), result=Button("↗","완료된 합성 이미지를 엽니다.");
     private FocusBoxContrast boxA,boxB;
     private CancellationTokenSource cancellation;
@@ -107,6 +109,7 @@ public sealed class SuperfocusWindow : Window
         Section(settings,"① 초점 범위","화살표로 초점을 옮기고 ‘가까운 곳’, ‘먼 곳’을 눌러 저장하세요. 박스를 옮겨도 렌즈는 움직이지 않습니다.");
         Tip(boxMode,"켜면 라이브뷰에서 고른 박스에 렌즈가 초점을 찾아 가까운 곳/먼 곳으로 저장합니다(AF/MF 스위치 없는 렌즈, 카메라는 AF). 끄면 화살표로 맞춘 위치를 그대로 저장합니다(렌즈 MF).");
         boxMode.Click+=(s,e)=>Refresh();settings.Children.Add(boxMode);
+        focusHere.Width=200;focusHere.FontSize=12;focusHere.Click+=async(s,e)=>await FocusHereAsync();autoRow.Children.Add(focusHere);
         var focusRow=new StackPanel {Orientation=Orientation.Horizontal,HorizontalAlignment=HorizontalAlignment.Center};
         markA.Width=74;markB.Width=74;markA.FontSize=12;markB.FontSize=12;markA.Padding=markB.Padding=new Thickness(2,4,2,4);
         markA.Click+=async(s,e)=>await MarkSelectedAsync(true);markB.Click+=async(s,e)=>await MarkSelectedAsync(false);
@@ -114,7 +117,7 @@ public sealed class SuperfocusWindow : Window
         focusRow.Children.Add(markA);
         foreach(int step in new[]{1,5,20})AddNudge(focusRow,step);
         focusRow.Children.Add(markB);
-        settings.Children.Add(focusRow);
+        settings.Children.Add(autoRow);settings.Children.Add(focusRow);
         var directions=new DockPanel {Margin=new Thickness(4,0,4,6)};
         var far=new TextBlock {Text="멀리 ▶",Foreground=Gray,FontSize=11};DockPanel.SetDock(far,Dock.Right);directions.Children.Add(far);
         directions.Children.Add(new TextBlock {Text="◀ 가까이",Foreground=Gray,FontSize=11});settings.Children.Add(directions);
@@ -160,7 +163,7 @@ public sealed class SuperfocusWindow : Window
     private void PathField(Panel panel,string label,TextBox box,string filter){Field(panel,label,box);Tip(box,label+" 파일 경로");var b=Button("…",label+" 파일 선택");b.HorizontalAlignment=HorizontalAlignment.Right;b.Click+=(s,e)=>{var dialog=new Microsoft.Win32.OpenFileDialog {Filter=filter};if(dialog.ShowDialog(this)==true)box.Text=dialog.FileName;};panel.Children.Add(b);}
     private void SetStatus(string text){status.Text=(text??"").Split(new[]{'\r','\n'},StringSplitOptions.RemoveEmptyEntries).FirstOrDefault()??"";status.Visibility=string.IsNullOrEmpty(status.Text)?Visibility.Collapsed:Visibility.Visible;Tip(status,text??"");}
     private void Disconnected(object sender,DisconnectCameraEventArgs e){Dispatcher.BeginInvoke(new Action(()=>{RequestStop();range.Invalidate();boxA=boxB=previewBox=null;SetStatus("연결 끊김");Refresh();}));}
-    public void InvalidateRange(){if(IsWorking){RequestStop();return;}range.Reset();boxA=boxB=previewBox=null;automaticCuts=true;Quality=0;SetStatus("");Refresh();}
+    public void InvalidateRange(){if(IsWorking){RequestStop();return;}range.Reset();boxA=boxB=null;automaticCuts=true;Quality=0;SetStatus("");Refresh();} // the chosen box stays on screen
     public void MarkA(){if(!IsWorking){range.MarkA();RangeMarked();}}
     public void MarkB(){if(!IsWorking){range.MarkB();RangeMarked();}}
     // Lens profile from the body (on each open): RF24-240 turns 자동 초점 찾기 on and shows the AF notice. A user's own choice is
@@ -170,11 +173,19 @@ public sealed class SuperfocusWindow : Window
         string name="";
         try{name=await Task.Run(()=>canon.LensName)??"";}catch(Exception){}
         LensName=name;bool auto=FindsFocusAutomatically(name);
+        Log.Debug("Superfocus : lens '"+name+"' -> "+(auto?"자동 초점 찾기":"MF 화살표"));
         if(lensAuto!=auto){lensAuto=auto;if(!IsWorking)UseFocusBox=auto;}
         noticeText.Text=(name.Length>0?name+" · ":"")+(UseFocusBox?AutoNotice:MfNotice);
         Refresh();
     }
     public Task MarkSelectedAsync(bool isA)=>UseFocusBox?FindAndMarkAsync(isA):SaveCurrentAsync(isA);
+    // 박스에 초점 맞추기: focus on the chosen box without saving an end (first time: camera AF at the box, then counting starts).
+    public async Task FocusHereAsync(){
+        if(IsWorking)return;
+        FocusBoxContrast box;
+        try{box=previewBox??FocusBoxContrast.From(camera.GetLiveViewImage());}catch(Exception e){SetStatus(e.GetBaseException().Message);return;}
+        await FocusSelectedBoxAsync(false,false,box);
+    }
     // 자동 초점 찾기: focus is found on the selected box (first end: camera AF at the box, then a counted contrast search;
     // second end: counted search from the first towards near/far). Arrows during a search take over at the current spot.
     private async Task FindAndMarkAsync(bool isA){
@@ -198,7 +209,7 @@ public sealed class SuperfocusWindow : Window
         bool first=!range.A.HasValue&&!range.B.HasValue,uncertain=false;
         string name=mark?(isA?"가까운 곳":"먼 곳"):"박스";
         using(var token=new CancellationTokenSource()){
-            cancellation=token;SetStatus(name+" 초점 찾는 중");Refresh();
+            cancellation=token;SetStatus(name+" 초점 찾는 중");Refresh();Log.Debug("Superfocus : find focus "+name+" (first="+first+", box "+(selectedBox==null?"camera":selectedBox.X.ToString("0.00")+","+selectedBox.Y.ToString("0.00"))+")");
             try{
                 await Task.Run(async()=>{var adapter=focusCameraFactory();using(adapter as IDisposable){
                     var frame=await ReadFrameAsync(token.Token);
@@ -219,10 +230,10 @@ public sealed class SuperfocusWindow : Window
                         if(isA){range.MarkA();boxA=box;}else{range.MarkB();boxB=box;}
                     }
                 }});
-                SetStatus(mark?name+" 저장":"초점 완료");
+                SetStatus(mark?name+" 저장":"초점 완료");Log.Debug("Superfocus : focus found at "+range.Position+(mark?" saved as "+name:""));
                 if(mark)RangeMarked();
             }catch(Exception e){
-                pendingAnchor=null;pendingBox=null;
+                pendingAnchor=null;pendingBox=null;Log.Debug("Superfocus : find focus "+name+" ended: "+e.GetBaseException().Message);
                 if(e is OperationCanceledException&&manualTakeover&&mark){
                     try{
                         // Stop any native AF before handing the lens to the arrows.
@@ -276,6 +287,7 @@ public sealed class SuperfocusWindow : Window
         settings.IsEnabled=!IsWorking||registeringAnchor||manualDriving;foreach(var b in focusMoveButtons)b.IsEnabled=!IsWorking||registeringAnchor||manualDriving;
         markA.IsEnabled=!IsWorking||(registeringAnchor&&activeAnchor!=true);markB.IsEnabled=!IsWorking||(registeringAnchor&&activeAnchor!=false);
         markA.Content=pendingAnchor==true?"가까운 곳…":range.A.HasValue?"가까운 곳 ✓":"가까운 곳";markB.Content=pendingAnchor==false?"먼 곳…":range.B.HasValue?"먼 곳 ✓":"먼 곳";
+        autoRow.Visibility=UseFocusBox?Visibility.Visible:Visibility.Collapsed;focusHere.IsEnabled=!IsWorking;
         if(noticeText!=null&&!IsWorking){string head=LensName.Length>0?LensName+" · ":"";noticeText.Text=head+(UseFocusBox?AutoNotice:MfNotice);}
         cuts.IsEnabled=!IsWorking||registeringAnchor;boxMode.IsEnabled=!IsWorking;advanced.IsEnabled=!IsWorking;cancel.IsEnabled=IsWorking;start.IsEnabled=CanCapture;result.IsEnabled=File.Exists(lastResult);if(result.IsEnabled)Tip(result,"합성 결과 열기\n"+lastResult);
         Changed?.Invoke(this,EventArgs.Empty);
