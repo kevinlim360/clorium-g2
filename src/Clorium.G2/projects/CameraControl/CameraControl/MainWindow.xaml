@@ -264,7 +264,13 @@
           <Border Style="{StaticResource G2Divider}" Margin="10,0,10,8" />
           <TextBlock HorizontalAlignment="Center" FontSize="{DynamicResource G2Fs10}" FontWeight="SemiBold" Foreground="{DynamicResource G2Accent}" Text="웹서버" ToolTip="모바일용 웹서버 가동중" Visibility="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=UseWebserver, Converter={StaticResource BooleanToVisibilityConverter1}}" />
           <TextBlock HorizontalAlignment="Center" FontSize="{DynamicResource G2Fs10}" FontWeight="SemiBold" Foreground="{DynamicResource G2Accent}" Text="FTP" ToolTip="FTP서버 가동중" Visibility="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=UseFTPserver, Converter={StaticResource BooleanToVisibilityConverter1}}" />
-          <!-- camera (moved from the top bar) and 클로리움 설정, above the PC status -->
+          <!-- 클로리움 설정, then camera (moved from the top bar), above the PC status -->
+          <Button Style="{StaticResource G2ButtonBase}" Width="40" Height="40" HorizontalAlignment="Center" Margin="0,0,0,2" Foreground="{DynamicResource G2Sub}" ToolTip="{T:Translate SettingsToolTip}" Command="{Binding SettingsCommand}" Visibility="{Binding Branding.ShowSettingMenuMainWindow, Converter={StaticResource BooleanToVisibilityConverter1}}">
+            <FrameworkElement.DataContext>
+              <viewModel:MainMenuViewModel />
+            </FrameworkElement.DataContext>
+            <Viewbox Width="22" Height="22"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoSliders}" /></Viewbox>
+          </Button>
           <Grid x:Name="CameraStatusIcon" Width="40" Height="40" VerticalAlignment="Center" Margin="0,0,0,2" HorizontalAlignment="Center" Background="Transparent" DataContext="{Binding Source={x:Static Core:ServiceProvider.DeviceManager}}" ToolTip="카메라" ToolTipService.InitialShowDelay="200" ToolTipService.ShowDuration="20000" ToolTipOpening="CameraStatusIcon_ToolTipOpening">
             <Viewbox Width="24" Height="24">
               <Path StrokeThickness="1.8" StrokeLineJoin="Round" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Data="{StaticResource G2IcoCamera}">
@@ -293,12 +299,6 @@
               </Ellipse.Style>
             </Ellipse>
           </Grid>
-          <Button Style="{StaticResource G2ButtonBase}" Width="40" Height="40" HorizontalAlignment="Center" Margin="0,0,0,2" Foreground="{DynamicResource G2Sub}" ToolTip="{T:Translate SettingsToolTip}" Command="{Binding SettingsCommand}" Visibility="{Binding Branding.ShowSettingMenuMainWindow, Converter={StaticResource BooleanToVisibilityConverter1}}">
-            <FrameworkElement.DataContext>
-              <viewModel:MainMenuViewModel />
-            </FrameworkElement.DataContext>
-            <Viewbox Width="22" Height="22"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoSliders}" /></Viewbox>
-          </Button>
           <!-- PC status: memory and drive use in the tooltip; the icon blinks red (5x every 3 min) at 90 % or more -->
           <Grid x:Name="PcStatusIcon" Width="34" Height="30" HorizontalAlignment="Center" Background="Transparent" ToolTip="PC 상태" ToolTipService.InitialShowDelay="200" ToolTipService.ShowDuration="20000" ToolTipOpening="PcStatusIcon_ToolTipOpening">
             <Viewbox Width="22" Height="22"><Path x:Name="PcStatusPath" Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoMonitor}" Stroke="{DynamicResource G2Sub}" /></Viewbox>
