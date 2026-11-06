@@ -39,8 +39,8 @@ public sealed class SquareBoardCalibration
     // bgra: 32-bit BGRA pixels (stride = width * 4).
     public static SquareBoardCalibration Detect(byte[] bgra, int width, int height, double boardMm)
     {
-        if (bgra == null || width < 64 || height < 64 || bgra.Length < width * height * 4) throw new DetectionException("사진을 읽지 못했습니다.");
-        if (!(boardMm > 0)) throw new DetectionException("정사각형 판 크기를 확인해 주세요.");
+        if (bgra == null || width < 64 || height < 64 || bgra.Length < width * height * 4) throw new DetectionException(global::CameraControl.Devices.UiText.T("M0063", "사진을 읽을 수 없습니다."));
+        if (!(boardMm > 0)) throw new DetectionException(global::CameraControl.Devices.UiText.T("M0064", "정사각형 판 크기를 확인해 주세요."));
         byte[] gray = new byte[width * height];
         int[] hist = new int[256];
         for (int i = 0, p = 0; i < gray.Length; i++, p += 4)
@@ -72,7 +72,7 @@ public sealed class SquareBoardCalibration
             if (y > 0) Visit(i - width); if (y < height - 1) Visit(i + width);
         }
         void Visit(int j) { if (!mask[j] && (gray[j] <= threshold) == boardDark) { mask[j] = true; stack.Push(j); } }
-        if (area < (long)width * height / 50) throw new DetectionException("정사각형 판을 찾지 못했습니다. 판을 화면 가운데에 크게 놓고 배경과 색이 구분되게 촬영해 주세요.");
+        if (area < (long)width * height / 50) throw new DetectionException(global::CameraControl.Devices.UiText.T("M0065", "정사각형 판을 찾지 못했습니다. 판을 화면 가운데에 크게 놓고, 배경과 색이 구분되게 촬영해 주세요."));
 
         // Outer silhouette: first/last board pixel of every row and column.
         var left = new List<(double x, double y)>(); var right = new List<(double x, double y)>();
@@ -94,7 +94,7 @@ public sealed class SquareBoardCalibration
             top.Add((x, a)); bottom.Add((x, b + 1));
         }
         if (left.Min(p => p.x) <= 1 || right.Max(p => p.x) >= width - 1 || top.Min(p => p.y) <= 1 || bottom.Max(p => p.y) >= height - 1)
-            throw new DetectionException("정사각형 판이 사진 가장자리에 닿았습니다. 판 전체가 여백과 함께 보이도록 촬영해 주세요.");
+            throw new DetectionException(global::CameraControl.Devices.UiText.T("M0066", "정사각형 판이 사진 가장자리에 닿아 있습니다. 판 전체가 여백과 함께 보이게 촬영해 주세요."));
 
         // Rough corners from the silhouette extremes, then robust edge lines between them.
         var all = left.Concat(right).Concat(top).Concat(bottom).ToList();
@@ -110,7 +110,7 @@ public sealed class SquareBoardCalibration
         double wTop = Dist(c0, c1), wBottom = Dist(c3, c2), hLeft = Dist(c0, c3), hRight = Dist(c1, c2);
         double w = (wTop + wBottom) / 2, h = (hLeft + hRight) / 2;
         if (w < 32 || h < 32 || w / h > 1.35 || h / w > 1.35)
-            throw new DetectionException("찾은 판이 정사각형으로 보이지 않습니다. 판을 카메라와 마주 보게 놓고 다시 촬영해 주세요.");
+            throw new DetectionException(global::CameraControl.Devices.UiText.T("M0067", "찾은 판이 정사각형으로 보이지 않습니다. 판을 카메라와 마주 보게 놓고 다시 촬영해 주세요."));
         var result = new SquareBoardCalibration
         {
             BoardMm = boardMm,
@@ -162,7 +162,7 @@ public sealed class SquareBoardCalibration
 
     static (double a, double b) Refit(List<(double u, double v)> pts, int outward)
     {
-        if (pts.Count < 8) throw new DetectionException("판의 가장자리를 충분히 찾지 못했습니다.");
+        if (pts.Count < 8) throw new DetectionException(global::CameraControl.Devices.UiText.T("M0068", "판의 가장자리를 충분히 찾지 못했습니다."));
         // Labels, holes or shadows that reach the edge only ever cut into the board (inward notches), while the true edge
         // is the outer envelope: drop points lying inward of the fitted line by more than antialias/noise and refit.
         var line = Least(pts);
@@ -183,7 +183,7 @@ public sealed class SquareBoardCalibration
         double n = pts.Count, su = 0, sv = 0, suu = 0, suv = 0;
         foreach (var p in pts) { su += p.u; sv += p.v; suu += p.u * p.u; suv += p.u * p.v; }
         double d = n * suu - su * su;
-        if (Math.Abs(d) < 1e-9) throw new DetectionException("판의 가장자리를 계산하지 못했습니다.");
+        if (Math.Abs(d) < 1e-9) throw new DetectionException(global::CameraControl.Devices.UiText.T("M0069", "판의 가장자리를 계산할 수 없습니다."));
         double a = (n * suv - su * sv) / d;
         return (a, (sv - a * su) / n);
     }
@@ -193,7 +193,7 @@ public sealed class SquareBoardCalibration
     {
         // y = ha x + hb, x = va y + vb  ->  y = ha (va y + vb) + hb
         double den = 1 - h.a * v.a;
-        if (Math.Abs(den) < 1e-9) throw new DetectionException("판의 모서리를 계산하지 못했습니다.");
+        if (Math.Abs(den) < 1e-9) throw new DetectionException(global::CameraControl.Devices.UiText.T("M0070", "판의 모서리를 계산할 수 없습니다."));
         double y = (h.a * v.b + h.b) / den;
         return (v.a * y + v.b, y);
     }
@@ -216,7 +216,7 @@ public sealed class SquareBoardCalibration
         {
             int piv = col;
             for (int r = col + 1; r < 8; r++) if (Math.Abs(m[r, col]) > Math.Abs(m[piv, col])) piv = r;
-            if (Math.Abs(m[piv, col]) < 1e-12) throw new DetectionException("원근 보정값을 계산하지 못했습니다.");
+            if (Math.Abs(m[piv, col]) < 1e-12) throw new DetectionException(global::CameraControl.Devices.UiText.T("M0071", "원근 보정값을 계산할 수 없습니다."));
             for (int k = 0; k < 9; k++) { double tmp = m[col, k]; m[col, k] = m[piv, k]; m[piv, k] = tmp; }
             for (int r = 0; r < 8; r++)
             {
@@ -269,13 +269,13 @@ public sealed class SquareBoardCalibration
     }
 
     public string Summary() =>
-        "가로 " + ScaleX.ToString("0.00000", CultureInfo.InvariantCulture) + " · 세로 " + ScaleY.ToString("0.00000", CultureInfo.InvariantCulture) + " mm/px"
-        + " · 사다리꼴 가로 " + (KeystoneH * 100).ToString("+0.0;-0.0;0.0", CultureInfo.InvariantCulture) + "% / 세로 " + (KeystoneV * 100).ToString("+0.0;-0.0;0.0", CultureInfo.InvariantCulture) + "%"
-        + " · 회전 " + RotationDeg.ToString("0.00", CultureInfo.InvariantCulture) + "°";
+        global::CameraControl.Devices.UiText.T("M0072", "가로 ") + ScaleX.ToString("0.00000", CultureInfo.InvariantCulture) + global::CameraControl.Devices.UiText.T("M0073", " · 세로 ") + ScaleY.ToString("0.00000", CultureInfo.InvariantCulture) + " mm/px"
+        + global::CameraControl.Devices.UiText.T("M0074", " · 사다리꼴 가로 ") + (KeystoneH * 100).ToString("+0.0;-0.0;0.0", CultureInfo.InvariantCulture) + global::CameraControl.Devices.UiText.T("M0075", "% / 세로 ") + (KeystoneV * 100).ToString("+0.0;-0.0;0.0", CultureInfo.InvariantCulture) + "%"
+        + global::CameraControl.Devices.UiText.T("M0076", " · 회전 ") + RotationDeg.ToString("0.00", CultureInfo.InvariantCulture) + "°";
 
     public static string Describe(string text)
     {
         var r = Parse(text);
-        return r == null ? "아직 정사각형 판으로 보정하지 않았습니다." : r.Summary() + (r.Measured > DateTime.MinValue ? " (" + r.Measured.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture) + ")" : "");
+        return r == null ? global::CameraControl.Devices.UiText.T("M0077", "아직 정사각형 판으로 보정하지 않았습니다.") : r.Summary() + (r.Measured > DateTime.MinValue ? " (" + r.Measured.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture) + ")" : "");
     }
 }

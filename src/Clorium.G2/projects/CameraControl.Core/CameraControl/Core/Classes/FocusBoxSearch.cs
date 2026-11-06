@@ -27,7 +27,7 @@ public sealed class FocusBoxSearch
         if (limit < 8 || limit > 800) throw new ArgumentOutOfRangeException(nameof(limit));
         double initial = await measure(), best = initial;
         if (double.IsNaN(initial) || double.IsInfinity(initial) || initial < 1)
-            throw new InvalidOperationException("박스 안에 무늬가 있는 피사체를 선택해 주세요. 선명도를 측정할 수 없습니다.");
+            throw new InvalidOperationException(global::CameraControl.Devices.UiText.T("M0008", "선명도를 측정할 수 없습니다. 무늬가 있는 피사체를 박스에 맞춰 주세요."));
         int bestAt = 0, current = 0, falling = 0, plateau = 0;
         bool found = false;
         for (int i = 1; i <= limit; i++)
@@ -36,14 +36,14 @@ public sealed class FocusBoxSearch
             await move(1); current++;
             double score = await measure();
             if (double.IsNaN(score) || double.IsInfinity(score) || score < 0)
-                throw new InvalidOperationException("라이브뷰 선명도 측정에 실패했습니다.");
+                throw new InvalidOperationException(global::CameraControl.Devices.UiText.T("M0009", "라이브뷰 선명도를 측정할 수 없습니다."));
             if (score > best * 1.01) { best = score; bestAt = current; falling = plateau = 0; }
             else { falling = score < best * .90 ? falling + 1 : 0; plateau = score >= best * .98 ? plateau + 1 : 0; }
             // Falling edges confirm a peak, including an already focused target.
             // A plateau is accepted only after a substantial increase from A.
             if (falling >= 5 || (plateau >= 16 && best > initial * 1.4)) { found = true; break; }
         }
-        if (!found) throw new InvalidOperationException("먼 박스의 초점 정점을 확인하지 못했습니다. 박스 위치를 바꾸거나 수동 화살표로 A/B를 지정해 주세요.");
+        if (!found) throw new InvalidOperationException(global::CameraControl.Devices.UiText.T("M0010", "원거리 상자의 최적 초점을 찾지 못했습니다. 상자를 이동하거나 수동 조절 화살표로 A/B를 설정해 주세요."));
         while (current > bestAt) { token.ThrowIfCancellationRequested(); await move(-1); current--; }
         return bestAt;
     }

@@ -1,0 +1,2151 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- G2 사용자 메시지 (UiText). tools/KoreanText messages-apply가 검토된 엑셀에서 만듭니다. -->
+<messages>
+  <m id="M0001">
+    <ko>초점이 맞지 않습니다.
+박스 안에 초점을 맞추고 다시 시도해보세요.</ko>
+    <en>Out of focus.
+Focus inside the box and try again.</en>
+  </m>
+  <m id="M0002">
+    <ko>알림</ko>
+    <en>Notice</en>
+  </m>
+  <m id="M0003">
+    <ko>수퍼포커스 촬영 또는 다운로드가 진행 중입니다.</ko>
+    <en>Superfocus capture or download is in progress.</en>
+  </m>
+  <m id="M0004">
+    <ko>합성 처리 중</ko>
+    <en>Stacking in progress</en>
+  </m>
+  <m id="M0005">
+    <ko>라이브뷰에서 포커스 박스를 선택해 주세요.</ko>
+    <en>Select a focus box in Live View.</en>
+  </m>
+  <m id="M0006">
+    <ko>라이브뷰 이미지가 없습니다.</ko>
+    <en>No Live View image.</en>
+  </m>
+  <m id="M0007">
+    <ko>포커스 박스가 이미지 밖에 있습니다.</ko>
+    <en>The focus box is outside the image.</en>
+  </m>
+  <m id="M0008">
+    <ko>선명도를 측정할 수 없습니다. 무늬가 있는 피사체를 박스에 맞춰 주세요.</ko>
+    <en>Place a patterned subject inside the box. Sharpness cannot be measured.</en>
+  </m>
+  <m id="M0009">
+    <ko>라이브뷰 선명도를 측정할 수 없습니다.</ko>
+    <en>Failed to measure Live View sharpness.</en>
+  </m>
+  <m id="M0010">
+    <ko>원거리 상자의 최적 초점을 찾지 못했습니다. 상자를 이동하거나 수동 조절 화살표로 A/B를 설정해 주세요.</ko>
+    <en>Could not find the peak focus for the far box. Move the box or set A/B with the manual arrows.</en>
+  </m>
+  <m id="M0011">
+    <ko>촬영할 피사체의 A/B 양 끝점과 컷수를 확인해 주세요.</ko>
+    <en>Check the A/B end points and shot count of the capture plan.</en>
+  </m>
+  <m id="M0012">
+    <ko>촬영할 피사체의 A/B 양 끝이 포함되어야 합니다.</ko>
+    <en>The capture plan must include both A and B end points.</en>
+  </m>
+  <m id="M0013">
+    <ko>촬영 지점은 한 방향으로만 진행되어야 합니다.</ko>
+    <en>Capture points must run in one direction.</en>
+  </m>
+  <m id="M0014">
+    <ko>시작 초점 준비</ko>
+    <en>Preparing start focus</en>
+  </m>
+  <m id="M0015">
+    <ko>초점 이동</ko>
+    <en>Moving focus</en>
+  </m>
+  <m id="M0016">
+    <ko>카메라 연결이 끊겼습니다.</ko>
+    <en>The camera is disconnected.</en>
+  </m>
+  <m id="M0017">
+    <ko>A–B 촬영 및 다운로드 {0}/{1}</ko>
+    <en>A–B capture and download {0}/{1}</en>
+  </m>
+  <m id="M0018">
+    <ko>다운로드 대기 시간이 초과되었습니다. 원본은 보존됩니다.</ko>
+    <en>Download timed out. The originals are kept.</en>
+  </m>
+  <m id="M0019">
+    <ko>촬영 원본이 누락되었거나 중복되었습니다.</ko>
+    <en>Original shots are missing or duplicated.</en>
+  </m>
+  <m id="M0020">
+    <ko>촬영 및 다운로드 {0}/{1}</ko>
+    <en>Capture and download {0}/{1}</en>
+  </m>
+  <m id="M0021">
+    <ko>다운로드 대기 시간이 초과되었습니다. 늦게 도착하는 원본은 세션 폴더에 보존됩니다.</ko>
+    <en>Download timed out. Originals that arrive late are kept in the session folder.</en>
+  </m>
+  <m id="M0022">
+    <ko>다운로드한 원본 파일을 확인할 수 없습니다.</ko>
+    <en>Cannot verify the downloaded original file.</en>
+  </m>
+  <m id="M0023">
+    <ko>다운로드가 중복되었습니다.</ko>
+    <en>A duplicate download was detected.</en>
+  </m>
+  <m id="M0024">
+    <ko>가까운 곳(A)과 먼 곳(B)을 모두 저장해 주세요.</ko>
+    <en>Save both Near (A) and Far (B).</en>
+  </m>
+  <m id="M0025">
+    <ko>가까운 곳과 먼 곳의 초첨을 각각 맞추고 저장해 주세요.</ko>
+    <en>Save Near and Far at different focus points.</en>
+  </m>
+  <m id="M0026">
+    <ko>고</ko>
+    <en>High</en>
+  </m>
+  <m id="M0027">
+    <ko>중</ko>
+    <en>Medium</en>
+  </m>
+  <m id="M0028">
+    <ko>저</ko>
+    <en>Low</en>
+  </m>
+  <m id="M0029">
+    <ko>컷 · </ko>
+    <en> shots · </en>
+  </m>
+  <m id="M0030">
+    <ko>단계</ko>
+    <en> steps</en>
+  </m>
+  <m id="M0031">
+    <ko> (한도 초과)</ko>
+    <en> (over limit)</en>
+  </m>
+  <m id="M0032">
+    <ko>예상 컷수가 200장을 넘습니다. 더 낮은 품질을 선택하거나 A–B 범위를 줄여 주세요.</ko>
+    <en>The estimated shot count exceeds 200. Choose a lower quality or shorten the A–B range.</en>
+  </m>
+  <m id="M0033">
+    <ko>컷수는 2~200장이며 초점 단계 수 보다 많을 수 없습니다.</ko>
+    <en>Shot count must be 2–200 and cannot exceed the number of focus steps.</en>
+  </m>
+  <m id="M0034">
+    <ko>컷수는 2부터 </ko>
+    <en>Enter 2 to </en>
+  </m>
+  <m id="M0035">
+    <ko>컷 까지 입력해 주세요.</ko>
+    <en> shots.</en>
+  </m>
+  <m id="M0036">
+    <ko>가까운 A와 먼 B를 모두 지정해 주세요.</ko>
+    <en>Set both the near point A and the far point B.</en>
+  </m>
+  <m id="M0037">
+    <ko>B는 A보다 먼 초점이어야 합니다. 가까운 곳을 A, 먼 곳을 B로 다시 지정해 주세요.</ko>
+    <en>B must be farther than A. Set the near point as A and the far point as B again.</en>
+  </m>
+  <m id="M0038">
+    <ko>예상 컷수가 200장을 넘습니다. 촬영 간격을 늘리거나 A–B 범위를 줄여 주세요.</ko>
+    <en>The estimated shot count exceeds 200. Increase the interval or shorten the A–B range.</en>
+  </m>
+  <m id="M0042">
+    <ko>확인</ko>
+    <en>Confirm</en>
+  </m>
+  <m id="M0043">
+    <ko>오류</ko>
+    <en>Error</en>
+  </m>
+  <m id="M0045">
+    <ko>수퍼포커스는 현재 Canon SDK 카메라만 지원합니다.</ko>
+    <en>Superfocus currently supports Canon SDK cameras only.</en>
+  </m>
+  <m id="M0046">
+    <ko>이전 촬영의 다운로드가 진행중입니다. 완료될 때까지 기다리거나 카메라 연결을 확인해 주세요.</ko>
+    <en>The previous download is not finished. Wait for it to finish or check the camera connection.</en>
+  </m>
+  <m id="M0047">
+    <ko>카메라를 연결해 주세요.</ko>
+    <en>Connect a camera.</en>
+  </m>
+  <m id="M0048">
+    <ko>카메라가 다른 작업 중입니다.</ko>
+    <en>The camera is busy with another task.</en>
+  </m>
+  <m id="M0049">
+    <ko>G2 라이브뷰를 먼저 열고 시작 초점을 맞춰 주세요.</ko>
+    <en>Open G2 Live View first and set the start focus.</en>
+  </m>
+  <m id="M0050">
+    <ko>카메라 화질을 JPEG 만으로 설정해 주세요. RAW와 RAW+JPEG는 아직 지원하지 않습니다.</ko>
+    <en>Set the camera quality to JPEG only. RAW and RAW+JPEG are not supported yet.</en>
+  </m>
+  <m id="M0051">
+    <ko>이전 다운로드가 아직 진행중입니다.</ko>
+    <en>The previous download is not finished.</en>
+  </m>
+  <m id="M0052">
+    <ko>전송된 원본이 비어 있습니다.</ko>
+    <en>The transferred original is empty.</en>
+  </m>
+  <m id="M0053">
+    <ko>JPEG과 다른 원본이 저장되었습니다. 카메라 화질 설정을 확인해 주세요.</ko>
+    <en>A non-JPEG original was kept. Check the camera quality setting.</en>
+  </m>
+  <m id="M0054">
+    <ko>예상하지 못한 촬영 이벤트가 저장되었습니다.</ko>
+    <en>An unexpected capture event was kept.</en>
+  </m>
+  <m id="M0055">
+    <ko>카메라 연결이 끊겼습니다. 내려받은 원본은 보존됩니다.</ko>
+    <en>The camera is disconnected. Downloaded originals are kept.</en>
+  </m>
+  <m id="M0056">
+    <ko>쓰기 권한이 없습니다.</ko>
+    <en>No write permission.</en>
+  </m>
+  <m id="M0057">
+    <ko>프로그램을 최적화하고 있습니다. 최대 1~2분 걸립니다.
+
+프로그램이 자동으로 실행되지 않으면 1~2분 뒤에 직접 다시 시작해 주세요.</ko>
+    <en>Optimizing the program. This takes up to 1–2 minutes.
+
+If the program does not start automatically, restart it manually after 1–2 minutes.</en>
+  </m>
+  <m id="M0058">
+    <ko>세션 파일 오류: </ko>
+    <en>Session file error: </en>
+  </m>
+  <m id="M0059">
+    <ko>캐시 파일 오류: </ko>
+    <en>Cache file error: </en>
+  </m>
+  <m id="M0060">
+    <ko>비밀번호를 입력해 주세요.</ko>
+    <en>Enter the password.</en>
+  </m>
+  <m id="M0061">
+    <ko>비밀번호 확인</ko>
+    <en>Confirm Password</en>
+  </m>
+  <m id="M0062">
+    <ko>비밀번호가 올바르지 않습니다. 다시 입력해 주세요.</ko>
+    <en>Incorrect password. Please try again.</en>
+  </m>
+  <m id="M0063">
+    <ko>사진을 읽을 수 없습니다.</ko>
+    <en>Cannot read the photo.</en>
+  </m>
+  <m id="M0064">
+    <ko>정사각형 판 크기를 확인해 주세요.</ko>
+    <en>Check the square board size.</en>
+  </m>
+  <m id="M0065">
+    <ko>정사각형 판을 찾지 못했습니다. 판을 화면 가운데에 크게 놓고, 배경과 색이 구분되게 촬영해 주세요.</ko>
+    <en>Could not find the square board. Place it large in the center and shoot it in a color that contrasts with the background.</en>
+  </m>
+  <m id="M0066">
+    <ko>정사각형 판이 사진 가장자리에 닿아 있습니다. 판 전체가 여백과 함께 보이게 촬영해 주세요.</ko>
+    <en>The square board touches the photo edge. Shoot so the whole board is visible with some margin.</en>
+  </m>
+  <m id="M0067">
+    <ko>찾은 판이 정사각형으로 보이지 않습니다. 판을 카메라와 마주 보게 놓고 다시 촬영해 주세요.</ko>
+    <en>The detected board does not look square. Place it facing the camera and shoot again.</en>
+  </m>
+  <m id="M0068">
+    <ko>판의 가장자리를 충분히 찾지 못했습니다.</ko>
+    <en>Could not find enough of the board's edges.</en>
+  </m>
+  <m id="M0069">
+    <ko>판의 가장자리를 계산할 수 없습니다.</ko>
+    <en>Cannot calculate the board's edges.</en>
+  </m>
+  <m id="M0070">
+    <ko>판의 모서리를 계산할 수 없습니다.</ko>
+    <en>Cannot calculate the board's corners.</en>
+  </m>
+  <m id="M0071">
+    <ko>원근 보정값을 계산할 수 없습니다.</ko>
+    <en>Cannot calculate the perspective correction.</en>
+  </m>
+  <m id="M0072">
+    <ko>가로 </ko>
+    <en>Horizontal </en>
+  </m>
+  <m id="M0073">
+    <ko> · 세로 </ko>
+    <en> · Vertical </en>
+  </m>
+  <m id="M0074">
+    <ko> · 사다리꼴 가로 </ko>
+    <en> · Keystone horizontal </en>
+  </m>
+  <m id="M0075">
+    <ko>% / 세로 </ko>
+    <en>% / vertical </en>
+  </m>
+  <m id="M0076">
+    <ko> · 회전 </ko>
+    <en> · Rotation </en>
+  </m>
+  <m id="M0077">
+    <ko>아직 정사각형 판으로 보정하지 않았습니다.</ko>
+    <en>Not calibrated with a square board yet.</en>
+  </m>
+  <m id="M0078">
+    <ko>카메라 초기화에 실패했습니다. 카메라 전원을 껐다 켜 주세요.</ko>
+    <en>Camera initialization failed. Turn the camera off and on again.</en>
+  </m>
+  <m id="M0079">
+    <ko>오류</ko>
+    <en>Error</en>
+  </m>
+  <m id="M0080">
+    <ko>모바일 또는 웹 카메라 연결 해제: </ko>
+    <en>Mobile or web camera disconnected: </en>
+  </m>
+  <m id="M0081">
+    <ko>수퍼포커스 초점 이동에는 연결된 카메라의 라이브뷰가 필요합니다.</ko>
+    <en>Superfocus focus shifting requires Live View on the connected camera.</en>
+  </m>
+  <m id="M0082">
+    <ko>원본 저장 경로에 이미 파일이 있습니다.</ko>
+    <en>A file already exists at the original save path.</en>
+  </m>
+  <m id="M0083">
+    <ko>지원하지 않는 Canon 다운로드 핸들입니다.</ko>
+    <en>Unsupported Canon download handle.</en>
+  </m>
+  <m id="M0085">
+    <ko>지원하지 않는 데이터 형식입니다: </ko>
+    <en>Unsupported data type: </en>
+  </m>
+  <m id="M0086">
+    <ko>폴더에 처리할 파일(jpg, mp4)이 없습니다.</ko>
+    <en>No files to process (jpg, mp4) in the folder.</en>
+  </m>
+  <m id="M0087">
+    <ko>웹캠으로 촬영할 수 없습니다.</ko>
+    <en>Cannot capture with the webcam.</en>
+  </m>
+  <m id="M0088">
+    <ko>이미 실행 중입니다.</ko>
+    <en>Already running.</en>
+  </m>
+  <m id="M0089">
+    <ko>라이선스 확인 설정을 읽지 못했습니다. 최신 Clorium 업데이트를 다시 설치해 주세요.</ko>
+    <en>Could not read the license check settings. Reinstall the latest Clorium update.</en>
+  </m>
+  <m id="M0090">
+    <ko>라이선스 키 확인 중 오류가 발생했습니다: </ko>
+    <en>An error occurred while checking the license key: </en>
+  </m>
+  <m id="M0091">
+    <ko>PC 식별 정보를 읽지 못했습니다.</ko>
+    <en>Could not read the PC identification info.</en>
+  </m>
+  <m id="M0092">
+    <ko>이 PC에 맞는 라이선스 키 파일이 D:\에 없습니다.
+아래 PC 정보를 클로리움(주)에 전달하고 키 파일을 확인해 주세요.
+
+</ko>
+    <en>No license key file for this PC was found on D:\.
+Send the PC info below to Clorium Co. and check the key file.
+
+</en>
+  </m>
+  <m id="M0093">
+    <ko>라이선스 키 확인 중 오류가 발생했습니다. D: 드라이브 접근 권한과 설치 상태를 확인해 주세요.</ko>
+    <en>An error occurred while checking the license key. Check access to drive D: and the installation.</en>
+  </m>
+  <m id="M0094">
+    <ko>시스템 이상이 감지되었습니다.
+
+프로그램이 정상적으로 동작하지 않을 수 있습니다.
+클로리움(주) 담당자에게 연락해 주세요.</ko>
+    <en>A system problem was detected.
+
+The program may not work correctly.
+Please contact Clorium Co.</en>
+  </m>
+  <m id="M0095">
+    <ko>시스템 일부 파일이 손상되었습니다.
+
+클로리움(주) 담당자에게 연락해 주세요.</ko>
+    <en>Some system files are damaged.
+
+Please contact Clorium Co.</en>
+  </m>
+  <m id="M0096">
+    <ko>오류가 발생했습니다: </ko>
+    <en>An error occurred: </en>
+  </m>
+  <m id="M0097">
+    <ko>웹서버를 실행하려면 관리자 권한이 필요합니다. 프로그램을 다시 시작합니다.</ko>
+    <en>Administrator rights are required to run the web server. The program will restart.</en>
+  </m>
+  <m id="M0098">
+    <ko>관리자 권한이 거부되어 웹서버를 시작할 수 없습니다.</ko>
+    <en>Administrator permission was denied, so the web server cannot start.</en>
+  </m>
+  <m id="M0099">
+    <ko>시리얼 수신 중 오류가 발생했습니다: </ko>
+    <en>An error occurred while receiving serial data: </en>
+  </m>
+  <m id="M0101">
+    <ko>클로리움 오토사이징 프로그램을 찾을 수 없습니다.
+
+</ko>
+    <en>Clorium AutoSizing program not found.
+
+</en>
+  </m>
+  <m id="M0102">
+    <ko>
+
+클로리움 설정 &gt; 오토사이징에서 실행 파일 경로를 확인해 주세요.</ko>
+    <en>
+
+Check the executable path in Clorium Settings &gt; AutoSizing.</en>
+  </m>
+  <m id="M0103">
+    <ko>오토사이징</ko>
+    <en>AutoSizing</en>
+  </m>
+  <m id="M0104">
+    <ko>클로리움 오토사이징 프로그램을 시작하지 못했습니다.
+
+</ko>
+    <en>Could not start the Clorium AutoSizing program.
+
+</en>
+  </m>
+  <m id="M0105">
+    <ko>배경제거 화면을 열지 못했습니다.
+
+</ko>
+    <en>Could not open the Background Removal screen.
+
+</en>
+  </m>
+  <m id="M0106">
+    <ko>배경제거 엔진의 응답을 읽지 못했습니다. (HTTP </ko>
+    <en>Could not read the Background Removal engine response. (HTTP </en>
+  </m>
+  <m id="M0107">
+    <ko>배경제거 엔진 오류 (HTTP </ko>
+    <en>Background Removal engine error (HTTP </en>
+  </m>
+  <m id="M0108">
+    <ko>배경제거 엔진의 응답을 확인하지 못했습니다.</ko>
+    <en>Could not verify the Background Removal engine response.</en>
+  </m>
+  <m id="M0109">
+    <ko>배경제거 엔진에 연결하지 못했습니다. 엔진이 종료되었다면 G2의 배경제거 버튼을 다시 눌러 주세요.</ko>
+    <en>Could not connect to the Background Removal engine. If it has closed, click the Background Removal button in G2 again.</en>
+  </m>
+  <m id="M0110">
+    <ko>다른 프로그램이 배경제거 주소(</ko>
+    <en>Another program is using the Background Removal address (</en>
+  </m>
+  <m id="M0111">
+    <ko>)를 사용 중이라 시작할 수 없습니다.
+
+그 프로그램을 닫은 후 다시 눌러 주세요.</ko>
+    <en>), so it cannot start.
+
+Close that program and try again.</en>
+  </m>
+  <m id="M0112">
+    <ko>클로리움 배경제거(Matting Studio) 실행 스크립트를 찾을 수 없습니다.
+
+</ko>
+    <en>Clorium Background Removal (Matting Studio) start script not found.
+
+</en>
+  </m>
+  <m id="M0113">
+    <ko>
+
+클로리움 설정 &gt; 배경제거에서 Start.ps1 경로를 확인해 주세요.</ko>
+    <en>
+
+Check the Start.ps1 path in Clorium Settings &gt; Background Removal.</en>
+  </m>
+  <m id="M0114">
+    <ko>클로리움 배경제거가 60초 안에 시작되지 않았습니다.</ko>
+    <en>Clorium Background Removal did not start within 60 seconds.</en>
+  </m>
+  <m id="M0115">
+    <ko>클로리움 배경제거를 시작하지 못했습니다.
+
+</ko>
+    <en>Could not start Clorium Background Removal.
+
+</en>
+  </m>
+  <m id="M0116">
+    <ko>배경제거</ko>
+    <en>Background Removal</en>
+  </m>
+  <m id="M0117">
+    <ko>이미지보정</ko>
+    <en>Image Adjust</en>
+  </m>
+  <m id="M0118">
+    <ko>먼저 이미지보정할 사진을 선택해 주세요.</ko>
+    <en>Select a photo to adjust first.</en>
+  </m>
+  <m id="M0119">
+    <ko>JPEG, PNG, TIFF, BMP 사진만 이미지보정할 수 있습니다.
+
+RAW 파일은 같은 이름의 JPEG나 TIFF가 옆에 있으면 그 사진을 엽니다.</ko>
+    <en>Only JPEG, PNG, TIFF, and BMP photos can be adjusted.
+
+For a RAW file, the JPEG or TIFF with the same name next to it is opened.</en>
+  </m>
+  <m id="M0120">
+    <ko>이미지보정 창을 열지 못했습니다.
+
+</ko>
+    <en>Could not open the Image Adjust window.
+
+</en>
+  </m>
+  <m id="M0121">
+    <ko>클로리움 조명 제어 프로그램을 찾을 수 없습니다.
+
+</ko>
+    <en>Clorium Light Control program not found.
+
+</en>
+  </m>
+  <m id="M0122">
+    <ko>
+
+클로리움 설정 &gt; 확장 기능 &gt; 조명 조절에서 실행 파일 경로를 확인해 주세요.</ko>
+    <en>
+
+Check the executable path in Clorium Settings &gt; Extensions &gt; Light Control.</en>
+  </m>
+  <m id="M0123">
+    <ko>조명 조절</ko>
+    <en>Light Control</en>
+  </m>
+  <m id="M0124">
+    <ko>클로리움 조명 제어 프로그램을 시작하지 못했습니다.
+
+</ko>
+    <en>Could not start the Clorium Light Control program.
+
+</en>
+  </m>
+  <m id="M0125">
+    <ko>모바일 카메라 감시 설정 중 오류가 발생했습니다: </ko>
+    <en>An error occurred while setting up the mobile camera watcher: </en>
+  </m>
+  <m id="M0126">
+    <ko>폴더 오류</ko>
+    <en>Folder Error</en>
+  </m>
+  <m id="M0127">
+    <ko>모바일 카메라 공용 폴더에서 이벤트 오류가 발생했습니다: </ko>
+    <en>An event error occurred in the mobile camera shared folder: </en>
+  </m>
+  <m id="M0128">
+    <ko>이벤트 오류</ko>
+    <en>Event Error</en>
+  </m>
+  <m id="M0129">
+    <ko>템플릿 이름을 입력해 주세요.</ko>
+    <en>Enter a template name.</en>
+  </m>
+  <m id="M0130">
+    <ko>템플릿 이름은 </ko>
+    <en>Template name must be </en>
+  </m>
+  <m id="M0131">
+    <ko>자 이하로 입력해 주세요.</ko>
+    <en> characters or fewer.</en>
+  </m>
+  <m id="M0132">
+    <ko>같은 이름의 템플릿이 이미 있습니다: </ko>
+    <en>A template with the same name already exists: </en>
+  </m>
+  <m id="M0133">
+    <ko>템플릿을 찾을 수 없습니다: </ko>
+    <en>Template not found: </en>
+  </m>
+  <m id="M0134">
+    <ko>폴더를 찾을 수 없습니다: </ko>
+    <en>Folder not found: </en>
+  </m>
+  <m id="M0135">
+    <ko>Clorium G2 이미지보정 일괄 적용</ko>
+    <en>Clorium G2 Image Adjust batch</en>
+  </m>
+  <m id="M0136">
+    <ko>시작: </ko>
+    <en>Started: </en>
+  </m>
+  <m id="M0137">
+    <ko>템플릿: </ko>
+    <en>Template: </en>
+  </m>
+  <m id="M0138">
+    <ko>(이름 없음)</ko>
+    <en>(no name)</en>
+  </m>
+  <m id="M0139">
+    <ko>보정값: </ko>
+    <en>Adjustments: </en>
+  </m>
+  <m id="M0140">
+    <ko>원본 폴더: </ko>
+    <en>Source folder: </en>
+  </m>
+  <m id="M0141">
+    <ko>저장 폴더: </ko>
+    <en>Output folder: </en>
+  </m>
+  <m id="M0142">
+    <ko>엔진: </ko>
+    <en>Engine: </en>
+  </m>
+  <m id="M0143">
+    <ko>중지됨: </ko>
+    <en>Stopped: </en>
+  </m>
+  <m id="M0144">
+    <ko>장 처리하지 않음</ko>
+    <en> not processed</en>
+  </m>
+  <m id="M0145">
+    <ko>완료	</ko>
+    <en>Done	</en>
+  </m>
+  <m id="M0146">
+    <ko>실패	</ko>
+    <en>Failed	</en>
+  </m>
+  <m id="M0147">
+    <ko>결과: 전체 </ko>
+    <en>Result: total </en>
+  </m>
+  <m id="M0148">
+    <ko> · 저장 </ko>
+    <en> · saved </en>
+  </m>
+  <m id="M0149">
+    <ko> · 실패 </ko>
+    <en> · failed </en>
+  </m>
+  <m id="M0150">
+    <ko> · 중지</ko>
+    <en> · stopped</en>
+  </m>
+  <m id="M0151">
+    <ko>소요: </ko>
+    <en>Elapsed: </en>
+  </m>
+  <m id="M0152">
+    <ko>초</ko>
+    <en> sec</en>
+  </m>
+  <m id="M0154">
+    <ko>노출 </ko>
+    <en>Exposure </en>
+  </m>
+  <m id="M0155">
+    <ko>명도 </ko>
+    <en>Brightness </en>
+  </m>
+  <m id="M0156">
+    <ko>대비 </ko>
+    <en>Contrast </en>
+  </m>
+  <m id="M0157">
+    <ko>채도 </ko>
+    <en>Saturation </en>
+  </m>
+  <m id="M0158">
+    <ko>색온도 </ko>
+    <en>Temperature </en>
+  </m>
+  <m id="M0159">
+    <ko>색조 </ko>
+    <en>Tint </en>
+  </m>
+  <m id="M0160">
+    <ko>전체</ko>
+    <en>All</en>
+  </m>
+  <m id="M0161">
+    <ko> 레벨 </ko>
+    <en> levels </en>
+  </m>
+  <m id="M0162">
+    <ko>보정 없음</ko>
+    <en>No adjustments</en>
+  </m>
+  <m id="M0163">
+    <ko>CMYK 이미지는 이미지보정을 지원하지 않습니다. RGB 사진을 사용해 주세요.</ko>
+    <en>CMYK images are not supported by Image Adjust. Use an RGB photo.</en>
+  </m>
+  <m id="M0164">
+    <ko>사진 파일을 찾을 수 없습니다.</ko>
+    <en>Photo file not found.</en>
+  </m>
+  <m id="M0165">
+    <ko>JPEG, PNG, TIFF, BMP 사진만 보정할 수 있습니다. RAW 파일은 지원하지 않습니다.</ko>
+    <en>Only JPEG, PNG, TIFF, and BMP photos can be adjusted. RAW files are not supported.</en>
+  </m>
+  <m id="M0166">
+    <ko>원본과 다른 파일 이름을 입력해 주세요. 원본은 덮어쓰지 않습니다.</ko>
+    <en>Enter a file name different from the original. The original is never overwritten.</en>
+  </m>
+  <m id="M0167">
+    <ko>JPEG, PNG, TIFF, BMP 형식으로만 저장할 수 있습니다.</ko>
+    <en>Only JPEG, PNG, TIFF, and BMP formats can be saved.</en>
+  </m>
+  <m id="M0168">
+    <ko>같은 이름의 파일이 이미 있습니다: </ko>
+    <en>A file with the same name already exists: </en>
+  </m>
+  <m id="M0170">
+    <ko>모바일 웹 서버를 시작할 수 없습니다.
+관리자 권한으로 다시 실행해 주세요.</ko>
+    <en>Cannot start the mobile web server.
+Please restart the app as administrator.</en>
+  </m>
+  <m id="M0172">
+    <ko> - 실행 완료</ko>
+    <en> - Done</en>
+  </m>
+  <m id="M0180">
+    <ko>PC 상태</ko>
+    <en></en>
+  </m>
+  <m id="M0181">
+    <ko>
+메모리  </ko>
+    <en></en>
+  </m>
+  <m id="M0182">
+    <ko>
+메모리  확인할 수 없음</ko>
+    <en></en>
+  </m>
+  <m id="M0183">
+    <ko> 드라이브  </ko>
+    <en></en>
+  </m>
+  <m id="M0184">
+    <ko>
+90% 이상이면 아이콘이 빨갛게 깜빡입니다.</ko>
+    <en></en>
+  </m>
+  <m id="M0185">
+    <ko>카메라 연결됨</ko>
+    <en></en>
+  </m>
+  <m id="M0186">
+    <ko>카메라 연결 안 됨</ko>
+    <en></en>
+  </m>
+  <m id="M0187">
+    <ko>
+모델  </ko>
+    <en></en>
+  </m>
+  <m id="M0188">
+    <ko>
+시리얼  </ko>
+    <en></en>
+  </m>
+  <m id="M0189">
+    <ko>
+배터리  </ko>
+    <en></en>
+  </m>
+  <m id="M0190">
+    <ko>
+오늘 촬영  </ko>
+    <en></en>
+  </m>
+  <m id="M0191">
+    <ko>컷</ko>
+    <en></en>
+  </m>
+  <m id="M0192">
+    <ko>
+오늘 세션  </ko>
+    <en></en>
+  </m>
+  <m id="M0193">
+    <ko>개</ko>
+    <en> items</en>
+  </m>
+  <m id="M0194">
+    <ko>메모리 사용량이 90%를 넘었습니다.
+프로그램을 계속 사용해도 됩니다.
+실행이 느려지면 다시 시작해 주세요.</ko>
+    <en>Memory usage is over 90%.
+You can keep using the program.
+If it slows down, please restart it.</en>
+  </m>
+  <m id="M0197">
+    <ko>에러 관련 정보를 저장했습니다.</ko>
+    <en>Error information has been saved.</en>
+  </m>
+  <m id="M0201">
+    <ko>일시 정지 중입니다.
+촬영을 시작하려면 작업시작 버튼을 눌러 주세요.</ko>
+    <en>Paused.
+Press Start Work to begin shooting.</en>
+  </m>
+  <m id="M0202">
+    <ko>일시정지</ko>
+    <en>Pause</en>
+  </m>
+  <m id="M0203">
+    <ko>작업시작</ko>
+    <en>Start Work</en>
+  </m>
+  <m id="M0205">
+    <ko>CSV 파일이 없습니다.</ko>
+    <en>The CSV file does not exist.</en>
+  </m>
+  <m id="M0206">
+    <ko>이미 통계가 기록된 파일입니다. 작업을 종료합니다.</ko>
+    <en>Statistics have already been written to this file. Stopping.</en>
+  </m>
+  <m id="M0211">
+    <ko>통계를 계산할 데이터가 없습니다.</ko>
+    <en>There is no data to calculate statistics.</en>
+  </m>
+  <m id="M0212">
+    <ko>오늘도 수고하셨습니다.</ko>
+    <en>Thank you for your hard work today.</en>
+  </m>
+  <m id="M0213">
+    <ko>CSV 파일이 열려 있습니다. 파일을 닫고 다시 시도해 주세요.</ko>
+    <en>The CSV file is open. Close it and try again.</en>
+  </m>
+  <m id="M0214">
+    <ko>경고</ko>
+    <en>Warning</en>
+  </m>
+  <m id="M0215">
+    <ko>FTP Fake Camera는 촬영을 지원하지 않습니다.</ko>
+    <en>FTP Fake Camera does not support shooting.</en>
+  </m>
+  <m id="M0216">
+    <ko>썸네일을 만드는 중입니다. 잠시 후 다시 촬영해 주세요.</ko>
+    <en>Creating thumbnails. Please shoot again in a moment.</en>
+  </m>
+  <m id="M0217">
+    <ko>연결된 카메라가 없습니다.</ko>
+    <en>No camera is connected.</en>
+  </m>
+  <m id="M0218">
+    <ko>치수 사진 저장 : </ko>
+    <en>Measurement photo saved: </en>
+  </m>
+  <m id="M0219">
+    <ko>현재 세션 폴더를 찾을 수 없습니다.
+</ko>
+    <en>Cannot find the current session folder.
+</en>
+  </m>
+  <m id="M0220">
+    <ko>열기</ko>
+    <en>Open</en>
+  </m>
+  <m id="M0221">
+    <ko>저장할 사진을 먼저 선택해 주세요.</ko>
+    <en>Select a photo to save first.</en>
+  </m>
+  <m id="M0222">
+    <ko>다른 이름으로 저장</ko>
+    <en>Save As</en>
+  </m>
+  <m id="M0223">
+    <ko>사진 (*</ko>
+    <en>Photos (*</en>
+  </m>
+  <m id="M0224">
+    <ko>|모든 파일 (*.*)|*.*</ko>
+    <en>|All files (*.*)|*.*</en>
+  </m>
+  <m id="M0225">
+    <ko>원본과 다른 이름을 입력해 주세요.</ko>
+    <en>Enter a name different from the original.</en>
+  </m>
+  <m id="M0226">
+    <ko>저장하지 못했습니다.
+</ko>
+    <en>Could not save.
+</en>
+  </m>
+  <m id="M0228">
+    <ko>다운로드하지 못했습니다.
+다시 촬영해 주세요.</ko>
+    <en>Download failed.
+Please shoot again.</en>
+  </m>
+  <m id="M0229">
+    <ko>이미지 처리 중 오류가 발생했습니다.</ko>
+    <en>An error occurred while processing the image.</en>
+  </m>
+  <m id="M0230">
+    <ko>이미지 속성 정보(PropertyItems)가 없습니다.</ko>
+    <en>The image has no property information (PropertyItems).</en>
+  </m>
+  <m id="M0231">
+    <ko>파일이 없습니다.
+</ko>
+    <en>File not found.
+</en>
+  </m>
+  <m id="M0232">
+    <ko>파일 오류</ko>
+    <en>File Error</en>
+  </m>
+  <m id="M0234">
+    <ko>파일 백업 실패 </ko>
+    <en>File backup failed </en>
+  </m>
+  <m id="M0235">
+    <ko>색온도 모드가 아닙니다.</ko>
+    <en>Not in color temperature mode.</en>
+  </m>
+  <m id="M0236">
+    <ko>색보정 슬라이더를 사용하는 동안 카메라가 사용 중입니다.</ko>
+    <en>The camera is busy while the color slider is in use.</en>
+  </m>
+  <m id="M0237">
+    <ko>색온도 모드가 아닙니다.</ko>
+    <en>Not in color temperature mode.</en>
+  </m>
+  <m id="M0238">
+    <ko>스케일 값 : </ko>
+    <en>Scale : </en>
+  </m>
+  <m id="M0239">
+    <ko>정사각형 판 </ko>
+    <en>Square board </en>
+  </m>
+  <m id="M0240">
+    <ko>
+
+이 값을 치수 촬영 스케일로 저장할까요?</ko>
+    <en>
+
+Save this value as the measurement shooting scale?</en>
+  </m>
+  <m id="M0241">
+    <ko>정사각형 판 캘리브레이션</ko>
+    <en>Square Board Calibration</en>
+  </m>
+  <m id="M0242">
+    <ko>캘리브레이션 사진을 처리하지 못했습니다.
+
+</ko>
+    <en>Could not process the calibration photo.
+
+</en>
+  </m>
+  <m id="M0243">
+    <ko>바코드 USB 드라이브를 찾을 수 없습니다.
+
+USB 포트 연결을 확인해 주세요.</ko>
+    <en>Cannot find the barcode USB drive.
+
+Please check the USB port connection.</en>
+  </m>
+  <m id="M0244">
+    <ko>시리얼 수신 중 오류가 발생했습니다: </ko>
+    <en>An error occurred while receiving serial data: </en>
+  </m>
+  <m id="M0245">
+    <ko>LED 조명 USB 드라이브를 찾을 수 없습니다.
+
+USB 포트 연결을 확인해 주세요.</ko>
+    <en>Cannot find the LED light USB drive.
+
+Please check the USB port connection.</en>
+  </m>
+  <m id="M0246">
+    <ko>라이브 뷰가 정지되었습니다.</ko>
+    <en>Live view has stopped.</en>
+  </m>
+  <m id="M0247">
+    <ko>이미지를 다운로드하는 중입니다. 잠시 후 다시 시도해 주세요.</ko>
+    <en>The image is downloading. Please try again in a moment.</en>
+  </m>
+  <m id="M0248">
+    <ko>'을(를) 삭제할까요?</ko>
+    <en>' will be deleted. Continue?</en>
+  </m>
+  <m id="M0249">
+    <ko>파일 삭제 확인</ko>
+    <en>Confirm Delete</en>
+  </m>
+  <m id="M0250">
+    <ko>파일을 삭제하는 중 오류가 발생했습니다:
+</ko>
+    <en>An error occurred while deleting the file:
+</en>
+  </m>
+  <m id="M0251">
+    <ko>알 수 없는 오류가 발생했습니다:
+</ko>
+    <en>An unknown error occurred:
+</en>
+  </m>
+  <m id="M0252">
+    <ko>바코드 모드에서는 새 세션을 만들 수 없습니다.</ko>
+    <en>New sessions cannot be created in barcode mode.</en>
+  </m>
+  <m id="M0253">
+    <ko>작업시작 버튼을 눌러 주세요.</ko>
+    <en>Press Start Work.</en>
+  </m>
+  <m id="M0254">
+    <ko>촬영 이미지의 저장과 썸네일 처리가 끝난 뒤 다음 제품으로 이동해 주세요.</ko>
+    <en>Wait until the shot images are saved and thumbnails are done, then move to the next product.</en>
+  </m>
+  <m id="M0258">
+    <ko>세션이 하나뿐이면 삭제할 수 없습니다.</ko>
+    <en>The last remaining session cannot be deleted.</en>
+  </m>
+  <m id="M0260">
+    <ko>CSV 파일을 쓰는 중입니다.</ko>
+    <en>The CSV file is being written.</en>
+  </m>
+  <m id="M0261">
+    <ko>CSV 파일을 먼저 닫은 뒤 이 창을 닫아 주세요.</ko>
+    <en>Close the CSV file first, then close this window.</en>
+  </m>
+  <m id="M0262">
+    <ko>API로 전송합니다.
+</ko>
+    <en>Sending to the API.
+</en>
+  </m>
+  <m id="M0263">
+    <ko>앞면과 뒷면을 모두 촬영해 주세요.</ko>
+    <en>Please shoot both the front and the back.</en>
+  </m>
+  <m id="M0264">
+    <ko>앞면을 촬영해 주세요.</ko>
+    <en>Please shoot the front.</en>
+  </m>
+  <m id="M0265">
+    <ko>뒷면을 촬영해 주세요.</ko>
+    <en>Please shoot the back.</en>
+  </m>
+  <m id="M0267">
+    <ko>이미지 폴더가 없습니다.</ko>
+    <en>The image folder does not exist.</en>
+  </m>
+  <m id="M0268">
+    <ko>API 서버 오류: 코드 {0} ({1})</ko>
+    <en>API server error: code {0} ({1})</en>
+  </m>
+  <m id="M0269">
+    <ko>네트워크 연결에 실패했습니다: {0}</ko>
+    <en>Network connection failed: {0}</en>
+  </m>
+  <m id="M0270">
+    <ko>오류가 발생했습니다: </ko>
+    <en>An error occurred: </en>
+  </m>
+  <m id="M0271">
+    <ko>네트워크 오류: </ko>
+    <en>Network error: </en>
+  </m>
+  <m id="M0272">
+    <ko>
+응답 메시지:
+</ko>
+    <en>
+Response:
+</en>
+  </m>
+  <m id="M0273">
+    <ko>도</ko>
+    <en>°</en>
+  </m>
+  <m id="M0284">
+    <ko>턴테이블 USB 드라이브를 찾을 수 없습니다.
+
+USB 포트 연결을 확인해 주세요.</ko>
+    <en>Cannot find the turntable USB drive.
+
+Please check the USB port connection.</en>
+  </m>
+  <m id="M0285">
+    <ko>절대 위치로 이동하는 중 오류가 발생했습니다: </ko>
+    <en>An error occurred while moving to the absolute position: </en>
+  </m>
+  <m id="M0286">
+    <ko>상대 위치로 이동하는 중 오류가 발생했습니다: </ko>
+    <en>An error occurred while moving to the relative position: </en>
+  </m>
+  <m id="M0287">
+    <ko>0도</ko>
+    <en>0°</en>
+  </m>
+  <m id="M0288">
+    <ko>홈 위치로 이동하는 중 오류가 발생했습니다: </ko>
+    <en>An error occurred while moving to the home position: </en>
+  </m>
+  <m id="M0289">
+    <ko>고속, 중속, 저속 중에서 선택해 주세요.</ko>
+    <en>Select high, medium, or low speed.</en>
+  </m>
+  <m id="M0290">
+    <ko>원점 위치로 이동 중입니다.</ko>
+    <en>Moving to the home position.</en>
+  </m>
+  <m id="M0291">
+    <ko>이미지 다운로드 시간이 초과되었습니다.</ko>
+    <en>Image download timed out.</en>
+  </m>
+  <m id="M0292">
+    <ko>턴테이블 속도에 비해 촬영 횟수가 많아 촬영할 수 없습니다.</ko>
+    <en>Too many shots for the turntable speed. Cannot shoot.</en>
+  </m>
+  <m id="M0294">
+    <ko>실행 파일을 찾을 수 없습니다:
+</ko>
+    <en>Cannot find the executable file:
+</en>
+  </m>
+  <m id="M0295">
+    <ko>턴테이블 연결을 확인해 주세요.</ko>
+    <en>Please check the turntable connection.</en>
+  </m>
+  <m id="M0296">
+    <ko>연결된 카메라가 없습니다. 계속할까요?</ko>
+    <en>No camera is connected. Continue?</en>
+  </m>
+  <m id="M0297">
+    <ko>Clorium_MDPData.txt 파일의 값을 확인해 주세요.</ko>
+    <en>Please check the values in Clorium_MDPData.txt.</en>
+  </m>
+  <m id="M0298">
+    <ko>MDP 파일이 없어 기본값을 불러왔습니다.
+
+Clorium_MDPData.txt에서 수정해 주세요.</ko>
+    <en>The MDP file was not found, so default values were loaded.
+
+Edit them in Clorium_MDPData.txt.</en>
+  </m>
+  <m id="M0299">
+    <ko>대기 중</ko>
+    <en>Idle</en>
+  </m>
+  <m id="M0300">
+    <ko>수동 포커스 모드</ko>
+    <en>Manual focus mode</en>
+  </m>
+  <m id="M0301">
+    <ko>자동 포커스 모드</ko>
+    <en>Auto focus mode</en>
+  </m>
+  <m id="M0302">
+    <ko>녹화 처리 중...</ko>
+    <en>Processing recording...</en>
+  </m>
+  <m id="M0303">
+    <ko>녹화 완료</ko>
+    <en>Recording complete</en>
+  </m>
+  <m id="M0304">
+    <ko>오류: </ko>
+    <en>Error: </en>
+  </m>
+  <m id="M0305">
+    <ko>새 세션 폴더를 만들어 주세요.</ko>
+    <en>Create a new session folder.</en>
+  </m>
+  <m id="M0306">
+    <ko>폴더를 만들 수 없습니다.</ko>
+    <en>Cannot create the folder.</en>
+  </m>
+  <m id="M0307">
+    <ko>연결 안 됨</ko>
+    <en>Not connected</en>
+  </m>
+  <m id="M0308">
+    <ko>준비 완료</ko>
+    <en>Ready</en>
+  </m>
+  <m id="M0309">
+    <ko>배경제거 엔진(BiRefNet)이 준비되었습니다.</ko>
+    <en>The background removal engine (BiRefNet) is ready.</en>
+  </m>
+  <m id="M0310">
+    <ko>모델 준비 중</ko>
+    <en>Preparing model</en>
+  </m>
+  <m id="M0311">
+    <ko>모델을 불러오는 중입니다.</ko>
+    <en>Loading the model.</en>
+  </m>
+  <m id="M0312">
+    <ko>모델 준비가 끝나면 시작할 수 있습니다.</ko>
+    <en>You can start when the model is ready.</en>
+  </m>
+  <m id="M0313">
+    <ko>원본은 그대로 두고, 옆의 _bgr 폴더에 투명 배경 PNG로 저장합니다.</ko>
+    <en>The original is kept. Results are saved as transparent PNGs in the neighboring _bgr folder.</en>
+  </m>
+  <m id="M0314">
+    <ko>폴더 선택</ko>
+    <en>Select folder</en>
+  </m>
+  <m id="M0315">
+    <ko>사진 선택</ko>
+    <en>Select photos</en>
+  </m>
+  <m id="M0316">
+    <ko>배경을 지울 사진 폴더를 선택해 주세요. 하위 폴더도 함께 처리합니다.</ko>
+    <en>Select the photo folder to remove backgrounds from. Subfolders are included.</en>
+  </m>
+  <m id="M0317">
+    <ko>배경을 지울 사진 선택</ko>
+    <en>Select photos to remove backgrounds from</en>
+  </m>
+  <m id="M0318">
+    <ko>사진 (JPG, PNG, WebP, TIFF, BMP)|*.jpg;*.jpeg;*.png;*.webp;*.tif;*.tiff;*.bmp</ko>
+    <en>Photos (JPG, PNG, WebP, TIFF, BMP)|*.jpg;*.jpeg;*.png;*.webp;*.tif;*.tiff;*.bmp</en>
+  </m>
+  <m id="M0319">
+    <ko>사진 폴더를 선택해 주세요.</ko>
+    <en>Select a photo folder.</en>
+  </m>
+  <m id="M0320">
+    <ko>배경을 지울 사진을 선택해 주세요.</ko>
+    <en>Select the photos to remove backgrounds from.</en>
+  </m>
+  <m id="M0321">
+    <ko>폴더는 하나만 선택해 주세요.</ko>
+    <en>Select only one folder.</en>
+  </m>
+  <m id="M0322">
+    <ko>대상을 확인하는 중입니다</ko>
+    <en>Checking the target</en>
+  </m>
+  <m id="M0323">
+    <ko>사진이나 폴더를 고른 뒤 확인을 눌러 주세요</ko>
+    <en>Select photos or a folder, then press Confirm</en>
+  </m>
+  <m id="M0324">
+    <ko>사진 </ko>
+    <en></en>
+  </m>
+  <m id="M0325">
+    <ko>장</ko>
+    <en> photos</en>
+  </m>
+  <m id="M0326">
+    <ko> (하위 폴더 포함)</ko>
+    <en> (including subfolders)</en>
+  </m>
+  <m id="M0327">
+    <ko> · 이미 결과가 있는 </ko>
+    <en> · Photos with existing results: </en>
+  </m>
+  <m id="M0328">
+    <ko>장은 새 이름으로 저장</ko>
+    <en> will be saved with new names</en>
+  </m>
+  <m id="M0329">
+    <ko> · 결과/연결 폴더 </ko>
+    <en> · Result/linked folders: </en>
+  </m>
+  <m id="M0330">
+    <ko>개 제외</ko>
+    <en> folders excluded</en>
+  </m>
+  <m id="M0331">
+    <ko>저장 위치: </ko>
+    <en>Save location: </en>
+  </m>
+  <m id="M0332">
+    <ko>준비되었습니다. 배경 제거 시작을 눌러 주세요</ko>
+    <en>Ready. Press Start Background Removal</en>
+  </m>
+  <m id="M0333">
+    <ko>처리할 사진 </ko>
+    <en>Photos to process: </en>
+  </m>
+  <m id="M0334">
+    <ko>시작하지 못했습니다</ko>
+    <en>Could not start</en>
+  </m>
+  <m id="M0335">
+    <ko>배경을 지우는 중입니다</ko>
+    <en>Removing backgrounds</en>
+  </m>
+  <m id="M0336">
+    <ko>현재 사진 저장을 마친 뒤 중지합니다.</ko>
+    <en>Stopping after the current photo is saved.</en>
+  </m>
+  <m id="M0337">
+    <ko>완료되었습니다: </ko>
+    <en>Done: </en>
+  </m>
+  <m id="M0338">
+    <ko>장 저장, </ko>
+    <en> photos saved, </en>
+  </m>
+  <m id="M0339">
+    <ko>장 실패</ko>
+    <en> photos failed</en>
+  </m>
+  <m id="M0340">
+    <ko>장 저장</ko>
+    <en> photos saved</en>
+  </m>
+  <m id="M0341">
+    <ko>중지했습니다: </ko>
+    <en>Stopped: </en>
+  </m>
+  <m id="M0342">
+    <ko>처리하지 못했습니다</ko>
+    <en>Could not process</en>
+  </m>
+  <m id="M0343">
+    <ko> · 다시 처리하려면 확인을 눌러 주세요.</ko>
+    <en> · To process again, press Confirm.</en>
+  </m>
+  <m id="M0344">
+    <ko>맞춤</ko>
+    <en>Fit</en>
+  </m>
+  <m id="M0345">
+    <ko>배경 제거가 진행 중입니다.
+
+중지하고 닫을까요? (이미 저장된 결과는 유지됩니다)
+
+아니요를 누르면 계속 처리하며 창을 닫지 않습니다.</ko>
+    <en>Background removal is in progress.
+
+Stop and close? (Results already saved are kept.)
+
+Press No to keep processing and leave the window open.</en>
+  </m>
+  <m id="M0346">
+    <ko>이미지보정 — </ko>
+    <en>Image Adjustment — </en>
+  </m>
+  <m id="M0347">
+    <ko>사진을 불러오는 중…</ko>
+    <en>Loading photo…</en>
+  </m>
+  <m id="M0348">
+    <ko>현재 사진을 저장한 뒤 중지하는 중…</ko>
+    <en>Stopping after saving the current photo…</en>
+  </m>
+  <m id="M0349">
+    <ko>노출</ko>
+    <en>Exposure</en>
+  </m>
+  <m id="M0350">
+    <ko>선형광 기준 노출 보정입니다. +1EV는 빛의 양이 2배입니다.</ko>
+    <en>Exposure correction in linear light. +1 EV doubles the amount of light.</en>
+  </m>
+  <m id="M0351">
+    <ko>명도</ko>
+    <en>Brightness</en>
+  </m>
+  <m id="M0352">
+    <ko>검정과 흰색은 유지하고 중간톤 밝기를 조절합니다.</ko>
+    <en>Adjusts midtone brightness while keeping black and white unchanged.</en>
+  </m>
+  <m id="M0353">
+    <ko>대비</ko>
+    <en>Contrast</en>
+  </m>
+  <m id="M0354">
+    <ko>중간 회색을 기준으로 밝은 곳과 어두운 곳의 차이를 조절합니다.</ko>
+    <en>Adjusts the difference between light and dark areas around mid-gray.</en>
+  </m>
+  <m id="M0355">
+    <ko>채도</ko>
+    <en>Saturation</en>
+  </m>
+  <m id="M0356">
+    <ko>휘도(Rec.709)는 유지하고 색의 진하기를 조절합니다. −100은 흑백입니다.</ko>
+    <en>Adjusts color intensity while keeping luminance (Rec.709). −100 is black and white.</en>
+  </m>
+  <m id="M0357">
+    <ko>색온도</ko>
+    <en>Temperature</en>
+  </m>
+  <m id="M0358">
+    <ko>− 차갑게(파랑) · + 따뜻하게(주황). 밝기는 유지합니다.</ko>
+    <en>− Cooler (blue) · + Warmer (orange). Brightness is kept.</en>
+  </m>
+  <m id="M0359">
+    <ko>색조</ko>
+    <en>Tint</en>
+  </m>
+  <m id="M0360">
+    <ko>− 녹색 · + 마젠타. 형광등 등으로 틀어진 색을 보정합니다.</ko>
+    <en>− Green · + Magenta. Corrects color casts from fluorescent lights and similar.</en>
+  </m>
+  <m id="M0361">
+    <ko>검정점</ko>
+    <en>Black point</en>
+  </m>
+  <m id="M0362">
+    <ko>이 값 이하는 검정이 됩니다.</ko>
+    <en>Values at or below this become black.</en>
+  </m>
+  <m id="M0363">
+    <ko>감마</ko>
+    <en>Gamma</en>
+  </m>
+  <m id="M0364">
+    <ko>중간톤을 밝게(&gt;1) 또는 어둡게(&lt;1) 합니다.</ko>
+    <en>Makes midtones brighter (&gt;1) or darker (&lt;1).</en>
+  </m>
+  <m id="M0365">
+    <ko>흰점</ko>
+    <en>White point</en>
+  </m>
+  <m id="M0366">
+    <ko>이 값 이상은 최대 밝기가 됩니다.</ko>
+    <en>Values at or above this become maximum brightness.</en>
+  </m>
+  <m id="M0367">
+    <ko>
+두 번 누르면 기본값으로 되돌립니다.</ko>
+    <en>
+Double-click to reset to the default.</en>
+  </m>
+  <m id="M0368">
+    <ko>숫자를 입력하고 Enter 키를 누르세요.</ko>
+    <en>Type a number and press Enter.</en>
+  </m>
+  <m id="M0369">
+    <ko>변경 없음</ko>
+    <en>No changes</en>
+  </m>
+  <m id="M0370">
+    <ko>ICC 없음(sRGB로 간주)</ko>
+    <en>No ICC profile (treated as sRGB)</en>
+  </m>
+  <m id="M0371">
+    <ko>16비트 원본입니다. 이 엔진(Q8)은 8비트 정밀도로 처리해 저장하며, 원본은 그대로 둡니다.</ko>
+    <en>This is a 16-bit original. This engine (Q8) processes and saves at 8-bit precision. The original is left unchanged.</en>
+  </m>
+  <m id="M0372">
+    <ko>원본 크기 미리보기</ko>
+    <en>Full-size preview</en>
+  </m>
+  <m id="M0373">
+    <ko>미리보기 </ko>
+    <en>Preview </en>
+  </m>
+  <m id="M0374">
+    <ko>사진을 열 수 없습니다.
+</ko>
+    <en>Cannot open the photo.
+</en>
+  </m>
+  <m id="M0375">
+    <ko>미리보기 오류: </ko>
+    <en>Preview error: </en>
+  </m>
+  <m id="M0376">
+    <ko>보정 후</ko>
+    <en>Adjusted</en>
+  </m>
+  <m id="M0377">
+    <ko>원본</ko>
+    <en>Original</en>
+  </m>
+  <m id="M0378">
+    <ko>그림자 </ko>
+    <en>Shadows </en>
+  </m>
+  <m id="M0379">
+    <ko>% · 하이라이트 </ko>
+    <en>% · Highlights </en>
+  </m>
+  <m id="M0380">
+    <ko>저장 위치를 정할 수 없습니다: </ko>
+    <en>Cannot set the save location: </en>
+  </m>
+  <m id="M0381">
+    <ko>보정본 저장</ko>
+    <en>Save Adjusted Photo</en>
+  </m>
+  <m id="M0382">
+    <ko>원본과 같은 형식 (*</ko>
+    <en>Same format as original (*</en>
+  </m>
+  <m id="M0383">
+    <ko>원본과 다른 이름을 지정해 주세요. 원본은 덮어쓰지 않습니다.</ko>
+    <en>Enter a name different from the original. The original is never overwritten.</en>
+  </m>
+  <m id="M0384">
+    <ko>저장하는 중… (원본 해상도)</ko>
+    <en>Saving… (original resolution)</en>
+  </m>
+  <m id="M0385">
+    <ko> · 세션에 추가됨</ko>
+    <en> · Added to session</en>
+  </m>
+  <m id="M0386">
+    <ko> · 파일은 저장했지만 세션 목록을 갱신하지 못했습니다</ko>
+    <en> · File saved, but the session list could not be updated</en>
+  </m>
+  <m id="M0387">
+    <ko>저장했습니다: </ko>
+    <en>Saved: </en>
+  </m>
+  <m id="M0388">
+    <ko>저장하지 못했습니다. 원본은 그대로입니다.
+</ko>
+    <en>Could not save. The original is unchanged.
+</en>
+  </m>
+  <m id="M0389">
+    <ko>템플릿 파일을 읽을 수 없어 따로 보관했습니다: </ko>
+    <en>The template file could not be read and was set aside: </en>
+  </m>
+  <m id="M0390">
+    <ko>템플릿을 불러오지 못했습니다: </ko>
+    <en>Could not load the template: </en>
+  </m>
+  <m id="M0391">
+    <ko>템플릿을 누르면 이 사진에 바로 적용됩니다.</ko>
+    <en>Click a template to apply it to this photo right away.</en>
+  </m>
+  <m id="M0392">
+    <ko>적용됨: </ko>
+    <en>Applied: </en>
+  </m>
+  <m id="M0393">
+    <ko> · 이후 값이 바뀌었습니다 (덮어쓰기로 저장할 수 있습니다)</ko>
+    <en> · Values changed since then (you can save with Overwrite)</en>
+  </m>
+  <m id="M0394">
+    <ko>템플릿 '</ko>
+    <en>Template '</en>
+  </m>
+  <m id="M0395">
+    <ko>' 적용 · 저장하려면 '새 파일로 저장'을 누르세요.</ko>
+    <en>' applied · To save, click 'Save as new file'.</en>
+  </m>
+  <m id="M0396">
+    <ko>템플릿 </ko>
+    <en>Template </en>
+  </m>
+  <m id="M0397">
+    <ko>이름 변경</ko>
+    <en>Rename</en>
+  </m>
+  <m id="M0398">
+    <ko>저장</ko>
+    <en>Save</en>
+  </m>
+  <m id="M0399">
+    <ko>템플릿 이름을 바꿨습니다: </ko>
+    <en>Template renamed: </en>
+  </m>
+  <m id="M0400">
+    <ko>템플릿을 저장했습니다: </ko>
+    <en>Template saved: </en>
+  </m>
+  <m id="M0401">
+    <ko>'을(를) 현재 보정값으로 덮어쓸까요?
+
+</ko>
+    <en>' will be overwritten with the current adjustments. Continue?
+
+</en>
+  </m>
+  <m id="M0402">
+    <ko>템플릿 덮어쓰기</ko>
+    <en>Overwrite Template</en>
+  </m>
+  <m id="M0403">
+    <ko>템플릿을 덮어썼습니다: </ko>
+    <en>Template overwritten: </en>
+  </m>
+  <m id="M0404">
+    <ko>'을(를) 삭제할까요?
+사진의 현재 보정값은 그대로 둡니다.</ko>
+    <en>' will be deleted. Continue?
+The photo's current adjustments are kept.</en>
+  </m>
+  <m id="M0405">
+    <ko>템플릿 삭제</ko>
+    <en>Delete Template</en>
+  </m>
+  <m id="M0406">
+    <ko>템플릿을 삭제했습니다: </ko>
+    <en>Template deleted: </en>
+  </m>
+  <m id="M0407">
+    <ko>일괄 적용할 템플릿을 먼저 선택해 주세요.</ko>
+    <en>Select a template to batch apply first.</en>
+  </m>
+  <m id="M0408">
+    <ko>'을(를) 적용할 사진 폴더를 선택해 주세요. (하위 폴더는 제외, 결과는 폴더\_cc\에 저장)</ko>
+    <en>' — choose the photo folder to apply it to. (Subfolders excluded; results are saved in folder\_cc\)</en>
+  </m>
+  <m id="M0409">
+    <ko>이 폴더에는 보정할 사진(JPEG·PNG·TIFF·BMP)이 없습니다: </ko>
+    <en>This folder has no photos to adjust (JPEG, PNG, TIFF, BMP): </en>
+  </m>
+  <m id="M0410">
+    <ko>'을(를) </ko>
+    <en>' will be applied to </en>
+  </m>
+  <m id="M0411">
+    <ko>장에 적용합니다.
+
+</ko>
+    <en> photos.
+
+</en>
+  </m>
+  <m id="M0412">
+    <ko>
+
+폴더: </ko>
+    <en>
+
+Folder: </en>
+  </m>
+  <m id="M0413">
+    <ko>
+저장: </ko>
+    <en>
+Save to: </en>
+  </m>
+  <m id="M0414">
+    <ko>
+원본은 바꾸지 않습니다.</ko>
+    <en>
+Originals are not changed.</en>
+  </m>
+  <m id="M0415">
+    <ko>일괄 적용</ko>
+    <en>Batch Apply</en>
+  </m>
+  <m id="M0416">
+    <ko>일괄 적용하는 중… 템플릿 '</ko>
+    <en>Batch applying… Template '</en>
+  </m>
+  <m id="M0417">
+    <ko>일괄 적용 </ko>
+    <en>Batch apply </en>
+  </m>
+  <m id="M0418">
+    <ko>중지</ko>
+    <en>Stop</en>
+  </m>
+  <m id="M0419">
+    <ko>완료</ko>
+    <en>completed</en>
+  </m>
+  <m id="M0420">
+    <ko>일괄 적용 실패: </ko>
+    <en>Batch apply failed: </en>
+  </m>
+  <m id="M0421">
+    <ko>
+
+실패:
+</ko>
+    <en>
+
+Failed:
+</en>
+  </m>
+  <m id="M0422">
+    <ko>
+
+결과 폴더를 열까요?</ko>
+    <en>
+
+Open the result folder?</en>
+  </m>
+  <m id="M0423">
+    <ko>라이선스 정보를 읽을 수 없습니다.</ko>
+    <en>Cannot read the license information.</en>
+  </m>
+  <m id="M0424">
+    <ko>사용 중 · 이 PC용 키 파일 확인됨</ko>
+    <en>In use · Key file for this PC verified</en>
+  </m>
+  <m id="M0425">
+    <ko>키 파일 없음</ko>
+    <en>No key file</en>
+  </m>
+  <m id="M0426">
+    <ko>D:\ 드라이브에 이 PC용 키 파일이 없습니다.</ko>
+    <en>No key file for this PC was found on drive D:\.</en>
+  </m>
+  <m id="M0427">
+    <ko>변경 내역 파일이 없습니다.
+</ko>
+    <en></en>
+  </m>
+  <m id="M0428">
+    <ko>변경 내역</ko>
+    <en></en>
+  </m>
+  <m id="M0429">
+    <ko>파일을 열 수 없습니다: </ko>
+    <en></en>
+  </m>
+  <m id="M0430">
+    <ko>비어 있음</ko>
+    <en>Empty</en>
+  </m>
+  <m id="M0431">
+    <ko>선택됨 · 저장값과 같음</ko>
+    <en>Selected · Same as saved</en>
+  </m>
+  <m id="M0432">
+    <ko>선택됨 · 바뀐 값 있음</ko>
+    <en>Selected · Has changes</en>
+  </m>
+  <m id="M0433">
+    <ko>저장됨</ko>
+    <en>Saved</en>
+  </m>
+  <m id="M0434">
+    <ko>설정 </ko>
+    <en>Preset </en>
+  </m>
+  <m id="M0435">
+    <ko>로 바꿨습니다 (</ko>
+    <en> loaded (</en>
+  </m>
+  <m id="M0436">
+    <ko>개 항목). 확정하려면 저장을 눌러 주세요.</ko>
+    <en> items). Click Save to confirm.</en>
+  </m>
+  <m id="M0437">
+    <ko>은 비어 있습니다. 아래 '</ko>
+    <en> is empty. Use the '</en>
+  </m>
+  <m id="M0438">
+    <ko> 저장하기'로 지금 설정을 저장해 주세요.</ko>
+    <en> Save' button below to save the current settings.</en>
+  </m>
+  <m id="M0439">
+    <ko>현재 설정을 설정 </ko>
+    <en>Saved the current settings to preset </en>
+  </m>
+  <m id="M0440">
+    <ko>에 저장했습니다.</ko>
+    <en>.</en>
+  </m>
+  <m id="M0441">
+    <ko> 저장에 실패했습니다: </ko>
+    <en> could not be saved: </en>
+  </m>
+  <m id="M0442">
+    <ko>' 검색 결과</ko>
+    <en>' search results</en>
+  </m>
+  <m id="M0443">
+    <ko>'와 일치하는 설정이 없습니다.</ko>
+    <en>' matches no settings.</en>
+  </m>
+  <m id="M0447">
+    <ko>저장한 보정 템플릿이 아직 없습니다.
+
+</ko>
+    <en>No adjustment templates have been saved yet.
+
+</en>
+  </m>
+  <m id="M0448">
+    <ko>폴더를 열지 못했습니다.
+
+</ko>
+    <en>Could not open the folder.
+
+</en>
+  </m>
+  <m id="M0449">
+    <ko>원본 백업 폴더를 선택해 주세요.</ko>
+    <en>Select the original backup folder.</en>
+  </m>
+  <m id="M0450">
+    <ko>촬영 이미지를 저장할 폴더를 만들어 주세요.</ko>
+    <en>Create a folder to save captured images.</en>
+  </m>
+  <m id="M0451">
+    <ko>폴더 이름을 바꾸고 Enter 키를 눌러 주세요.</ko>
+    <en>Rename the folder and press Enter.</en>
+  </m>
+  <m id="M0452">
+    <ko>모든 작업 데이터를 삭제하고 프로그램을 다시 시작합니다. 계속할까요?</ko>
+    <en>All work data will be deleted and the program will restart. Continue?</en>
+  </m>
+  <m id="M0453">
+    <ko>모든 작업 데이터를 삭제하지는 못했습니다.
+</ko>
+    <en>Could not delete all work data.
+</en>
+  </m>
+  <m id="M0455">
+    <ko>작업 통계 데이터 파일(csv)을 저장할 폴더를 만들어 주세요.</ko>
+    <en>Create a folder to save the work statistics data file (csv).</en>
+  </m>
+  <m id="M0456">
+    <ko>모든 카메라의 날짜와 시간을 맞췄습니다.
+
+모든 카메라 전원을 껐다가 다시 켜 주세요.</ko>
+    <en>Date and time were synced on all cameras.
+
+Turn all cameras off and on again.</en>
+  </m>
+  <m id="M0457">
+    <ko>자동 초점 찾기</ko>
+    <en>Find focus automatically</en>
+  </m>
+  <m id="M0460">
+    <ko>가까운 곳</ko>
+    <en>Near</en>
+  </m>
+  <m id="M0461">
+    <ko>지금 초점을 가까운 곳(A)으로 저장합니다.</ko>
+    <en>Saves the current focus as the near point (A).</en>
+  </m>
+  <m id="M0462">
+    <ko>먼 곳</ko>
+    <en>Far</en>
+  </m>
+  <m id="M0463">
+    <ko>지금 초점을 먼 곳(B)으로 저장합니다.</ko>
+    <en>Saves the current focus as the far point (B).</en>
+  </m>
+  <m id="M0464">
+    <ko>박스에 초점 맞추기</ko>
+    <en></en>
+  </m>
+  <m id="M0465">
+    <ko>라이브뷰에서 고른 박스에 초점을 자동으로 맞춥니다. 맞춘 뒤 ‘가까운 곳’ 또는 ‘먼 곳’을 누르면 그 위치를 저장합니다.</ko>
+    <en></en>
+  </m>
+  <m id="M0466">
+    <ko>촬영</ko>
+    <en>Shoot</en>
+  </m>
+  <m id="M0467">
+    <ko>현재 초점에서 가까운 끝점부터 반대쪽 끝점까지 촬영하고 합성합니다.</ko>
+    <en>Shoots from the nearer end point to the opposite one, starting at the current focus, then stacks the shots.</en>
+  </m>
+  <m id="M0468">
+    <ko>초점 탐색·촬영·합성을 중지합니다. 원본은 보존됩니다.</ko>
+    <en>Stops focus search, shooting and stacking. Originals are kept.</en>
+  </m>
+  <m id="M0469">
+    <ko>결과보기</ko>
+    <en></en>
+  </m>
+  <m id="M0470">
+    <ko>완료된 합성 이미지를 엽니다.</ko>
+    <en>Opens the finished stacked image.</en>
+  </m>
+  <m id="M0471">
+    <ko>수퍼포커스 중에는 화살표로 초점을 옮겨 주세요.</ko>
+    <en>During Superfocus, move focus with the arrow keys.</en>
+  </m>
+  <m id="M0472">
+    <ko>안내를 닫습니다.</ko>
+    <en>Closes this notice.</en>
+  </m>
+  <m id="M0473">
+    <ko>① 초점 범위</ko>
+    <en>① Focus range</en>
+  </m>
+  <m id="M0474">
+    <ko>화살표로 초점을 옮기고 ‘가까운 곳’, ‘먼 곳’을 눌러 저장해 주세요. 박스를 옮겨도 렌즈는 움직이지 않습니다.</ko>
+    <en>Move focus with the arrows, then click ‘Near’ and ‘Far’ to save. Moving the box does not move the lens.</en>
+  </m>
+  <m id="M0475">
+    <ko>켜면 라이브뷰에서 고른 박스에 렌즈가 초점을 찾아 가까운 곳/먼 곳으로 저장합니다(AF/MF 스위치 없는 렌즈, 카메라는 AF). 끄면 화살표로 맞춘 위치를 그대로 저장합니다(렌즈 MF).</ko>
+    <en>On: the lens finds focus on the box you pick and saves it as Near/Far (lenses without an AF/MF switch, camera in AF). Off: saves where the arrows left the focus (lens in MF).</en>
+  </m>
+  <m id="M0476">
+    <ko>② 품질</ko>
+    <en>② Quality</en>
+  </m>
+  <m id="M0477">
+    <ko>고 · 중 · 저를 고르거나 컷수를 직접 입력해 주세요.</ko>
+    <en>Choose High, Medium or Low, or enter the number of shots.</en>
+  </m>
+  <m id="M0478">
+    <ko>품질</ko>
+    <en>Quality</en>
+  </m>
+  <m id="M0479">
+    <ko>합성 품질을 선택합니다.</ko>
+    <en>Selects the stacking quality.</en>
+  </m>
+  <m id="M0480">
+    <ko>컷수</ko>
+    <en>Shots</en>
+  </m>
+  <m id="M0481">
+    <ko>촬영할 컷수(2–200)를 직접 입력합니다. 비우거나 품질 버튼을 누르면 자동 계산합니다. A/B 양 끝을 포함해 균등하게 나눕니다.</ko>
+    <en>Enter the number of shots (2–200). Leave it empty or click a quality button to calculate automatically. Shots are spaced evenly, including both A/B ends.</en>
+  </m>
+  <m id="M0482">
+    <ko>③ 촬영</ko>
+    <en>③ Shoot</en>
+  </m>
+  <m id="M0483">
+    <ko>가까운 끝점부터 반대쪽 끝점까지 촬영하고 한 장으로 합성합니다.</ko>
+    <en>Shoots from the nearer end point to the opposite one and stacks them into one image.</en>
+  </m>
+  <m id="M0484">
+    <ko>초기화</ko>
+    <en></en>
+  </m>
+  <m id="M0485">
+    <ko>가까운 곳·먼 곳을 지웁니다. 렌즈 링·줌·카메라·렌즈를 바꾼 뒤에는 다시 저장해 주세요.</ko>
+    <en>Clears the near and far points. Save them again after changing the lens ring, zoom, camera or lens.</en>
+  </m>
+  <m id="M0486">
+    <ko>안정화 (ms)</ko>
+    <en>Settle time (ms)</en>
+  </m>
+  <m id="M0487">
+    <ko>초점 이동 뒤 기다릴 시간입니다. 100–10000 ms. 현재 끝점에서 바로 시작할 때는 추가로 기다리지 않습니다.</ko>
+    <en>Time to wait after focus moves (100–10000 ms). No extra wait when starting right at the current end point.</en>
+  </m>
+  <m id="M0489">
+    <ko>엔진</ko>
+    <en>Engine</en>
+  </m>
+  <m id="M0491">
+    <ko>중지하는 중</ko>
+    <en>Stopping</en>
+  </m>
+  <m id="M0492">
+    <ko>가까이 </ko>
+    <en>Near </en>
+  </m>
+  <m id="M0493">
+    <ko>멀리 </ko>
+    <en>Far </en>
+  </m>
+  <m id="M0494">
+    <ko> 파일 경로</ko>
+    <en> file path</en>
+  </m>
+  <m id="M0495">
+    <ko> 파일 선택</ko>
+    <en> file: browse</en>
+  </m>
+  <m id="M0496">
+    <ko>연결이 끊겼습니다</ko>
+    <en>Disconnected</en>
+  </m>
+  <m id="M0497">
+    <ko> 저장</ko>
+    <en> saved</en>
+  </m>
+  <m id="M0498">
+    <ko>컷수는 2부터 200까지 입력해 주세요.</ko>
+    <en></en>
+  </m>
+  <m id="M0499">
+    <ko>박스에 초점 맞추는 중</ko>
+    <en></en>
+  </m>
+  <m id="M0500">
+    <ko>초점 맞춤 · ‘가까운 곳’ 또는 ‘먼 곳’을 눌러 저장하세요</ko>
+    <en></en>
+  </m>
+  <m id="M0501">
+    <ko>중지됨</ko>
+    <en>Stopped</en>
+  </m>
+  <m id="M0502">
+    <ko>가까운 곳과 먼 곳을 모두 저장해 주세요.</ko>
+    <en></en>
+  </m>
+  <m id="M0503">
+    <ko>안정화 시간을 100–10000 ms로 입력해 주세요.</ko>
+    <en>Enter a settle time of 100–10000 ms.</en>
+  </m>
+  <m id="M0504">
+    <ko>아래 설정에서 Python 파일을 선택해 주세요.</ko>
+    <en></en>
+  </m>
+  <m id="M0505">
+    <ko>아래 설정에서 합성 엔진을 선택해 주세요.</ko>
+    <en></en>
+  </m>
+  <m id="M0506">
+    <ko>초점 맞추고 촬영 </ko>
+    <en></en>
+  </m>
+  <m id="M0507">
+    <ko>사진을 받지 못했습니다(</ko>
+    <en></en>
+  </m>
+  <m id="M0508">
+    <ko>컷).</ko>
+    <en></en>
+  </m>
+  <m id="M0509">
+    <ko>합성하는 중</ko>
+    <en>Stacking</en>
+  </m>
+  <m id="M0510">
+    <ko>완료 · </ko>
+    <en>Done · </en>
+  </m>
+  <m id="M0511">
+    <ko>컷 · 촬영 </ko>
+    <en></en>
+  </m>
+  <m id="M0512">
+    <ko>초
+</ko>
+    <en></en>
+  </m>
+  <m id="M0513">
+    <ko>
+원본: </ko>
+    <en>
+Originals: </en>
+  </m>
+  <m id="M0514">
+    <ko>라이브뷰 화면을 읽지 못했습니다.</ko>
+    <en>Could not read the live view.</en>
+  </m>
+  <m id="M0515">
+    <ko>가까운 곳을 저장했습니다</ko>
+    <en>Near point saved</en>
+  </m>
+  <m id="M0516">
+    <ko>먼 곳을 저장했습니다</ko>
+    <en>Far point saved</en>
+  </m>
+  <m id="M0517">
+    <ko>가까운 곳 </ko>
+    <en>Near </en>
+  </m>
+  <m id="M0518">
+    <ko> · 먼 곳 </ko>
+    <en> · Far </en>
+  </m>
+  <m id="M0519">
+    <ko>직접</ko>
+    <en>Custom</en>
+  </m>
+  <m id="M0520">
+    <ko>가까운 곳 → 먼 곳</ko>
+    <en>Near → Far</en>
+  </m>
+  <m id="M0521">
+    <ko>먼 곳 → 가까운 곳</ko>
+    <en>Far → Near</en>
+  </m>
+  <m id="M0522">
+    <ko>현재 초점에서 가까운 끝점부터 촬영하고 합성합니다.
+</ko>
+    <en>Shoots from the nearer end point at the current focus, then stacks.
+</en>
+  </m>
+  <m id="M0523">
+    <ko>지금 초점을 가까운 곳(A)으로 저장합니다. 먼 곳을 먼저 저장해도 됩니다.
+</ko>
+    <en>Saves the current focus as the near point (A). You can save the far point first.
+</en>
+  </m>
+  <m id="M0524">
+    <ko>지금 초점을 먼 곳(B)으로 저장합니다.
+</ko>
+    <en>Saves the current focus as the far point (B).
+</en>
+  </m>
+  <m id="M0525">
+    <ko>2부터 </ko>
+    <en>From 2 to</en>
+  </m>
+  <m id="M0526">
+    <ko>컷까지 직접 입력할 수 있습니다. 지우고 다시 입력하면 품질 대신 그 컷수로 찍습니다. 품질을 누르면 그 품질의 컷수로 돌아갑니다.
+</ko>
+    <en></en>
+  </m>
+  <m id="M0527">
+    <ko> · 예전 컷수(3단계마다 한 장)의 3/5</ko>
+    <en> · 3/5 of the former count (one shot every 3 steps)</en>
+  </m>
+  <m id="M0528">
+    <ko> · 고 컷수의 약 2/3</ko>
+    <en> · about 2/3 of High</en>
+  </m>
+  <m id="M0529">
+    <ko> · 고 컷수의 약 1/3</ko>
+    <en> · about 1/3 of High</en>
+  </m>
+  <m id="M0530">
+    <ko>가까운 곳 ✓</ko>
+    <en>Near ✓</en>
+  </m>
+  <m id="M0531">
+    <ko>먼 곳 ✓</ko>
+    <en>Far ✓</en>
+  </m>
+  <m id="M0532">
+    <ko>합성 결과 열기
+</ko>
+    <en>Open stacked result
+</en>
+  </m>
+  <m id="M0533">
+    <ko>수동 초점으로 전환하는 중</ko>
+    <en>Switching to manual focus</en>
+  </m>
+  <m id="M0534">
+    <ko>컷
+</ko>
+    <en> shots
+</en>
+  </m>
+  <m id="M0535">
+    <ko>중지됨
+원본: </ko>
+    <en>Stopped
+Originals: </en>
+  </m>
+  <m id="M0536">
+    <ko>카메라가 연결되지 않았습니다. 확인해 주세요.</ko>
+    <en>No camera is connected. Please check.</en>
+  </m>
+  <m id="M0537">
+    <ko>먼저 Live 화면을 실행해 주세요.</ko>
+    <en>Start the Live view first.</en>
+  </m>
+</messages>

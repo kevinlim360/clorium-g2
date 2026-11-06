@@ -93,7 +93,7 @@ internal static class CloriumBackgroundRemoval
 			catch (Exception ex)
 			{
 				Log.Error("BackgroundRemoval : unable to show the window", ex);
-				ShowError("배경제거 화면을 열지 못했습니다.\n\n" + ex.Message);
+				ShowError(global::CameraControl.Devices.UiText.T("M0105", "배경제거 화면을 열지 못했습니다.\n\n") + ex.Message);
 				return null;
 			}
 		});
@@ -153,10 +153,10 @@ internal static class CloriumBackgroundRemoval
 				}
 				catch (JsonException)
 				{
-					throw new ApiException("배경제거 엔진의 응답을 읽지 못했습니다. (HTTP " + status + ")");
+					throw new ApiException(global::CameraControl.Devices.UiText.T("M0106", "배경제거 엔진의 응답을 읽지 못했습니다. (HTTP ") + status + ")");
 				}
 				if (status >= 200 && status < 300) return json;
-				throw new ApiException(json.ValueKind == JsonValueKind.Object && json.TryGetProperty("error", out JsonElement error) && error.ValueKind == JsonValueKind.String ? error.GetString() : "배경제거 엔진 오류 (HTTP " + status + ")");
+				throw new ApiException(json.ValueKind == JsonValueKind.Object && json.TryGetProperty("error", out JsonElement error) && error.ValueKind == JsonValueKind.String ? error.GetString() : global::CameraControl.Devices.UiText.T("M0107", "배경제거 엔진 오류 (HTTP ") + status + ")");
 			}
 		}
 	}
@@ -167,7 +167,7 @@ internal static class CloriumBackgroundRemoval
 		using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, StudioUrl + "/"))
 		{
 			Match match = Regex.Match(Send(request).Text, "const token='([^']+)'");
-			if (!match.Success) throw new ApiException("배경제거 엔진의 응답을 확인하지 못했습니다.");
+			if (!match.Success) throw new ApiException(global::CameraControl.Devices.UiText.T("M0108", "배경제거 엔진의 응답을 확인하지 못했습니다."));
 			return _token = match.Groups[1].Value;
 		}
 	}
@@ -183,7 +183,7 @@ internal static class CloriumBackgroundRemoval
 		}
 		catch (Exception ex) when (ex is AggregateException || ex is HttpRequestException || ex is TaskCanceledException || ex is InvalidOperationException)
 		{
-			throw new ApiException("배경제거 엔진에 연결하지 못했습니다. 엔진이 종료됐다면 G2의 배경제거 버튼을 다시 눌러 주세요.");
+			throw new ApiException(global::CameraControl.Devices.UiText.T("M0109", "배경제거 엔진에 연결하지 못했습니다. 엔진이 종료되었다면 G2의 배경제거 버튼을 다시 눌러 주세요."));
 		}
 	}
 
@@ -248,14 +248,14 @@ internal static class CloriumBackgroundRemoval
 			if (probe == false)
 			{
 				Log.Error("BackgroundRemoval : port 8765 used by another program");
-				ShowError("다른 프로그램이 배경제거 주소(" + StudioUrl + ")를 사용하고 있어 시작할 수 없습니다.\n\n그 프로그램을 닫은 뒤 다시 눌러 주세요.");
+				ShowError(global::CameraControl.Devices.UiText.T("M0110", "다른 프로그램이 배경제거 주소(") + StudioUrl + global::CameraControl.Devices.UiText.T("M0111", ")를 사용 중이라 시작할 수 없습니다.\n\n그 프로그램을 닫은 후 다시 눌러 주세요."));
 				return false;
 			}
 			string script = ScriptPath;
 			if (!File.Exists(script))
 			{
 				Log.Error("BackgroundRemoval : script not found " + script);
-				ShowError("클로리움 배경제거(Matting Studio) 실행 스크립트를 찾을 수 없습니다.\n\n" + script + "\n\n클로리움 설정 > 배경제거에서 Start.ps1 경로를 확인해 주세요.");
+				ShowError(global::CameraControl.Devices.UiText.T("M0112", "클로리움 배경제거(Matting Studio) 실행 스크립트를 찾을 수 없습니다.\n\n") + script + global::CameraControl.Devices.UiText.T("M0113", "\n\n클로리움 설정 > 배경제거에서 Start.ps1 경로를 확인해 주세요."));
 				return false;
 			}
 			// No redirected pipes: the server Start.ps1 launches would inherit them and keep them open. The failure
@@ -276,14 +276,14 @@ internal static class CloriumBackgroundRemoval
 					if (!process.WaitForExit(60000))
 					{
 						Log.Error("BackgroundRemoval : Start.ps1 did not finish");
-						ShowError("클로리움 배경제거가 60초 안에 시작되지 않았습니다.");
+						ShowError(global::CameraControl.Devices.UiText.T("M0114", "클로리움 배경제거가 60초 안에 시작되지 않았습니다."));
 						return false;
 					}
 					if (process.ExitCode != 0 || !IsRunning())
 					{
 						string reason = (File.Exists(reasonFile) ? FirstLine(File.ReadAllText(reasonFile)) : null) ?? ("exit " + process.ExitCode);
 						Log.Error("BackgroundRemoval : start failed - " + reason);
-						ShowError("클로리움 배경제거를 시작하지 못했습니다.\n\n" + reason);
+						ShowError(global::CameraControl.Devices.UiText.T("M0115", "클로리움 배경제거를 시작하지 못했습니다.\n\n") + reason);
 						return false;
 					}
 				}
@@ -298,7 +298,7 @@ internal static class CloriumBackgroundRemoval
 		catch (Exception ex)
 		{
 			Log.Error("BackgroundRemoval : unable to start", ex);
-			ShowError("클로리움 배경제거를 시작하지 못했습니다.\n\n" + ex.Message);
+			ShowError(global::CameraControl.Devices.UiText.T("M0115", "클로리움 배경제거를 시작하지 못했습니다.\n\n") + ex.Message);
 			return false;
 		}
 		finally
@@ -319,7 +319,7 @@ internal static class CloriumBackgroundRemoval
 
 	private static void ShowError(string message)
 	{
-		Action show = () => global::CameraControl.Core.Classes.G2Dialog.Show(message, "배경제거", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+		Action show = () => global::CameraControl.Core.Classes.G2Dialog.Show(message, global::CameraControl.Devices.UiText.T("M0116", "배경제거"), MessageBoxButton.OK, MessageBoxImage.Exclamation);
 		var dispatcher = Application.Current?.Dispatcher;
 		if (dispatcher != null && !dispatcher.CheckAccess()) dispatcher.Invoke(show);
 		else show();

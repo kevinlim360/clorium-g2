@@ -251,7 +251,7 @@ public partial class SettingsWnd
 			}
 			if (state != null)
 			{
-				state.Text = !has ? "비어 있음" : (selected ? (G2Same(map) ? "선택됨 · 저장값과 같음" : "선택됨 · 바뀐 값 있음") : "저장됨");
+				state.Text = !has ? global::CameraControl.Devices.UiText.T("M0430", "비어 있음") : (selected ? (G2Same(map) ? global::CameraControl.Devices.UiText.T("M0431", "선택됨 · 저장값과 같음") : global::CameraControl.Devices.UiText.T("M0432", "선택됨 · 바뀐 값 있음")) : global::CameraControl.Devices.UiText.T("M0433", "저장됨"));
 				state.Foreground = (Brush)FindResource(!has ? "G2Sub" : (selected ? "G2Accent" : "G2NeutralText"));
 			}
 			if (badge != null)
@@ -277,11 +277,11 @@ public partial class SettingsWnd
 		if (_g2Presets.Slots.TryGetValue(key, out Dictionary<string, string> map) && map != null)
 		{
 			int n = G2Apply(map);
-			msg = "설정 " + key + "로 바꿨습니다 (" + n + "개 항목). 확정하려면 저장을 누르세요.";
+			msg = global::CameraControl.Devices.UiText.T("M0434", "설정 ") + key + global::CameraControl.Devices.UiText.T("M0435", "로 바꿨습니다 (") + n + global::CameraControl.Devices.UiText.T("M0436", "개 항목). 확정하려면 저장을 눌러 주세요.");
 		}
 		else
 		{
-			msg = "설정 " + key + "은 비어 있습니다. 아래 '" + key + " 저장하기'로 지금 설정을 저장하세요.";
+			msg = global::CameraControl.Devices.UiText.T("M0434", "설정 ") + key + global::CameraControl.Devices.UiText.T("M0437", "은 비어 있습니다. 아래 '") + key + global::CameraControl.Devices.UiText.T("M0438", " 저장하기'로 지금 설정을 저장해 주세요.");
 		}
 		try
 		{
@@ -306,12 +306,12 @@ public partial class SettingsWnd
 		try
 		{
 			G2SavePresets();
-			G2RefreshSlots("지금 설정을 설정 " + key + "에 저장했습니다.");
+			G2RefreshSlots(global::CameraControl.Devices.UiText.T("M0439", "현재 설정을 설정 ") + key + global::CameraControl.Devices.UiText.T("M0440", "에 저장했습니다."));
 		}
 		catch (Exception ex)
 		{
 			Log.Error("G2 settings presets: save failed", ex);
-			G2RefreshSlots("설정 " + key + " 저장에 실패했습니다: " + ex.Message);
+			G2RefreshSlots(global::CameraControl.Devices.UiText.T("M0434", "설정 ") + key + global::CameraControl.Devices.UiText.T("M0441", " 저장에 실패했습니다: ") + ex.Message);
 		}
 	}
 
@@ -346,11 +346,11 @@ public partial class SettingsWnd
 			if (first != null)
 			{
 				G2Tabs.SelectedItem = first;
-				G2Status.Text = "'" + q + "' 검색 결과";
+				G2Status.Text = "'" + q + global::CameraControl.Devices.UiText.T("M0442", "' 검색 결과");
 			}
 			else
 			{
-				G2Status.Text = "'" + q + "'와 맞는 설정이 없습니다.";
+				G2Status.Text = "'" + q + global::CameraControl.Devices.UiText.T("M0443", "'와 일치하는 설정이 없습니다.");
 			}
 		}
 		else

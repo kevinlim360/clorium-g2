@@ -24,7 +24,7 @@ public static class CameraHelper
 			StaticHelper.Instance.SystemMessage = ex.Message;
 			Application.Current.Dispatcher.Invoke(() =>
 			{
-				global::CameraControl.Core.Classes.G2Dialog.Show("포커스가 맞지 않습니다.\r\n박스내 포커스를 맞추고 다시 시도해 주세요.", "알림", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+				global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0001", "초점이 맞지 않습니다.\r\n박스 안에 초점을 맞추고 다시 시도해보세요."), global::CameraControl.Devices.UiText.T("M0002", "알림"), MessageBoxButton.OK, MessageBoxImage.Exclamation);
 				Log.Debug("포커스가 맞지 않습니다.");
 			});
 		}
@@ -39,7 +39,7 @@ public static class CameraHelper
 	{
 		if (o != null && o is ICameraDevice camera)
 		{
-			if (G2FocusCamera.IsOwned(camera)) throw new InvalidOperationException("수퍼포커스 촬영 또는 다운로드가 진행 중입니다.");
+			if (G2FocusCamera.IsOwned(camera)) throw new InvalidOperationException(global::CameraControl.Devices.UiText.T("M0003", "수퍼포커스 촬영 또는 다운로드가 진행 중입니다."));
 			ServiceProvider.DeviceManager.LastCapturedImage[camera] = "-";
 			CameraProperty property = ServiceProvider.Settings.CameraProperties.Get(camera);
 			for (int i = 0; i < property.Delay; i++)
@@ -79,7 +79,7 @@ public static class CameraHelper
 	{
 		if (o != null && o is ICameraDevice camera)
 		{
-			if (G2FocusCamera.IsOwned(camera)) throw new InvalidOperationException("수퍼포커스 촬영 또는 다운로드가 진행 중입니다.");
+			if (G2FocusCamera.IsOwned(camera)) throw new InvalidOperationException(global::CameraControl.Devices.UiText.T("M0003", "수퍼포커스 촬영 또는 다운로드가 진행 중입니다."));
 			CameraProperty property = ServiceProvider.Settings.CameraProperties.Get(camera);
 			if (property.UseExternalShutter && property.SelectedConfig != null)
 			{
@@ -289,7 +289,7 @@ public static class CameraHelper
 			StaticHelper.Instance.SystemMessage = e.Message;
 			Application.Current.Dispatcher.Invoke(() =>
 			{
-				global::CameraControl.Core.Classes.G2Dialog.Show("포커스가 맞지 않습니다.\r\n박스내 포커스를 맞추고 다시 시도해 주세요.", "알림", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+				global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0001", "초점이 맞지 않습니다.\r\n박스 안에 초점을 맞추고 다시 시도해보세요."), global::CameraControl.Devices.UiText.T("M0002", "알림"), MessageBoxButton.OK, MessageBoxImage.Exclamation);
 				Log.Debug("포커스가 맞지 않습니다.");
 			});
 			return false;
@@ -333,7 +333,7 @@ public static class CameraHelper
 		{
 			return false;
 		}
-		if (G2FocusCamera.IsOwned(camera)) throw new InvalidOperationException("수퍼포커스 촬영 또는 다운로드가 진행 중입니다.");
+		if (G2FocusCamera.IsOwned(camera)) throw new InvalidOperationException(global::CameraControl.Devices.UiText.T("M0003", "수퍼포커스 촬영 또는 다운로드가 진행 중입니다."));
 		ServiceProvider.DeviceManager.LastCapturedImage[camera] = "-";
 		CameraProperty property = ServiceProvider.Settings.CameraProperties.Get(camera);
 		for (int i = 0; i < property.Delay; i++)

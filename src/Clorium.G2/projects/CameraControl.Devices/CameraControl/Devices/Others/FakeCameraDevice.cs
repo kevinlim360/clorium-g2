@@ -140,7 +140,7 @@ public class FakeCameraDevice : BaseCameraDevice
 				}
 				return;
 			}
-			throw new InvalidCastException("지원하지 않는 데이터 형식입니다: " + o.GetType().Name);
+			throw new InvalidCastException(global::CameraControl.Devices.UiText.T("M0085", "지원하지 않는 데이터 형식입니다: ") + o.GetType().Name);
 		}
 		catch (Exception exception)
 		{

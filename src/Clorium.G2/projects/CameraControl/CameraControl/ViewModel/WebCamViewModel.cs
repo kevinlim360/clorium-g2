@@ -25,7 +25,7 @@ internal class WebCamViewModel : INotifyPropertyChanged
 
 	private bool _canRecord = true;
 
-	private string _statusText = "대기 중";
+	private string _statusText = global::CameraControl.Devices.UiText.T("M0299", "대기 중");
 
 	private int _preSeconds = 5;
 
@@ -204,7 +204,7 @@ internal class WebCamViewModel : INotifyPropertyChanged
 			{
 				_cameraDevice.AutoFocus();
 			}
-			StatusText = (isManual ? "수동 포커스 모드" : "자동 포커스 모드");
+			StatusText = (isManual ? global::CameraControl.Devices.UiText.T("M0300", "수동 포커스 모드") : global::CameraControl.Devices.UiText.T("M0301", "자동 포커스 모드"));
 		}
 		catch (Exception ex)
 		{
@@ -313,7 +313,7 @@ internal class WebCamViewModel : INotifyPropertyChanged
 		try
 		{
 			CanRecord = false;
-			StatusText = "녹화 처리 중 ...";
+			StatusText = global::CameraControl.Devices.UiText.T("M0302", "녹화 처리 중...");
 			WebCameraDevice.StaticPreSeconds = PreSeconds;
 			WebCameraDevice.StaticPostSeconds = PostSeconds;
 			_cameraDevice.StartRecordMovie();
@@ -321,12 +321,12 @@ internal class WebCamViewModel : INotifyPropertyChanged
 			{
 				await WebCameraDevice.RecordTaskSignal.Task;
 			}
-			StatusText = "녹화 완료";
+			StatusText = global::CameraControl.Devices.UiText.T("M0303", "녹화 완료");
 		}
 		catch (Exception ex)
 		{
 			Exception ex2 = ex;
-			StatusText = "에러: " + ex2.Message;
+			StatusText = global::CameraControl.Devices.UiText.T("M0304", "오류: ") + ex2.Message;
 		}
 		finally
 		{

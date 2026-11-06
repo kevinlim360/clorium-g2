@@ -1728,7 +1728,7 @@ public class CanonSDKBase : BaseMTPCamera
 		lock (Locker)
 		{
 			if (!IsConnected || Camera == null || !Camera.IsInHostLiveViewMode)
-				throw new InvalidOperationException("수퍼포커스 초점 이동에는 연결된 카메라의 라이브뷰가 필요합니다.");
+				throw new InvalidOperationException(global::CameraControl.Devices.UiText.T("M0081", "수퍼포커스 초점 이동에는 연결된 카메라의 라이브뷰가 필요합니다."));
 			// EVF AF off / shutter released once per run of steps, not before every step (two extra SDK commands each).
 			if ((DateTime.Now - _lastStackDrive).TotalMilliseconds > 1000)
 				PrepareFocusStack();
@@ -1870,7 +1870,7 @@ public class CanonSDKBase : BaseMTPCamera
 	{
 		lock (Locker)
 		{
-			if (File.Exists(filename)) throw new IOException("원본 저장 경로에 이미 파일이 있습니다.");
+			if (File.Exists(filename)) throw new IOException(global::CameraControl.Devices.UiText.T("M0082", "원본 저장 경로에 이미 파일이 있습니다."));
 			IsBusy = true;
 			Camera.PauseLiveview();
 			try
@@ -1896,7 +1896,7 @@ public class CanonSDKBase : BaseMTPCamera
 					using (var stream = new FileStream(filename, FileMode.CreateNew, FileAccess.Write))
 						stream.Write(memory.ImageData, 0, memory.ImageData.Length);
 				}
-				else throw new InvalidOperationException("지원하지 않는 Canon 다운로드 핸들입니다.");
+				else throw new InvalidOperationException(global::CameraControl.Devices.UiText.T("M0083", "지원하지 않는 Canon 다운로드 핸들입니다."));
 			}
 			finally { Camera.ResumeLiveview(); }
 		}

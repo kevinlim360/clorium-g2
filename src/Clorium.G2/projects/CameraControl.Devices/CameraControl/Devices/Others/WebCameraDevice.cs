@@ -270,7 +270,7 @@ public class WebCameraDevice : BaseCameraDevice
 			_liveViewData.ImageData = null;
 			return;
 		}
-		throw new Exception("웹캠 촬영할 수 없습니다.");
+		throw new Exception(global::CameraControl.Devices.UiText.T("M0087", "웹캠으로 촬영할 수 없습니다."));
 	}
 
 	private void PhotoCaptureEvent(byte[] data)

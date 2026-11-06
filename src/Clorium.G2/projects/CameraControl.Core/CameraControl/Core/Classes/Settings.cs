@@ -2305,7 +2305,7 @@ public partial class Settings : BaseFieldClass
 		catch (Exception exception)
 		{
 			Log.Error("설정 저장 실패", exception);
-			global::CameraControl.Core.Classes.G2Dialog.Show("쓰기 권한이 없습니다.");
+			global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0056", "쓰기 권한이 없습니다."));
 		}
 	}
 
@@ -2573,7 +2573,7 @@ public partial class Settings : BaseFieldClass
 			{
 				ProcessCounter = 0;
 				Save();
-				global::CameraControl.Core.Classes.G2Dialog.Show("\ud83d\udea8 프로그램 최적화 작업중으로 최대 1~2분 소요됩니다.\n\n\ud83d\udea8 만일 프로그램이 자동으로 실행되지 않으면 1~2분 후 직접 재 시작해 주세요.", "알림", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+				global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0057", "프로그램을 최적화하고 있습니다. 최대 1~2분 걸립니다.\n\n프로그램이 자동으로 실행되지 않으면 1~2분 뒤에 직접 다시 시작해 주세요."), global::CameraControl.Devices.UiText.T("M0002", "알림"), MessageBoxButton.OK, MessageBoxImage.Asterisk);
 				Process.Start(new ProcessStartInfo
 				{
 					FileName = "cmd.exe",
@@ -2598,7 +2598,7 @@ public partial class Settings : BaseFieldClass
 		}
 		catch (Exception ex)
 		{
-			global::CameraControl.Core.Classes.G2Dialog.Show("\ud83d\udea8 세션 파일 오류 발생: " + ex.Message);
+			global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0058", "세션 파일 오류: ") + ex.Message);
 		}
 	}
 
@@ -2619,7 +2619,7 @@ public partial class Settings : BaseFieldClass
 		}
 		catch (Exception ex)
 		{
-			global::CameraControl.Core.Classes.G2Dialog.Show("\ud83d\udea8 캐시 파일 오류 발생: " + ex.Message);
+			global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0059", "캐시 파일 오류: ") + ex.Message);
 		}
 	}
 
@@ -2651,14 +2651,14 @@ public partial class Settings : BaseFieldClass
 		{
 			return true;
 		}
-		string inputPassword = Interaction.InputBox("비밀번호를 입력하세요:", "비밀번호 확인");
+		string inputPassword = Interaction.InputBox(global::CameraControl.Devices.UiText.T("M0060", "비밀번호를 입력해 주세요."), global::CameraControl.Devices.UiText.T("M0061", "비밀번호 확인"));
 		if (string.IsNullOrEmpty(inputPassword))
 		{
 			return false;
 		}
 		if (ServiceProvider.Settings.PresetPassword != inputPassword)
 		{
-			global::CameraControl.Core.Classes.G2Dialog.Show("\ud83e\udd14올바른 비밀번호를 입력하세요.", "알림", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+			global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0062", "비밀번호가 올바르지 않습니다. 다시 입력해 주세요."), global::CameraControl.Devices.UiText.T("M0002", "알림"), MessageBoxButton.OK, MessageBoxImage.Asterisk);
 			return false;
 		}
 		return true;

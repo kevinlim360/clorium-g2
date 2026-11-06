@@ -454,7 +454,7 @@ public class CameraDeviceManager : BaseFieldClass
 			catch (Exception)
 			{
 				Log.Error("카메라 초기화 실패했습니다. 카메라 전원 On/Off 시도해 주세요.");
-				UiMessage.Show("카메라 초기화 실패했습니다. 카메라 전원 On/Off 시도해 주세요.", "에러", (MessageBoxButton)0, (MessageBoxImage)16);
+				UiMessage.Show(global::CameraControl.Devices.UiText.T("M0078", "카메라 초기화에 실패했습니다. 카메라 전원을 껐다 켜 주세요."), global::CameraControl.Devices.UiText.T("M0079", "오류"), (MessageBoxButton)0, (MessageBoxImage)16);
 			}
 		}
 	}
@@ -676,7 +676,7 @@ public class CameraDeviceManager : BaseFieldClass
 			cameraDevice.Close();
 			OnCameraDisconnected(cameraDevice);
 		}));
-		StaticHelper.Instance.SystemMessage = "모바일 또는 웹 카메라 연결 해제 :" + cameraDevice.DeviceName;
+		StaticHelper.Instance.SystemMessage = global::CameraControl.Devices.UiText.T("M0080", "모바일 또는 웹 카메라 연결 해제: ") + cameraDevice.DeviceName;
 		Log.Debug("=========== 모발일 또는 웹 카메라 연결 해제 ==============");
 		Log.Debug("Name :" + cameraDevice.DeviceName);
 	}

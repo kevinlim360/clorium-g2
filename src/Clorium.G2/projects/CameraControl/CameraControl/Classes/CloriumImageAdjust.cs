@@ -17,7 +17,7 @@ internal static class CloriumImageAdjust
 	private static readonly string[] SiblingExtensions = { ".jpg", ".jpeg", ".tif", ".tiff", ".png", ".bmp" };
 
 	// Replaced by tests; the defaults show a message box and the modal window.
-	internal static Action<string> ShowMessage = text => global::CameraControl.Core.Classes.G2Dialog.Show(text, "이미지보정", MessageBoxButton.OK, MessageBoxImage.Information);
+	internal static Action<string> ShowMessage = text => global::CameraControl.Core.Classes.G2Dialog.Show(text, global::CameraControl.Devices.UiText.T("M0117", "이미지보정"), MessageBoxButton.OK, MessageBoxImage.Information);
 
 	internal static Action<string, Window> ShowWindow = (file, owner) => new G2ColorAdjustWnd(file) { Owner = owner }.ShowDialog();
 
@@ -53,13 +53,13 @@ internal static class CloriumImageAdjust
 		if (!Enabled) return null;
 		if (string.IsNullOrWhiteSpace(selected) || !File.Exists(selected))
 		{
-			ShowMessage("이미지보정할 사진을 먼저 선택해 주세요.");
+			ShowMessage(global::CameraControl.Devices.UiText.T("M0118", "먼저 이미지보정할 사진을 선택해 주세요."));
 			return null;
 		}
 		string target = ResolveTarget(selected);
 		if (target == null)
 		{
-			ShowMessage("JPEG, PNG, TIFF, BMP 사진만 이미지보정할 수 있습니다.\n\nRAW 파일은 같은 이름의 JPEG나 TIFF가 옆에 있으면 그 사진을 엽니다.");
+			ShowMessage(global::CameraControl.Devices.UiText.T("M0119", "JPEG, PNG, TIFF, BMP 사진만 이미지보정할 수 있습니다.\n\nRAW 파일은 같은 이름의 JPEG나 TIFF가 옆에 있으면 그 사진을 엽니다."));
 			return null;
 		}
 		try
@@ -71,7 +71,7 @@ internal static class CloriumImageAdjust
 		catch (Exception ex)
 		{
 			Log.Error("ImageAdjust : unable to open", ex);
-			ShowMessage("이미지보정 창을 열지 못했습니다.\n\n" + ex.Message);
+			ShowMessage(global::CameraControl.Devices.UiText.T("M0120", "이미지보정 창을 열지 못했습니다.\n\n") + ex.Message);
 			return null;
 		}
 	}

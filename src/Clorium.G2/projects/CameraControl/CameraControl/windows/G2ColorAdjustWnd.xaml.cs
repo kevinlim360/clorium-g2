@@ -97,10 +97,10 @@ namespace CameraControl.windows
 			_addToSession = addToSession;
 			InitializeComponent();
 			FileTitle.Text = Path.GetFileName(sourceFile);
-			Title = "이미지보정 — " + Path.GetFileName(sourceFile);
+			Title = global::CameraControl.Devices.UiText.T("M0346", "이미지보정 — ") + Path.GetFileName(sourceFile);
 			BuildRows();
 			LoadTemplates();
-			SetBusy(true, "사진을 불러오는 중…");
+			SetBusy(true, global::CameraControl.Devices.UiText.T("M0347", "사진을 불러오는 중…"));
 			PrevSettingsButton.IsEnabled = _lastSaved != null;
 			EngineText.Text = G2ImageAdjust.EngineVersion;
 			Loaded += async (s, e) => await LoadAsync();
@@ -114,7 +114,7 @@ namespace CameraControl.windows
 				{
 					e.Cancel = true;
 					_batchCts?.Cancel();
-					BusyText.Text = "현재 사진을 저장한 뒤 멈추는 중…";
+					BusyText.Text = global::CameraControl.Devices.UiText.T("M0348", "현재 사진을 저장한 뒤 중지하는 중…");
 				}
 			};
 			Closed += (s, e) =>
@@ -147,30 +147,30 @@ namespace CameraControl.windows
 		private void BuildRows()
 		{
 			var s = _settings;
-			AddRow(TonePanel, "노출", "EV", -3, 3, 0, "+0.00;-0.00;0.00", 0.05, () => s.Exposure, v => s.Exposure = v, null,
-				"선형광 기준 노출 보정입니다. +1EV는 빛의 양 2배입니다.");
-			AddRow(TonePanel, "명도", null, -100, 100, 0, "+0;-0;0", 1, () => s.Brightness, v => s.Brightness = v, null,
-				"검정과 흰색은 그대로 두고 중간톤 밝기를 조절합니다.");
-			AddRow(TonePanel, "대비", null, -100, 100, 0, "+0;-0;0", 1, () => s.Contrast, v => s.Contrast = v, null,
-				"중간 회색을 기준으로 밝은 곳과 어두운 곳의 차이를 조절합니다.");
-			AddRow(TonePanel, "채도", null, -100, 100, 0, "+0;-0;0", 1, () => s.Saturation, v => s.Saturation = v,
+			AddRow(TonePanel, global::CameraControl.Devices.UiText.T("M0349", "노출"), "EV", -3, 3, 0, "+0.00;-0.00;0.00", 0.05, () => s.Exposure, v => s.Exposure = v, null,
+				global::CameraControl.Devices.UiText.T("M0350", "선형광 기준 노출 보정입니다. +1EV는 빛의 양이 2배입니다."));
+			AddRow(TonePanel, global::CameraControl.Devices.UiText.T("M0351", "명도"), null, -100, 100, 0, "+0;-0;0", 1, () => s.Brightness, v => s.Brightness = v, null,
+				global::CameraControl.Devices.UiText.T("M0352", "검정과 흰색은 유지하고 중간톤 밝기를 조절합니다."));
+			AddRow(TonePanel, global::CameraControl.Devices.UiText.T("M0353", "대비"), null, -100, 100, 0, "+0;-0;0", 1, () => s.Contrast, v => s.Contrast = v, null,
+				global::CameraControl.Devices.UiText.T("M0354", "중간 회색을 기준으로 밝은 곳과 어두운 곳의 차이를 조절합니다."));
+			AddRow(TonePanel, global::CameraControl.Devices.UiText.T("M0355", "채도"), null, -100, 100, 0, "+0;-0;0", 1, () => s.Saturation, v => s.Saturation = v,
 				Gradient(Color.FromRgb(0x9A, 0x9F, 0xA6), Color.FromRgb(0xE5, 0x48, 0x4D), Color.FromRgb(0x30, 0xA4, 0x6C), Color.FromRgb(0x3E, 0x7B, 0xFA)),
-				"휘도(Rec.709)를 유지하며 색의 진하기를 조절합니다. −100은 흑백입니다.");
+				global::CameraControl.Devices.UiText.T("M0356", "휘도(Rec.709)는 유지하고 색의 진하기를 조절합니다. −100은 흑백입니다."));
 
-			AddRow(ColorPanel, "색온도", null, -100, 100, 0, "+0;-0;0", 1, () => s.Temperature, v => s.Temperature = v,
+			AddRow(ColorPanel, global::CameraControl.Devices.UiText.T("M0357", "색온도"), null, -100, 100, 0, "+0;-0;0", 1, () => s.Temperature, v => s.Temperature = v,
 				Gradient(Color.FromRgb(0x5B, 0x8D, 0xEF), Color.FromRgb(0xEE, 0xEE, 0xEE), Color.FromRgb(0xF2, 0xA6, 0x3B)),
-				"− 차갑게(파랑) · + 따뜻하게(주황). 밝기는 유지합니다.");
-			AddRow(ColorPanel, "색조", null, -100, 100, 0, "+0;-0;0", 1, () => s.Tint, v => s.Tint = v,
+				global::CameraControl.Devices.UiText.T("M0358", "− 차갑게(파랑) · + 따뜻하게(주황). 밝기는 유지합니다."));
+			AddRow(ColorPanel, global::CameraControl.Devices.UiText.T("M0359", "색조"), null, -100, 100, 0, "+0;-0;0", 1, () => s.Tint, v => s.Tint = v,
 				Gradient(Color.FromRgb(0x4C, 0xB0, 0x5A), Color.FromRgb(0xEE, 0xEE, 0xEE), Color.FromRgb(0xD0, 0x4C, 0xC4)),
-				"− 녹색 · + 마젠타. 형광등 등의 색 틀어짐을 보정합니다.");
+				global::CameraControl.Devices.UiText.T("M0360", "− 녹색 · + 마젠타. 형광등 등으로 틀어진 색을 보정합니다."));
 
-			_levelRows.Add(AddRow(LevelsPanel, "검정점", null, 0, 254, 0, "0", 1, () => CurrentLevels.Black, v => SetBlack(v), null,
-				"이 값 이하를 검정으로 만듭니다."));
+			_levelRows.Add(AddRow(LevelsPanel, global::CameraControl.Devices.UiText.T("M0361", "검정점"), null, 0, 254, 0, "0", 1, () => CurrentLevels.Black, v => SetBlack(v), null,
+				global::CameraControl.Devices.UiText.T("M0362", "이 값 이하는 검정이 됩니다.")));
 			// gamma: slider position p in [-1, 1] ↔ gamma = 3^p (0.33 … 3.00), 1.00 at the centre
-			_levelRows.Add(AddRow(LevelsPanel, "감마", null, 0.1, 10, 1, "0.00", 0.01, () => CurrentLevels.Gamma, v => CurrentLevels.Gamma = v, null,
-				"중간톤을 밝게(>1) 또는 어둡게(<1) 합니다.", g => Math.Log(Math.Max(0.1, g)) / Math.Log(3), p => Math.Round(Math.Pow(3, p), 2), -1, 1));
-			_levelRows.Add(AddRow(LevelsPanel, "흰점", null, 1, 255, 255, "0", 1, () => CurrentLevels.White, v => SetWhite(v), null,
-				"이 값 이상을 최대 밝기로 만듭니다."));
+			_levelRows.Add(AddRow(LevelsPanel, global::CameraControl.Devices.UiText.T("M0363", "감마"), null, 0.1, 10, 1, "0.00", 0.01, () => CurrentLevels.Gamma, v => CurrentLevels.Gamma = v, null,
+				global::CameraControl.Devices.UiText.T("M0364", "중간톤을 밝게(>1) 또는 어둡게(<1) 합니다."), g => Math.Log(Math.Max(0.1, g)) / Math.Log(3), p => Math.Round(Math.Pow(3, p), 2), -1, 1));
+			_levelRows.Add(AddRow(LevelsPanel, global::CameraControl.Devices.UiText.T("M0365", "흰점"), null, 1, 255, 255, "0", 1, () => CurrentLevels.White, v => SetWhite(v), null,
+				global::CameraControl.Devices.UiText.T("M0366", "이 값 이상은 최대 밝기가 됩니다.")));
 			UpdateLevelTracks();
 		}
 
@@ -228,7 +228,7 @@ namespace CameraControl.windows
 			grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
 			grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
 
-			var name = new TextBlock { Text = unit == null ? label : label + "  ", Style = (Style)FindResource("CcRowLabel"), ToolTip = hint + "\n두 번 누르면 기본값으로 돌아갑니다." };
+			var name = new TextBlock { Text = unit == null ? label : label + "  ", Style = (Style)FindResource("CcRowLabel"), ToolTip = hint + global::CameraControl.Devices.UiText.T("M0367", "\n두 번 누르면 기본값으로 되돌립니다.") };
 			if (unit != null)
 			{
 				name.Inlines.Add(new System.Windows.Documents.Run(unit) { Foreground = (Brush)FindResource("G2Sub"), FontSize = 11 });
@@ -244,7 +244,7 @@ namespace CameraControl.windows
 			};
 			grid.Children.Add(name);
 
-			row.Box = new TextBox { Style = (Style)FindResource("CcValueBox"), ToolTip = "숫자를 입력하고 Enter" };
+			row.Box = new TextBox { Style = (Style)FindResource("CcValueBox"), ToolTip = global::CameraControl.Devices.UiText.T("M0368", "숫자를 입력하고 Enter 키를 누르세요.") };
 			Grid.SetColumn(row.Box, 1);
 			row.Box.KeyDown += (s, e) =>
 			{
@@ -403,7 +403,7 @@ namespace CameraControl.windows
 
 		private void UpdateChannelSummary()
 		{
-			string[] names = { "전체", "R", "G", "B" };
+			string[] names = { global::CameraControl.Devices.UiText.T("M0160", "전체"), "R", "G", "B" };
 			var parts = new List<string>();
 			for (int i = 0; i < 4; i++)
 			{
@@ -413,7 +413,7 @@ namespace CameraControl.windows
 					parts.Add(names[i] + " " + l.Black + " / " + l.Gamma.ToString("0.00", CultureInfo.InvariantCulture) + " / " + l.White);
 				}
 			}
-			ChannelSummary.Text = parts.Count == 0 ? "변경 없음" : string.Join("  ·  ", parts);
+			ChannelSummary.Text = parts.Count == 0 ? global::CameraControl.Devices.UiText.T("M0369", "변경 없음") : string.Join("  ·  ", parts);
 		}
 
 		private void ResetChannel_Click(object sender, RoutedEventArgs e)
@@ -440,7 +440,7 @@ namespace CameraControl.windows
 					{
 						IColorProfile icc = original.GetColorProfile();
 						string desc = original.Width + "×" + original.Height + " · " + original.Format.ToString().ToUpperInvariant() +
-							" · " + original.Depth + "bit · " + (icc != null ? "ICC " + (string.IsNullOrEmpty(icc.Description) ? icc.ColorSpace.ToString() : icc.Description) : "ICC 없음(sRGB로 간주)");
+							" · " + original.Depth + "bit · " + (icc != null ? "ICC " + (string.IsNullOrEmpty(icc.Description) ? icc.ColorSpace.ToString() : icc.Description) : global::CameraControl.Devices.UiText.T("M0370", "ICC 없음(sRGB로 간주)"));
 						IMagickImage<byte> preview = G2ImageAdjust.CreatePreview(original, PreviewEdge);
 						_sourceHasAlpha = original.HasAlpha;
 						byte[] bgra = G2ImageAdjust.ToBgra(preview, !_sourceHasAlpha);
@@ -462,9 +462,9 @@ namespace CameraControl.windows
 				FileInfoText.Text = info.Item3;
 				if (info.Item4)
 				{
-					StatusText.Text = "16비트 원본입니다. 이 버전의 엔진(Q8)은 8비트 정밀도로 처리해 저장합니다. 원본은 그대로 둡니다.";
+					StatusText.Text = global::CameraControl.Devices.UiText.T("M0371", "16비트 원본입니다. 이 엔진(Q8)은 8비트 정밀도로 처리해 저장하며, 원본은 그대로 둡니다.");
 				}
-				ProxyBadgeText.Text = w == info.Item5 && h == info.Item6 ? "원본 크기 미리보기" : "미리보기 " + w + "×" + h + " · 저장 " + info.Item5 + "×" + info.Item6;
+				ProxyBadgeText.Text = w == info.Item5 && h == info.Item6 ? global::CameraControl.Devices.UiText.T("M0372", "원본 크기 미리보기") : global::CameraControl.Devices.UiText.T("M0373", "미리보기 ") + w + "×" + h + global::CameraControl.Devices.UiText.T("M0148", " · 저장 ") + info.Item5 + "×" + info.Item6;
 				ProxyBadge.Visibility = Visibility.Visible;
 				ShowHistogram(G2ImageAdjust.Histogram(info.Item2));
 				UpdateStage();
@@ -474,7 +474,7 @@ namespace CameraControl.windows
 			catch (Exception ex)
 			{
 				Log.Error("G2 color adjust load", ex);
-				BusyText.Text = "사진을 열 수 없습니다.\n" + ex.GetBaseException().Message;
+				BusyText.Text = global::CameraControl.Devices.UiText.T("M0374", "사진을 열 수 없습니다.\n") + ex.GetBaseException().Message;
 				SaveButton.IsEnabled = SaveAsButton.IsEnabled = ResetButton.IsEnabled = PrevSettingsButton.IsEnabled = false;
 				ControlsPanel.IsEnabled = false;
 				_busy = true;
@@ -524,7 +524,7 @@ namespace CameraControl.windows
 					catch (Exception ex)
 					{
 						Log.Error("G2 color adjust preview", ex);
-						StatusText.Text = "미리보기 오류: " + ex.GetBaseException().Message;
+						StatusText.Text = global::CameraControl.Devices.UiText.T("M0375", "미리보기 오류: ") + ex.GetBaseException().Message;
 						continue;
 					}
 					if (result == null || _closed)
@@ -566,14 +566,14 @@ namespace CameraControl.windows
 			{
 				SideBefore.Source = _originalBitmap;
 				SideAfter.Source = _adjustedBitmap;
-				SideAfterText.Text = _settings.IsIdentity ? "보정 없음" : "보정 후";
+				SideAfterText.Text = _settings.IsIdentity ? global::CameraControl.Devices.UiText.T("M0162", "보정 없음") : global::CameraControl.Devices.UiText.T("M0376", "보정 후");
 				StateBadge.Visibility = Visibility.Collapsed;
 				return;
 			}
 			bool original = ViewMode == 1 || _holdCompare;
 			StageImage.Source = original ? _originalBitmap : _adjustedBitmap;
 			StateBadge.Visibility = _originalBitmap == null ? Visibility.Collapsed : Visibility.Visible;
-			StateBadgeText.Text = original ? "원본" : (_settings.IsIdentity ? "보정 없음" : "보정 후");
+			StateBadgeText.Text = original ? global::CameraControl.Devices.UiText.T("M0377", "원본") : (_settings.IsIdentity ? global::CameraControl.Devices.UiText.T("M0162", "보정 없음") : global::CameraControl.Devices.UiText.T("M0376", "보정 후"));
 			StateBadge.Background = original ? (Brush)FindResource("G2Pr") : new SolidColorBrush(Color.FromArgb(0xCC, 0x16, 0x18, 0x1C));
 		}
 
@@ -588,7 +588,7 @@ namespace CameraControl.windows
 			HistGreen.Data = Area(h.Green, max);
 			HistBlue.Data = Area(h.Blue, max);
 			HistLuma.Data = Line(h.Luma, max);
-			ClipText.Text = "그림자 " + h.ShadowClipPercent.ToString("0.0", CultureInfo.InvariantCulture) + "% · 하이라이트 " + h.HighlightClipPercent.ToString("0.0", CultureInfo.InvariantCulture) + "%";
+			ClipText.Text = global::CameraControl.Devices.UiText.T("M0378", "그림자 ") + h.ShadowClipPercent.ToString("0.0", CultureInfo.InvariantCulture) + global::CameraControl.Devices.UiText.T("M0379", "% · 하이라이트 ") + h.HighlightClipPercent.ToString("0.0", CultureInfo.InvariantCulture) + "%";
 			ClipText.Foreground = (Brush)FindResource(h.HighlightClipPercent >= 1.0 || h.ShadowClipPercent >= 1.0 ? "G2Pr" : "G2Sub");
 		}
 
@@ -745,7 +745,7 @@ namespace CameraControl.windows
 			}
 			catch (Exception ex)
 			{
-				StatusText.Text = "저장 위치를 정할 수 없습니다: " + ex.Message;
+				StatusText.Text = global::CameraControl.Devices.UiText.T("M0380", "저장 위치를 정할 수 없습니다: ") + ex.Message;
 				return;
 			}
 			await SaveToAsync(dest, false, _addToSession);
@@ -757,11 +757,11 @@ namespace CameraControl.windows
 			string ext = Path.GetExtension(_source);
 			var dialog = new Microsoft.Win32.SaveFileDialog
 			{
-				Title = "보정본 저장",
+				Title = global::CameraControl.Devices.UiText.T("M0381", "보정본 저장"),
 				InitialDirectory = Path.GetDirectoryName(Path.GetFullPath(_source)),
 				FileName = Path.GetFileName(G2ImageAdjust.NextAdjustedName(_source)),
 				DefaultExt = ext,
-				Filter = "원본과 같은 형식 (*" + ext + ")|*" + ext + "|JPEG (*.jpg)|*.jpg|PNG (*.png)|*.png|TIFF (*.tif)|*.tif",
+				Filter = global::CameraControl.Devices.UiText.T("M0382", "원본과 같은 형식 (*") + ext + ")|*" + ext + "|JPEG (*.jpg)|*.jpg|PNG (*.png)|*.png|TIFF (*.tif)|*.tif",
 				OverwritePrompt = true,
 				AddExtension = true
 			};
@@ -771,7 +771,7 @@ namespace CameraControl.windows
 			}
 			if (string.Equals(Path.GetFullPath(dialog.FileName), Path.GetFullPath(_source), StringComparison.OrdinalIgnoreCase))
 			{
-				StatusText.Text = "원본과 다른 이름을 지정해 주세요. 원본은 덮어쓰지 않습니다.";
+				StatusText.Text = global::CameraControl.Devices.UiText.T("M0383", "원본과 다른 이름을 지정해 주세요. 원본은 덮어쓰지 않습니다.");
 				return;
 			}
 			bool sameFolder = string.Equals(Path.GetDirectoryName(Path.GetFullPath(dialog.FileName)), Path.GetDirectoryName(Path.GetFullPath(_source)), StringComparison.OrdinalIgnoreCase);
@@ -782,7 +782,7 @@ namespace CameraControl.windows
 		{
 			G2AdjustSettings s = _settings.Clone();
 			_saving = true;
-			SetBusy(true, "저장하는 중… (원본 해상도)");
+			SetBusy(true, global::CameraControl.Devices.UiText.T("M0384", "저장하는 중… (원본 해상도)"));
 			try
 			{
 				await Task.Run(() => G2ImageAdjust.SaveAdjusted(_source, dest, s, overwrite));
@@ -792,15 +792,15 @@ namespace CameraControl.windows
 				string note = "";
 				if (addToSession)
 				{
-					note = AddToSession(dest) ? " · 세션에 추가됨" : " · 세션 목록 갱신 실패(파일은 저장됨)";
+					note = AddToSession(dest) ? global::CameraControl.Devices.UiText.T("M0385", " · 세션에 추가됨") : global::CameraControl.Devices.UiText.T("M0386", " · 파일은 저장했지만 세션 목록을 갱신하지 못했습니다");
 				}
-				StatusText.Text = "저장됨: " + Path.GetFileName(dest) + note + "\n" + s.Describe();
+				StatusText.Text = global::CameraControl.Devices.UiText.T("M0387", "저장했습니다: ") + Path.GetFileName(dest) + note + "\n" + s.Describe();
 				StatusText.Foreground = (Brush)FindResource("G2Ok");
 			}
 			catch (Exception ex)
 			{
 				Log.Error("G2 color adjust save", ex);
-				StatusText.Text = "저장하지 못했습니다. 원본은 그대로입니다.\n" + ex.GetBaseException().Message;
+				StatusText.Text = global::CameraControl.Devices.UiText.T("M0388", "저장하지 못했습니다. 원본은 그대로입니다.\n") + ex.GetBaseException().Message;
 				StatusText.Foreground = (Brush)FindResource("G2Err");
 			}
 			finally
@@ -823,13 +823,13 @@ namespace CameraControl.windows
 				_store.Load();
 				if (_store.QuarantinedFile != null)
 				{
-					StatusText.Text = "템플릿 파일을 읽을 수 없어 따로 보관했습니다: " + Path.GetFileName(_store.QuarantinedFile);
+					StatusText.Text = global::CameraControl.Devices.UiText.T("M0389", "템플릿 파일을 읽을 수 없어 따로 보관했습니다: ") + Path.GetFileName(_store.QuarantinedFile);
 				}
 			}
 			catch (Exception ex)
 			{
 				Log.Error("G2 color templates load", ex);
-				StatusText.Text = "템플릿을 불러오지 못했습니다: " + ex.GetBaseException().Message;
+				StatusText.Text = global::CameraControl.Devices.UiText.T("M0390", "템플릿을 불러오지 못했습니다: ") + ex.GetBaseException().Message;
 			}
 			RefreshTemplateList(null);
 		}
@@ -850,7 +850,7 @@ namespace CameraControl.windows
 				_selectingTemplate = false;
 			}
 			int n = _store == null ? 0 : _store.Items.Count;
-			TemplateCount.Text = n == 0 ? "" : n + "개";
+			TemplateCount.Text = n == 0 ? "" : n + global::CameraControl.Devices.UiText.T("M0193", "개");
 			TemplateEmpty.Visibility = n == 0 ? Visibility.Visible : Visibility.Collapsed;
 			TemplateList.Visibility = n == 0 ? Visibility.Collapsed : Visibility.Visible;
 			UpdateTemplateButtons();
@@ -874,12 +874,12 @@ namespace CameraControl.windows
 			G2ColorTemplate t = _store?.Find(_appliedTemplate);
 			if (t == null)
 			{
-				TemplateState.Text = SelectedTemplate == null && (_store?.Items.Count ?? 0) > 0 ? "템플릿을 누르면 이 사진에 바로 적용됩니다." : "";
+				TemplateState.Text = SelectedTemplate == null && (_store?.Items.Count ?? 0) > 0 ? global::CameraControl.Devices.UiText.T("M0391", "템플릿을 누르면 이 사진에 바로 적용됩니다.") : "";
 				TemplateState.Foreground = (Brush)FindResource("G2Sub");
 				return;
 			}
 			bool same = t.Settings.SameAs(_settings);
-			TemplateState.Text = same ? "적용됨: " + t.Name : "적용됨: " + t.Name + " · 이후 값 변경됨 (덮어쓰기로 저장 가능)";
+			TemplateState.Text = same ? global::CameraControl.Devices.UiText.T("M0392", "적용됨: ") + t.Name : global::CameraControl.Devices.UiText.T("M0392", "적용됨: ") + t.Name + global::CameraControl.Devices.UiText.T("M0393", " · 이후 값이 바뀌었습니다 (덮어쓰기로 저장할 수 있습니다)");
 			TemplateState.Foreground = (Brush)FindResource(same ? "G2Ok" : "G2Pr");
 		}
 
@@ -908,7 +908,7 @@ namespace CameraControl.windows
 			}
 			_appliedTemplate = t.Name;
 			CopySettings(t.Settings);
-			StatusText.Text = "템플릿 '" + t.Name + "' 적용 · 저장하려면 '새 파일로 저장'";
+			StatusText.Text = global::CameraControl.Devices.UiText.T("M0394", "템플릿 '") + t.Name + global::CameraControl.Devices.UiText.T("M0395", "' 적용 · 저장하려면 '새 파일로 저장'을 누르세요.");
 			StatusText.Foreground = (Brush)FindResource("G2Sub");
 			return true;
 		}
@@ -932,7 +932,7 @@ namespace CameraControl.windows
 		{
 			for (int i = (_store?.Items.Count ?? 0) + 1; ; i++)
 			{
-				string n = "템플릿 " + i;
+				string n = global::CameraControl.Devices.UiText.T("M0396", "템플릿 ") + i;
 				if (_store?.Find(n) == null) return n;
 			}
 		}
@@ -940,7 +940,7 @@ namespace CameraControl.windows
 		private void ShowNameRow(bool rename, string text)
 		{
 			_templateRenaming = rename;
-			TemplateNameOk.Content = rename ? "이름 변경" : "저장";
+			TemplateNameOk.Content = rename ? global::CameraControl.Devices.UiText.T("M0397", "이름 변경") : global::CameraControl.Devices.UiText.T("M0398", "저장");
 			TemplateNameRow.Visibility = Visibility.Visible;
 			TemplateButtons.Visibility = Visibility.Collapsed;
 			TemplateNameBox.Text = text ?? "";
@@ -983,13 +983,13 @@ namespace CameraControl.windows
 					{
 						_appliedTemplate = t.Name;
 					}
-					StatusText.Text = "템플릿 이름을 바꿨습니다: " + t.Name;
+					StatusText.Text = global::CameraControl.Devices.UiText.T("M0399", "템플릿 이름을 바꿨습니다: ") + t.Name;
 				}
 				else
 				{
 					t = _store.Add(TemplateNameBox.Text, _settings);
 					_appliedTemplate = t.Name;
-					StatusText.Text = "템플릿 저장: " + t.Name + " · " + t.Summary;
+					StatusText.Text = global::CameraControl.Devices.UiText.T("M0400", "템플릿을 저장했습니다: ") + t.Name + " · " + t.Summary;
 				}
 				StatusText.Foreground = (Brush)FindResource("G2Ok");
 				HideNameRow();
@@ -1007,7 +1007,7 @@ namespace CameraControl.windows
 		{
 			G2ColorTemplate sel = SelectedTemplate;
 			if (_busy || sel == null) return;
-			if (global::CameraControl.Core.Classes.G2Dialog.Show(this, "템플릿 '" + sel.Name + "'을(를) 지금 보정값으로 바꿀까요?\n\n" + _settings.Describe(), "템플릿 덮어쓰기", MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK)
+			if (global::CameraControl.Core.Classes.G2Dialog.Show(this, global::CameraControl.Devices.UiText.T("M0394", "템플릿 '") + sel.Name + global::CameraControl.Devices.UiText.T("M0401", "'을(를) 현재 보정값으로 덮어쓸까요?\n\n") + _settings.Describe(), global::CameraControl.Devices.UiText.T("M0402", "템플릿 덮어쓰기"), MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK)
 			{
 				return;
 			}
@@ -1015,7 +1015,7 @@ namespace CameraControl.windows
 			{
 				G2ColorTemplate t = _store.Update(sel.Name, _settings);
 				_appliedTemplate = t.Name;
-				StatusText.Text = "템플릿 덮어씀: " + t.Name;
+				StatusText.Text = global::CameraControl.Devices.UiText.T("M0403", "템플릿을 덮어썼습니다: ") + t.Name;
 				StatusText.Foreground = (Brush)FindResource("G2Ok");
 				RefreshTemplateList(t.Name);
 			}
@@ -1030,7 +1030,7 @@ namespace CameraControl.windows
 		{
 			G2ColorTemplate sel = SelectedTemplate;
 			if (_busy || sel == null) return;
-			if (global::CameraControl.Core.Classes.G2Dialog.Show(this, "템플릿 '" + sel.Name + "'을(를) 삭제할까요?\n사진의 현재 보정값은 그대로 둡니다.", "템플릿 삭제", MessageBoxButton.OKCancel, MessageBoxImage.Warning) != MessageBoxResult.OK)
+			if (global::CameraControl.Core.Classes.G2Dialog.Show(this, global::CameraControl.Devices.UiText.T("M0394", "템플릿 '") + sel.Name + global::CameraControl.Devices.UiText.T("M0404", "'을(를) 삭제할까요?\n사진의 현재 보정값은 그대로 둡니다."), global::CameraControl.Devices.UiText.T("M0405", "템플릿 삭제"), MessageBoxButton.OKCancel, MessageBoxImage.Warning) != MessageBoxResult.OK)
 			{
 				return;
 			}
@@ -1041,7 +1041,7 @@ namespace CameraControl.windows
 				{
 					_appliedTemplate = null;
 				}
-				StatusText.Text = "템플릿 삭제: " + sel.Name;
+				StatusText.Text = global::CameraControl.Devices.UiText.T("M0406", "템플릿을 삭제했습니다: ") + sel.Name;
 				StatusText.Foreground = (Brush)FindResource("G2Sub");
 				RefreshTemplateList(null);
 			}
@@ -1066,13 +1066,13 @@ namespace CameraControl.windows
 			G2ColorTemplate t = SelectedTemplate;
 			if (_busy || t == null)
 			{
-				StatusText.Text = "일괄 적용할 템플릿을 먼저 선택해 주세요.";
+				StatusText.Text = global::CameraControl.Devices.UiText.T("M0407", "일괄 적용할 템플릿을 먼저 선택해 주세요.");
 				return;
 			}
 			string folder;
 			using (var dialog = new System.Windows.Forms.FolderBrowserDialog
 			{
-				Description = "템플릿 '" + t.Name + "'을(를) 적용할 사진 폴더를 고르세요. (하위 폴더 제외, 결과는 폴더\\_cc\\)",
+				Description = global::CameraControl.Devices.UiText.T("M0394", "템플릿 '") + t.Name + global::CameraControl.Devices.UiText.T("M0408", "'을(를) 적용할 사진 폴더를 선택해 주세요. (하위 폴더는 제외, 결과는 폴더\\_cc\\에 저장)"),
 				ShowNewFolderButton = false,
 				SelectedPath = Path.GetDirectoryName(Path.GetFullPath(_source))
 			})
@@ -1108,19 +1108,19 @@ namespace CameraControl.windows
 			}
 			if (count == 0)
 			{
-				StatusText.Text = "이 폴더에는 보정할 사진(JPEG·PNG·TIFF·BMP)이 없습니다: " + folder;
+				StatusText.Text = global::CameraControl.Devices.UiText.T("M0409", "이 폴더에는 보정할 사진(JPEG·PNG·TIFF·BMP)이 없습니다: ") + folder;
 				StatusText.Foreground = (Brush)FindResource("G2Err");
 				return null;
 			}
 			if (ConfirmBatch && global::CameraControl.Core.Classes.G2Dialog.Show(this,
-				"템플릿 '" + t.Name + "'을(를) " + count + "장에 적용합니다.\n\n" + t.Summary + "\n\n폴더: " + folder + "\n저장: " + Path.Combine(folder, G2ColorBatch.OutputFolderName) + "\n원본은 바꾸지 않습니다.",
-				"일괄 적용", MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK)
+				global::CameraControl.Devices.UiText.T("M0394", "템플릿 '") + t.Name + global::CameraControl.Devices.UiText.T("M0410", "'을(를) ") + count + global::CameraControl.Devices.UiText.T("M0411", "장에 적용합니다.\n\n") + t.Summary + global::CameraControl.Devices.UiText.T("M0412", "\n\n폴더: ") + folder + global::CameraControl.Devices.UiText.T("M0413", "\n저장: ") + Path.Combine(folder, G2ColorBatch.OutputFolderName) + global::CameraControl.Devices.UiText.T("M0414", "\n원본은 바꾸지 않습니다."),
+				global::CameraControl.Devices.UiText.T("M0415", "일괄 적용"), MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK)
 			{
 				return null;
 			}
 			_batching = true;
 			_batchCts = new CancellationTokenSource();
-			SetBusy(true, "일괄 적용 중… 템플릿 '" + t.Name + "'");
+			SetBusy(true, global::CameraControl.Devices.UiText.T("M0416", "일괄 적용하는 중… 템플릿 '") + t.Name + "'");
 			BusyProgress.IsIndeterminate = false;
 			BusyProgress.Minimum = 0;
 			BusyProgress.Maximum = count;
@@ -1140,8 +1140,8 @@ namespace CameraControl.windows
 				CancellationToken token = _batchCts.Token;
 				result = await Task.Run(() => G2ColorBatch.Run(folder, s, t.Name, progress, token));
 				LastBatch = result;
-				string summary = "일괄 적용 " + (result.Cancelled ? "중지" : "완료") + ": " + result.Saved + " / " + result.Total + "장 저장" +
-					(result.Errors.Count > 0 ? " · 실패 " + result.Errors.Count + "장" : "") + "\n" + result.OutputFolder;
+				string summary = global::CameraControl.Devices.UiText.T("M0417", "일괄 적용 ") + (result.Cancelled ? global::CameraControl.Devices.UiText.T("M0418", "중지") : global::CameraControl.Devices.UiText.T("M0419", "완료")) + ": " + result.Saved + " / " + result.Total + global::CameraControl.Devices.UiText.T("M0340", "장 저장") +
+					(result.Errors.Count > 0 ? global::CameraControl.Devices.UiText.T("M0149", " · 실패 ") + result.Errors.Count + global::CameraControl.Devices.UiText.T("M0325", "장") : "") + "\n" + result.OutputFolder;
 				StatusText.Text = summary;
 				StatusText.Foreground = (Brush)FindResource(result.Errors.Count > 0 || result.Cancelled ? "G2Pr" : "G2Ok");
 				Log.Debug("G2 color batch " + folder + " template=" + t.Name + " saved=" + result.Saved + "/" + result.Total + " errors=" + result.Errors.Count);
@@ -1149,7 +1149,7 @@ namespace CameraControl.windows
 			catch (Exception ex)
 			{
 				Log.Error("G2 color batch", ex);
-				StatusText.Text = "일괄 적용 실패: " + ex.GetBaseException().Message;
+				StatusText.Text = global::CameraControl.Devices.UiText.T("M0420", "일괄 적용 실패: ") + ex.GetBaseException().Message;
 				StatusText.Foreground = (Brush)FindResource("G2Err");
 			}
 			finally
@@ -1167,8 +1167,8 @@ namespace CameraControl.windows
 			}
 			if (result != null && ConfirmBatch && result.Saved > 0 && !_closed)
 			{
-				string text = StatusText.Text + (result.Errors.Count > 0 ? "\n\n실패:\n" + string.Join("\n", result.Errors.Take(8)) + (result.Errors.Count > 8 ? "\n…" : "") : "") + "\n\n결과 폴더를 열까요?";
-				if (global::CameraControl.Core.Classes.G2Dialog.Show(this, text, "일괄 적용", MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes)
+				string text = StatusText.Text + (result.Errors.Count > 0 ? global::CameraControl.Devices.UiText.T("M0421", "\n\n실패:\n") + string.Join("\n", result.Errors.Take(8)) + (result.Errors.Count > 8 ? "\n…" : "") : "") + global::CameraControl.Devices.UiText.T("M0422", "\n\n결과 폴더를 열까요?");
+				if (global::CameraControl.Core.Classes.G2Dialog.Show(this, text, global::CameraControl.Devices.UiText.T("M0415", "일괄 적용"), MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes)
 				{
 					try { System.Diagnostics.Process.Start("explorer.exe", "\"" + result.OutputFolder + "\""); } catch (Exception) { }
 				}
@@ -1180,7 +1180,7 @@ namespace CameraControl.windows
 		{
 			_batchCts?.Cancel();
 			BatchStopButton.IsEnabled = false;
-			BusyText.Text = "현재 사진을 저장한 뒤 멈추는 중…";
+			BusyText.Text = global::CameraControl.Devices.UiText.T("M0348", "현재 사진을 저장한 뒤 중지하는 중…");
 		}
 
 		/// <summary>기존 색보정과 같은 방식으로 세션 목록에 추가하고 선택한다. 자동 내보내기(FileTransfered)는 호출하지 않는다.</summary>

@@ -42,7 +42,7 @@ public partial class EditSession : Window, IComponentConnector
 			string year = DateTime.Now.ToString("yyyy");
 			string month = DateTime.Now.ToString("MM");
 			string day = DateTime.Now.ToString("dd");
-			dialog.Description = "새로운 새션 폴더를 만드세요.";
+			dialog.Description = global::CameraControl.Devices.UiText.T("M0305", "새 세션 폴더를 만들어 주세요.");
 			dialog.SelectedPath = Path.Combine(ServiceProvider.Settings.DownloadFolder, year.ToString() + "년" + month.ToString() + "월\\", day.ToString());
 			if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
 			{
@@ -51,7 +51,7 @@ public partial class EditSession : Window, IComponentConnector
 		}
 		catch (Exception exception)
 		{
-			global::CameraControl.Core.Classes.G2Dialog.Show("폴더를 만들 수 없습니다.");
+			global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0306", "폴더를 만들 수 없습니다."));
 			Log.Error("폴더를 만들 수 없습니다.", exception);
 		}
 	}

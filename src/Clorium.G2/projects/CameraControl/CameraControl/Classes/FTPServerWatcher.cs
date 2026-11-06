@@ -122,7 +122,7 @@ public class FTPServerWatcher
 		}
 		catch (Exception ex)
 		{
-			global::CameraControl.Core.Classes.G2Dialog.Show("모바일 카메라 감시자 설정 중 오류: " + ex.Message, "폴더 오류", MessageBoxButton.OK, MessageBoxImage.Hand);
+			global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0125", "모바일 카메라 감시 설정 중 오류가 발생했습니다: ") + ex.Message, global::CameraControl.Devices.UiText.T("M0126", "폴더 오류"), MessageBoxButton.OK, MessageBoxImage.Hand);
 		}
 	}
 
@@ -177,7 +177,7 @@ public class FTPServerWatcher
 		catch (Exception ex)
 		{
 			Exception ex2 = ex;
-			global::CameraControl.Core.Classes.G2Dialog.Show("모바일 카메라 공용 폴더 이벤트 오류: " + ex2.Message, "이벤트 오류", MessageBoxButton.OK, MessageBoxImage.Hand);
+			global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0127", "모바일 카메라 공용 폴더에서 이벤트 오류가 발생했습니다: ") + ex2.Message, global::CameraControl.Devices.UiText.T("M0128", "이벤트 오류"), MessageBoxButton.OK, MessageBoxImage.Hand);
 		}
 	}
 

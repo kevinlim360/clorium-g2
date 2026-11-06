@@ -16,8 +16,8 @@ public static class CloriumStackProcess
     public static string DescribeProgress(string line)
     {
         if (!line.StartsWith("{")) return line;
-        try { return (string)JObject.Parse(line)["message"] ?? "합성 처리 중"; }
-        catch (Newtonsoft.Json.JsonException) { return "합성 처리 중"; }
+        try { return (string)JObject.Parse(line)["message"] ?? global::CameraControl.Devices.UiText.T("M0004", "합성 처리 중"); }
+        catch (Newtonsoft.Json.JsonException) { return global::CameraControl.Devices.UiText.T("M0004", "합성 처리 중"); }
     }
 
     private static string Quote(string value)

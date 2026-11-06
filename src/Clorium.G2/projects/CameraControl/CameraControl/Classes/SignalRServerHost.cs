@@ -37,7 +37,7 @@ public class SignalRServerHost : IDisposable
 		catch (Exception ex)
 		{
 			Log.Debug("모바일 웹 서버 시작 실패: " + ex.Message);
-			global::CameraControl.Core.Classes.G2Dialog.Show("모바일 웹 서버 시작할 수 없습니다.\n 모바일 웹서버 시작을 원하시면 관리자 권한으로 다시 실행해 주세요.");
+			global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0170", "모바일 웹 서버를 시작할 수 없습니다.\n관리자 권한으로 다시 실행해 주세요."));
 			_signalRServer = null;
 		}
 	}

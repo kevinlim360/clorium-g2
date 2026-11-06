@@ -109,7 +109,7 @@ public static class G2Dialog
 			case MessageBoxResult.Yes: return Korean ? "예" : "Yes";
 			case MessageBoxResult.No: return Korean ? "아니요" : "No";
 			case MessageBoxResult.Cancel: return Korean ? "취소" : "Cancel";
-			default: return Korean ? "확인" : "OK";
+			default: return Korean ? global::CameraControl.Devices.UiText.T("M0042", "확인") : "OK";
 		}
 	}
 
@@ -120,7 +120,7 @@ public static class G2Dialog
 			case MessageBoxImage.Error: return Korean ? "오류" : "Error";
 			case MessageBoxImage.Warning: return Korean ? "주의" : "Warning";
 			case MessageBoxImage.Question: return Korean ? "확인" : "Confirm";
-			default: return Korean ? "알림" : "Notice";
+			default: return Korean ? global::CameraControl.Devices.UiText.T("M0002", "알림") : "Notice";
 		}
 	}
 

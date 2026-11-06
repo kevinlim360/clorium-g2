@@ -30,7 +30,7 @@ public class SignalRServerHub : Hub
 				try
 				{
 					mainWindow.ExeWinCommand(cmd, data);
-					Clients.Caller.onCommandReceived(cmd + " - > 실행 완료");
+					Clients.Caller.onCommandReceived(cmd + global::CameraControl.Devices.UiText.T("M0172", " - 실행 완료"));
 					return;
 				}
 				catch (Exception ex)

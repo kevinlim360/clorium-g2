@@ -1,5 +1,7 @@
 # 클로리움 G2 작업 기록
 
+2026-11-07 사용자 검토 메시지 엑셀 반영(handoff/messages/사용자메시지_한영.xlsx, 2026-11-06 23:54 저장본). tools/KoreanText messages-apply: 메시지 485개, 627곳(41개 소스 파일)을 UiText.T("M…", "새 한글")로 바꾸고 projects/CameraControl/Data/Messages.xml(한·영 485개)을 만듦. 위치 못 찾음 11곳: 오늘 다시 만든 카메라·PC 툴팁 옛 문구 9곳(이제 없음)과 G2Dialog 제목 2곳(이미 한/영 분기) — 건너뜀. 비교/키 문구는 한글 그대로이며 화면 표시에만 쓰임을 확인. 결과 목록: handoff/messages/메시지_반영결과.txt. SuperfocusRegression에 UiText.cs와 Log 대체를 추가. 검사: 빌드 오류 0, UiBinding 84, ThemeCheck 80, MeasureCapture 16, SuperfocusRegression 통과. 미확인: 영어 모드로 실제 화면 전체 확인, 엑셀 이후에 생긴 툴팁 문구(모델·모드·배터리 등)는 아직 표에 없음.
+
 2026-11-06 상태 아이콘 툴팁 그래픽(사용자 요청). 카메라: 시리얼 제거, 모드(Mode.NumericValue 0 P·1 Tv·2 Av·3 M·4 Bulb·9 Auto) 추가, 배터리 아이콘(20% 이하 빨강·50% 이하 주황·그 위 녹색)+%. PC: RAM·SSD(드라이브별) 막대그래프 뒤에 사용 % 숫자와 GB(75% 이상 주황, 90% 이상 빨강). 새 Classes/StatusTip.cs, 테마 색(G2Ok/G2Pr/G2Err/G2Line) 사용. 검사: 빌드 오류 0, ThemeCheck 79(툴팁 밝은/어두운 렌더 포함), UiBinding 84. 미확인: 실제 카메라 연결 상태에서 모드 값.
 
 2026-11-06 카메라 툴팁·시작 화면(사용자 요청). 오늘 촬영/세션: 기존 CaptureCount(이번 실행의 일반 촬영만)·TodaySessionCounter(바코드 세션만, 날짜 초기화 없음) 대신 TodayCaptures가 세션 폴더(하위 포함)의 오늘 날짜 카메라 파일(JPEG/RAW, PNG 결과 제외)과 그 파일이 있는 세션 수를 백그라운드로 셈(실데이터 Default 51컷/1세션, 디스크 대조 일치). 시작 시 흰 박스: 로고 잔상이 아니라 (1) 메인 창 첫 프레임 전 흰 화면 → FirstFrameCloak(DWM cloak, 첫 렌더 후 표시, 5초 안전), (2) 첫 사진 맞춤 전 사진 뷰어의 흰 사진 틀이 화면 가운데부터 원래 크기로 보임 → 첫 사진 맞춤 후 표시, (3) 동영상 재생 막대가 바인딩 값 없을 때 보임 → FallbackValue=Collapsed. 화면 연속 캡처로 흰 프레임 90%→0% 확인. 로고 AI PHOTO STATION #171717→#808080. 검사: 빌드 오류 0, UiBinding 84, ThemeCheck 76. 미확인: 카메라 툴팁을 실제로 띄운 화면.

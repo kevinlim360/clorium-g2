@@ -122,7 +122,7 @@ internal static class CloriumAutoSizing
 			Log.Error("AutoSizing : executable not found " + path);
 			if (showErrors)
 			{
-				global::CameraControl.Core.Classes.G2Dialog.Show("클로리움 오토사이징 프로그램을 찾을 수 없습니다.\n\n" + path + "\n\n클로리움 설정 > 오토사이징에서 실행 파일 경로를 확인해 주세요.", "오토사이징", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+				global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0101", "클로리움 오토사이징 프로그램을 찾을 수 없습니다.\n\n") + path + global::CameraControl.Devices.UiText.T("M0102", "\n\n클로리움 설정 > 오토사이징에서 실행 파일 경로를 확인해 주세요."), global::CameraControl.Devices.UiText.T("M0103", "오토사이징"), MessageBoxButton.OK, MessageBoxImage.Exclamation);
 			}
 			return false;
 		}
@@ -149,7 +149,7 @@ internal static class CloriumAutoSizing
 			Log.Error("AutoSizing : unable to start " + path, ex);
 			if (showErrors)
 			{
-				global::CameraControl.Core.Classes.G2Dialog.Show("클로리움 오토사이징 프로그램을 시작하지 못했습니다.\n\n" + ex.Message, "오토사이징", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+				global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0104", "클로리움 오토사이징 프로그램을 시작하지 못했습니다.\n\n") + ex.Message, global::CameraControl.Devices.UiText.T("M0103", "오토사이징"), MessageBoxButton.OK, MessageBoxImage.Exclamation);
 			}
 			return false;
 		}

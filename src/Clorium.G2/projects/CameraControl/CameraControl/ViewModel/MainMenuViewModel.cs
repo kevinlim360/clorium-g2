@@ -451,11 +451,11 @@ public class MainMenuViewModel : ViewModelBase
 		if (!CanStartNewCaptureSession()) return;
 		if ((ServiceProvider.Settings.ModeBarcodeSession || ServiceProvider.Settings.ModeBarcodeCapture) && ServiceProvider.Settings.UseBarcodeScanner)
 		{
-			global::CameraControl.Core.Classes.G2Dialog.Show("\ud83d\udea8 바코드 모드 설정되면 새 세션 작업은 할 수 없습니다.", "알림", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+			global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0252", "바코드 모드에서는 새 세션을 만들 수 없습니다."), global::CameraControl.Devices.UiText.T("M0002", "알림"), MessageBoxButton.OK, MessageBoxImage.Asterisk);
 		}
 		else if (ServiceProvider.Settings.UseAlarm && !ServiceProvider.Settings.IsTimerRunning)
 		{
-			global::CameraControl.Core.Classes.G2Dialog.Show("⚠\ufe0f 작업시작 버튼을 누르세요.", "알림", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+			global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0253", "작업시작 버튼을 눌러 주세요."), global::CameraControl.Devices.UiText.T("M0002", "알림"), MessageBoxButton.OK, MessageBoxImage.Asterisk);
 		}
 		else
 		{
@@ -512,7 +512,7 @@ public class MainMenuViewModel : ViewModelBase
 	{
 		if (ServiceProvider.Settings.isBtnPressed || !ServiceProvider.Settings.ThumbailLoaded)
 		{
-			global::CameraControl.Core.Classes.G2Dialog.Show("촬영 이미지의 저장과 썸네일 처리가 끝난 후 다음 제품으로 이동하세요.");
+			global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0254", "촬영 이미지의 저장과 썸네일 처리가 끝난 뒤 다음 제품으로 이동해 주세요."));
 			return false;
 		}
 		return true;
@@ -608,7 +608,7 @@ public class MainMenuViewModel : ViewModelBase
 			}
 		}
 		ServiceProvider.WindowsManager.ExecuteCommand("MainWnd_Message", TranslationStrings.MsgLastSessionCantBeDeleted);
-		global::CameraControl.Core.Classes.G2Dialog.Show("세션이 하나면 지울 수 없습니다.");
+		global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0258", "세션이 하나뿐이면 삭제할 수 없습니다."));
 	}
 
 	private void ExportSession()
@@ -825,7 +825,7 @@ public class MainMenuViewModel : ViewModelBase
 		}
 		catch (IOException)
 		{
-			global::CameraControl.Core.Classes.G2Dialog.Show("\ud83d\udea8 csv 파일을 쓰기입니다.", "경고", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+			global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0260", "CSV 파일을 쓰는 중입니다."), global::CameraControl.Devices.UiText.T("M0214", "경고"), MessageBoxButton.OK, MessageBoxImage.Exclamation);
 		}
 	}
 
@@ -846,7 +846,7 @@ public class MainMenuViewModel : ViewModelBase
 			}
 			catch (IOException)
 			{
-				global::CameraControl.Core.Classes.G2Dialog.Show("\ud83d\udea8 csv 파일을 먼저 닫은 후 본 메세지 창을 닫아 주세요.", "경고", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+				global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0261", "CSV 파일을 먼저 닫은 뒤 이 창을 닫아 주세요."), global::CameraControl.Devices.UiText.T("M0214", "경고"), MessageBoxButton.OK, MessageBoxImage.Exclamation);
 			}
 		}
 	}
@@ -872,7 +872,7 @@ public class MainMenuViewModel : ViewModelBase
 		}
 		if (ServiceProvider.Settings.ShowAPICommunication)
 		{
-			global::CameraControl.Core.Classes.G2Dialog.Show("\ud83d\udce1 API 송신합니다.\n" + APISendData.JsonData, "알림", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+			global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0262", "API로 전송합니다.\n") + APISendData.JsonData, global::CameraControl.Devices.UiText.T("M0002", "알림"), MessageBoxButton.OK, MessageBoxImage.Asterisk);
 		}
 		return true;
 	}
@@ -889,17 +889,17 @@ public class MainMenuViewModel : ViewModelBase
 		}
 		if (ServiceProvider.Settings.UseAlarm && !IsMusinsaFrontOK && !IsMusinsaBackOK)
 		{
-			global::CameraControl.Core.Classes.G2Dialog.Show("⚠\ufe0f 앞면과 뒤면 촬영을 모두 해주세요.", "알림", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+			global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0263", "앞면과 뒷면을 모두 촬영해 주세요."), global::CameraControl.Devices.UiText.T("M0002", "알림"), MessageBoxButton.OK, MessageBoxImage.Asterisk);
 			return false;
 		}
 		if (ServiceProvider.Settings.UseAlarm && !IsMusinsaFrontOK)
 		{
-			global::CameraControl.Core.Classes.G2Dialog.Show("⚠\ufe0f 앞면 촬영을 해주세요.", "알림", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+			global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0264", "앞면을 촬영해 주세요."), global::CameraControl.Devices.UiText.T("M0002", "알림"), MessageBoxButton.OK, MessageBoxImage.Asterisk);
 			return false;
 		}
 		if (ServiceProvider.Settings.UseAlarm && !IsMusinsaBackOK)
 		{
-			global::CameraControl.Core.Classes.G2Dialog.Show("⚠\ufe0f 뒤면 촬영을 해주세요.", "알림", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+			global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0265", "뒷면을 촬영해 주세요."), global::CameraControl.Devices.UiText.T("M0002", "알림"), MessageBoxButton.OK, MessageBoxImage.Asterisk);
 			return false;
 		}
 		makeMeasureInformData();
@@ -912,7 +912,7 @@ public class MainMenuViewModel : ViewModelBase
 		}
 		if (ServiceProvider.Settings.ShowAPICommunication)
 		{
-			global::CameraControl.Core.Classes.G2Dialog.Show("\ud83d\udce1 API 송신합니다.\n" + APISendData.JsonData, "알림", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+			global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0262", "API로 전송합니다.\n") + APISendData.JsonData, global::CameraControl.Devices.UiText.T("M0002", "알림"), MessageBoxButton.OK, MessageBoxImage.Asterisk);
 		}
 		return true;
 	}
@@ -948,7 +948,7 @@ public class MainMenuViewModel : ViewModelBase
 		}
 		else
 		{
-			global::CameraControl.Core.Classes.G2Dialog.Show("이미지 폴더가 존재하지 않습니다.");
+			global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0267", "이미지 폴더가 없습니다."));
 		}
 	}
 
@@ -974,7 +974,7 @@ public class MainMenuViewModel : ViewModelBase
 		}
 		else
 		{
-			global::CameraControl.Core.Classes.G2Dialog.Show("이미지 폴더가 존재하지 않습니다.");
+			global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0267", "이미지 폴더가 없습니다."));
 		}
 	}
 
@@ -1083,17 +1083,17 @@ public class MainMenuViewModel : ViewModelBase
 			if (ex.Response is HttpWebResponse errorResponse)
 			{
 				int statusCode = (int)errorResponse.StatusCode;
-				global::CameraControl.Core.Classes.G2Dialog.Show($"API 서버 에러: 코드 {statusCode} ({errorResponse.StatusDescription})");
+				global::CameraControl.Core.Classes.G2Dialog.Show(string.Format(global::CameraControl.Devices.UiText.T("M0268", "API 서버 오류: 코드 {0} ({1})"), statusCode, errorResponse.StatusDescription));
 			}
 			else
 			{
-				global::CameraControl.Core.Classes.G2Dialog.Show($"네트워크 연결 실패: {ex.Status}");
+				global::CameraControl.Core.Classes.G2Dialog.Show(string.Format(global::CameraControl.Devices.UiText.T("M0269", "네트워크 연결에 실패했습니다: {0}"), ex.Status));
 			}
 			return false;
 		}
 		catch (Exception ex2)
 		{
-			global::CameraControl.Core.Classes.G2Dialog.Show("일반 오류: " + ex2.Message);
+			global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0270", "오류가 발생했습니다: ") + ex2.Message);
 			return false;
 		}
 	}
@@ -1118,7 +1118,7 @@ public class MainMenuViewModel : ViewModelBase
 		}
 		catch (WebException ex)
 		{
-			string message = "네트워크 오류: " + ex.Message;
+			string message = global::CameraControl.Devices.UiText.T("M0271", "네트워크 오류: ") + ex.Message;
 			if (ex.Response != null && ex.Response is HttpWebResponse errorResponse)
 			{
 				using Stream stream = errorResponse.GetResponseStream();
@@ -1126,10 +1126,10 @@ public class MainMenuViewModel : ViewModelBase
 				{
 					using StreamReader reader = new StreamReader(stream);
 					string errorBody = reader.ReadToEnd();
-					message = message + $"\nHTTP {(int)errorResponse.StatusCode} - {errorResponse.StatusCode}" + "\n응답 메시지:\n" + errorBody;
+					message = message + $"\nHTTP {(int)errorResponse.StatusCode} - {errorResponse.StatusCode}" + global::CameraControl.Devices.UiText.T("M0272", "\n응답 메시지:\n") + errorBody;
 				}
 			}
-			global::CameraControl.Core.Classes.G2Dialog.Show(message, "알림", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+			global::CameraControl.Core.Classes.G2Dialog.Show(message, global::CameraControl.Devices.UiText.T("M0002", "알림"), MessageBoxButton.OK, MessageBoxImage.Asterisk);
 			return false;
 		}
 	}

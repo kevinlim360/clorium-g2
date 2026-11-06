@@ -2145,7 +2145,7 @@ public class LiveViewViewModel : ViewModelBase
 				Application.Current.Dispatcher.Invoke(() =>
 				{
 					Log.Error("라이브 뷰 에러 발생");
-					global::CameraControl.Core.Classes.G2Dialog.Show("⛔ 라이브 뷰가 정지되었습니다.", "알림", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+					global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0246", "라이브 뷰가 정지되었습니다."), global::CameraControl.Devices.UiText.T("M0002", "알림"), MessageBoxButton.OK, MessageBoxImage.Exclamation);
 				});
 				return;
 			}
@@ -2567,7 +2567,7 @@ public class LiveViewViewModel : ViewModelBase
 	{
 		if (ServiceProvider.DeviceManager.SelectedCameraDevice.IsBusy)
 		{
-			global::CameraControl.Core.Classes.G2Dialog.Show("이미지 다운로드 중입니다. 다시 시도하세요.", "알림", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+			global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0247", "이미지를 다운로드하는 중입니다. 잠시 후 다시 시도해 주세요."), global::CameraControl.Devices.UiText.T("M0002", "알림"), MessageBoxButton.OK, MessageBoxImage.Asterisk);
 			return;
 		}
 		Thread thread = new Thread(() =>
@@ -3166,8 +3166,8 @@ public class LiveViewViewModel : ViewModelBase
 		{
 			return;
 		}
-		string message = "'" + itemToRemove.Name + "' 정말 삭제하시겠습니까?";
-		MessageBoxResult result = global::CameraControl.Core.Classes.G2Dialog.Show(message, "파일 삭제 확인", MessageBoxButton.OKCancel, MessageBoxImage.Exclamation);
+		string message = "'" + itemToRemove.Name + global::CameraControl.Devices.UiText.T("M0248", "'을(를) 삭제할까요?");
+		MessageBoxResult result = global::CameraControl.Core.Classes.G2Dialog.Show(message, global::CameraControl.Devices.UiText.T("M0249", "파일 삭제 확인"), MessageBoxButton.OKCancel, MessageBoxImage.Exclamation);
 		if (result != MessageBoxResult.OK)
 		{
 			return;
@@ -3190,11 +3190,11 @@ public class LiveViewViewModel : ViewModelBase
 		}
 		catch (IOException ex)
 		{
-			global::CameraControl.Core.Classes.G2Dialog.Show("파일을 삭제중 오류가 발생했습니다:\n" + ex.Message, "오류", MessageBoxButton.OK, MessageBoxImage.Hand);
+			global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0250", "파일을 삭제하는 중 오류가 발생했습니다:\n") + ex.Message, global::CameraControl.Devices.UiText.T("M0043", "오류"), MessageBoxButton.OK, MessageBoxImage.Hand);
 		}
 		catch (Exception ex2)
 		{
-			global::CameraControl.Core.Classes.G2Dialog.Show("알 수 없는 오류가 발생했습니다:\n" + ex2.Message, "오류", MessageBoxButton.OK, MessageBoxImage.Hand);
+			global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0251", "알 수 없는 오류가 발생했습니다:\n") + ex2.Message, global::CameraControl.Devices.UiText.T("M0043", "오류"), MessageBoxButton.OK, MessageBoxImage.Hand);
 		}
 	}
 

@@ -55,7 +55,7 @@ internal class FTPFakeCameraDevice : BaseCameraDevice
 			});
 			return;
 		}
-		throw new Exception("폴더에 처리할 파일(jpg, mp4)이 없습니다.");
+		throw new Exception(global::CameraControl.Devices.UiText.T("M0086", "폴더에 처리할 파일(jpg, mp4)이 없습니다."));
 	}
 
 	public override void CapturePhotoNoAf()
@@ -86,7 +86,7 @@ internal class FTPFakeCameraDevice : BaseCameraDevice
 				}
 				return;
 			}
-			throw new InvalidCastException("지원하지 않는 데이터 형식입니다: " + o.GetType().Name);
+			throw new InvalidCastException(global::CameraControl.Devices.UiText.T("M0085", "지원하지 않는 데이터 형식입니다: ") + o.GetType().Name);
 		}
 		catch (Exception exception)
 		{

@@ -16,7 +16,7 @@ public sealed class FocusBoxContrast
     public static FocusBoxContrast From(LiveViewData frame)
     {
         if (frame == null || frame.ImageWidth <= 0 || frame.ImageHeight <= 0)
-            throw new InvalidOperationException("라이브뷰에서 포커스 박스를 선택해 주세요.");
+            throw new InvalidOperationException(global::CameraControl.Devices.UiText.T("M0005", "라이브뷰에서 포커스 박스를 선택해 주세요."));
         // A frame without the camera's AF box (size 0, e.g. after the stack turned EVF AF off) gets a 10 % box at its centre.
         if (frame.FocusFrameXSize <= 0 || frame.FocusFrameYSize <= 0)
             return new FocusBoxContrast { X = frame.FocusX > 0 ? (double)frame.FocusX / frame.ImageWidth : 0.5, Y = frame.FocusY > 0 ? (double)frame.FocusY / frame.ImageHeight : 0.5, Width = 0.1, Height = 0.1 };
@@ -32,7 +32,7 @@ public sealed class FocusBoxContrast
     }
     public double Measure(LiveViewData frame)
     {
-        if (frame?.ImageData == null || frame.ImageData.Length == 0) throw new InvalidOperationException("라이브뷰 이미지가 없습니다.");
+        if (frame?.ImageData == null || frame.ImageData.Length == 0) throw new InvalidOperationException(global::CameraControl.Devices.UiText.T("M0006", "라이브뷰 이미지가 없습니다."));
         using (var stream = new MemoryStream(frame.ImageData, frame.ImageDataPosition, frame.ImageData.Length - frame.ImageDataPosition))
         using (var source = new Bitmap(stream))
         using (var crop = new Bitmap(128,128,PixelFormat.Format24bppRgb))
@@ -40,7 +40,7 @@ public sealed class FocusBoxContrast
             int left = Math.Max(0, (int)((X - Width / 2) * source.Width)), top = Math.Max(0, (int)((Y - Height / 2) * source.Height));
             int width = Math.Min(source.Width - left, Math.Max(3,(int)(Width * source.Width)));
             int height = Math.Min(source.Height - top, Math.Max(3,(int)(Height * source.Height)));
-            if (width < 3 || height < 3) throw new InvalidOperationException("포커스 박스가 이미지 밖에 있습니다.");
+            if (width < 3 || height < 3) throw new InvalidOperationException(global::CameraControl.Devices.UiText.T("M0007", "포커스 박스가 이미지 밖에 있습니다."));
             using (var g = Graphics.FromImage(crop)) g.DrawImage(source,new Rectangle(0,0,128,128),new Rectangle(left,top,width,height),GraphicsUnit.Pixel);
             var bits = crop.LockBits(new Rectangle(0,0,128,128),ImageLockMode.ReadOnly,PixelFormat.Format24bppRgb);
             var bytes = new byte[bits.Stride * 128];

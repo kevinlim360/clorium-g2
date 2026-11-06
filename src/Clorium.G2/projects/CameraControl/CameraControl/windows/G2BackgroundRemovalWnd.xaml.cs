@@ -127,17 +127,17 @@ public partial class G2BackgroundRemovalWnd : Window
 			if (t.IsFaulted)
 			{
 				_ready = false;
-				SetChip("연결 안 됨", "G2Err", "G2Neutral", t.Exception.GetBaseException().Message);
+				SetChip(global::CameraControl.Devices.UiText.T("M0307", "연결 안 됨"), "G2Err", "G2Neutral", t.Exception.GetBaseException().Message);
 			}
 			else if (t.Result.Ready)
 			{
 				_ready = true;
-				SetChip("준비 완료", "G2Ok", "G2OkBg", "배경제거 엔진(BiRefNet)이 준비됐습니다.");
+				SetChip(global::CameraControl.Devices.UiText.T("M0308", "준비 완료"), "G2Ok", "G2OkBg", global::CameraControl.Devices.UiText.T("M0309", "배경제거 엔진(BiRefNet)이 준비되었습니다."));
 			}
 			else
 			{
 				_ready = false;
-				SetChip("모델 준비 중", "G2NeutralText", "G2Neutral", string.IsNullOrEmpty(t.Result.Message) ? "모델을 불러오고 있습니다." : t.Result.Message);
+				SetChip(global::CameraControl.Devices.UiText.T("M0310", "모델 준비 중"), "G2NeutralText", "G2Neutral", string.IsNullOrEmpty(t.Result.Message) ? global::CameraControl.Devices.UiText.T("M0311", "모델을 불러오는 중입니다.") : t.Result.Message);
 			}
 			UpdateButtons();
 			if (!_ready && IsLoaded) _healthTimer.Start();
@@ -161,8 +161,8 @@ public partial class G2BackgroundRemovalWnd : Window
 		ModeFile.IsEnabled = ModeFolder.IsEnabled = TargetBox.IsEnabled = BrowseButton.IsEnabled = ScanButton.IsEnabled = idle;
 		Quality1024.IsEnabled = Quality2048.IsEnabled = Edge0.IsEnabled = Edge1.IsEnabled = Edge2.IsEnabled = OpaqueSwitch.IsEnabled = DetailSwitch.IsEnabled = idle;
 		OpenOutputButton.IsEnabled = !string.IsNullOrEmpty(_output) && Directory.Exists(_output);
-		if (!_running && _planId != null && !_ready) SettingsHint.Text = "모델 준비가 끝나면 시작할 수 있습니다.";
-		else SettingsHint.Text = "원본은 그대로 두고, 옆의 _bgr 폴더에 투명 배경 PNG로 저장합니다.";
+		if (!_running && _planId != null && !_ready) SettingsHint.Text = global::CameraControl.Devices.UiText.T("M0312", "모델 준비가 끝나면 시작할 수 있습니다.");
+		else SettingsHint.Text = global::CameraControl.Devices.UiText.T("M0313", "원본은 그대로 두고, 옆의 _bgr 폴더에 투명 배경 PNG로 저장합니다.");
 	}
 
 	// ---------- target ----------
@@ -170,7 +170,7 @@ public partial class G2BackgroundRemovalWnd : Window
 	private void Mode_Checked(object sender, RoutedEventArgs e)
 	{
 		if (BrowseText == null) return;
-		BrowseText.Text = ModeFolder.IsChecked == true ? "폴더 선택" : "사진 선택";
+		BrowseText.Text = ModeFolder.IsChecked == true ? global::CameraControl.Devices.UiText.T("M0314", "폴더 선택") : global::CameraControl.Devices.UiText.T("M0315", "사진 선택");
 		if (!_settingTarget) Invalidate();
 	}
 
@@ -192,7 +192,7 @@ public partial class G2BackgroundRemovalWnd : Window
 		string[] current = Paths();
 		if (ModeFolder.IsChecked == true)
 		{
-			using (System.Windows.Forms.FolderBrowserDialog dialog = new System.Windows.Forms.FolderBrowserDialog { Description = "배경을 지울 사진 폴더를 선택하세요. 하위 폴더도 함께 처리합니다." })
+			using (System.Windows.Forms.FolderBrowserDialog dialog = new System.Windows.Forms.FolderBrowserDialog { Description = global::CameraControl.Devices.UiText.T("M0316", "배경을 지울 사진 폴더를 선택해 주세요. 하위 폴더도 함께 처리합니다.") })
 			{
 				if (current.Length > 0 && Directory.Exists(current[0])) dialog.SelectedPath = current[0];
 				if (dialog.ShowDialog() != System.Windows.Forms.DialogResult.OK) return;
@@ -202,9 +202,9 @@ public partial class G2BackgroundRemovalWnd : Window
 		}
 		Microsoft.Win32.OpenFileDialog files = new Microsoft.Win32.OpenFileDialog
 		{
-			Title = "배경을 지울 사진 선택",
+			Title = global::CameraControl.Devices.UiText.T("M0317", "배경을 지울 사진 선택"),
 			Multiselect = true,
-			Filter = "사진 (JPG, PNG, WebP, TIFF, BMP)|*.jpg;*.jpeg;*.png;*.webp;*.tif;*.tiff;*.bmp"
+			Filter = global::CameraControl.Devices.UiText.T("M0318", "사진 (JPG, PNG, WebP, TIFF, BMP)|*.jpg;*.jpeg;*.png;*.webp;*.tif;*.tiff;*.bmp")
 		};
 		if (current.Length > 0)
 		{
@@ -233,16 +233,16 @@ public partial class G2BackgroundRemovalWnd : Window
 		bool folder = ModeFolder.IsChecked == true;
 		if (paths.Length == 0)
 		{
-			ShowScanError(folder ? "사진 폴더를 선택해 주세요." : "배경을 지울 사진을 선택해 주세요.");
+			ShowScanError(folder ? global::CameraControl.Devices.UiText.T("M0319", "사진 폴더를 선택해 주세요.") : global::CameraControl.Devices.UiText.T("M0320", "배경을 지울 사진을 선택해 주세요."));
 			return;
 		}
 		if (folder && paths.Length > 1)
 		{
-			ShowScanError("폴더는 하나만 지정해 주세요.");
+			ShowScanError(global::CameraControl.Devices.UiText.T("M0321", "폴더는 하나만 선택해 주세요."));
 			return;
 		}
 		ScanButton.IsEnabled = false;
-		StatusTitle.Text = "대상을 확인하고 있습니다";
+		StatusTitle.Text = global::CameraControl.Devices.UiText.T("M0322", "대상을 확인하는 중입니다");
 		StatusText.Text = "";
 		Task.Run(() => CloriumBackgroundRemoval.Scan(paths, folder)).ContinueWith(t =>
 		{
@@ -250,7 +250,7 @@ public partial class G2BackgroundRemovalWnd : Window
 			if (t.IsFaulted)
 			{
 				ShowScanError(t.Exception.GetBaseException().Message);
-				StatusTitle.Text = "사진이나 폴더를 고른 뒤 확인을 눌러 주세요";
+				StatusTitle.Text = global::CameraControl.Devices.UiText.T("M0323", "사진이나 폴더를 고른 뒤 확인을 눌러 주세요");
 				return;
 			}
 			JsonElement plan = t.Result;
@@ -259,16 +259,16 @@ public partial class G2BackgroundRemovalWnd : Window
 			int total = plan.GetProperty("total").GetInt32();
 			int existing = plan.TryGetProperty("existing", out JsonElement ex) ? ex.GetInt32() : 0;
 			int excluded = plan.TryGetProperty("excluded", out JsonElement exc) ? exc.GetInt32() : 0;
-			StringBuilder summary = new StringBuilder("사진 " + total + "장");
-			if (folder) summary.Append(" (하위 폴더 포함)");
-			if (existing > 0) summary.Append(" · 이미 결과가 있는 " + existing + "장은 새 이름으로 저장");
-			if (excluded > 0) summary.Append(" · 결과/연결 폴더 " + excluded + "개 제외");
+			StringBuilder summary = new StringBuilder(global::CameraControl.Devices.UiText.T("M0324", "사진 ") + total + global::CameraControl.Devices.UiText.T("M0325", "장"));
+			if (folder) summary.Append(global::CameraControl.Devices.UiText.T("M0326", " (하위 폴더 포함)"));
+			if (existing > 0) summary.Append(global::CameraControl.Devices.UiText.T("M0327", " · 이미 결과가 있는 ") + existing + global::CameraControl.Devices.UiText.T("M0328", "장은 새 이름으로 저장"));
+			if (excluded > 0) summary.Append(global::CameraControl.Devices.UiText.T("M0329", " · 결과/연결 폴더 ") + excluded + global::CameraControl.Devices.UiText.T("M0330", "개 제외"));
 			ScanSummary.Text = summary.ToString();
-			ScanOutput.Text = "저장 위치: " + _output;
+			ScanOutput.Text = global::CameraControl.Devices.UiText.T("M0331", "저장 위치: ") + _output;
 			ScanCard.Visibility = Visibility.Visible;
 			ScanError.Visibility = Visibility.Collapsed;
-			StatusTitle.Text = "준비됐습니다. 배경 제거 시작을 눌러 주세요";
-			StatusText.Text = "처리할 사진 " + total + "장";
+			StatusTitle.Text = global::CameraControl.Devices.UiText.T("M0332", "준비되었습니다. 배경 제거 시작을 눌러 주세요");
+			StatusText.Text = global::CameraControl.Devices.UiText.T("M0333", "처리할 사진 ") + total + global::CameraControl.Devices.UiText.T("M0325", "장");
 			CountText.Text = "0 / " + total;
 			Progress.Value = 0;
 			ErrorsCard.Visibility = Visibility.Collapsed;
@@ -404,7 +404,7 @@ public partial class G2BackgroundRemovalWnd : Window
 		{
 			if (t.IsFaulted)
 			{
-				StatusTitle.Text = "시작하지 못했습니다";
+				StatusTitle.Text = global::CameraControl.Devices.UiText.T("M0334", "시작하지 못했습니다");
 				StatusText.Text = t.Exception.GetBaseException().Message;
 				UpdateButtons();
 				return;
@@ -412,7 +412,7 @@ public partial class G2BackgroundRemovalWnd : Window
 			_jobId = t.Result.GetProperty("id").GetString();
 			_running = true;
 			ErrorsCard.Visibility = Visibility.Collapsed;
-			StatusTitle.Text = "배경을 지우고 있습니다";
+			StatusTitle.Text = global::CameraControl.Devices.UiText.T("M0335", "배경을 지우는 중입니다");
 			UpdateButtons();
 			Apply(t.Result);
 			_jobTimer.Start();
@@ -427,7 +427,7 @@ public partial class G2BackgroundRemovalWnd : Window
 		Task.Run(() => CloriumBackgroundRemoval.CancelBatch(job)).ContinueWith(t =>
 		{
 			StopButton.IsEnabled = true;
-			StatusText.Text = t.IsFaulted ? t.Exception.GetBaseException().Message : "현재 사진 저장을 마친 뒤 중지합니다.";
+			StatusText.Text = t.IsFaulted ? t.Exception.GetBaseException().Message : global::CameraControl.Devices.UiText.T("M0336", "현재 사진 저장을 마친 뒤 중지합니다.");
 		}, TaskScheduler.FromCurrentSynchronizationContext());
 	}
 
@@ -498,16 +498,16 @@ public partial class G2BackgroundRemovalWnd : Window
 		switch (status)
 		{
 			case "done":
-				StatusTitle.Text = failed > 0 ? "끝났습니다: " + success + "장 저장, " + failed + "장 실패" : "끝났습니다: " + success + "장 저장";
+				StatusTitle.Text = failed > 0 ? global::CameraControl.Devices.UiText.T("M0337", "완료되었습니다: ") + success + global::CameraControl.Devices.UiText.T("M0338", "장 저장, ") + failed + global::CameraControl.Devices.UiText.T("M0339", "장 실패") : global::CameraControl.Devices.UiText.T("M0337", "완료되었습니다: ") + success + global::CameraControl.Devices.UiText.T("M0340", "장 저장");
 				break;
 			case "cancelled":
-				StatusTitle.Text = "중지했습니다: " + success + "장 저장";
+				StatusTitle.Text = global::CameraControl.Devices.UiText.T("M0341", "중지했습니다: ") + success + global::CameraControl.Devices.UiText.T("M0340", "장 저장");
 				break;
 			default:
-				StatusTitle.Text = "처리하지 못했습니다";
+				StatusTitle.Text = global::CameraControl.Devices.UiText.T("M0342", "처리하지 못했습니다");
 				break;
 		}
-		StatusText.Text = Str(job, "message") + (job.TryGetProperty("seconds", out JsonElement s) && s.ValueKind == JsonValueKind.Number ? " · " + s.GetDouble().ToString("0.#") + "초" : "") + " · 다시 처리하려면 확인을 눌러 주세요.";
+		StatusText.Text = Str(job, "message") + (job.TryGetProperty("seconds", out JsonElement s) && s.ValueKind == JsonValueKind.Number ? " · " + s.GetDouble().ToString("0.#") + global::CameraControl.Devices.UiText.T("M0152", "초") : "") + global::CameraControl.Devices.UiText.T("M0343", " · 다시 처리하려면 확인을 눌러 주세요.");
 		ScanCard.Visibility = Visibility.Collapsed;
 		UpdateButtons();
 	}
@@ -612,7 +612,7 @@ public partial class G2BackgroundRemovalWnd : Window
 	private void UpdateZoomText()
 	{
 		double s = _zoom.ScaleX, actual = ActualPixelScale();
-		ZoomText.Text = s <= 1.001 ? "맞춤" + (actual > 0 ? " · " + Math.Round(100 / actual) + "%" : "") : actual > 0 ? Math.Round(100 * s / actual) + "%" : "×" + s.ToString("0.#");
+		ZoomText.Text = s <= 1.001 ? global::CameraControl.Devices.UiText.T("M0344", "맞춤") + (actual > 0 ? " · " + Math.Round(100 / actual) + "%" : "") : actual > 0 ? Math.Round(100 * s / actual) + "%" : "×" + s.ToString("0.#");
 		// At 200% and more show crisp photo pixels (edges of the cut-out) instead of smoothing them.
 		BitmapScalingMode mode = actual > 0 && s / actual >= 2 ? BitmapScalingMode.NearestNeighbor : BitmapScalingMode.HighQuality;
 		RenderOptions.SetBitmapScalingMode(SourceImage, mode);
@@ -635,7 +635,7 @@ public partial class G2BackgroundRemovalWnd : Window
 	private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
 	{
 		if (!_running || _jobId == null) return;
-		MessageBoxResult answer = global::CameraControl.Core.Classes.G2Dialog.Show(this, "배경 제거가 진행 중입니다.\n\n중지하고 닫을까요? (이미 저장된 결과는 유지됩니다)\n\n아니요를 누르면 계속 처리하고 창은 닫지 않습니다.", "배경제거", MessageBoxButton.YesNo, MessageBoxImage.Question);
+		MessageBoxResult answer = global::CameraControl.Core.Classes.G2Dialog.Show(this, global::CameraControl.Devices.UiText.T("M0345", "배경 제거가 진행 중입니다.\n\n중지하고 닫을까요? (이미 저장된 결과는 유지됩니다)\n\n아니요를 누르면 계속 처리하며 창을 닫지 않습니다."), global::CameraControl.Devices.UiText.T("M0116", "배경제거"), MessageBoxButton.YesNo, MessageBoxImage.Question);
 		if (answer != MessageBoxResult.Yes)
 		{
 			e.Cancel = true;

@@ -225,7 +225,7 @@ internal class TurnTableViewModel : LiveViewViewModel
 		set
 		{
 			_currentPos = value;
-			CurrentPosDisp = (double.Parse(_currentPos) / UNIT_ANGLE_TURNTABLE).ToString("F1") + "도";
+			CurrentPosDisp = (double.Parse(_currentPos) / UNIT_ANGLE_TURNTABLE).ToString("F1") + global::CameraControl.Devices.UiText.T("M0273", "도");
 		}
 	}
 
@@ -643,7 +643,7 @@ internal class TurnTableViewModel : LiveViewViewModel
 				if (bTargetPosUpdate)
 				{
 					TargetPos = CurrentPos;
-					TargetPosDisp = (double.Parse(TargetPos) / UNIT_ANGLE_TURNTABLE).ToString("F1") + "도";
+					TargetPosDisp = (double.Parse(TargetPos) / UNIT_ANGLE_TURNTABLE).ToString("F1") + global::CameraControl.Devices.UiText.T("M0273", "도");
 					bTargetPosUpdate = false;
 				}
 			});
@@ -663,7 +663,7 @@ internal class TurnTableViewModel : LiveViewViewModel
 		arduino.Init();
 		if (!arduino.ConnectSerial())
 		{
-			global::CameraControl.Core.Classes.G2Dialog.Show("\ud83d\udea8 턴테이블 USB 드라이브를 찾을 수 없습니다.\ud83d\udea8\n\n⚠\ufe0f 턴테이블 USB 포트 확인 바랍니다.⚠\ufe0f", "알림", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+			global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0284", "턴테이블 USB 드라이브를 찾을 수 없습니다.\n\nUSB 포트 연결을 확인해 주세요."), global::CameraControl.Devices.UiText.T("M0002", "알림"), MessageBoxButton.OK, MessageBoxImage.Asterisk);
 			return;
 		}
 		GetPos(sAxis);
@@ -705,7 +705,7 @@ internal class TurnTableViewModel : LiveViewViewModel
 		{
 			isRunning = true;
 			TargetPos = targetpos;
-			TargetPosDisp = (double.Parse(TargetPos) / UNIT_ANGLE_TURNTABLE).ToString("F1") + "도";
+			TargetPosDisp = (double.Parse(TargetPos) / UNIT_ANGLE_TURNTABLE).ToString("F1") + global::CameraControl.Devices.UiText.T("M0273", "도");
 			string packet = MakePacket(CMD_MOVE_ABS, axis, targetpos, "");
 			arduino.CommandSend(packet);
 			if (wait)
@@ -720,7 +720,7 @@ internal class TurnTableViewModel : LiveViewViewModel
 			Exception ex3 = ex2;
 			Application.Current.Dispatcher.Invoke(() =>
 			{
-				global::CameraControl.Core.Classes.G2Dialog.Show("⚠\ufe0f 절대 위치 이동 중 예외 발생: " + ex3.Message, "알림", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+				global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0285", "절대 위치로 이동하는 중 오류가 발생했습니다: ") + ex3.Message, global::CameraControl.Devices.UiText.T("M0002", "알림"), MessageBoxButton.OK, MessageBoxImage.Exclamation);
 			});
 			return false;
 		}
@@ -740,7 +740,7 @@ internal class TurnTableViewModel : LiveViewViewModel
 			isRunning = true;
 			int targetpos = int.Parse(CurrentPos) + (int)double.Parse(step);
 			TargetPos = targetpos.ToString();
-			TargetPosDisp = (double.Parse(TargetPos) / UNIT_ANGLE_TURNTABLE).ToString("F1") + "도";
+			TargetPosDisp = (double.Parse(TargetPos) / UNIT_ANGLE_TURNTABLE).ToString("F1") + global::CameraControl.Devices.UiText.T("M0273", "도");
 			string packet = MakePacket(CMD_MOVE_ABS, axis, targetpos.ToString(), "");
 			arduino.CommandSend(packet);
 			if (wait)
@@ -755,7 +755,7 @@ internal class TurnTableViewModel : LiveViewViewModel
 			Exception ex3 = ex2;
 			Application.Current.Dispatcher.Invoke(() =>
 			{
-				global::CameraControl.Core.Classes.G2Dialog.Show("⚠\ufe0f 상대 위치 이동 중 예외 발생: " + ex3.Message, "알림", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+				global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0286", "상대 위치로 이동하는 중 오류가 발생했습니다: ") + ex3.Message, global::CameraControl.Devices.UiText.T("M0002", "알림"), MessageBoxButton.OK, MessageBoxImage.Exclamation);
 			});
 			return false;
 		}
@@ -801,8 +801,8 @@ internal class TurnTableViewModel : LiveViewViewModel
 			}
 			TargetPos = "0";
 			CurrentPos = "0";
-			TargetPosDisp = "0도";
-			CurrentPosDisp = "0도";
+			TargetPosDisp = global::CameraControl.Devices.UiText.T("M0287", "0도");
+			CurrentPosDisp = global::CameraControl.Devices.UiText.T("M0287", "0도");
 		}
 		catch (Exception ex)
 		{
@@ -810,7 +810,7 @@ internal class TurnTableViewModel : LiveViewViewModel
 			Exception ex3 = ex2;
 			Application.Current.Dispatcher.Invoke(() =>
 			{
-				global::CameraControl.Core.Classes.G2Dialog.Show("⚠\ufe0f 홈 위치로 이동 중 예외 발생: " + ex3.Message);
+				global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0288", "홈 위치로 이동하는 중 오류가 발생했습니다: ") + ex3.Message);
 			});
 			isRunning = false;
 		}
@@ -869,8 +869,8 @@ internal class TurnTableViewModel : LiveViewViewModel
 		arduino.CommandSend(packet);
 		CurrentPos = "0";
 		TargetPos = CurrentPos;
-		CurrentPosDisp = (double.Parse(CurrentPos) / UNIT_ANGLE_TURNTABLE).ToString("F1") + "도";
-		TargetPosDisp = (double.Parse(TargetPos) / UNIT_ANGLE_TURNTABLE).ToString("F1") + "도";
+		CurrentPosDisp = (double.Parse(CurrentPos) / UNIT_ANGLE_TURNTABLE).ToString("F1") + global::CameraControl.Devices.UiText.T("M0273", "도");
+		TargetPosDisp = (double.Parse(TargetPos) / UNIT_ANGLE_TURNTABLE).ToString("F1") + global::CameraControl.Devices.UiText.T("M0273", "도");
 	}
 
 	private void GetPos(string axis)
@@ -964,7 +964,7 @@ internal class TurnTableViewModel : LiveViewViewModel
 		}
 		if (TurnTableSpeed == 5)
 		{
-			global::CameraControl.Core.Classes.G2Dialog.Show("✅ 고속/중속/저속 선택해 주세요.");
+			global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0289", "고속, 중속, 저속 중에서 선택해 주세요."));
 			return;
 		}
 		switch (TurnTableSpeed)
@@ -990,7 +990,7 @@ internal class TurnTableViewModel : LiveViewViewModel
 		}
 		if (TurnTableSpeed == 5)
 		{
-			global::CameraControl.Core.Classes.G2Dialog.Show("✅ 고속/중속/저속 선택해 주세요.");
+			global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0289", "고속, 중속, 저속 중에서 선택해 주세요."));
 			return;
 		}
 		switch (TurnTableSpeed)
@@ -1277,7 +1277,7 @@ internal class TurnTableViewModel : LiveViewViewModel
 					MoveHomeThread();
 					Application.Current.Dispatcher.Invoke(() =>
 					{
-						global::CameraControl.Core.Classes.G2Dialog.Show("\ud83d\udce2 원점 위치로 이동중입니다.", "알림", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+						global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0290", "원점 위치로 이동 중입니다."), global::CameraControl.Devices.UiText.T("M0002", "알림"), MessageBoxButton.OK, MessageBoxImage.Asterisk);
 					});
 					break;
 				}
@@ -1288,7 +1288,7 @@ internal class TurnTableViewModel : LiveViewViewModel
 				Application.Current.Dispatcher.Invoke(() =>
 				{
 					Log.Error("이미지 다운로드 타임 아웃...");
-					global::CameraControl.Core.Classes.G2Dialog.Show("⚠\ufe0f 이미지 다운로드 타임 아웃...", "알림", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+					global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0291", "이미지 다운로드 시간이 초과되었습니다."), global::CameraControl.Devices.UiText.T("M0002", "알림"), MessageBoxButton.OK, MessageBoxImage.Exclamation);
 				});
 			}
 		}
@@ -1300,7 +1300,7 @@ internal class TurnTableViewModel : LiveViewViewModel
 			Application.Current.Dispatcher.Invoke(() =>
 			{
 				Log.Error("일반/지정 촬영 : 에러 발생", e);
-				global::CameraControl.Core.Classes.G2Dialog.Show(e.ToString(), "에러", MessageBoxButton.OK, MessageBoxImage.Hand);
+				global::CameraControl.Core.Classes.G2Dialog.Show(e.ToString(), global::CameraControl.Devices.UiText.T("M0079", "오류"), MessageBoxButton.OK, MessageBoxImage.Hand);
 			});
 		}
 		finally
@@ -1393,7 +1393,7 @@ internal class TurnTableViewModel : LiveViewViewModel
 		{
 			Application.Current.Dispatcher.Invoke(() =>
 			{
-				global::CameraControl.Core.Classes.G2Dialog.Show("⚠\ufe0f 턴테이블 속도 대비 촬영 빈도가 많아 촬영할 수 없습니다.", "알림", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+				global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0292", "턴테이블 속도에 비해 촬영 횟수가 많아 촬영할 수 없습니다."), global::CameraControl.Devices.UiText.T("M0002", "알림"), MessageBoxButton.OK, MessageBoxImage.Exclamation);
 			});
 			bIsBtnExcute = false;
 			return;
@@ -1471,7 +1471,7 @@ internal class TurnTableViewModel : LiveViewViewModel
 			long startTime = stopwatch.ElapsedMilliseconds;
 			int targetpos = (int)(UNIT_ANGLE_TURNTABLE * 360.0) + accDist;
 			TargetPos = targetpos.ToString();
-			TargetPosDisp = (double.Parse(TargetPos) / UNIT_ANGLE_TURNTABLE).ToString("F1") + "도";
+			TargetPosDisp = (double.Parse(TargetPos) / UNIT_ANGLE_TURNTABLE).ToString("F1") + global::CameraControl.Devices.UiText.T("M0273", "도");
 			SetHome(sAxis);
 			MoveAbs(sAxis, targetpos.ToString(), wait: false);
 			Thread.Sleep(accTime);
@@ -1533,7 +1533,7 @@ internal class TurnTableViewModel : LiveViewViewModel
 				Application.Current.Dispatcher.Invoke(() =>
 				{
 					Log.Error("논스톱 : 이미지 다운로드 타임 아웃...");
-					global::CameraControl.Core.Classes.G2Dialog.Show("⚠\ufe0f 이미지 다운로드 타임 아웃...", "알림", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+					global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0291", "이미지 다운로드 시간이 초과되었습니다."), global::CameraControl.Devices.UiText.T("M0002", "알림"), MessageBoxButton.OK, MessageBoxImage.Exclamation);
 				});
 			}
 		}
@@ -1545,7 +1545,7 @@ internal class TurnTableViewModel : LiveViewViewModel
 			Application.Current.Dispatcher.Invoke(() =>
 			{
 				Log.Error("논스톱 : 에러 발생", e);
-				global::CameraControl.Core.Classes.G2Dialog.Show(e.ToString(), "에러", MessageBoxButton.OK, MessageBoxImage.Hand);
+				global::CameraControl.Core.Classes.G2Dialog.Show(e.ToString(), global::CameraControl.Devices.UiText.T("M0079", "오류"), MessageBoxButton.OK, MessageBoxImage.Hand);
 			});
 		}
 		finally
@@ -1615,7 +1615,7 @@ internal class TurnTableViewModel : LiveViewViewModel
 		string processname = "C:\\Program Files (x86)\\Clorium\\Clorium Centering.exe";
 		if (!File.Exists(processname))
 		{
-			global::CameraControl.Core.Classes.G2Dialog.Show("실행 파일을 찾을 수 없습니다:\n" + processname);
+			global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0294", "실행 파일을 찾을 수 없습니다:\n") + processname);
 			return;
 		}
 		ProcessStartInfo startInfo = new ProcessStartInfo
@@ -1756,12 +1756,12 @@ internal class TurnTableViewModel : LiveViewViewModel
 	{
 		if (!arduino.bIsConnected)
 		{
-			global::CameraControl.Core.Classes.G2Dialog.Show("\ud83d\udea8 턴테이블 연결 확인하세요.", "알림", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+			global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0295", "턴테이블 연결을 확인해 주세요."), global::CameraControl.Devices.UiText.T("M0002", "알림"), MessageBoxButton.OK, MessageBoxImage.Asterisk);
 			return false;
 		}
 		if (!ServiceProvider.DeviceManager.SelectedCameraDevice.IsConnected)
 		{
-			MessageBoxResult result = global::CameraControl.Core.Classes.G2Dialog.Show("\ud83d\udea8 연결된 카메라가 없습니다. 계속하시겠습니까?", "알림", MessageBoxButton.YesNo, MessageBoxImage.Asterisk);
+			MessageBoxResult result = global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0296", "연결된 카메라가 없습니다. 계속할까요?"), global::CameraControl.Devices.UiText.T("M0002", "알림"), MessageBoxButton.YesNo, MessageBoxImage.Asterisk);
 			if (result == MessageBoxResult.Yes)
 			{
 				return true;
@@ -1809,12 +1809,12 @@ internal class TurnTableViewModel : LiveViewViewModel
 			}
 			catch (Exception)
 			{
-				global::CameraControl.Core.Classes.G2Dialog.Show("\ud83d\udea8 Clorium_MDPData.txt 파일의 값을 확인하세요.", "에러", MessageBoxButton.OK, MessageBoxImage.Hand);
+				global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0297", "Clorium_MDPData.txt 파일의 값을 확인해 주세요."), global::CameraControl.Devices.UiText.T("M0079", "오류"), MessageBoxButton.OK, MessageBoxImage.Hand);
 				return;
 			}
 		}
 		WriteMDP(file);
-		global::CameraControl.Core.Classes.G2Dialog.Show("\ud83d\udea8 MDP 파일이 없어 Default 값을 로드했습니다.\n\n\ud83d\udea8 Clorium_MDPData.txt에서 수정하세요.", "알림", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+		global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0298", "MDP 파일이 없어 기본값을 불러왔습니다.\n\nClorium_MDPData.txt에서 수정해 주세요."), global::CameraControl.Devices.UiText.T("M0002", "알림"), MessageBoxButton.OK, MessageBoxImage.Asterisk);
 	}
 
 	private void WriteMDP(string file)
@@ -1881,7 +1881,7 @@ internal class TurnTableViewModel : LiveViewViewModel
 		}
 		catch (Exception ex)
 		{
-			global::CameraControl.Core.Classes.G2Dialog.Show(ex.ToString(), "에러", MessageBoxButton.OK, MessageBoxImage.Hand);
+			global::CameraControl.Core.Classes.G2Dialog.Show(ex.ToString(), global::CameraControl.Devices.UiText.T("M0079", "오류"), MessageBoxButton.OK, MessageBoxImage.Hand);
 		}
 	}
 

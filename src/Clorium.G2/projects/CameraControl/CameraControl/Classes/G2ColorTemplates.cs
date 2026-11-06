@@ -144,8 +144,8 @@ namespace CameraControl.Classes
 		public static string ValidateName(string name)
 		{
 			string n = (name ?? "").Trim();
-			if (n.Length == 0) throw new ArgumentException("템플릿 이름을 입력해 주세요.");
-			if (n.Length > MaxNameLength) throw new ArgumentException("템플릿 이름은 " + MaxNameLength + "자 이하로 입력해 주세요.");
+			if (n.Length == 0) throw new ArgumentException(global::CameraControl.Devices.UiText.T("M0129", "템플릿 이름을 입력해 주세요."));
+			if (n.Length > MaxNameLength) throw new ArgumentException(global::CameraControl.Devices.UiText.T("M0130", "템플릿 이름은 ") + MaxNameLength + global::CameraControl.Devices.UiText.T("M0131", "자 이하로 입력해 주세요."));
 			return n;
 		}
 
@@ -153,7 +153,7 @@ namespace CameraControl.Classes
 		public G2ColorTemplate Add(string name, G2AdjustSettings settings)
 		{
 			string n = ValidateName(name);
-			if (Find(n) != null) throw new InvalidOperationException("같은 이름의 템플릿이 이미 있습니다: " + n);
+			if (Find(n) != null) throw new InvalidOperationException(global::CameraControl.Devices.UiText.T("M0132", "같은 이름의 템플릿이 이미 있습니다: ") + n);
 			var t = new G2ColorTemplate { Name = n, Settings = Normalized(settings), Updated = DateTime.Now };
 			_items.Add(t);
 			Save();
@@ -163,7 +163,7 @@ namespace CameraControl.Classes
 		/// <summary>기존 템플릿의 보정값을 바꾼 뒤 저장.</summary>
 		public G2ColorTemplate Update(string name, G2AdjustSettings settings)
 		{
-			G2ColorTemplate t = Find(name) ?? throw new InvalidOperationException("템플릿을 찾을 수 없습니다: " + name);
+			G2ColorTemplate t = Find(name) ?? throw new InvalidOperationException(global::CameraControl.Devices.UiText.T("M0133", "템플릿을 찾을 수 없습니다: ") + name);
 			t.Settings = Normalized(settings);
 			t.Updated = DateTime.Now;
 			Save();
@@ -172,10 +172,10 @@ namespace CameraControl.Classes
 
 		public G2ColorTemplate Rename(string name, string newName)
 		{
-			G2ColorTemplate t = Find(name) ?? throw new InvalidOperationException("템플릿을 찾을 수 없습니다: " + name);
+			G2ColorTemplate t = Find(name) ?? throw new InvalidOperationException(global::CameraControl.Devices.UiText.T("M0133", "템플릿을 찾을 수 없습니다: ") + name);
 			string n = ValidateName(newName);
 			G2ColorTemplate other = Find(n);
-			if (other != null && !ReferenceEquals(other, t)) throw new InvalidOperationException("같은 이름의 템플릿이 이미 있습니다: " + n);
+			if (other != null && !ReferenceEquals(other, t)) throw new InvalidOperationException(global::CameraControl.Devices.UiText.T("M0132", "같은 이름의 템플릿이 이미 있습니다: ") + n);
 			t.Name = n;
 			t.Updated = DateTime.Now;
 			Save();
@@ -235,7 +235,7 @@ namespace CameraControl.Classes
 		/// <summary>처리 대상: 지원 형식, 숨김/임시 파일 제외, 이름순.</summary>
 		public static List<string> FindImages(string folder)
 		{
-			if (!Directory.Exists(folder)) throw new DirectoryNotFoundException("폴더를 찾을 수 없습니다: " + folder);
+			if (!Directory.Exists(folder)) throw new DirectoryNotFoundException(global::CameraControl.Devices.UiText.T("M0134", "폴더를 찾을 수 없습니다: ") + folder);
 			return Directory.GetFiles(folder)
 				.Where(f => G2ImageAdjust.IsSupportedFile(f))
 				.Where(f => !Path.GetFileName(f).StartsWith(".~", StringComparison.Ordinal))
@@ -258,20 +258,20 @@ namespace CameraControl.Classes
 			G2AdjustSettings s = settings.Clone();
 			var log = new StringBuilder();
 			DateTime started = DateTime.Now;
-			log.AppendLine("Clorium G2 이미지보정 일괄 적용");
-			log.AppendLine("시작: " + started.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture));
-			log.AppendLine("템플릿: " + (templateName ?? "(이름 없음)"));
-			log.AppendLine("보정값: " + s.Describe());
-			log.AppendLine("원본 폴더: " + result.SourceFolder);
-			log.AppendLine("저장 폴더: " + result.OutputFolder);
-			log.AppendLine("엔진: " + G2ImageAdjust.EngineVersion);
+			log.AppendLine(global::CameraControl.Devices.UiText.T("M0135", "Clorium G2 이미지보정 일괄 적용"));
+			log.AppendLine(global::CameraControl.Devices.UiText.T("M0136", "시작: ") + started.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture));
+			log.AppendLine(global::CameraControl.Devices.UiText.T("M0137", "템플릿: ") + (templateName ?? global::CameraControl.Devices.UiText.T("M0138", "(이름 없음)")));
+			log.AppendLine(global::CameraControl.Devices.UiText.T("M0139", "보정값: ") + s.Describe());
+			log.AppendLine(global::CameraControl.Devices.UiText.T("M0140", "원본 폴더: ") + result.SourceFolder);
+			log.AppendLine(global::CameraControl.Devices.UiText.T("M0141", "저장 폴더: ") + result.OutputFolder);
+			log.AppendLine(global::CameraControl.Devices.UiText.T("M0142", "엔진: ") + G2ImageAdjust.EngineVersion);
 			log.AppendLine();
 			for (int i = 0; i < files.Count; i++)
 			{
 				if (token.IsCancellationRequested)
 				{
 					result.Cancelled = true;
-					log.AppendLine("중지됨: " + (files.Count - i) + "장 처리하지 않음");
+					log.AppendLine(global::CameraControl.Devices.UiText.T("M0143", "중지됨: ") + (files.Count - i) + global::CameraControl.Devices.UiText.T("M0144", "장 처리하지 않음"));
 					break;
 				}
 				string src = files[i];
@@ -282,19 +282,19 @@ namespace CameraControl.Classes
 					G2ImageAdjust.SaveAdjusted(src, dest, s, false);
 					result.Saved++;
 					result.Outputs.Add(dest);
-					log.AppendLine("완료\t" + Path.GetFileName(src) + "\t→ " + Path.GetFileName(dest));
+					log.AppendLine(global::CameraControl.Devices.UiText.T("M0145", "완료\t") + Path.GetFileName(src) + "\t→ " + Path.GetFileName(dest));
 				}
 				catch (Exception ex)
 				{
 					string msg = Path.GetFileName(src) + ": " + ex.GetBaseException().Message;
 					result.Errors.Add(msg);
-					log.AppendLine("실패\t" + msg);
+					log.AppendLine(global::CameraControl.Devices.UiText.T("M0146", "실패\t") + msg);
 				}
 			}
 			progress?.Report(new G2BatchProgress { Index = files.Count, Total = files.Count, File = null });
 			log.AppendLine();
-			log.AppendLine("결과: 전체 " + result.Total + " · 저장 " + result.Saved + " · 실패 " + result.Errors.Count + (result.Cancelled ? " · 중지" : ""));
-			log.AppendLine("소요: " + (DateTime.Now - started).TotalSeconds.ToString("0.0", CultureInfo.InvariantCulture) + "초");
+			log.AppendLine(global::CameraControl.Devices.UiText.T("M0147", "결과: 전체 ") + result.Total + global::CameraControl.Devices.UiText.T("M0148", " · 저장 ") + result.Saved + global::CameraControl.Devices.UiText.T("M0149", " · 실패 ") + result.Errors.Count + (result.Cancelled ? global::CameraControl.Devices.UiText.T("M0150", " · 중지") : ""));
+			log.AppendLine(global::CameraControl.Devices.UiText.T("M0151", "소요: ") + (DateTime.Now - started).TotalSeconds.ToString("0.0", CultureInfo.InvariantCulture) + global::CameraControl.Devices.UiText.T("M0152", "초"));
 			try
 			{
 				string name = "보정기록_" + started.ToString("yyyyMMdd-HHmmss", CultureInfo.InvariantCulture);

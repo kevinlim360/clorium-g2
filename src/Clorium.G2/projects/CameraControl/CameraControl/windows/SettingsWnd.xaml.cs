@@ -126,7 +126,7 @@ public partial class SettingsWnd : Window, IComponentConnector
 		string folder = Path.GetDirectoryName(CameraControl.Classes.G2ColorTemplateStore.DefaultPath);
 		if (!Directory.Exists(folder))
 		{
-			global::CameraControl.Core.Classes.G2Dialog.Show("아직 저장한 보정 템플릿이 없습니다.\n\n" + folder, "이미지보정");
+			global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0447", "저장한 보정 템플릿이 아직 없습니다.\n\n") + folder, global::CameraControl.Devices.UiText.T("M0117", "이미지보정"));
 			return;
 		}
 		try
@@ -135,7 +135,7 @@ public partial class SettingsWnd : Window, IComponentConnector
 		}
 		catch (Exception ex)
 		{
-			global::CameraControl.Core.Classes.G2Dialog.Show("폴더를 열지 못했습니다.\n\n" + ex.Message, "이미지보정");
+			global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0448", "폴더를 열지 못했습니다.\n\n") + ex.Message, global::CameraControl.Devices.UiText.T("M0117", "이미지보정"));
 		}
 	}
 
@@ -149,7 +149,7 @@ public partial class SettingsWnd : Window, IComponentConnector
 	{
 		using (FolderBrowserDialog dialog = new FolderBrowserDialog())
 		{
-			dialog.Description = "원본 백업 폴더";
+			dialog.Description = global::CameraControl.Devices.UiText.T("M0449", "원본 백업 폴더를 선택해 주세요.");
 			dialog.SelectedPath = ServiceProvider.Settings.BackupFolder;
 			if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
 			{
@@ -219,14 +219,14 @@ public partial class SettingsWnd : Window, IComponentConnector
 		{
 			Log.Debug("이미지 저장 폴더 Click");
 			using FolderBrowserDialog dialog = new FolderBrowserDialog();
-			dialog.Description = "캡쳐 이미지를 저장할 폴더를 만드세요.";
+			dialog.Description = global::CameraControl.Devices.UiText.T("M0450", "촬영 이미지를 저장할 폴더를 만들어 주세요.");
 			dialog.RootFolder = Environment.SpecialFolder.MyComputer;
 			dialog.SelectedPath = "D:\\";
 			if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
 			{
 				if (dialog.SelectedPath.Contains("새 폴더"))
 				{
-					global::CameraControl.Core.Classes.G2Dialog.Show("폴더 이름을 바꾸고 엔터를 눌러 주세요.", "알림", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+					global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0451", "폴더 이름을 바꾸고 Enter 키를 눌러 주세요."), global::CameraControl.Devices.UiText.T("M0002", "알림"), MessageBoxButton.OK, MessageBoxImage.Asterisk);
 				}
 				ServiceProvider.Settings.DownloadFolder = dialog.SelectedPath + "\\";
 			}
@@ -234,7 +234,7 @@ public partial class SettingsWnd : Window, IComponentConnector
 		catch (Exception exception)
 		{
 			Log.Error("폴더를 만들 수 없습니다.", exception);
-			global::CameraControl.Core.Classes.G2Dialog.Show("폴더를 만들 수 없습니다.", "에러", MessageBoxButton.OK, MessageBoxImage.Hand);
+			global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0306", "폴더를 만들 수 없습니다."), global::CameraControl.Devices.UiText.T("M0079", "오류"), MessageBoxButton.OK, MessageBoxImage.Hand);
 		}
 	}
 
@@ -249,7 +249,7 @@ public partial class SettingsWnd : Window, IComponentConnector
 	{
 		try
 		{
-			if (global::CameraControl.Core.Classes.G2Dialog.Show("모든 작업 데이터가 삭제되고 프로그램은 다시 시작됩니다.", "경고", MessageBoxButton.YesNo) != MessageBoxResult.No)
+			if (global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0452", "모든 작업 데이터를 삭제하고 프로그램을 다시 시작합니다. 계속할까요?"), global::CameraControl.Devices.UiText.T("M0214", "경고"), MessageBoxButton.YesNo) != MessageBoxResult.No)
 			{
 				Log.Debug("공장 초기화 Click");
 				Directory.Delete(Path.Combine(Settings.DataFolder, "Cache"), recursive: true);
@@ -266,7 +266,7 @@ public partial class SettingsWnd : Window, IComponentConnector
 		}
 		catch (Exception ex)
 		{
-			global::CameraControl.Core.Classes.G2Dialog.Show("모든 작업 데이터 삭제에 실패했습니다.\r\n" + ex);
+			global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0453", "모든 작업 데이터를 삭제하지는 못했습니다.\r\n") + ex);
 		}
 	}
 
@@ -309,14 +309,14 @@ public partial class SettingsWnd : Window, IComponentConnector
 		{
 			Log.Debug("작업 통계파일(csv) 저장 폴더 Click");
 			using FolderBrowserDialog dialog = new FolderBrowserDialog();
-			dialog.Description = "작업 통계 데이터 파일(csv)을 저장할 폴더를 만드세요.";
+			dialog.Description = global::CameraControl.Devices.UiText.T("M0455", "작업 통계 데이터 파일(csv)을 저장할 폴더를 만들어 주세요.");
 			dialog.RootFolder = Environment.SpecialFolder.MyComputer;
 			dialog.SelectedPath = "D:\\";
 			if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
 			{
 				if (dialog.SelectedPath.Contains("새 폴더"))
 				{
-					global::CameraControl.Core.Classes.G2Dialog.Show("폴더 이름을 바꾸고 엔터를 눌러 주세요.", "알림", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+					global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0451", "폴더 이름을 바꾸고 Enter 키를 눌러 주세요."), global::CameraControl.Devices.UiText.T("M0002", "알림"), MessageBoxButton.OK, MessageBoxImage.Asterisk);
 				}
 				ServiceProvider.Settings.ElapsedDownloadFolder = dialog.SelectedPath + "\\";
 			}
@@ -324,7 +324,7 @@ public partial class SettingsWnd : Window, IComponentConnector
 		catch (Exception exception)
 		{
 			Log.Error("폴더를 만들 수 없습니다.", exception);
-			global::CameraControl.Core.Classes.G2Dialog.Show("폴더를 만들 수 없습니다.", "에러", MessageBoxButton.OK, MessageBoxImage.Hand);
+			global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0306", "폴더를 만들 수 없습니다."), global::CameraControl.Devices.UiText.T("M0079", "오류"), MessageBoxButton.OK, MessageBoxImage.Hand);
 		}
 	}
 
@@ -342,7 +342,7 @@ public partial class SettingsWnd : Window, IComponentConnector
 				Log.Error("Setting : 카메라 시간을 동기화 할 수 없습니다.", exception);
 			}
 		}
-		global::CameraControl.Core.Classes.G2Dialog.Show("⚠\ufe0f 모든 카메라 날짜/시간 동기화했습니다.\n\n⚠\ufe0f 모든 카메라 전원을 껏다 다시 켜 주세요.", "Info", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+		global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0456", "모든 카메라의 날짜와 시간을 맞췄습니다.\n\n모든 카메라 전원을 껐다가 다시 켜 주세요."), "Info", MessageBoxButton.OK, MessageBoxImage.Asterisk);
 	}
 
 	private void Expander_Click(object sender, RoutedEventArgs e)

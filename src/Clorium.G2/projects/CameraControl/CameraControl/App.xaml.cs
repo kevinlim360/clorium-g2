@@ -49,7 +49,7 @@ public partial class App : System.Windows.Application
 		}
 		else if (Process.GetProcessesByName(procName).Length > 1)
 		{
-			global::CameraControl.Core.Classes.G2Dialog.Show("이미 실행 중입니다.");
+			global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0088", "이미 실행 중입니다."));
 			System.Windows.Application.Current.Shutdown(-1);
 			return;
 		}
@@ -517,13 +517,13 @@ public partial class App : System.Windows.Application
 			var keys = new[] { Encryption_key, LicenseFileMatcher.ReadCompatibilityKey() };
 			if (!keys.Any(key => !string.IsNullOrEmpty(key)))
 			{
-				return (null, information, "라이선스 확인 설정을 읽지 못했습니다. 최신 Clorium 업데이트를 다시 설치해 주세요.");
+				return (null, information, global::CameraControl.Devices.UiText.T("M0089", "라이선스 확인 설정을 읽지 못했습니다. 최신 Clorium 업데이트를 다시 설치해 주세요."));
 			}
 			return (LicenseFileMatcher.FindMatchingFile("D:\\", identifiers, keys, Encrypt, RemoveSpecialCharacters), information, null);
 		}
 		catch (Exception ex)
 		{
-			return (null, "", "라이선스 키 확인 중 오류가 발생했습니다: " + ex.Message);
+			return (null, "", global::CameraControl.Devices.UiText.T("M0090", "라이선스 키 확인 중 오류가 발생했습니다: ") + ex.Message);
 		}
 	}
 
@@ -535,7 +535,7 @@ public partial class App : System.Windows.Application
 			var keys = new[] { Encryption_key, LicenseFileMatcher.ReadCompatibilityKey() };
 			if (!keys.Any(key => !string.IsNullOrEmpty(key)))
 			{
-				global::CameraControl.Core.Classes.G2Dialog.Show("라이선스 확인 설정을 읽지 못했습니다. 최신 Clorium 업데이트를 다시 설치해 주세요.", "알림", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+				global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0089", "라이선스 확인 설정을 읽지 못했습니다. 최신 Clorium 업데이트를 다시 설치해 주세요."), global::CameraControl.Devices.UiText.T("M0002", "알림"), MessageBoxButton.OK, MessageBoxImage.Asterisk);
 				return false;
 			}
 			string matchedPath = LicenseFileMatcher.FindMatchingFile("D:\\", identifiers, keys, Encrypt, RemoveSpecialCharacters);
@@ -549,13 +549,13 @@ public partial class App : System.Windows.Application
 				return true;
 			}
 			string information = string.Join("\n", identifiers.Where(LicenseFileMatcher.IsUsableIdentifier).Distinct());
-			if (string.IsNullOrEmpty(information)) information = "PC 식별 정보를 읽지 못했습니다.";
-			global::CameraControl.Core.Classes.G2Dialog.Show("PC 정보와 일치하는 라이선스 키 파일이 D:\\에 없습니다.\n클로리움(주)에 아래 PC 정보를 알려주고 키 파일을 확인해 주세요.\n\n" + information, "알림", MessageBoxButton.OK, MessageBoxImage.Asterisk);
+			if (string.IsNullOrEmpty(information)) information = global::CameraControl.Devices.UiText.T("M0091", "PC 식별 정보를 읽지 못했습니다.");
+			global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0092", "이 PC에 맞는 라이선스 키 파일이 D:\\에 없습니다.\n아래 PC 정보를 클로리움(주)에 전달하고 키 파일을 확인해 주세요.\n\n") + information, global::CameraControl.Devices.UiText.T("M0002", "알림"), MessageBoxButton.OK, MessageBoxImage.Asterisk);
 			return false;
 		}
 		catch
 		{
-			global::CameraControl.Core.Classes.G2Dialog.Show("라이선스 키 확인 중 오류가 발생했습니다. D: 드라이브 접근 권한과 설치 상태를 확인해 주세요.", "에러", MessageBoxButton.OK, MessageBoxImage.Hand);
+			global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0093", "라이선스 키 확인 중 오류가 발생했습니다. D: 드라이브 접근 권한과 설치 상태를 확인해 주세요."), global::CameraControl.Devices.UiText.T("M0079", "오류"), MessageBoxButton.OK, MessageBoxImage.Hand);
 			return false;
 		}
 	}
@@ -710,7 +710,7 @@ public partial class App : System.Windows.Application
 		if (remainday > 0 && remainday < 30)
 		{
 			ServiceProvider.Settings.D_DayBefore = true;
-			global::CameraControl.Core.Classes.G2Dialog.Show("\ud83d\udea8 시스템 이상 감지되었습니다.\n\n\ud83d\udea8 프로그램이 정상 동작하지 않을 수 있습니다.\n\ud83d\udea8 클로리움(주) 담당자에게 연락 주시기 바랍니다.", "알림", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+			global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0094", "시스템 이상이 감지되었습니다.\n\n프로그램이 정상적으로 동작하지 않을 수 있습니다.\n클로리움(주) 담당자에게 연락해 주세요."), global::CameraControl.Devices.UiText.T("M0002", "알림"), MessageBoxButton.OK, MessageBoxImage.Exclamation);
 		}
 		else
 		{
@@ -720,7 +720,7 @@ public partial class App : System.Windows.Application
 		{
 			if (remainday < -365)
 			{
-				global::CameraControl.Core.Classes.G2Dialog.Show("⚠\ufe0f 시스템 일부 파일이 손상되었습니다.\n\n⚠\ufe0f 클로리움(주) 담당자에게 연락 주시기 바랍니다.", "알림", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+				global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0095", "시스템 일부 파일이 손상되었습니다.\n\n클로리움(주) 담당자에게 연락해 주세요."), global::CameraControl.Devices.UiText.T("M0002", "알림"), MessageBoxButton.OK, MessageBoxImage.Exclamation);
 				return true;
 			}
 			try
@@ -736,7 +736,7 @@ public partial class App : System.Windows.Application
 			}
 			catch (Exception ex)
 			{
-				global::CameraControl.Core.Classes.G2Dialog.Show("오류 발생: " + ex.Message);
+				global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0096", "오류가 발생했습니다: ") + ex.Message);
 			}
 			return true;
 		}
@@ -776,7 +776,7 @@ public partial class App : System.Windows.Application
 	{
 		if (!IsRunningAsAdministrator())
 		{
-			global::CameraControl.Core.Classes.G2Dialog.Show("웹서버 가동을 위해서는 관리자 권한이 필요합니다. 프로그램을 재시작합니다.");
+			global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0097", "웹서버를 실행하려면 관리자 권한이 필요합니다. 프로그램을 다시 시작합니다."));
 			ProcessStartInfo processInfo = new ProcessStartInfo
 			{
 				FileName = System.Windows.Forms.Application.ExecutablePath,
@@ -791,7 +791,7 @@ public partial class App : System.Windows.Application
 			}
 			catch (Exception)
 			{
-				global::CameraControl.Core.Classes.G2Dialog.Show("관리자 권한 승인이 거부되어 웹서버를 시작할 수 없습니다.");
+				global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0098", "관리자 권한이 거부되어 웹서버를 시작할 수 없습니다."));
 			}
 		}
 	}

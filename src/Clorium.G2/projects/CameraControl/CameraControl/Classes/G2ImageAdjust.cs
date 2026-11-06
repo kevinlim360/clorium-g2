@@ -134,19 +134,19 @@ namespace CameraControl.Classes
 		{
 			var parts = new List<string>();
 			CultureInfo c = CultureInfo.InvariantCulture;
-			if (Math.Abs(Exposure) > 1e-9) parts.Add("노출 " + Exposure.ToString("+0.00;-0.00", c) + "EV");
-			if (Math.Abs(Brightness) > 1e-9) parts.Add("명도 " + Brightness.ToString("+0;-0", c));
-			if (Math.Abs(Contrast) > 1e-9) parts.Add("대비 " + Contrast.ToString("+0;-0", c));
-			if (Math.Abs(Saturation) > 1e-9) parts.Add("채도 " + Saturation.ToString("+0;-0", c));
-			if (Math.Abs(Temperature) > 1e-9) parts.Add("색온도 " + Temperature.ToString("+0;-0", c));
-			if (Math.Abs(Tint) > 1e-9) parts.Add("색조 " + Tint.ToString("+0;-0", c));
-			string[] names = { "전체", "R", "G", "B" };
+			if (Math.Abs(Exposure) > 1e-9) parts.Add(global::CameraControl.Devices.UiText.T("M0154", "노출 ") + Exposure.ToString("+0.00;-0.00", c) + "EV");
+			if (Math.Abs(Brightness) > 1e-9) parts.Add(global::CameraControl.Devices.UiText.T("M0155", "명도 ") + Brightness.ToString("+0;-0", c));
+			if (Math.Abs(Contrast) > 1e-9) parts.Add(global::CameraControl.Devices.UiText.T("M0156", "대비 ") + Contrast.ToString("+0;-0", c));
+			if (Math.Abs(Saturation) > 1e-9) parts.Add(global::CameraControl.Devices.UiText.T("M0157", "채도 ") + Saturation.ToString("+0;-0", c));
+			if (Math.Abs(Temperature) > 1e-9) parts.Add(global::CameraControl.Devices.UiText.T("M0158", "색온도 ") + Temperature.ToString("+0;-0", c));
+			if (Math.Abs(Tint) > 1e-9) parts.Add(global::CameraControl.Devices.UiText.T("M0159", "색조 ") + Tint.ToString("+0;-0", c));
+			string[] names = { global::CameraControl.Devices.UiText.T("M0160", "전체"), "R", "G", "B" };
 			for (int i = 0; i < 4; i++)
 			{
 				G2Levels l = Channel(i);
-				if (!l.IsIdentity) parts.Add(names[i] + " 레벨 " + l.Black + "/" + l.Gamma.ToString("0.00", c) + "/" + l.White);
+				if (!l.IsIdentity) parts.Add(names[i] + global::CameraControl.Devices.UiText.T("M0161", " 레벨 ") + l.Black + "/" + l.Gamma.ToString("0.00", c) + "/" + l.White);
 			}
-			return parts.Count == 0 ? "보정 없음" : string.Join(", ", parts);
+			return parts.Count == 0 ? global::CameraControl.Devices.UiText.T("M0162", "보정 없음") : string.Join(", ", parts);
 		}
 	}
 
@@ -322,7 +322,7 @@ namespace CameraControl.Classes
 		{
 			if (image.ColorSpace == ColorSpace.CMYK)
 			{
-				throw new NotSupportedException("CMYK 이미지는 이미지보정을 지원하지 않습니다. RGB 사진을 사용해 주세요.");
+				throw new NotSupportedException(global::CameraControl.Devices.UiText.T("M0163", "CMYK 이미지는 이미지보정을 지원하지 않습니다. RGB 사진을 사용해 주세요."));
 			}
 			bool gray = image.ColorType == ColorType.Grayscale || image.ColorType == ColorType.GrayscaleAlpha || image.ColorType == ColorType.Bilevel;
 			if (gray && (s.ChangesColorBalance || s.Saturation > 1e-9))
@@ -338,14 +338,14 @@ namespace CameraControl.Classes
 		/// <summary>원본을 읽어 방향을 바로잡는다. 호출자가 Dispose 한다.</summary>
 		public static MagickImage Load(string path)
 		{
-			if (!File.Exists(path)) throw new FileNotFoundException("사진 파일을 찾을 수 없습니다.", path);
-			if (!IsSupportedFile(path)) throw new NotSupportedException("JPEG, PNG, TIFF, BMP 사진만 이미지보정할 수 있습니다. RAW 파일은 지원하지 않습니다.");
+			if (!File.Exists(path)) throw new FileNotFoundException(global::CameraControl.Devices.UiText.T("M0164", "사진 파일을 찾을 수 없습니다."), path);
+			if (!IsSupportedFile(path)) throw new NotSupportedException(global::CameraControl.Devices.UiText.T("M0165", "JPEG, PNG, TIFF, BMP 사진만 보정할 수 있습니다. RAW 파일은 지원하지 않습니다."));
 			var image = new MagickImage(path);
 			try
 			{
 				if (image.ColorSpace == ColorSpace.CMYK)
 				{
-					throw new NotSupportedException("CMYK 이미지는 이미지보정을 지원하지 않습니다. RGB 사진을 사용해 주세요.");
+					throw new NotSupportedException(global::CameraControl.Devices.UiText.T("M0163", "CMYK 이미지는 이미지보정을 지원하지 않습니다. RGB 사진을 사용해 주세요."));
 				}
 				image.AutoOrient();
 				return image;
@@ -404,10 +404,10 @@ namespace CameraControl.Classes
 			if (string.IsNullOrEmpty(destination)) throw new ArgumentNullException(nameof(destination));
 			if (string.Equals(Path.GetFullPath(source), Path.GetFullPath(destination), StringComparison.OrdinalIgnoreCase))
 			{
-				throw new InvalidOperationException("원본과 다른 파일 이름을 지정해 주세요. 원본은 덮어쓰지 않습니다.");
+				throw new InvalidOperationException(global::CameraControl.Devices.UiText.T("M0166", "원본과 다른 파일 이름을 입력해 주세요. 원본은 덮어쓰지 않습니다."));
 			}
-			if (!IsSupportedFile(destination)) throw new NotSupportedException("JPEG, PNG, TIFF, BMP 형식으로만 저장할 수 있습니다.");
-			if (File.Exists(destination) && !overwrite) throw new IOException("같은 이름의 파일이 이미 있습니다: " + Path.GetFileName(destination));
+			if (!IsSupportedFile(destination)) throw new NotSupportedException(global::CameraControl.Devices.UiText.T("M0167", "JPEG, PNG, TIFF, BMP 형식으로만 저장할 수 있습니다."));
+			if (File.Exists(destination) && !overwrite) throw new IOException(global::CameraControl.Devices.UiText.T("M0168", "같은 이름의 파일이 이미 있습니다: ") + Path.GetFileName(destination));
 			string folder = Path.GetDirectoryName(Path.GetFullPath(destination));
 			string temp = Path.Combine(folder, ".~cc-" + Guid.NewGuid().ToString("N") + Path.GetExtension(destination));
 			try
