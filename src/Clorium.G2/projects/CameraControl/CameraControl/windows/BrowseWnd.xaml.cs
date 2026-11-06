@@ -88,6 +88,22 @@ public partial class BrowseWnd : Window, INotifyPropertyChanged, IWindow, ICompo
 
 	private void lst_profiles_MouseDoubleClick(object sender, MouseButtonEventArgs e)
 	{
+		OpenSelected();
+	}
+
+	// 이 세션 열기: same as double-clicking the session.
+	private void Open_Click(object sender, RoutedEventArgs e)
+	{
+		OpenSelected();
+	}
+
+	private void Close_Click(object sender, RoutedEventArgs e)
+	{
+		ServiceProvider.WindowsManager.ExecuteCommand("BrowseWnd_Hide");
+	}
+
+	private void OpenSelected()
+	{
 		if (lst_profiles.SelectedItem != null)
 		{
 			ServiceProvider.Settings.DefaultSession = SelectedPhotoSession;

@@ -111,6 +111,33 @@ class ThemeCheck
 			Check("and light again", Bg(live).R > 0xE0);
 			live.Close();
 
+			// 세션 검색 (BrowseWnd): G2 page, sessions with photo counts, photo tiles, in both themes.
+			{
+				Type browseType = g2.GetType("CameraControl.windows.BrowseWnd", true);
+				var sessionA = new PhotoSession { Name = "DefaultSession", Folder = outDir };
+				for (int i = 0; i < 4; i++) sessionA.Files.Add(new FileItem(jpeg));
+				var sessionB = new PhotoSession { Name = "test", Folder = Path.Combine(outDir, "test") };
+				ServiceProvider.Settings.PhotoSessions.Add(sessionA);
+				ServiceProvider.Settings.PhotoSessions.Add(sessionB);
+				foreach (bool d in new[] { false, true })
+				{
+					apply.Invoke(null, new object[] { d }); Pump(200);
+					string mode = d ? "dark" : "light";
+					var bwin = (Window)Activator.CreateInstance(browseType);
+					browseType.GetProperty("SelectedPhotoSession").SetValue(bwin, sessionA, null);
+					bwin.Show(); Pump(500);
+					Snapshot(bwin, Path.Combine(outDir, "session-browse-" + mode + ".png"));
+					var files = (ListBox)bwin.FindName("lst_files");
+					Check("세션 검색 in " + mode + ": G2 page " + Bg(bwin) + ", " + files.Items.Count + " photos", files.Items.Count == 4 && (d ? Bg(bwin).R < 0x30 : Bg(bwin).R > 0xE0));
+					browseType.GetProperty("SelectedPhotoSession").SetValue(bwin, sessionB, null); Pump(200);
+					Snapshot(bwin, Path.Combine(outDir, "session-browse-empty-" + mode + ".png"));
+					bwin.Hide();
+				}
+				ServiceProvider.Settings.PhotoSessions.Remove(sessionA);
+				ServiceProvider.Settings.PhotoSessions.Remove(sessionB);
+				apply.Invoke(null, new object[] { false }); Pump(200);
+			}
+
 			// Status icon tooltips (StatusTip): camera mode + battery glyph, PC RAM/SSD bars with the percentage after them.
 			{
 				Type tipType = g2.GetType("CameraControl.Classes.StatusTip", true);

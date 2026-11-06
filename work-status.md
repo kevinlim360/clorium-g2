@@ -1,5 +1,7 @@
 # 클로리움 G2 작업 기록
 
+2026-11-07 세션 검색 창(BrowseWnd) G2 디자인(사용자 요청). MaterialDesign 창을 G2 테마(밝은/어두운)로: 제목·설명, 세션 카드(이름·폴더·사진 수 배지, G2List), 사진 카드(둥근 썸네일 타일·G2CheckBox·파일 이름, 빈 세션 안내), 아래 줄(사진 수·폴더 줄임·‘이 세션 열기’·‘닫기’). 세션 두 번 누르기 동작 그대로, ‘이 세션 열기’는 같은 동작. 검사: 빌드 오류 0, ThemeCheck 82(세션 검색 밝은/어두운·빈 세션 렌더), UiBinding 84. 미확인: 실제 앱에서 썸네일이 있는 화면.
+
 2026-11-07 사용자 검토 메시지 엑셀 반영(handoff/messages/사용자메시지_한영.xlsx, 2026-11-06 23:54 저장본). tools/KoreanText messages-apply: 메시지 485개, 627곳(41개 소스 파일)을 UiText.T("M…", "새 한글")로 바꾸고 projects/CameraControl/Data/Messages.xml(한·영 485개)을 만듦. 위치 못 찾음 11곳: 오늘 다시 만든 카메라·PC 툴팁 옛 문구 9곳(이제 없음)과 G2Dialog 제목 2곳(이미 한/영 분기) — 건너뜀. 비교/키 문구는 한글 그대로이며 화면 표시에만 쓰임을 확인. 결과 목록: handoff/messages/메시지_반영결과.txt. SuperfocusRegression에 UiText.cs와 Log 대체를 추가. 검사: 빌드 오류 0, UiBinding 84, ThemeCheck 80, MeasureCapture 16, SuperfocusRegression 통과. 미확인: 영어 모드로 실제 화면 전체 확인, 엑셀 이후에 생긴 툴팁 문구(모델·모드·배터리 등)는 아직 표에 없음.
 
 2026-11-06 상태 아이콘 툴팁 그래픽(사용자 요청). 카메라: 시리얼 제거, 모드(Mode.NumericValue 0 P·1 Tv·2 Av·3 M·4 Bulb·9 Auto) 추가, 배터리 아이콘(20% 이하 빨강·50% 이하 주황·그 위 녹색)+%. PC: RAM·SSD(드라이브별) 막대그래프 뒤에 사용 % 숫자와 GB(75% 이상 주황, 90% 이상 빨강). 새 Classes/StatusTip.cs, 테마 색(G2Ok/G2Pr/G2Err/G2Line) 사용. 검사: 빌드 오류 0, ThemeCheck 79(툴팁 밝은/어두운 렌더 포함), UiBinding 84. 미확인: 실제 카메라 연결 상태에서 모드 값.
