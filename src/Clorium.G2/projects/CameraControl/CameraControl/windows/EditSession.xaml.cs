@@ -30,6 +30,15 @@ public partial class EditSession : Window, IComponentConnector
 
 	private void Window_Loaded(object sender, RoutedEventArgs e)
 	{
+		// a session that is not in the list yet is being added (메뉴 > 세션 추가, 왼쪽 ‘세션’ 아이콘)
+		bool adding = ServiceProvider.Settings?.PhotoSessions == null || !ServiceProvider.Settings.PhotoSessions.Contains(Session);
+		Title = adding ? "세션 추가" : "세션 편집";
+		HeaderText.Text = Title;
+		HeaderCaption.Text = adding ? "새 세션의 이름과 사진 저장 방식을 정합니다. 확인을 누르면 날짜별 폴더가 만들어지고 새 세션으로 바뀝니다." : "현재 세션의 이름과 사진 저장 방식을 바꿉니다.";
+		// a new session's folder is made after 확인 (CreateNewSessionFolder), so only an existing session shows one
+		Visibility folder = adding || string.IsNullOrEmpty(Session?.Folder) ? Visibility.Collapsed : Visibility.Visible;
+		FolderLabel.Visibility = folder;
+		FolderText.Visibility = folder;
 		SessionName.Focus();
 		SessionName.SelectAll();
 	}
@@ -82,7 +91,7 @@ public partial class EditSession : Window, IComponentConnector
 	private void btn_add_tag_Click(object sender, RoutedEventArgs e)
 	{
 		TagItem item = new TagItem();
-		EditTagWnd wnd = new EditTagWnd(item);
+		EditTagWnd wnd = new EditTagWnd(item) { Owner = this };
 		if (wnd.ShowDialog() == true)
 		{
 			Session.Tags.Add(item);
@@ -101,7 +110,7 @@ public partial class EditSession : Window, IComponentConnector
 	{
 		if (lst_tags.SelectedItem is TagItem item)
 		{
-			EditTagWnd wnd = new EditTagWnd(item);
+			EditTagWnd wnd = new EditTagWnd(item) { Owner = this };
 			wnd.ShowDialog();
 		}
 	}

@@ -58,9 +58,11 @@ public partial class FileNameTemplateEditorWnd : Window, INotifyPropertyChanged,
 
 	private void Button_Click(object sender, RoutedEventArgs e)
 	{
-		if (sender is Chip s)
+		// G2: each template part is a pill button whose Tag is the part's key (was a MaterialDesign Chip)
+		string key = (sender as FrameworkElement)?.Tag as string ?? (sender as Chip)?.Content as string;
+		if (key != null)
 		{
-			string text = "_" + (string)s.Content;
+			string text = "_" + key;
 			if (txt_templateName.SelectionLength > 0)
 			{
 				txt_templateName.SelectedText = text;

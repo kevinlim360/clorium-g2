@@ -312,6 +312,16 @@
               <TextBlock Text="라이브뷰" HorizontalAlignment="Center" Margin="0,4,0,0" />
             </StackPanel>
           </Button>
+          <!-- 세션 추가 (same as 메뉴 > 세션 > 세션 추가) -->
+          <Button Name="btn_newSession" Style="{StaticResource G2RailButton}" ToolTip="새 세션을 추가합니다" Command="{Binding NewSessionCommand}">
+            <FrameworkElement.DataContext>
+              <viewModel:MainMenuViewModel />
+            </FrameworkElement.DataContext>
+            <StackPanel>
+              <Viewbox Width="22" Height="22" HorizontalAlignment="Center"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoFolderPlus}" /></Viewbox>
+              <TextBlock Text="세션" HorizontalAlignment="Center" Margin="0,4,0,0" />
+            </StackPanel>
+          </Button>
           <Button Name="btn_browse" Style="{StaticResource G2RailButton}" ToolTip="{T:Translate BrowseSessionsToolTip}" Click="btn_browse_Click">
             <StackPanel>
               <Viewbox Width="22" Height="22" HorizontalAlignment="Center"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoPhotos}" /></Viewbox>

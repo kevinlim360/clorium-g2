@@ -138,6 +138,37 @@ class ThemeCheck
 				apply.Invoke(null, new object[] { false }); Pump(200);
 			}
 
+			// 세션 추가/편집 (EditSession), 태그 (EditTagWnd), 파일 이름 규칙 (FileNameTemplateEditorWnd) in both themes.
+			{
+				Type editType = g2.GetType("CameraControl.windows.EditSession", true);
+				Type tagType = g2.GetType("CameraControl.windows.EditTagWnd", true);
+				Type ruleType = g2.GetType("CameraControl.windows.FileNameTemplateEditorWnd", true);
+				var newSession = new PhotoSession { Name = "새 세션" };
+				newSession.Tags.Add(new TagItem { DisplayValue = "니트", Value = "knit" });
+				foreach (bool d in new[] { false, true })
+				{
+					apply.Invoke(null, new object[] { d }); Pump(200);
+					string mode = d ? "dark" : "light";
+					var ew = (Window)Activator.CreateInstance(editType, newSession);
+					ew.Show(); Pump(400);
+					Snapshot(ew, Path.Combine(outDir, "session-edit-" + mode + ".png"));
+					Check("세션 추가 in " + mode + ": title " + ew.Title + ", page " + Bg(ew), ew.Title == "세션 추가" && (d ? Bg(ew).R < 0x30 : Bg(ew).R > 0xE0) && ((ListBox)ew.FindName("lst_tags")).Items.Count == 1);
+					ew.Close();
+					var tw2 = (Window)Activator.CreateInstance(tagType, new TagItem { DisplayValue = "니트", Value = "knit" });
+					tw2.Show(); Pump(300);
+					Snapshot(tw2, Path.Combine(outDir, "session-tag-" + mode + ".png"));
+					Check("태그 window in " + mode + " (" + Bg(tw2) + ")", d ? Bg(tw2).R < 0x30 : Bg(tw2).R > 0xE0);
+					tw2.Close();
+					var rw = (Window)Activator.CreateInstance(ruleType);
+					ruleType.GetProperty("TemplateString").SetValue(rw, "[Session Name]_[Counter 4 digit]", null);
+					rw.Show(); Pump(300);
+					Snapshot(rw, Path.Combine(outDir, "session-filename-" + mode + ".png"));
+					Check("파일 이름 규칙 window in " + mode + " (" + Bg(rw) + ")", d ? Bg(rw).R < 0x30 : Bg(rw).R > 0xE0);
+					rw.Close();
+				}
+				apply.Invoke(null, new object[] { false }); Pump(200);
+			}
+
 			// Status icon tooltips (StatusTip): camera mode + battery glyph, PC RAM/SSD bars with the percentage after them.
 			{
 				Type tipType = g2.GetType("CameraControl.Classes.StatusTip", true);

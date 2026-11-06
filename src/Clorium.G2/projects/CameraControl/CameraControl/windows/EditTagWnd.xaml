@@ -1,63 +1,53 @@
-﻿<Window x:Class="CameraControl.windows.EditTagWnd"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                      xmlns:Classes="clr-namespace:CameraControl.Core.Classes;assembly=CameraControl.Core"
-                      xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-                      xmlns:T="clr-namespace:CameraControl.Core.Translation;assembly=CameraControl.Core"
-                      xmlns:controls="clr-namespace:CameraControl.Controls"
-                      xmlns:wpf="clr-namespace:CameraControl.Core.Wpf;assembly=CameraControl.Core"
-                      Title="{T:TranslateExtension EditTagWindowTitle}" Height="340" Width="397" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen" 
-             TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-     TextElement.FontWeight="Regular"
-     TextElement.FontSize="13"
-     TextOptions.TextFormattingMode="Ideal"
-     TextOptions.TextRenderingMode="Auto"
-     Background="{DynamicResource MaterialDesignPaper}"
-     FontFamily="{DynamicResource MaterialDesignFont}">
-    <Window.DataContext>
-        <Classes:TagItem/>
-    </Window.DataContext>
-    <Grid>
-        <Grid.RowDefinitions>
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Clorium G2 · 세션 > 태그 추가/편집 (EditTagWnd): what the tag shows, the value written to the photo, groups and colour. -->
+<Window x:Class="CameraControl.windows.EditTagWnd" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:Classes="clr-namespace:CameraControl.Core.Classes;assembly=CameraControl.Core" xmlns:wpf="clr-namespace:CameraControl.Core.Wpf;assembly=CameraControl.Core" Title="태그" Width="440" SizeToContent="Height" ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" Background="{DynamicResource G2Page}" FontFamily="{DynamicResource G2Font}" TextElement.Foreground="{DynamicResource G2Text}" TextElement.FontSize="13" UseLayoutRounding="True">
+  <Window.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/CameraControl;component/styles/g2theme.xaml" />
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </Window.Resources>
+  <Window.DataContext>
+    <Classes:TagItem />
+  </Window.DataContext>
+  <StackPanel>
+    <StackPanel Margin="20,18,20,14">
+      <TextBlock FontSize="{DynamicResource G2Fs20}" FontWeight="Bold" Text="태그" />
+      <TextBlock Style="{StaticResource G2Caption}" Margin="0,4,0,14" TextWrapping="Wrap" Text="사진에 붙일 태그입니다. 화면에 보이는 이름과 파일에 기록할 값을 정합니다." />
+      <Border Style="{StaticResource G2Card}" Padding="16,14">
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100" />
+            <ColumnDefinition Width="*" />
+          </Grid.ColumnDefinitions>
+          <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="150*" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="10" />
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="178*" />
-            <ColumnDefinition Width="197*" />
-        </Grid.ColumnDefinitions>
-        
-        <Label Content="{T:TranslateExtension LabelTagDisplayValue}" Grid.Row="1" Margin="2" HorizontalContentAlignment="Right"/>
-        <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding Path=DisplayValue}" Margin="2" />
-
-        <Label Content="{T:TranslateExtension LabelTagValue}" Grid.Row="2" Margin="2" HorizontalContentAlignment="Right" />
-        <TextBox Grid.Column="1" Grid.Row="2" Margin="2" Text="{Binding Path=Value}" />
-
-        <Label Grid.Column="0" Grid.Row="3" Content="{T:TranslateExtension LabelTagIncludeInGroup1}" Margin="2" HorizontalContentAlignment="Right" />
-        <CheckBox Grid.Column="1"  Grid.Row="3" Margin="2" IsChecked="{Binding Path=Tag1Checked}"/>
-
-        <Label Grid.Column="0" Grid.Row="4" Content="{T:TranslateExtension LabelTagIncludeInGroup2}" Margin="2" HorizontalContentAlignment="Right" />
-        <CheckBox Grid.Column="1" Grid.Row="4" Margin="2" IsChecked="{Binding Path=Tag2Checked}"/>
-
-        <Label Grid.Column="0" Grid.Row="5" Content="{T:TranslateExtension LabelTagIncludeInGroup3}" Margin="2" HorizontalContentAlignment="Right" />
-        <CheckBox Grid.Column="1" Grid.Row="5" Margin="2" IsChecked="{Binding Path=Tag3Checked}"/>
-
-        <Label Grid.Column="0" Grid.Row="6" Content="{T:TranslateExtension LabelTagIncludeInGroup4}" Margin="2" HorizontalContentAlignment="Right" />
-        <CheckBox Grid.Column="1" Grid.Row="6" Margin="2" IsChecked="{Binding Path=Tag4Checked}"/>
-
-        <Label Grid.Column="0" Grid.Row="7" Content="{T:TranslateExtension LabelColor}" Margin="2" HorizontalContentAlignment="Right" />
-        <wpf:Colorpicker Grid.Row="7" Grid.Column="1" Margin="3" SelectedColor="{Binding Color, Mode=TwoWay}" />
-        
-        <Button Content="{T:TranslateExtension ButtonSave}" Grid.Row="9" Height="23" HorizontalAlignment="Left" Margin="3" Name="btn_save" VerticalAlignment="Top" Width="75" Click="btn_save_Click" />
-        <Button Content="{T:TranslateExtension ButtonCancel}" Grid.Column="1" Grid.Row="9" Height="23" HorizontalAlignment="Right" Margin="3" Name="btn_cancel" VerticalAlignment="Top" Width="75" Click="btn_cancel_Click" />
-    </Grid>
+          </Grid.RowDefinitions>
+          <TextBlock Foreground="{DynamicResource G2Sub}" VerticalAlignment="Center" Text="보이는 이름" />
+          <TextBox Grid.Column="1" Style="{StaticResource G2TextBox}" Text="{Binding Path=DisplayValue, UpdateSourceTrigger=PropertyChanged}" />
+          <TextBlock Grid.Row="1" Foreground="{DynamicResource G2Sub}" VerticalAlignment="Center" Margin="0,10,0,0" Text="기록할 값" />
+          <TextBox Grid.Row="1" Grid.Column="1" Margin="0,10,0,0" Style="{StaticResource G2TextBox}" Text="{Binding Path=Value, UpdateSourceTrigger=PropertyChanged}" />
+          <TextBlock Grid.Row="2" Foreground="{DynamicResource G2Sub}" VerticalAlignment="Top" Margin="0,14,0,0" Text="그룹" />
+          <WrapPanel Grid.Row="2" Grid.Column="1" Margin="0,12,0,0">
+            <CheckBox Style="{StaticResource G2CheckBox}" Margin="0,2,16,2" Content="그룹 1" IsChecked="{Binding Path=Tag1Checked}" />
+            <CheckBox Style="{StaticResource G2CheckBox}" Margin="0,2,16,2" Content="그룹 2" IsChecked="{Binding Path=Tag2Checked}" />
+            <CheckBox Style="{StaticResource G2CheckBox}" Margin="0,2,16,2" Content="그룹 3" IsChecked="{Binding Path=Tag3Checked}" />
+            <CheckBox Style="{StaticResource G2CheckBox}" Margin="0,2,16,2" Content="그룹 4" IsChecked="{Binding Path=Tag4Checked}" />
+          </WrapPanel>
+          <TextBlock Grid.Row="3" Foreground="{DynamicResource G2Sub}" VerticalAlignment="Center" Margin="0,12,0,0" Text="색" />
+          <wpf:Colorpicker Grid.Row="3" Grid.Column="1" Margin="0,12,0,0" HorizontalAlignment="Left" MinWidth="160" SelectedColor="{Binding Color, Mode=TwoWay}" />
+        </Grid>
+      </Border>
+    </StackPanel>
+    <Border Background="{DynamicResource G2Panel}" BorderBrush="{DynamicResource G2Line}" BorderThickness="0,1,0,0" Padding="20,12">
+      <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+        <Button Name="btn_cancel" Style="{StaticResource G2GhostButton}" Padding="18,0" Height="34" IsCancel="True" Content="취소" Click="btn_cancel_Click" />
+        <Button Name="btn_save" Style="{StaticResource G2PrimaryButton}" Padding="22,0" Height="34" Margin="8,0,0,0" IsDefault="True" Content="저장" Click="btn_save_Click" />
+      </StackPanel>
+    </Border>
+  </StackPanel>
 </Window>
