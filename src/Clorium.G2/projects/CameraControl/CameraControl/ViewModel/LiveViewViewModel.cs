@@ -1666,11 +1666,33 @@ public class LiveViewViewModel : ViewModelBase
 		ResetOverlayCommand = new RelayCommand(ResetOverlay);
 		ZoomInCommand = new RelayCommand(() =>
 		{
+			// 수퍼포커스 open: magnify around the chosen box (the camera zoom position follows it only now, so moving the box
+			// stays instant).
+			var box = CameraControl.windows.SuperfocusWindow.ZoomBoxFor(CameraDevice);
+			var frame = LiveViewData;
+			if (box != null && frame != null && frame.ImageWidth > 0 && IsWholeView())
+			{
+				try
+				{
+					CameraDevice.Focus((int)(box.X * frame.ImageWidth), (int)(box.Y * frame.ImageHeight));
+				}
+				catch (Exception exception)
+				{
+					Log.Error("Unable to move the zoom position to the superfocus box", exception);
+				}
+			}
 			CameraDevice.LiveViewImageZoomRatio.NextValue();
 		});
 		ZoomOutCommand = new RelayCommand(() =>
 		{
-			CameraDevice.LiveViewImageZoomRatio.PrevValue();
+			// 수퍼포커스 open: (−) goes straight back to the whole picture.
+			var zoom = CameraDevice.LiveViewImageZoomRatio;
+			if (CameraControl.windows.SuperfocusWindow.IsOpenFor(CameraDevice) && zoom?.Values != null && zoom.Values.Count > 0)
+			{
+				zoom.Value = zoom.Values[0];
+				return;
+			}
+			zoom.PrevValue();
 		});
 		ZoomIn100 = new RelayCommand(ToggleZoom);
 		ToggleGridCommand = new RelayCommand(ToggleGrid);
@@ -3185,6 +3207,12 @@ public class LiveViewViewModel : ViewModelBase
 			i = 0;
 		}
 		GridType = i;
+	}
+
+	private bool IsWholeView()
+	{
+		var zoom = CameraDevice.LiveViewImageZoomRatio;
+		return zoom == null || zoom.Values == null || zoom.Values.Count == 0 || zoom.Value == zoom.Values[0] || zoom.Value == "All" || zoom.Value == "0";
 	}
 
 	private void ToggleZoom()

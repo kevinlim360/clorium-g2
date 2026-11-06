@@ -227,6 +227,38 @@ class ThemeCheck
 				}
 			}
 
+			// 수퍼포커스 자동 초점 찾기 with a simulated lens: near subject sharp at -40, far at +50 (small steps). AF on each box, then
+			// saving 먼 곳 measures the distance back to 가까운 곳 by counted steps.
+			{
+				Type sf = g2.GetType("CameraControl.windows.SuperfocusWindow", true);
+				var lens = new FakeLens { SerialNumber = "THEME-LENS" };
+				var w = (Window)sf.GetMethod("For").Invoke(null, new object[] { lens, null });
+				var inst = BindingFlags.Instance | BindingFlags.NonPublic;
+				sf.GetField("focusCameraFactory", inst).SetValue(w, (Func<IFocusCaptureCamera>)(() => new FakeLensAdapter(lens)));
+				sf.GetField("stopNativeAutofocus", inst).SetValue(w, (Action)(() => { }));
+				w.Show(); Pump(200);
+				sf.GetProperty("UseFocusBox").SetValue(w, true, null);
+				Func<System.Threading.Tasks.Task, bool> Run = t => { DateTime until = DateTime.Now.AddSeconds(120); while (!t.IsCompleted && DateTime.Now < until) Pump(20); return t.IsCompleted; };
+				object range = sf.GetField("range", inst).GetValue(w);
+				Func<string, object> R = n => range.GetType().GetProperty(n).GetValue(range, null);
+				var lensFrame = lens.GetLiveViewImage();
+				sf.GetMethod("TrySelectPreviewBox").Invoke(null, new object[] { lens, lensFrame, (int)(0.3 * lensFrame.ImageWidth), lensFrame.ImageHeight / 2 });
+				Check("박스에 초점 맞추기 (near box) finishes and unlocks", Run((System.Threading.Tasks.Task)sf.GetMethod("FocusHereAsync").Invoke(w, null)) && !(bool)sf.GetProperty("IsWorking").GetValue(w, null));
+				Check("AF went to the near subject (lens " + lens.Position + ")", lens.Position == FakeLens.Near);
+				Run((System.Threading.Tasks.Task)sf.GetMethod("MarkSelectedAsync").Invoke(w, new object[] { true }));
+				Check("가까운 곳 saved right after AF", (int?)R("A") == 0);
+				sf.GetMethod("TrySelectPreviewBox").Invoke(null, new object[] { lens, lensFrame, (int)(0.7 * lensFrame.ImageWidth), lensFrame.ImageHeight / 2 });
+				Run((System.Threading.Tasks.Task)sf.GetMethod("FocusHereAsync").Invoke(w, null));
+				Check("AF went to the far subject (lens " + lens.Position + ")", lens.Position == FakeLens.Far);
+				var lensClock = System.Diagnostics.Stopwatch.StartNew();
+				Check("먼 곳 save measures back to 가까운 곳", Run((System.Threading.Tasks.Task)sf.GetMethod("MarkSelectedAsync").Invoke(w, new object[] { false })));
+				int? a = (int?)R("A"), b = (int?)R("B");
+				Check("two ends " + (FakeLens.Far - FakeLens.Near) + " steps apart (A " + a + ", B " + b + ", " + sf.GetProperty("Feedback").GetValue(w, null) + ", " + lensClock.Elapsed.TotalSeconds.ToString("0") + " s)", a.HasValue && b.HasValue && b.Value - a.Value == FakeLens.Far - FakeLens.Near);
+				Check("lens ends on 가까운 곳 with the count in step (lens " + lens.Position + ", position " + R("Position") + ")", lens.Position == FakeLens.Near && (int)R("Position") == a.Value);
+				Snapshot(w, Path.Combine(outDir, "superfocus-measured.png"));
+				sf.GetMethod("CloseAll").Invoke(null, null);
+			}
+
 			// 시작 화면: the Clorium intro control (real-time ribbon), captured while it plays; then CloseWhenReady.
 			ServiceProvider.Branding.ShowStartupScreenAnimation = true;
 			Type startup = g2.GetType("CameraControl.StartUpWindow", true);
@@ -308,4 +340,40 @@ class ThemeCheck
 		enc.Frames.Add(BitmapFrame.Create(BitmapSource.Create(w, h, 300, 300, PixelFormats.Bgr24, null, px, stride), null, md, null));
 		using (var f = File.Create(path)) enc.Save(f);
 	}
+}
+
+// Simulated lens for 수퍼포커스: two textured subjects (left = near, right = far) whose contrast peaks at their focus position.
+class FakeLens : CameraControl.Devices.BaseCameraDevice
+{
+	public const int Near = -40, Far = 50;
+	public int Position = 7;
+	double afX = 0.5;
+	public override void Focus(int x, int y) { afX = x / 400.0; }
+	public override void AutoFocus() { Position = afX < 0.5 ? Near : Far; }
+	public override CameraControl.Devices.Classes.LiveViewData GetLiveViewImage()
+	{
+		int w = 400, h = 300, stride = w * 3;
+		var px = new byte[stride * h];
+		double near = 120 / (1 + Math.Abs(Position - Near) / 6.0), far = 120 / (1 + Math.Abs(Position - Far) / 6.0);
+		for (int y = 0; y < h; y++) for (int x = 0; x < w; x++)
+		{
+			double amp = x < w / 2 ? near : far;
+			int v = (int)(128 + (((x / 3) + (y / 3)) % 2 == 0 ? amp : -amp));
+			int p = y * stride + x * 3; px[p] = px[p + 1] = px[p + 2] = (byte)Math.Max(0, Math.Min(255, v));
+		}
+		var enc = new JpegBitmapEncoder { QualityLevel = 95 };
+		enc.Frames.Add(BitmapFrame.Create(BitmapSource.Create(w, h, 96, 96, PixelFormats.Bgr24, null, px, stride)));
+		var ms = new MemoryStream(); enc.Save(ms);
+		return new CameraControl.Devices.Classes.LiveViewData { ImageData = ms.ToArray(), ImageWidth = w, ImageHeight = h, FocusX = 200, FocusY = 150, FocusFrameXSize = 40, FocusFrameYSize = 40, HaveFocusData = true };
+	}
+}
+
+class FakeLensAdapter : IFocusCaptureCamera, IDisposable
+{
+	readonly FakeLens lens;
+	public FakeLensAdapter(FakeLens lens) { this.lens = lens; }
+	public bool IsConnected { get { return true; } }
+	public void MoveFocus(CameraControl.Devices.Classes.FocusDirection direction, CameraControl.Devices.Classes.FocusAmount amount) { lens.Position += direction == CameraControl.Devices.Classes.FocusDirection.Far ? 1 : -1; }
+	public System.Threading.Tasks.Task<string> CaptureAsync() { throw new NotSupportedException(); }
+	public void Dispose() { }
 }

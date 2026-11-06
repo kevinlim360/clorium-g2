@@ -37,7 +37,7 @@ public sealed class SuperfocusWindow : Window
     public string LensName {get;private set;}="";
     public static bool FindsFocusAutomatically(string lens)=>!string.IsNullOrEmpty(lens)&&lens.IndexOf("24-240",StringComparison.OrdinalIgnoreCase)>=0;
     const string MfNotice="렌즈를 MF(초점 수동 조절)로 설정해 주세요.";
-    const string AutoNotice="이 렌즈는 AF/MF 스위치가 없습니다. 카메라의 포커스 모드를 AF로 두세요. 박스를 고르고 ‘가까운 곳’, ‘먼 곳’을 누르면 초점을 자동으로 찾습니다.";
+    const string AutoNotice="이 렌즈는 AF/MF 스위치가 없습니다. 카메라의 포커스 모드를 AF로 두세요. 가까운 물체에 박스를 놓고 ‘박스에 초점 맞추기’ → ‘가까운 곳’, 먼 물체도 같은 방법으로 → ‘먼 곳’.";
     private readonly TextBox cuts = new TextBox { Width=42, Height=24, Margin=new Thickness(4,0,8,0), Padding=new Thickness(3), Background=Brushes.White, Foreground=Brushes.Black, VerticalContentAlignment=VerticalAlignment.Center };
     private readonly TextBox settle = new TextBox { Text="700" }, python = new TextBox(), engine = new TextBox();
     private readonly TextBlock status = new TextBlock { Foreground=Brushes.White, FontSize=12, TextTrimming=TextTrimming.CharacterEllipsis, Margin=new Thickness(2,4,2,0), Visibility=Visibility.Collapsed };
@@ -80,14 +80,17 @@ public sealed class SuperfocusWindow : Window
         });
     }
     public static FocusBoxContrast PreviewBoxFor(ICameraDevice device)=>device!=null&&Windows.TryGetValue(device,out var w)?w.previewBox:null;
+    // Live view (+)/(−) while the window is open: (+) magnifies the chosen box, (−) returns to the whole picture.
+    public static FocusBoxContrast ZoomBoxFor(ICameraDevice device)=>device!=null&&Windows.TryGetValue(device,out var w)&&w.Dispatcher.Invoke(()=>w.IsVisible)?w.previewBox:null;
+    public static bool IsOpenFor(ICameraDevice device)=>device!=null&&Windows.TryGetValue(device,out var w)&&w.Dispatcher.Invoke(()=>w.IsVisible);
     public static bool TryFocusSelectedBox(ICameraDevice device) {
         if(device==null||!Windows.TryGetValue(device,out var w))return false;
         if(w.IsWorking)return true;
         if(!w.IsVisible)return false;
         // 자동 초점 찾기 with a saved end: AF refines focus on the selected box by stepping (the range stays counted).
-        if(w.UseFocusBox&&(w.range.A.HasValue||w.range.B.HasValue)){_=w.FocusSelectedBoxAsync(false,false);return true;}
+        if(w.UseFocusBox){_=w.FocusHereAsync();return true;}
         // Otherwise AF from the live view would move the lens uncounted and clear the saved range.
-        w.SetStatus(w.UseFocusBox?"박스를 고르고 ‘가까운 곳’을 눌러 주세요.":"수퍼포커스 중에는 화살표로 초점을 옮겨 주세요.");return true;
+        w.SetStatus("수퍼포커스 중에는 화살표로 초점을 옮겨 주세요.");return true;
     }
     public void RequestStop(){pendingAnchor=null;pendingBox=null;manualMoves.Clear();manualTakeover=false;cancellation?.Cancel();}
     public Task StartCaptureAsync()=>RunAsync();
@@ -163,7 +166,7 @@ public sealed class SuperfocusWindow : Window
     private void PathField(Panel panel,string label,TextBox box,string filter){Field(panel,label,box);Tip(box,label+" 파일 경로");var b=Button("…",label+" 파일 선택");b.HorizontalAlignment=HorizontalAlignment.Right;b.Click+=(s,e)=>{var dialog=new Microsoft.Win32.OpenFileDialog {Filter=filter};if(dialog.ShowDialog(this)==true)box.Text=dialog.FileName;};panel.Children.Add(b);}
     private void SetStatus(string text){status.Text=(text??"").Split(new[]{'\r','\n'},StringSplitOptions.RemoveEmptyEntries).FirstOrDefault()??"";status.Visibility=string.IsNullOrEmpty(status.Text)?Visibility.Collapsed:Visibility.Visible;Tip(status,text??"");}
     private void Disconnected(object sender,DisconnectCameraEventArgs e){Dispatcher.BeginInvoke(new Action(()=>{RequestStop();range.Invalidate();boxA=boxB=previewBox=null;SetStatus("연결 끊김");Refresh();}));}
-    public void InvalidateRange(){if(IsWorking){RequestStop();return;}range.Reset();boxA=boxB=null;automaticCuts=true;Quality=0;SetStatus("");Refresh();} // the chosen box stays on screen
+    public void InvalidateRange(){if(IsWorking){RequestStop();return;}needsMeasure=false;range.Reset();boxA=boxB=null;automaticCuts=true;Quality=0;SetStatus("");Refresh();} // the chosen box stays on screen
     public void MarkA(){if(!IsWorking){range.MarkA();RangeMarked();}}
     public void MarkB(){if(!IsWorking){range.MarkB();RangeMarked();}}
     // Lens profile from the body (on each open): RF24-240 turns 자동 초점 찾기 on and shows the AF notice. A user's own choice is
@@ -178,78 +181,78 @@ public sealed class SuperfocusWindow : Window
         noticeText.Text=(name.Length>0?name+" · ":"")+(UseFocusBox?AutoNotice:MfNotice);
         Refresh();
     }
-    public Task MarkSelectedAsync(bool isA)=>UseFocusBox?FindAndMarkAsync(isA):SaveCurrentAsync(isA);
-    // 박스에 초점 맞추기: focus on the chosen box without saving an end (first time: camera AF at the box, then counting starts).
+    // 자동 초점 찾기 (RF24-240): 박스에 초점 맞추기 is camera AF only (the lens is accurate, a stepped search is not). AF moves the
+    // lens an unknown number of steps, so after it the distance to the other saved end is measured when this end is saved.
+    public Task MarkSelectedAsync(bool isA)=>UseFocusBox&&needsMeasure&&(isA?boxB:boxA)!=null?MeasureToOtherEndAsync(isA):SaveCurrentAsync(isA);
+    private bool needsMeasure;
     public async Task FocusHereAsync(){
         if(IsWorking)return;
         FocusBoxContrast box;
         try{box=previewBox??FocusBoxContrast.From(camera.GetLiveViewImage());}catch(Exception e){SetStatus(e.GetBaseException().Message);return;}
-        await FocusSelectedBoxAsync(false,false,box);
-    }
-    // 자동 초점 찾기: focus is found on the selected box (first end: camera AF at the box, then a counted contrast search;
-    // second end: counted search from the first towards near/far). Arrows during a search take over at the current spot.
-    private async Task FindAndMarkAsync(bool isA){
-        if(IsWorking&&(!registeringAnchor||activeAnchor==isA))return;
-        FocusBoxContrast box;
-        try{box=previewBox??FocusBoxContrast.From(camera.GetLiveViewImage());}catch(Exception e){SetStatus(e.GetBaseException().Message);return;}
-        if(IsWorking){pendingAnchor=isA;pendingBox=box;SetStatus((isA?"가까운 곳":"먼 곳")+" 예약 · 지금 찾는 초점 다음에 찾습니다");Refresh();return;}
-        registeringAnchor=true;activeAnchor=isA;anchorReleased=new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
-        try{
-            while(true){
-                await FocusSelectedBoxAsync(isA,true,box);
-                if(!pendingAnchor.HasValue)break;
-                isA=pendingAnchor.Value;box=pendingBox;pendingAnchor=null;pendingBox=null;activeAnchor=isA;
-            }
-        }finally{registeringAnchor=false;activeAnchor=null;pendingAnchor=null;pendingBox=null;anchorReleased.TrySetResult(true);Refresh();}
-    }
-    private async Task<LiveViewData> ReadFrameAsync(CancellationToken token){for(int i=0;i<20;i++){token.ThrowIfCancellationRequested();var frame=camera.GetLiveViewImage();if(frame?.ImageData!=null&&frame.ImageData.Length>0)return frame;await Task.Delay(50,token);}throw new InvalidOperationException("라이브뷰 프레임을 읽지 못했습니다.");}
-    private async Task FocusSelectedBoxAsync(bool isA,bool mark,FocusBoxContrast selectedBox=null){
-        if(IsWorking&&!registeringAnchor)return;
-        if(cancellation!=null)return;
-        bool first=!range.A.HasValue&&!range.B.HasValue,uncertain=false;
-        string name=mark?(isA?"가까운 곳":"먼 곳"):"박스";
+        bool anyEnd=range.A.HasValue||range.B.HasValue;
         using(var token=new CancellationTokenSource()){
-            cancellation=token;SetStatus(name+" 초점 찾는 중");Refresh();Log.Debug("Superfocus : find focus "+name+" (first="+first+", box "+(selectedBox==null?"camera":selectedBox.X.ToString("0.00")+","+selectedBox.Y.ToString("0.00"))+")");
+            cancellation=token;SetStatus("박스에 초점 맞추는 중");Refresh();Log.Debug("Superfocus : AF on box "+box.X.ToString("0.00")+","+box.Y.ToString("0.00"));
             try{
-                await Task.Run(async()=>{var adapter=focusCameraFactory();using(adapter as IDisposable){
+                await Task.Run(async()=>{
                     var frame=await ReadFrameAsync(token.Token);
-                    var box=selectedBox??FocusBoxContrast.From(frame);
-                    Func<int,Task> drive=async step=>{token.Token.ThrowIfCancellationRequested();uncertain=true;adapter.MoveFocus(step>0?FocusDirection.Far:FocusDirection.Near,FocusAmount.Small);range.Moved(step);uncertain=false;await Task.Delay(180,token.Token);};
-                    Func<Task<double>> measure=async()=>box.Measure(await ReadFrameAsync(token.Token));
-                    var search=new FocusBoxSearch();
-                    if(first){
-                        // Camera AF on the chosen box, then counting starts from where AF left the lens.
-                        uncertain=true;camera.Focus((int)(box.X*frame.ImageWidth),(int)(box.Y*frame.ImageHeight));await Task.Delay(250,token.Token);
-                        camera.AutoFocus();await Task.Delay(1600,token.Token);stopNativeAutofocus();await Task.Delay(300,token.Token);
-                        await search.FindAroundPeakAsync(measure,drive,400,token.Token);range.Reset();boxA=boxB=null;uncertain=false;
-                    }else if(mark&&(isA?range.B.HasValue:range.A.HasValue)){
-                        int direction=isA?-1:1;await search.FindFarPeakAsync(measure,step=>drive(step*direction),400,token.Token);
-                    }else await search.FindAroundPeakAsync(measure,drive,400,token.Token);
-                    if(mark){
-                        if((isA&&range.B==range.Position)||(!isA&&range.A==range.Position))throw new InvalidOperationException("가까운 곳과 먼 곳이 같은 초점입니다. 깊이가 다른 곳에 박스를 놓아 주세요.");
-                        if(isA){range.MarkA();boxA=box;}else{range.MarkB();boxB=box;}
-                    }
-                }});
-                SetStatus(mark?name+" 저장":"초점 완료");Log.Debug("Superfocus : focus found at "+range.Position+(mark?" saved as "+name:""));
-                if(mark)RangeMarked();
+                    camera.Focus((int)(box.X*frame.ImageWidth),(int)(box.Y*frame.ImageHeight));await Task.Delay(250,token.Token);
+                    camera.AutoFocus();await Task.Delay(1600,token.Token);stopNativeAutofocus();await Task.Delay(200,token.Token);
+                });
+                if(anyEnd)needsMeasure=true;else{range.Reset();needsMeasure=false;}
+                SetStatus("초점 맞춤 · ‘가까운 곳’ 또는 ‘먼 곳’을 눌러 저장하세요");
             }catch(Exception e){
-                pendingAnchor=null;pendingBox=null;Log.Debug("Superfocus : find focus "+name+" ended: "+e.GetBaseException().Message);
-                if(e is OperationCanceledException&&manualTakeover&&mark){
-                    try{
-                        // Stop any native AF before handing the lens to the arrows.
-                        await Task.Run(stopNativeAutofocus);
-                        if(first){range.Reset();boxA=boxB=null;}
-                        if(isA){range.MarkA();boxA=selectedBox;}else{range.MarkB();boxB=selectedBox;}
-                        RangeMarked();SetStatus("자동 찾기 중단 · 지금 위치를 "+name+"으로 저장");
-                    }catch(Exception stopError){range.Invalidate();boxA=boxB=null;manualMoves.Clear();manualTakeover=false;SetStatus(stopError.GetBaseException().Message);}
-                }else{
-                    manualMoves.Clear();manualTakeover=false;
-                    if(first||uncertain){range.Reset();boxA=boxB=null;}else if(mark){if(isA){range.ClearA();boxA=null;}else{range.ClearB();boxB=null;}}
-                    SetStatus(e is OperationCanceledException?"중지됨":e.GetBaseException().Message);
-                }
+                if(anyEnd)needsMeasure=true;
+                Log.Debug("Superfocus : AF on box ended: "+e.GetBaseException().Message);
+                SetStatus(e is OperationCanceledException?"중지됨":e.GetBaseException().Message);
             }finally{cancellation=null;Refresh();}
         }
     }
+    // Saves this end where AF left the lens, then steps towards the other end (가까운 곳 is nearer, 먼 곳 farther) until that end's
+    // box is sharpest again, counting every step. The lens finishes on the other end; both ends are then known.
+    private async Task MeasureToOtherEndAsync(bool isA){
+        if(IsWorking)return;
+        FocusBoxContrast here=previewBox,other=isA?boxB:boxA;
+        if(here==null){try{here=FocusBoxContrast.From(camera.GetLiveViewImage());}catch(Exception){here=null;}}
+        string name=isA?"가까운 곳":"먼 곳",otherName=isA?"먼 곳":"가까운 곳";
+        int direction=isA?1:-1; // towards the other end
+        int steps=0;bool saved=false;
+        using(var token=new CancellationTokenSource()){
+            cancellation=token;SetStatus(name+" 저장 · "+otherName+"까지 거리 재는 중");Refresh();
+            try{
+                await Task.Run(async()=>{var adapter=focusCameraFactory();using(adapter as IDisposable){
+                    range.Reset();if(isA)range.MarkA();else range.MarkB();saved=true;
+                    Func<Task<double>> measure=async()=>other.Measure(await ReadFrameAsync(token.Token));
+                    double initial=await measure(),best=initial;int bestAt=0,falling=0;bool found=false;
+                    Log.Debug("Superfocus : measure "+name+" -> "+otherName+" start score "+initial.ToString("0.0"));
+                    for(int i=1;i<=MeasureLimit;i++){
+                        token.Token.ThrowIfCancellationRequested();
+                        adapter.MoveFocus(direction>0?FocusDirection.Far:FocusDirection.Near,FocusAmount.Small);range.Moved(direction);steps=i;
+                        await Task.Delay(120,token.Token);
+                        double score=await measure();
+                        if(score>best){best=score;bestAt=i;falling=0;}else falling=score<best*.85?falling+1:0;
+                        if(i%20==0){int n=i;Dispatcher.BeginInvoke(new Action(()=>SetStatus(name+" 저장 · "+otherName+"까지 거리 재는 중 ("+n+"단계)")));Log.Debug("Superfocus : step "+i+" score "+score.ToString("0.0")+" best "+best.ToString("0.0")+" at "+bestAt);}
+                        // The other end's box must clearly sharpen and then soften again.
+                        if(best>initial*1.3&&falling>=3){found=true;break;}
+                    }
+                    if(!found)throw new InvalidOperationException(otherName+" 박스가 다시 선명해지지 않았습니다("+steps+"단계). "+otherName+"을 다시 저장해 주세요.");
+                    for(int i=steps;i>bestAt;i--){token.Token.ThrowIfCancellationRequested();adapter.MoveFocus(direction>0?FocusDirection.Near:FocusDirection.Far,FocusAmount.Small);range.Moved(-direction);await Task.Delay(120,token.Token);}
+                    if(isA)range.MarkB();else range.MarkA();
+                    Log.Debug("Superfocus : "+otherName+" found "+bestAt+" steps from "+name);
+                }});
+                if(isA)boxA=here;else boxB=here;
+                needsMeasure=false;RangeMarked();SetStatus(name+" 저장 · 두 곳 사이 "+Math.Abs((long)range.B.Value-range.A.Value)+"단계");
+            }catch(Exception e){
+                Log.Debug("Superfocus : measure ended: "+e.GetBaseException().Message);
+                // Steps were counted from this end, so it stays valid; the other end has to be saved again.
+                needsMeasure=false;
+                if(saved){if(isA){boxA=here;range.ClearB();boxB=null;}else{boxB=here;range.ClearA();boxA=null;}}
+                RangeMarked();
+                SetStatus(e is OperationCanceledException?"중지됨 · "+name+"만 저장했습니다":e.GetBaseException().Message);
+            }finally{cancellation=null;Refresh();}
+        }
+    }
+    private const int MeasureLimit=800;
+    private async Task<LiveViewData> ReadFrameAsync(CancellationToken token){for(int i=0;i<20;i++){token.ThrowIfCancellationRequested();var frame=camera.GetLiveViewImage();if(frame?.ImageData!=null&&frame.ImageData.Length>0)return frame;await Task.Delay(50,token);}throw new InvalidOperationException("라이브뷰 프레임을 읽지 못했습니다.");}
     // 가까운 곳 / 먼 곳 (렌즈 MF): saves where the arrows left the lens (no search, no AF). The selected preview box is kept with it.
     private Task SaveCurrentAsync(bool isA){
         if(IsWorking)return Task.CompletedTask;
