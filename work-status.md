@@ -1,5 +1,7 @@
 # 클로리움 G2 작업 기록
 
+2026-11-06 남은 일(사용자: 나중에) — G2 설치 패키지 없음. 기존 NSIS 설치(baseline deployment, 2026-10-05)는 이전 버전용. 테스트 실행본의 수퍼포커스 합성·배경제거는 이 PC의 개발용 Python venv(5.9 GB, 다른 PC로 이동 불가)를 씀. 할 일: 합성 엔진 단일 실행 파일화(numpy·OpenCV·Pillow)와 G2 연결, 배경제거 엔진·BiRefNet 모델(CPU/GPU 판 선택 필요), 조명 앱(PyInstaller), 오토사이징 Desk(.NET 10 데스크톱 런타임 → 자체 포함 배포), VC++ x64, Data\ShutterSounds·Languages\ko.xml·Data\Messages.xml을 NSIS에 추가.
+
 2026-11-06 수퍼포커스 ⚙ 버튼 삭제(사용자 요청). 안정화 시간·Python·합성 엔진 설정은 평소 자동(stack-python.txt/CLORIUM_STACK_PYTHON, modules\Clorium.Stack\clorium_stack.py, 안정화 700 ms)이라 숨김 유지, 경로를 못 찾을 때만 촬영 시 설정이 펼쳐지고 ‘아래 설정에서 … 선택해 주세요’ 안내. 검사: 빌드 오류 0, ThemeCheck 59.
 
 2026-11-06 수퍼포커스 안내 줄임(사용자 요청: 설명이 너무 김, 모델명과 사용법만 2–3줄). 자동 초점 찾기 안내 = 1줄 렌즈 모델명, 2줄 ‘박스에 초점 맞추기 → ‘가까운 곳’ · ‘먼 곳’ 저장 → ‘촬영’’. MF 안내도 모델명 다음 줄에 표시. 검사: 빌드 오류 0, ThemeCheck 59.
