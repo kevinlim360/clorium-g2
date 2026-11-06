@@ -236,6 +236,8 @@ public partial class App : System.Windows.Application
 			}
 		}
 		ServiceProvider.PluginManager.SelectedWindow = mainWindowPlugin;
+		// no blank white frame behind the start logo: the window appears once its first frame is drawn
+		if (mainWindowPlugin is Window firstShow) CameraControl.Classes.FirstFrameCloak.Apply(firstShow);
 		mainWindowPlugin.Show();
 		if (mainWindowPlugin is Window)
 		{

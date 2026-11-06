@@ -40,8 +40,8 @@
           </zoomandpan:ImageColorPicker>
         </zoomandpan:ZoomAndPanControl>
       </Grid>
-      <MediaElement Name="VideoControl" Grid.Column="0" Grid.RowSpan="3" LoadedBehavior="Manual" UnloadedBehavior="Close" Visibility="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=SelectedBitmap.FileItem.IsMovie, Converter={StaticResource BooleanToVisibilityConverter}}" Source="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=SelectedBitmap.FileItem.FileName}" />
-      <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Visibility="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=SelectedBitmap.FileItem.IsMovie, Converter={StaticResource BooleanToVisibilityConverter}}">
+      <MediaElement Name="VideoControl" Grid.Column="0" Grid.RowSpan="3" LoadedBehavior="Manual" UnloadedBehavior="Close" Visibility="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=SelectedBitmap.FileItem.IsMovie, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}" Source="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=SelectedBitmap.FileItem.FileName}" />
+      <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Visibility="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=SelectedBitmap.FileItem.IsMovie, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
         <Button Height="50" Width="50" Margin="5" Style="{DynamicResource MaterialDesignFlatButton}" Click="Button_Click">
           <materialDesign:PackIcon Width="24" Height="24" Kind="Play" />
         </Button>

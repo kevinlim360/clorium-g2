@@ -49,6 +49,9 @@ public class LayoutBase : UserControl
 
 	public void InitServices()
 	{
+		// Start-up: until the first photo is loaded and fitted, the viewer would show the photo's white frame at full
+		// size from the middle of the stage (a white box at the lower right). OnImageLoaded shows it after the fit.
+		if (ZoomAndPanControl != null) ZoomAndPanControl.Opacity = 0;
 		ServiceProvider.Settings.PropertyChanged += Settings_PropertyChanged;
 		ServiceProvider.WindowsManager.Event += Trigger_Event;
 		ImageLIst.SelectionChanged += ImageLIst_SelectionChanged;
@@ -167,6 +170,11 @@ public class LayoutBase : UserControl
 			LayoutViewModel.DoZoom();
 		}
 		ServiceProvider.Settings.SelectedBitmap.Notify();
+		if (ZoomAndPanControl != null && ZoomAndPanControl.Opacity < 1)
+		{
+			ZoomAndPanControl zoom = ZoomAndPanControl;
+			Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Loaded, new Action(() => zoom.Opacity = 1));
+		}
 	}
 
 	private void _worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)

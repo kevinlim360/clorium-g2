@@ -601,9 +601,34 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 			if (!string.IsNullOrEmpty(camera.SerialNumber)) text.Append("\n시리얼  " + camera.SerialNumber);
 			text.Append("\n배터리  " + camera.Battery + "%");
 		}
-		text.Append("\n오늘 촬영  " + CaptureCount + "컷");
-		text.Append("\n오늘 세션  " + (ServiceProvider.Settings?.TodaySessionCounter ?? 0) + "개");
-		CameraStatusIcon.ToolTip = text.ToString();
+		string head = text.ToString();
+		// Today's counts come from the session folders on disk (TodayCaptures): the old counters only saw normal
+		// captures since this start and barcode sessions. The text block is updated in place when the scan finishes.
+		if (!(CameraStatusIcon.ToolTip is System.Windows.Controls.TextBlock tip)) CameraStatusIcon.ToolTip = tip = new System.Windows.Controls.TextBlock();
+		tip.Text = head + (todayCounts.HasValue ? TodayLines(todayCounts.Value) : "\n오늘 촬영  확인 중…");
+		if (todayScanRunning) return;
+		todayScanRunning = true;
+		var folders = (ServiceProvider.Settings?.PhotoSessions?.Select(s => s.Folder).ToList()) ?? new List<string>();
+		Task.Run(() => TodayCaptures.Count(folders, DateTime.Now)).ContinueWith(t =>
+		{
+			todayScanRunning = false;
+			if (t.IsFaulted)
+			{
+				Log.Error("Camera icon : today count failed", t.Exception);
+				return;
+			}
+			todayCounts = t.Result;
+			tip.Text = head + TodayLines(t.Result);
+		}, TaskScheduler.FromCurrentSynchronizationContext());
+	}
+
+	private (int Cuts, int Sessions)? todayCounts;
+
+	private bool todayScanRunning;
+
+	private static string TodayLines((int Cuts, int Sessions) c)
+	{
+		return "\n오늘 촬영  " + c.Cuts + "컷\n오늘 세션  " + c.Sessions + "개";
 	}
 
 	private void ManagementTimer_Tick(object sender, EventArgs e)

@@ -125,6 +125,10 @@
                     <Setter Property="BorderBrush" Value="{DynamicResource G2Pr}" />
                     <Setter Property="BorderThickness" Value="3" />
                   </DataTrigger>
+                  <!-- no photo yet (start-up): the white frame would show as an empty white box -->
+                  <DataTrigger Binding="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=SelectedBitmap.DisplayImage, FallbackValue={x:Null}}" Value="{x:Null}">
+                    <Setter Property="Visibility" Value="Hidden" />
+                  </DataTrigger>
                 </Style.Triggers>
               </Style>
             </Border.Style>
@@ -139,7 +143,7 @@
           </Border>
         </zoomandpan:ZoomAndPanControl>
       </Grid>
-      <MediaElement Name="VideoControl" LoadedBehavior="Manual" UnloadedBehavior="Close" Visibility="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=SelectedBitmap.FileItem.IsMovie, Converter={StaticResource BooleanToVisibilityConverter}}" Source="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=SelectedBitmap.FileItem.FileName}" />
+      <MediaElement Name="VideoControl" LoadedBehavior="Manual" UnloadedBehavior="Close" Visibility="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=SelectedBitmap.FileItem.IsMovie, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}" Source="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=SelectedBitmap.FileItem.FileName}" />
 
       <!-- top-left badge -->
       <Border Style="{StaticResource G2OverlayChip}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="16,14,0,0">
@@ -161,7 +165,7 @@
         </ComboBox>
       </StackPanel>
       <!-- video transport -->
-      <Border Style="{StaticResource G2OverlayChip}" Height="40" Padding="4" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,66" Visibility="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=SelectedBitmap.FileItem.IsMovie, Converter={StaticResource BooleanToVisibilityConverter}}">
+      <Border Style="{StaticResource G2OverlayChip}" Height="40" Padding="4" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,66" Visibility="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=SelectedBitmap.FileItem.IsMovie, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
         <StackPanel Orientation="Horizontal">
           <Button Style="{StaticResource G2IconButton}" Width="32" Height="32" ToolTip="재생" Click="Button_Click"><Viewbox Width="18" Height="18"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoPlay}" /></Viewbox></Button>
           <Button Style="{StaticResource G2IconButton}" Width="32" Height="32" ToolTip="일시정지" Click="Button_Click_1"><Viewbox Width="18" Height="18"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoPause}" /></Viewbox></Button>
