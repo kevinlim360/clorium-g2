@@ -140,6 +140,7 @@ public partial class App : System.Windows.Application
 		{
 			Dispatcher.Invoke(ServiceProvider.Configure);
 			if (StartUpWindow.ShownAfterStart.HasValue) Log.Debug("App : start screen shown " + (int)StartUpWindow.ShownAfterStart.Value.TotalMilliseconds + " ms after process start");
+			CameraControl.Classes.UiHangWatchdog.Start(Dispatcher, Path.Combine(CameraControl.Core.Classes.Settings.DataFolder, "Log"));
 			ServiceProvider.Settings.LoadSessionData();
 			TranslationManager.LoadLanguage(ServiceProvider.Settings.SelectedLanguage);
 			ServiceProvider.PluginManager.CopyPlugins();

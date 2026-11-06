@@ -558,26 +558,45 @@ public class CameraDeviceManager : BaseFieldClass
 
 	private void DisconnectCamera(EosCamera device)
 	{
+		DeviceDescriptor descriptor;
 		lock (_locker)
 		{
-			DeviceDescriptor descriptor = _deviceEnumerator.GetByEosCamera(device);
+			descriptor = _deviceEnumerator.GetByEosCamera(device);
 			if (descriptor != null)
 			{
 				descriptor.CameraDevice.PhotoCaptured -= cameraDevice_PhotoCaptured;
 				descriptor.CameraDevice.CameraDisconnected -= cameraDevice_CameraDisconnected;
 				StaticHelper.Instance.SystemMessage = "Canon Camera disconnected :" + descriptor.CameraDevice.DeviceName;
 				Log.Debug("Name : " + descriptor.CameraDevice.DeviceName + " - 연결 해제");
-				((DispatcherObject)Application.Current).Dispatcher.Invoke((Action)(() =>
-				{
-					ConnectedDevices.Remove(descriptor.CameraDevice);
-					descriptor.CameraDevice.Close();
-					_deviceEnumerator.Remove(descriptor);
-					_deviceEnumerator.RemoveDisconnected();
-				}));
 			}
 		}
-		RemoveDisconnected();
-		Log.Debug("=========== 캐논 카메라 연결 해제 ==============");
+		// G2: the UI clean-up is queued without holding _locker and without waiting. Waiting for the UI thread while holding
+		// _locker could deadlock with the reconnect (CameraAdded -> AddCanonCameras takes _locker on the UI thread): G2 hung
+		// after a camera battery change. Queued work runs in order, before the later reconnect.
+		Action cleanUp = () =>
+		{
+			if (descriptor != null)
+			{
+				ConnectedDevices.Remove(descriptor.CameraDevice);
+				descriptor.CameraDevice.Close();
+				lock (_locker)
+				{
+					_deviceEnumerator.Remove(descriptor);
+					_deviceEnumerator.RemoveDisconnected();
+				}
+			}
+			RemoveDisconnected();
+			Log.Debug("=========== 캐논 카메라 연결 해제 ==============");
+		};
+		Dispatcher dispatcher = Application.Current?.Dispatcher;
+		if (dispatcher == null || dispatcher.CheckAccess())
+		{
+			cleanUp();
+		}
+		else
+		{
+			dispatcher.BeginInvoke(cleanUp);
+		}
 	}
 
 	private void RemoveDisconnected()
