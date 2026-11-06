@@ -496,16 +496,30 @@ public partial class App : System.Windows.Application
 			}
 			return;
 		}
-		if (global::CameraControl.Core.Classes.G2Dialog.Show(TranslationStrings.LabelAskSendLogFile, TranslationStrings.LabelApplicationError, MessageBoxButton.YesNo, MessageBoxImage.Hand) == MessageBoxResult.Yes)
+		// One error at a time: an error that repeats while its message is open (e.g. a list that fails on every layout pass)
+		// is only logged, instead of stacking message boxes.
+		if (_showingUnhandledError)
 		{
-			ErrorReportWnd wnd = new ErrorReportWnd("Application crash " + e.Exception.Message, e.Exception.StackTrace);
-			wnd.ShowDialog();
+			return;
 		}
-		if (global::CameraControl.Core.Classes.G2Dialog.Show(errorMessage, TranslationStrings.LabelApplicationError, MessageBoxButton.YesNo, MessageBoxImage.Hand) == MessageBoxResult.No && System.Windows.Application.Current != null)
+		_showingUnhandledError = true;
+		try
 		{
-			System.Windows.Application.Current.Shutdown();
+			// G2: no "send the log file to the developers?" question (ErrorReportWnd); the details are in the log file.
+			string title = global::CameraControl.Devices.UiText.IsKorean ? "어플리케이션 에러" : "Application Error";
+			global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.IsKorean ? "로그 파일을 참고하세요." : "Please see the log file.", title, MessageBoxButton.OK, MessageBoxImage.Hand);
+			if (global::CameraControl.Core.Classes.G2Dialog.Show(errorMessage, title, MessageBoxButton.YesNo, MessageBoxImage.Hand) == MessageBoxResult.No && System.Windows.Application.Current != null)
+			{
+				System.Windows.Application.Current.Shutdown();
+			}
+		}
+		finally
+		{
+			_showingUnhandledError = false;
 		}
 	}
+
+	private bool _showingUnhandledError;
 
 	// 설정 > 라이선스: the same D:\ key-file check as CheckLicense, without message boxes or attribute changes.
 	internal (string KeyFile, string Identifiers, string Error) LegacyLicenseInfo()

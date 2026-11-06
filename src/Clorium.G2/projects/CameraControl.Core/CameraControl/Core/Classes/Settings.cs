@@ -31,6 +31,9 @@ public partial class Settings : BaseFieldClass
 
 	private PhotoSession _defaultSession;
 
+	// counts DefaultSession switches; a session load that a newer switch replaced does not announce itself
+	private int _sessionLoad;
+
 	private ObservableCollection<CameraPreset> _cameraPresets;
 
 	private AsyncObservableCollection<WindowCommandItem> _actions;
@@ -299,16 +302,26 @@ public partial class Settings : BaseFieldClass
 			PhotoSession oldvalue = _defaultSession;
 			_defaultSession = value;
 			DefaultSessionName = _defaultSession.Name;
+			// quick clicks: each switch loads the session it chose; only the latest one announces DefaultSession
+			int load = System.Threading.Interlocked.Increment(ref _sessionLoad);
+			PhotoSession chosen = value;
 			Task.Run(() =>
 			{
 				if (SessionSelected != null)
 				{
-					SessionSelected(oldvalue, value);
+					SessionSelected(oldvalue, chosen);
 				}
-				LoadData(_defaultSession);
+				if (load != _sessionLoad || _defaultSession != chosen)
+				{
+					return;
+				}
+				LoadData(chosen);
 				Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.SystemIdle, (Action)(() =>
 				{
-					NotifyPropertyChanged("DefaultSession");
+					if (load == _sessionLoad && _defaultSession == chosen)
+					{
+						NotifyPropertyChanged("DefaultSession");
+					}
 				}));
 			});
 		}
@@ -2183,6 +2196,9 @@ public partial class Settings : BaseFieldClass
 		PhotoSessions.Add(session);
 	}
 
+	// The folder is read here (any thread), but session.Files - shown by the thumbnail strip - only changes on the UI
+	// thread: a background Add while the strip measured made WPF throw "ItemsControl ... 항목 소스와 일치하지 않습니다"
+	// when sessions were clicked quickly one after another.
 	public void LoadData(PhotoSession session)
 	{
 		try
@@ -2191,39 +2207,62 @@ public partial class Settings : BaseFieldClass
 			{
 				return;
 			}
-			if (Directory.Exists(session.Folder))
+			bool exists = Directory.Exists(session.Folder);
+			bool skip = exists && ServiceProvider.Settings != null && ServiceProvider.Settings.SkipAddingFileToSession;
+			bool reload = exists && !skip && session.AlowFolderChange && session.ReloadOnFolderChange;
+			List<string> found = new List<string>();
+			if (exists && !skip)
 			{
-				if (ServiceProvider.Settings != null && ServiceProvider.Settings.SkipAddingFileToSession)
+				foreach (string file in Directory.GetFiles(session.Folder))
+				{
+					if (!string.IsNullOrEmpty(file) && session.SupportedExtensions.Contains(Path.GetExtension(file).ToLower()) && (reload || !session.ContainFile(file)))
+					{
+						found.Add(file);
+					}
+				}
+			}
+			List<FileItem> created = found.Select((string file) => new FileItem(file)).ToList();
+			OnUiThread(() =>
+			{
+				if (skip)
 				{
 					session.Files.Clear();
 					return;
 				}
-				if (session.AlowFolderChange && session.ReloadOnFolderChange)
+				if (reload)
 				{
 					session.Files.Clear();
 				}
-				FileItem[] fileItems = new FileItem[session.Files.Count];
-				session.Files.CopyTo(fileItems, 0);
-				string[] files = Directory.GetFiles(session.Folder);
-				string[] array = files;
-				foreach (string file in array)
+				foreach (FileItem item in created)
 				{
-					if (session.SupportedExtensions.Contains(Path.GetExtension(file).ToLower()) && !string.IsNullOrEmpty(file) && !session.ContainFile(file))
+					if (!session.ContainFile(item.FileName))
 					{
-						session.AddFile(file);
+						session.Add(item);
 					}
 				}
-			}
-			List<FileItem> removedItems = session.Files.Where((FileItem fileItem) => !File.Exists(fileItem.FileName)).ToList();
-			foreach (FileItem removedItem in removedItems)
-			{
-				removedItem.Visible = false;
-			}
-			Log.Debug("세션 이름 : " + session.Name + "      썸네일 개수 : " + session.Files.Count((FileItem x) => x.Visible));
+				foreach (FileItem removedItem in session.Files.Where((FileItem fileItem) => !File.Exists(fileItem.FileName)).ToList())
+				{
+					removedItem.Visible = false;
+				}
+				Log.Debug("세션 이름 : " + session.Name + "      썸네일 개수 : " + session.Files.Count((FileItem x) => x.Visible));
+			});
 		}
 		catch (Exception exception)
 		{
 			Log.Error("세션 로드 실패 ", exception);
+		}
+	}
+
+	private static void OnUiThread(Action action)
+	{
+		Dispatcher dispatcher = Application.Current?.Dispatcher;
+		if (dispatcher == null || dispatcher.CheckAccess() || dispatcher.HasShutdownStarted)
+		{
+			action();
+		}
+		else
+		{
+			dispatcher.Invoke(action);
 		}
 	}
 
