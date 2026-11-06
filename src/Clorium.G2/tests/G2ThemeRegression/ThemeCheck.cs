@@ -205,7 +205,7 @@ class ThemeCheck
 				sf.GetMethod("InvalidateRange").Invoke(w, null); Pump(100);
 				Snapshot(w, Path.Combine(outDir, "superfocus-auto.png"));
 				string autoText = ((TextBlock)((DockPanel)notice.Child).Children[1]).Text;
-				Check("자동 초점 찾기 shows the AF notice (" + autoText + ")", autoText.Contains("AF로"));
+				Check("자동 초점 찾기 shows the AF notice (" + autoText + ")", autoText.Contains("박스에 초점 맞추기"));
 				var focusHere = (Button)sf.GetField("focusHere", inst).GetValue(w);
 				Check("자동 초점 찾기 shows the ‘" + focusHere.Content + "’ button", focusHere.IsVisible && ((string)focusHere.Content).Contains("초점 맞추기"));
 				Check("↺ keeps the chosen box on screen", sf.GetMethod("PreviewBoxFor").Invoke(null, new object[] { cam }) != null);

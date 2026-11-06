@@ -37,7 +37,7 @@ public sealed class SuperfocusWindow : Window
     public string LensName {get;private set;}="";
     public static bool FindsFocusAutomatically(string lens)=>!string.IsNullOrEmpty(lens)&&lens.IndexOf("24-240",StringComparison.OrdinalIgnoreCase)>=0;
     const string MfNotice="렌즈를 MF(초점 수동 조절)로 설정해 주세요.";
-    const string AutoNotice="이 렌즈는 AF/MF 스위치가 없습니다. 카메라 포커스 모드는 AF로 두세요. 가까운 물체와 먼 물체에 각각 박스를 놓고 ‘박스에 초점 맞추기’ 뒤 ‘가까운 곳’, ‘먼 곳’으로 저장하면, 촬영 때 두 박스 사이를 차례로 AF하며 찍습니다.";
+    const string AutoNotice="박스에 초점 맞추기 → ‘가까운 곳’ · ‘먼 곳’ 저장 → ‘촬영’";
     private readonly TextBox cuts = new TextBox { Width=48, Height=26, FontSize=13, Margin=new Thickness(4,0,8,0), Padding=new Thickness(3), Background=Brushes.White, Foreground=Brushes.Black, VerticalContentAlignment=VerticalAlignment.Center };
     private readonly TextBox settle = new TextBox { Text="700" }, python = new TextBox(), engine = new TextBox();
     private readonly TextBlock status = new TextBlock { Foreground=Brushes.White, FontSize=12, TextTrimming=TextTrimming.CharacterEllipsis, Margin=new Thickness(2,4,2,0), Visibility=Visibility.Collapsed };
@@ -189,7 +189,7 @@ public sealed class SuperfocusWindow : Window
         LensName=name;bool auto=FindsFocusAutomatically(name);
         Log.Debug("Superfocus : lens '"+name+"' -> "+(auto?"자동 초점 찾기":"MF 화살표"));
         if(lensAuto!=auto){lensAuto=auto;if(!IsWorking)UseFocusBox=auto;}
-        noticeText.Text=(name.Length>0?name+" · ":"")+(UseFocusBox?AutoNotice:MfNotice);
+        noticeText.Text=(name.Length>0?name+"\n":"")+(UseFocusBox?AutoNotice:MfNotice);
         Refresh();
     }
     // 자동 초점 찾기 (RF24-240): 박스에 초점 맞추기 is camera AF only. 가까운 곳/먼 곳 remember the AF boxes (no lens move); 촬영
@@ -332,7 +332,7 @@ public sealed class SuperfocusWindow : Window
         markA.IsEnabled=!IsWorking||(registeringAnchor&&activeAnchor!=true);markB.IsEnabled=!IsWorking||(registeringAnchor&&activeAnchor!=false);
         markA.Content=hasA?"가까운 곳 ✓":"가까운 곳";markB.Content=hasB?"먼 곳 ✓":"먼 곳";
         autoRow.Visibility=UseFocusBox?Visibility.Visible:Visibility.Collapsed;focusHere.IsEnabled=!IsWorking;
-        if(noticeText!=null&&!IsWorking){string head=LensName.Length>0?LensName+" · ":"";noticeText.Text=head+(UseFocusBox?AutoNotice:MfNotice);}
+        if(noticeText!=null&&!IsWorking){string head=LensName.Length>0?LensName+"\n":"";noticeText.Text=head+(UseFocusBox?AutoNotice:MfNotice);}
         cuts.IsEnabled=!IsWorking;boxMode.IsEnabled=!IsWorking;advanced.IsEnabled=!IsWorking;cancel.IsEnabled=IsWorking;start.IsEnabled=CanCapture;result.IsEnabled=File.Exists(lastResult);if(result.IsEnabled)Tip(result,"합성 결과 열기\n"+lastResult);
         Changed?.Invoke(this,EventArgs.Empty);
     }
