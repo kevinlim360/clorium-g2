@@ -68,7 +68,7 @@ class Program
         Check(range.Positions(2).Count == 101, "larger interval count");
         Console.WriteLine("PASS A/B count, endpoints, remainder, negative origin, invalid range, 200-frame limit");
         range.Reset(); range.MarkA(); range.Moved(72); range.MarkB();
-        Check(range.QualityCount(0)==25 && range.QualityCount(1)==17 && range.QualityCount(2)==8,"quality fractions must use high cut count");
+        Check(range.FineCount()==25 && range.QualityCount(0)==5 && range.QualityCount(1)==3 && range.QualityCount(2)==2,"presets are 1/5 of the fine count (A0/B72 25 -> 5/3/2)");
         foreach(int quality in new[]{0,1,2}) {
             var planned=range.PositionsForQuality(quality);
             Check(planned.Count==range.QualityCount(quality) && planned[0]==0 && planned[planned.Count-1]==72,"quality endpoints/count");
@@ -79,14 +79,13 @@ class Program
         range.Reset(); range.MarkA(); range.Moved(1); range.MarkB();
         Check(range.PositionsForQuality(2).Count==2,"low quality must keep both endpoints");
         range.Reset();range.Moved(-10);range.MarkA();range.Moved(10);range.MarkB();
-        Check(string.Join(",",range.PositionsForQuality(1))=="-10,-5,0","negative origin quality distribution");
+        Check(string.Join(",",range.PositionsForQuality(1))=="-10,0","negative origin quality distribution");
         range.Reset();range.MarkA();range.Moved(1200);range.MarkB();
-        try{range.PositionsForQuality(0);throw new Exception("high silently capped");}catch(InvalidOperationException){}
-        Check(range.PositionsForQuality(2).Count==134,"low plan should remain available when high exceeds limit");
+        Check(range.FineCount()==401 && range.PositionsForQuality(0).Count==81 && range.PositionsForQuality(1).Count==54 && range.PositionsForQuality(2).Count==27,"wide range presets stay under the 200 limit");
         Console.WriteLine("PASS quality ratios, rounding, inclusive endpoints, even gaps, negative origin, minimum and limit");
         range.Reset();range.MarkA();range.Moved(10);range.MarkB();
-        Check(string.Join(",",range.PositionsForQuality(0))=="0,3,6,9,10","three-unit spacing and remainder endpoint");
-        Check(range.QualityCount(0)==5 && range.QualityCount(1)==3 && range.QualityCount(2)==2,"reduced quality ratios");
+        Check(string.Join(",",range.PositionsForQuality(0))=="0,10","short range keeps both ends");
+        Check(range.FineCount()==5 && range.QualityCount(0)==2 && range.QualityCount(1)==2 && range.QualityCount(2)==2,"short range presets never below two");
         Check(string.Join(",",range.CapturePositionsForCount(4))=="10,6,3,0","custom count includes both ends in reverse");
         range.Moved(-10);
         Check(string.Join(",",range.CapturePositionsForCount(4))=="0,3,6,10","custom count starts at nearest end");
@@ -94,7 +93,7 @@ class Program
             try{range.CapturePositionsForCount(invalidCount);throw new Exception("invalid custom count accepted");}catch(InvalidOperationException){}
         }
         range.Reset();range.MarkB();range.Moved(-10);range.MarkA();
-        Check(string.Join(",",range.PositionsForQuality(0))=="-10,-7,-4,-1,0","B-first three-unit plan");
+        Check(string.Join(",",range.PositionsForQuality(0))=="-10,0","B-first plan");
         Console.WriteLine("PASS three-unit presets, remainder, custom count, nearest direction and invalid counts");
         range.Reset();range.MarkA();range.Moved(72);range.MarkB();
         Check(range.MaximumUserCuts==25,"maximum user cuts must use high quality");
@@ -166,7 +165,7 @@ class Program
         await new FocusCaptureSequence().RunPlannedRangeAsync(forwardCamera,range,forwardPlan,100,TimeSpan.FromSeconds(2),null,CancellationToken.None);
         Check(string.Join(",",forwardCamera.CapturedPositions)=="0,1,3,5" && range.Position==0,"B-first capture order");
         range.Reset();range.MarkA();range.Moved(-5);range.MarkB();
-        Check(range.QualityCount(0)==3 && string.Join(",",range.CapturePositionsForCount(4))=="-5,-3,-1,0","opposite signed endpoints");
+        Check(range.FineCount()==3 && string.Join(",",range.CapturePositionsForCount(4))=="-5,-3,-1,0","opposite signed endpoints");
         range.Moved(4);
         Check(range.CapturePositionsForCount(4)[0]==0,"nearest endpoint after manual nudge");
         Console.WriteLine("PASS A-first/B-first, reverse capture, opposite signed endpoints and nearest-start optimization");

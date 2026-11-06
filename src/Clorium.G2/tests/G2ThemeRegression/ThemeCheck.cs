@@ -162,9 +162,16 @@ class ThemeCheck
 			{
 				Type sf = g2.GetType("CameraControl.windows.SuperfocusWindow", true);
 				var cam = new CameraControl.Devices.BaseCameraDevice { SerialNumber = "THEME-SF" };
+				// As in G2: the live view's click handler (a worker thread) is the first to touch the window class.
+				System.Threading.Tasks.Task.Run(() => sf.GetMethod("TrySelectPreviewBox").Invoke(null, new object[] { cam, null, 0, 0 })).Wait();
+				string uiError = null;
+				DispatcherUnhandledExceptionEventHandler onError = (s2, a2) => { uiError = a2.Exception.GetBaseException().Message; a2.Handled = true; };
+				app.DispatcherUnhandledException += onError;
 				var w = (Window)sf.GetMethod("For").Invoke(null, new object[] { cam, null });
 				w.Show(); Pump(400);
+				app.DispatcherUnhandledException -= onError;
 				Snapshot(w, Path.Combine(outDir, "superfocus.png"));
+				Check("수퍼포커스 window draws after a worker thread touched it first (" + (uiError ?? "no UI error") + ")", uiError == null);
 				var inst = BindingFlags.Instance | BindingFlags.NonPublic;
 				var notice = (Border)sf.GetField("mfNotice", inst).GetValue(w);
 				string noticeText = ((TextBlock)((DockPanel)notice.Child).Children[1]).Text;
@@ -190,6 +197,15 @@ class ThemeCheck
 				Check("hidden window: clicks go to the camera again", !(bool)sf.GetMethod("TrySelectPreviewBox").Invoke(null, new object[] { cam, lvFrame, 200, 600 }));
 				w.Show(); Pump(200);
 				Check("MF notice shows again on reopen", notice.Visibility == Visibility.Visible);
+				// RF24-240 (no AF/MF switch) profile: lens name match and the AF notice when 자동 초점 찾기 is on.
+				var finds = sf.GetMethod("FindsFocusAutomatically");
+				Check("RF24-240 finds focus automatically, other lenses do not", (bool)finds.Invoke(null, new object[] { "RF24-240mm F4-6.3 IS USM" }) && !(bool)finds.Invoke(null, new object[] { "RF24-105mm F4 L IS USM" }) && !(bool)finds.Invoke(null, new object[] { "" }));
+				sf.GetProperty("UseFocusBox").SetValue(w, true, null);
+				sf.GetMethod("InvalidateRange").Invoke(w, null); Pump(100);
+				Snapshot(w, Path.Combine(outDir, "superfocus-auto.png"));
+				string autoText = ((TextBlock)((DockPanel)notice.Child).Children[1]).Text;
+				Check("자동 초점 찾기 shows the AF notice (" + autoText + ")", autoText.Contains("AF로"));
+				sf.GetProperty("UseFocusBox").SetValue(w, false, null);
 				sf.GetMethod("CloseAll").Invoke(null, null);
 				// English (언어 설정 not Korean) once Data\Messages.xml carries the reviewed wording.
 				if (File.Exists(Path.Combine(bin, "Data", "Messages.xml")))

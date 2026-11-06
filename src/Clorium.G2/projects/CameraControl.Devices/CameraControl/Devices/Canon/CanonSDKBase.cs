@@ -1691,6 +1691,26 @@ public class CanonSDKBase : BaseMTPCamera
 		}
 	}
 
+	// Attached lens (EDSDK kEdsPropID_LensName), "" when the body does not report it. Used by 수퍼포커스 lens profiles.
+	public string LensName
+	{
+		get
+		{
+			lock (Locker)
+			{
+				try
+				{
+					return Camera?.LensName ?? "";
+				}
+				catch (Exception ex)
+				{
+					Log.Debug("CanonSDK : lens name not available " + ex.Message);
+					return "";
+				}
+			}
+		}
+	}
+
 	// Checked SDK path for the new sequencer; legacy manual-focus behavior is preserved.
 	public void PrepareFocusStack()
 	{

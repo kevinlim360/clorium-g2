@@ -87,6 +87,15 @@ namespace Canon.Eos.Framework
         }
 
         /// <summary>
+        /// Gets the attached lens name (e.g. "RF24-240mm F4-6.3 IS USM"). G2 수퍼포커스 uses it to pick the lens profile.
+        /// </summary>
+        [EosProperty(Edsdk.PropID_LensName)]
+        public string LensName
+        {
+            get { return this.GetPropertyStringData(Edsdk.PropID_LensName); }
+        }
+
+        /// <summary>
         /// Gets the serial number.
         /// </summary>
         [EosProperty(Edsdk.PropID_BodyIDEx)]
