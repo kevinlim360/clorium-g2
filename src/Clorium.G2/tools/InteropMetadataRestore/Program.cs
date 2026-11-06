@@ -59,7 +59,10 @@ if (args.Length == 4 && args[0] == "restore")
     var preserveSymbols = File.Exists(Path.ChangeExtension(args[2], ".pdb"));
     if (File.Exists(Path.ChangeExtension(args[3], ".pdb")))
         throw new IOException("Output symbols already exist.");
-    using var rebuilt = AssemblyDefinition.ReadAssembly(args[2], new ReaderParameters { ReadSymbols = preserveSymbols });
+    // Writing re-encodes constants whose type lives in a referenced assembly (e.g. a const FocusAmount from Devices).
+    var resolver = new DefaultAssemblyResolver();
+    resolver.AddSearchDirectory(Path.GetDirectoryName(Path.GetFullPath(args[2]))!);
+    using var rebuilt = AssemblyDefinition.ReadAssembly(args[2], new ReaderParameters { ReadSymbols = preserveSymbols, AssemblyResolver = resolver });
     if (rebuilt.Name.Name != spec.SourceAssemblyName || rebuilt.Name.Version.ToString() != spec.SourceAssemblyVersion)
         throw new InvalidDataException("Compiled assembly identity differs from interop spec source.");
     var beforeBusinessIl = BusinessIlFingerprint(rebuilt);

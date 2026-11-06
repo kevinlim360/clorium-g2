@@ -7,7 +7,9 @@ IEnumerable<TypeDefinition> All(IEnumerable<TypeDefinition> types){foreach(var t
 Dictionary<string,string> Bodies(ModuleDefinition module)=>All(module.Types).Where(t=>t.FullName!=Name).SelectMany(t=>t.Methods).ToDictionary(m=>m.FullName,Digest);
 var output=Path.GetFullPath(args[1]);
 using var template=ModuleDefinition.ReadModule(args[0]);
-using var module=ModuleDefinition.ReadModule(output,new ReaderParameters{InMemory=true,ReadSymbols=true});
+// Writing needs referenced types such as enum-typed parameter defaults (FocusAmount.Small): resolve them next to the Core.
+var resolver=new DefaultAssemblyResolver();resolver.AddSearchDirectory(Path.GetDirectoryName(output)!);
+using var module=ModuleDefinition.ReadModule(output,new ReaderParameters{InMemory=true,ReadSymbols=true,AssemblyResolver=resolver});
 if(module.Types.Any(t=>t.FullName==Name)){Console.WriteLine("Core WPF helper already present.");return;}
 var before=Bodies(module);
 var source=template.Types.Single(t=>t.FullName==Name);
