@@ -139,11 +139,10 @@ public sealed class SuperfocusWindow : Window
         settings.Children.Add(qualityRow);panel.Children.Add(settings);
         Section(panel,"③ 촬영","가까운 끝점부터 반대쪽 끝점까지 찍고 한 장으로 합성합니다.");
         var captureRow=new StackPanel {Orientation=Orientation.Horizontal,HorizontalAlignment=HorizontalAlignment.Center};
-        start.Width=140;start.Background=Brushes.SteelBlue;start.Foreground=Brushes.White;start.FontWeight=FontWeights.SemiBold;start.Click+=async(s,e)=>await RunAsync();
-        cancel.Width=60;cancel.Click+=(s,e)=>RequestStop();result.Width=80;result.Click+=(s,e)=>{if(File.Exists(lastResult))System.Diagnostics.Process.Start(lastResult);};
-        var reset=Button("초기화","가까운 곳·먼 곳을 지웁니다. 렌즈 링·줌·카메라·렌즈를 바꾼 뒤에는 다시 저장하세요.");reset.Width=68;reset.Click+=(s,e)=>InvalidateRange();
-        var gear=Button("⚙","안정화 시간과 합성 엔진 경로 설정을 펼칩니다.");gear.Width=34;gear.Click+=(s,e)=>advanced.Visibility=advanced.Visibility==Visibility.Visible?Visibility.Collapsed:Visibility.Visible;
-        captureRow.Children.Add(start);captureRow.Children.Add(cancel);captureRow.Children.Add(result);captureRow.Children.Add(reset);captureRow.Children.Add(gear);panel.Children.Add(captureRow);panel.Children.Add(status);
+        start.Width=150;start.Background=Brushes.SteelBlue;start.Foreground=Brushes.White;start.FontWeight=FontWeights.SemiBold;start.Click+=async(s,e)=>await RunAsync();
+        cancel.Width=60;cancel.Click+=(s,e)=>RequestStop();result.Width=86;result.Click+=(s,e)=>{if(File.Exists(lastResult))System.Diagnostics.Process.Start(lastResult);};
+        var reset=Button("초기화","가까운 곳·먼 곳을 지웁니다. 렌즈 링·줌·카메라·렌즈를 바꾼 뒤에는 다시 저장하세요.");reset.Width=76;reset.Click+=(s,e)=>InvalidateRange();
+        captureRow.Children.Add(start);captureRow.Children.Add(cancel);captureRow.Children.Add(result);captureRow.Children.Add(reset);panel.Children.Add(captureRow);panel.Children.Add(status);
         advanced.Margin=new Thickness(4,8,4,0);advanced.Visibility=Visibility.Collapsed;
         Field(advanced,"안정화 (ms)",settle);Tip(settle,"초점 이동 뒤 기다릴 시간입니다. 100–10000 ms. 현재 끝점에서 바로 시작할 때에는 추가로 기다리지 않습니다.");
         PathField(advanced,"Python",python,"python.exe|python.exe|실행 파일|*.exe");PathField(advanced,"엔진",engine,"Python 파일|*.py");panel.Children.Add(advanced);
@@ -251,8 +250,8 @@ public sealed class SuperfocusWindow : Window
             if(!afA||!afB)throw new InvalidOperationException("가까운 곳과 먼 곳을 모두 저장해 주세요.");
             int count=AfCount();
             if(!int.TryParse(settle.Text,out int wait)||wait<100||wait>10000)throw new InvalidOperationException("안정화 시간을 100–10000 ms로 입력해 주세요.");
-            if(string.IsNullOrWhiteSpace(python.Text)||!File.Exists(python.Text.Trim()))throw new InvalidOperationException("⚙에서 Python 파일을 선택해 주세요.");
-            if(string.IsNullOrWhiteSpace(engine.Text)||!File.Exists(engine.Text.Trim()))throw new InvalidOperationException("⚙에서 합성 엔진을 선택해 주세요.");
+            if(string.IsNullOrWhiteSpace(python.Text)||!File.Exists(python.Text.Trim())){advanced.Visibility=Visibility.Visible;throw new InvalidOperationException("아래 설정에서 Python 파일을 선택해 주세요.");}
+            if(string.IsNullOrWhiteSpace(engine.Text)||!File.Exists(engine.Text.Trim())){advanced.Visibility=Visibility.Visible;throw new InvalidOperationException("아래 설정에서 합성 엔진을 선택해 주세요.");}
             string py=Path.GetFullPath(python.Text.Trim()),script=Path.GetFullPath(engine.Text.Trim());
             try{File.WriteAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"stack-python.txt"),py);}catch(IOException){}catch(UnauthorizedAccessException){}
             // Start where the lens already is (the end saved last), so nothing has to travel before the first cut.
@@ -367,8 +366,8 @@ public sealed class SuperfocusWindow : Window
         try{
             var targets=CaptureTargets();
             if(!int.TryParse(settle.Text,out int wait)||wait<100||wait>10000)throw new InvalidOperationException("안정화 시간을 100–10000 ms로 입력해 주세요.");
-            if(string.IsNullOrWhiteSpace(python.Text)||!File.Exists(python.Text.Trim()))throw new InvalidOperationException("⚙에서 Python 파일을 선택해 주세요.");
-            if(string.IsNullOrWhiteSpace(engine.Text)||!File.Exists(engine.Text.Trim()))throw new InvalidOperationException("⚙에서 합성 엔진을 선택해 주세요.");
+            if(string.IsNullOrWhiteSpace(python.Text)||!File.Exists(python.Text.Trim())){advanced.Visibility=Visibility.Visible;throw new InvalidOperationException("아래 설정에서 Python 파일을 선택해 주세요.");}
+            if(string.IsNullOrWhiteSpace(engine.Text)||!File.Exists(engine.Text.Trim())){advanced.Visibility=Visibility.Visible;throw new InvalidOperationException("아래 설정에서 합성 엔진을 선택해 주세요.");}
             string py=Path.GetFullPath(python.Text.Trim()),script=Path.GetFullPath(engine.Text.Trim());
             try{File.WriteAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"stack-python.txt"),py);}catch(IOException){}catch(UnauthorizedAccessException){}
             folder=Path.Combine(ServiceProvider.Settings.DefaultSession.Folder,"Superfocus",DateTime.Now.ToString("yyyyMMdd_HHmmss")+"_"+Guid.NewGuid().ToString("N").Substring(0,8));
