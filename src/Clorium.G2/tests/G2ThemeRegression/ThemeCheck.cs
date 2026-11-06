@@ -267,13 +267,14 @@ class ThemeCheck
 				sf.GetMethod("SelectQuality").Invoke(w, new object[] { 1 }); Pump(50);
 				Check("choosing 중 goes back to its count (" + cutsBox.Text + ")", cutsBox.Text == "10" && (bool)sf.GetProperty("CanCapture").GetValue(w, null));
 				Snapshot(w, Path.Combine(outDir, "superfocus-af-marked.png"));
-				// The distance measurement 촬영 runs first: from 먼 곳 (lens there) towards 가까운 곳's box.
-				range.GetType().GetMethod("Reset").Invoke(range, null); range.GetType().GetMethod("MarkB").Invoke(range, null);
-				var boxA = sf.GetField("boxA", inst).GetValue(w);
-				var measureClock = System.Diagnostics.Stopwatch.StartNew();
-				var measure = (System.Threading.Tasks.Task<int>)sf.GetMethod("MeasureAsync", inst).Invoke(w, new object[] { new FakeLensAdapter(lens), boxA, -1, null, System.Threading.CancellationToken.None });
-				Run(measure);
-				Check("distance measured from 먼 곳 to 가까운 곳: " + measure.Result + " units in " + measureClock.Elapsed.TotalSeconds.ToString("0.0") + " s, lens " + lens.Position, measure.Result == FakeLens.Far - FakeLens.Near && lens.Position == FakeLens.Near && (int)R("Position") == -(FakeLens.Far - FakeLens.Near));
+				// 촬영 AFs on evenly spaced points from the end the lens is on (먼 곳, saved last) to the other end.
+				var boxA = sf.GetField("boxA", inst).GetValue(w); var boxB = sf.GetField("boxB", inst).GetValue(w);
+				Check("촬영 starts at 먼 곳, where the lens is (afLensAt " + sf.GetField("afLensAt", inst).GetValue(w) + ")", (bool?)sf.GetField("afLensAt", inst).GetValue(w) == false);
+				var pts = (System.Collections.Generic.IReadOnlyList<Point>)sf.GetMethod("AfPoints").Invoke(null, new object[] { boxB, boxA, 5 });
+				string xs = string.Join(",", pts.Select(p => p.X.ToString("0.00")).ToArray());
+				Check("5 AF points from 먼 곳 to 가까운 곳 (" + xs + ")", pts.Count == 5 && xs == "0.70,0.60,0.50,0.40,0.30");
+				var order = new List<int>(); foreach (var p in pts) { lens.Focus((int)(p.X * 400), 150); lens.AutoFocus(); order.Add(lens.Position); }
+				Check("each AF point focuses nearer than the last (lens " + string.Join(",", order.Select(v => v.ToString()).ToArray()) + ")", order[0] == FakeLens.Far && order[4] == FakeLens.Near && order.Zip(order.Skip(1), (x, y) => y < x).All(v => v));
 				sf.GetMethod("CloseAll").Invoke(null, null);
 			}
 
@@ -367,7 +368,7 @@ class FakeLens : CameraControl.Devices.BaseCameraDevice
 	public int Position = 7;
 	double afX = 0.5;
 	public override void Focus(int x, int y) { afX = x / 400.0; }
-	public override void AutoFocus() { Position = afX < 0.5 ? Near : Far; }
+	public override void AutoFocus() { Position = (int)Math.Round(Near + (Far - Near) * Math.Max(0, Math.Min(1, (afX - 0.3) / 0.4))); }
 	public override CameraControl.Devices.Classes.LiveViewData GetLiveViewImage()
 	{
 		int w = 400, h = 300, stride = w * 3;
