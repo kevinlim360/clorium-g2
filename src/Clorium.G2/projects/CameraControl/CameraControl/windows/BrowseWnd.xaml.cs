@@ -8,6 +8,7 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Markup;
 using System.Windows.Threading;
+using CameraControl.Classes;
 using CameraControl.Core;
 using CameraControl.Core.Classes;
 using CameraControl.Core.Interfaces;
@@ -153,16 +154,9 @@ public partial class BrowseWnd : Window, INotifyPropertyChanged, IWindow, ICompo
 		if (session == null) return;
 		if (session == _found)
 		{
-			// add the folder as a session (name made unique), then switch to it
-			string name = session.Name;
-			for (int i = 2; ServiceProvider.Settings.PhotoSessions.Any(s => string.Equals(s.Name, session.Name, StringComparison.OrdinalIgnoreCase)); i++)
-			{
-				session.Name = name + "_" + i;
-			}
-			ServiceProvider.Settings.Add(session);
+			AddSession(session);
 			_found = null;
 			FoundPanel.Visibility = Visibility.Collapsed;
-			Log.Debug("세션 검색 : 폴더를 세션으로 추가 " + session.Name + " -> " + session.Folder);
 		}
 		else if (lst_profiles.SelectedItem == null)
 		{
@@ -174,21 +168,12 @@ public partial class BrowseWnd : Window, INotifyPropertyChanged, IWindow, ICompo
 
 	private void PickFolder()
 	{
-		string start = StartFolder();
-		string picked;
-		using (var dialog = new System.Windows.Forms.FolderBrowserDialog())
-		{
-			dialog.Description = "세션(사진) 폴더를 고르세요.";
-			dialog.ShowNewFolderButton = false;
-			if (!string.IsNullOrEmpty(start)) dialog.SelectedPath = start;
-			if (dialog.ShowDialog(new Win32Owner(new WindowInteropHelper(this).Handle)) != System.Windows.Forms.DialogResult.OK) return;
-			picked = dialog.SelectedPath;
-		}
-		ShowFolder(picked);
+		string picked = G2FolderPicker.Pick(new WindowInteropHelper(this).Handle, "세션(사진) 폴더 고르기", StartFolder());
+		if (picked != null) ShowFolder(picked);
 	}
 
 	// the folder above the current session (D:\Clorium Images\...), else the download folder
-	private static string StartFolder()
+	public static string StartFolder()
 	{
 		try
 		{
@@ -207,8 +192,7 @@ public partial class BrowseWnd : Window, INotifyPropertyChanged, IWindow, ICompo
 	public void ShowFolder(string folder)
 	{
 		if (string.IsNullOrEmpty(folder) || !Directory.Exists(folder)) return;
-		string full = Normalize(folder);
-		PhotoSession listed = ServiceProvider.Settings.PhotoSessions.FirstOrDefault(s => !string.IsNullOrEmpty(s.Folder) && string.Equals(Normalize(s.Folder), full, StringComparison.OrdinalIgnoreCase));
+		PhotoSession listed = ListedSessionFor(folder);
 		if (listed != null)
 		{
 			ForgetFound();
@@ -217,12 +201,12 @@ public partial class BrowseWnd : Window, INotifyPropertyChanged, IWindow, ICompo
 			return;
 		}
 		ForgetFound();
-		var session = new PhotoSession { Name = Path.GetFileName(full), Folder = full };
+		PhotoSession session = NewSessionFor(folder);
 		_found = session;
 		FoundPanel.DataContext = session;
 		FoundPanel.Visibility = Visibility.Visible;
 		SelectedPhotoSession = session;
-		Log.Debug("세션 검색 : 폴더 " + full);
+		Log.Debug("세션 검색 : 폴더 " + session.Folder);
 		Task.Run(() => ServiceProvider.Settings.LoadData(session));
 	}
 
@@ -242,6 +226,32 @@ public partial class BrowseWnd : Window, INotifyPropertyChanged, IWindow, ICompo
 		old.Files.Clear();
 	}
 
+	// the listed session whose folder this is, or null
+	public static PhotoSession ListedSessionFor(string folder)
+	{
+		string full = Normalize(folder);
+		return ServiceProvider.Settings.PhotoSessions.FirstOrDefault(s => !string.IsNullOrEmpty(s.Folder) && string.Equals(Normalize(s.Folder), full, StringComparison.OrdinalIgnoreCase));
+	}
+
+	// a session for a folder that is not in the list yet, named after the folder (not added)
+	public static PhotoSession NewSessionFor(string folder)
+	{
+		string full = Normalize(folder);
+		return new PhotoSession { Name = Path.GetFileName(full), Folder = full };
+	}
+
+	// adds the session to the list (name made unique: _2, _3 ...) and saves it
+	public static void AddSession(PhotoSession session)
+	{
+		string name = session.Name;
+		for (int i = 2; ServiceProvider.Settings.PhotoSessions.Any(s => s != session && string.Equals(s.Name, session.Name, StringComparison.OrdinalIgnoreCase)); i++)
+		{
+			session.Name = name + "_" + i;
+		}
+		ServiceProvider.Settings.Add(session);
+		Log.Debug("세션 : 폴더를 세션으로 추가 " + session.Name + " -> " + session.Folder);
+	}
+
 	private static string Normalize(string folder)
 	{
 		try
@@ -256,15 +266,5 @@ public partial class BrowseWnd : Window, INotifyPropertyChanged, IWindow, ICompo
 
 	private void lst_files_MouseDoubleClick(object sender, MouseButtonEventArgs e)
 	{
-	}
-
-	private sealed class Win32Owner : System.Windows.Forms.IWin32Window
-	{
-		public Win32Owner(IntPtr handle)
-		{
-			Handle = handle;
-		}
-
-		public IntPtr Handle { get; }
 	}
 }

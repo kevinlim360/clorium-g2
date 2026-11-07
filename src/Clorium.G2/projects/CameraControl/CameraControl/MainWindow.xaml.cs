@@ -2308,22 +2308,27 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 		}
 	}
 
-	// G2 UI: 파일 > 열기 — open the current session folder in Windows Explorer.
+	// G2 UI: 파일 > 세션 열기 — pick a session (photo) folder anywhere with the Explorer folder picker and make it the
+	// current session: a listed session's folder switches to that session, any other folder is added as a new session.
 	private void G2OpenSessionFolder_Click(object sender, RoutedEventArgs e)
 	{
 		try
 		{
-			string folder = ServiceProvider.Settings?.DefaultSession?.Folder;
-			if (string.IsNullOrWhiteSpace(folder) || !Directory.Exists(folder))
+			string folder = G2FolderPicker.Pick(new System.Windows.Interop.WindowInteropHelper(this).Handle, "열 세션(사진) 폴더 고르기", BrowseWnd.StartFolder());
+			if (folder == null) return;
+			PhotoSession session = BrowseWnd.ListedSessionFor(folder);
+			if (session == null)
 			{
-				global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0219", "현재 세션 폴더를 찾을 수 없습니다.\n") + folder, global::CameraControl.Devices.UiText.T("M0220", "열기"));
-				return;
+				session = BrowseWnd.NewSessionFor(folder);
+				BrowseWnd.AddSession(session);
 			}
-			Process.Start(new ProcessStartInfo("explorer.exe", "\"" + folder + "\"") { UseShellExecute = true });
+			Log.Debug("Menu : 세션 열기 " + session.Name + " -> " + session.Folder);
+			ServiceProvider.Settings.DefaultSession = session;
 		}
 		catch (Exception ex)
 		{
 			Log.Error("G2 open session folder", ex);
+			global::CameraControl.Core.Classes.G2Dialog.Show("폴더를 세션으로 열 수 없습니다.\n" + ex.Message, "세션 열기");
 		}
 	}
 

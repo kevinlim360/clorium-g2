@@ -93,7 +93,7 @@
                 <viewModel:MainMenuViewModel />
               </FrameworkElement.DataContext>
               <MenuItem Header="파일">
-                <MenuItem Header="열기" ToolTip="현재 세션 폴더를 윈도우 탐색기로 엽니다" Click="G2OpenSessionFolder_Click" />
+                <MenuItem Header="세션 열기" ToolTip="탐색기에서 원하는 폴더를 골라 그 세션을 엽니다 (목록에 없는 폴더는 새 세션으로 추가)" Click="G2OpenSessionFolder_Click" />
                 <MenuItem Header="다른 이름으로 저장" ToolTip="선택한 사진을 다른 이름으로 복사해 저장합니다 (원본은 그대로)" Click="G2SaveAs_Click" />
               </MenuItem>
               <MenuItem Header="{T:Translate MenuSession}" Visibility="{Binding Branding.ShowSessionPanel, Converter={StaticResource BooleanToVisibilityConverter1}}">
