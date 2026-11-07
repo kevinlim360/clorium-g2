@@ -325,7 +325,7 @@
           <Button Name="btn_browse" Style="{StaticResource G2RailButton}" ToolTip="{T:Translate BrowseSessionsToolTip}" Click="btn_browse_Click">
             <StackPanel>
               <Viewbox Width="22" Height="22" HorizontalAlignment="Center"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoPhotos}" /></Viewbox>
-              <TextBlock Text="사진" HorizontalAlignment="Center" Margin="0,4,0,0" />
+              <TextBlock Text="세션검색" HorizontalAlignment="Center" Margin="0,4,0,0" />
             </StackPanel>
           </Button>
           <Button Name="but_Ruler" Style="{StaticResource G2RailButton}" ToolTip="오토사이징 (치수 측정)" Click="but_Ruler_Click" Visibility="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=UseAutoSizing, Converter={StaticResource BooleanToVisibilityConverter1}}">

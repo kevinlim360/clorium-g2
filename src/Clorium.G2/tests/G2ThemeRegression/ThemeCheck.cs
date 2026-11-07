@@ -131,6 +131,16 @@ class ThemeCheck
 					Check("세션 검색 in " + mode + ": G2 page " + Bg(bwin) + ", " + files.Items.Count + " photos", files.Items.Count == 4 && (d ? Bg(bwin).R < 0x30 : Bg(bwin).R > 0xE0));
 					browseType.GetProperty("SelectedPhotoSession").SetValue(bwin, sessionB, null); Pump(200);
 					Snapshot(bwin, Path.Combine(outDir, "session-browse-empty-" + mode + ".png"));
+					// 다른 폴더: a folder that is no session yet shows as 폴더에서 찾음 with its photos; a session folder selects it
+					string foundDir = Path.Combine(outDir, "found-" + mode); Directory.CreateDirectory(foundDir); File.Copy(jpeg, Path.Combine(foundDir, "F1.jpg"), true); File.Copy(jpeg, Path.Combine(foundDir, "F2.jpg"), true);
+					MethodInfo showFolder = browseType.GetMethod("ShowFolder");
+					showFolder.Invoke(bwin, new object[] { foundDir });
+					DateTime untilFound = DateTime.Now.AddSeconds(10); while (DateTime.Now < untilFound && files.Items.Count < 2) Pump(100);
+					Pump(300);
+					Snapshot(bwin, Path.Combine(outDir, "session-browse-folder-" + mode + ".png"));
+					Check("세션 검색 다른 폴더 in " + mode + ": found panel " + ((FrameworkElement)bwin.FindName("FoundPanel")).Visibility + ", " + files.Items.Count + " photos", ((FrameworkElement)bwin.FindName("FoundPanel")).Visibility == Visibility.Visible && files.Items.Count == 2 && (bool)browseType.GetProperty("FoundSelected").GetValue(bwin, null));
+					showFolder.Invoke(bwin, new object[] { outDir }); Pump(200);
+					Check("세션 검색 session folder selects the listed session in " + mode, browseType.GetProperty("SelectedPhotoSession").GetValue(bwin, null) == sessionA && ((FrameworkElement)bwin.FindName("FoundPanel")).Visibility == Visibility.Collapsed);
 					bwin.Hide();
 				}
 				ServiceProvider.Settings.PhotoSessions.Remove(sessionA);
