@@ -3,6 +3,9 @@
     # Only replace the G2 program files of an existing test runtime; module folders (and a Matting Studio server started
     # from them) and G2TestData are left as they are.
     [switch]$ProgramOnly,
+    # Only refresh the Matting Studio source (CloriumBackgroundRemoval/outputs/matting-studio) from the matting repo HEAD;
+    # the program, other modules, the venv/model junctions and G2TestData are left as they are.
+    [switch]$MattingOnly,
     [string]$Target = '',
     [string]$LightDist = 'C:\Users\user\Documents\Codex\클로리움조명조절\work\dist\CloriumLightControl',
     [string]$AutoSizingDir = 'C:\Users\user\Documents\ChatGPT\의류 사진으로 부위별 사이즈 자동 측정\Clorium_ManualMeasure_Studio_Test_20261017\실행파일',
@@ -26,6 +29,19 @@ $Target = [IO.Path]::GetFullPath($Target)
 function Run([string[]]$ToolArgs) { & dotnet @ToolArgs; if ($LASTEXITCODE -ne 0) { throw "dotnet $($ToolArgs[0]) failed" } }
 function Remove-Junction([string]$Path) { if (Test-Path -LiteralPath $Path) { [IO.Directory]::Delete($Path, $false) } }
 
+if ($MattingOnly) {
+    $studio = Join-Path $Target 'CloriumBackgroundRemoval/outputs/matting-studio'
+    if (-not (Test-Path -LiteralPath $studio)) { throw "-MattingOnly needs an existing test runtime: $studio" }
+    $server = @(Get-CimInstance Win32_Process -Filter "Name like 'python%'" -ErrorAction SilentlyContinue | Where-Object { $_.CommandLine -and $_.CommandLine.IndexOf($Target, [StringComparison]::OrdinalIgnoreCase) -ge 0 })
+    if ($server.Count) { throw "Stop the Matting Studio server of the test runtime first (python $($server.ProcessId -join ', '))" }
+    $zip = Join-Path ([IO.Path]::GetTempPath()) ('matting-' + [guid]::NewGuid().ToString('N') + '.zip')
+    & git -C $MattingRepo archive --format=zip -o $zip HEAD outputs/matting-studio
+    if ($LASTEXITCODE -ne 0) { throw 'git archive (Matting Studio) failed' }
+    Expand-Archive -LiteralPath $zip -DestinationPath (Join-Path $Target 'CloriumBackgroundRemoval') -Force
+    Remove-Item -LiteralPath $zip
+    "Matting Studio refreshed from $(git -C $MattingRepo log -1 --format='%h %s'): $studio"
+    return
+}
 if (-not (Test-Path -LiteralPath $runtime)) { throw "dev runtime missing: $runtime" }
 $running = @(Get-Process -ErrorAction SilentlyContinue | Where-Object { $_.Path -and $_.Path.StartsWith($Target, [StringComparison]::OrdinalIgnoreCase) -and (-not $ProgramOnly -or $_.ProcessName -like 'CameraControl*') })
 if ($running.Count) { throw "Close the test runtime first (running: $($running | ForEach-Object { "$($_.ProcessName) $($_.Id)" }))" }
