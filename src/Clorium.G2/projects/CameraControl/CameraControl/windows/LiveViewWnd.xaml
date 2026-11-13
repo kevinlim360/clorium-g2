@@ -541,7 +541,7 @@
             </Button>
             <Button Style="{StaticResource LvToolButton}" Content="100" FontFamily="{StaticResource G2Mono}" FontSize="11" FontWeight="SemiBold" ToolTip="100%" Command="{Binding ZoomIn100}" />
             <Button Style="{StaticResource LvToolButton}" ToolTip="격자" Command="{Binding ToggleGridCommand}">
-              <Viewbox Width="17" Height="17"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoGrid}" /></Viewbox>
+              <Viewbox Width="17" Height="17"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoGridLines}" /></Viewbox>
             </Button>
             <ToggleButton Style="{StaticResource LvToolToggle}" IsChecked="{Binding FreezeImage}" ToolTip="{T:Translate ButtonFreezeImage}">
               <Viewbox Width="17" Height="17"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoPause}" Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ToggleButton}}" /></Viewbox>

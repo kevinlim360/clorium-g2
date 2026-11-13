@@ -31,9 +31,8 @@ public static class ShutterSounds
 
 	private static List<Sound> _all;
 
-	private static MediaPlayer _player;
-
-	private static string _opened;
+	// Players still sounding; held here so the garbage collector does not stop one mid-sound.
+	private static readonly HashSet<MediaPlayer> _playing = new HashSet<MediaPlayer>();
 
 	// Replaced by tests: the folder is next to the running program.
 	internal static string Folder = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location ?? AppDomain.CurrentDomain.BaseDirectory) ?? "", "Data", "ShutterSounds");
@@ -64,18 +63,27 @@ public static class ShutterSounds
 			PlayLegacy();
 			return;
 		}
+		// A new player per shot: rewinding one shared player (Stop, Position = 0, Play) right after the previous sound
+		// sometimes played nothing, so quick F/B/D/촬영 presses lost their sound now and then.
 		Dispatch(() =>
 		{
-			if (_player == null) _player = new MediaPlayer { Volume = 1 };
-			if (_opened != sound.Path)
+			MediaPlayer player = new MediaPlayer { Volume = 1 };
+			_playing.Add(player);
+			player.MediaEnded += (s, e) => Release(player);
+			player.MediaFailed += (s, e) =>
 			{
-				_player.Open(new Uri(sound.Path));
-				_opened = sound.Path;
-			}
-			_player.Stop();
-			_player.Position = TimeSpan.Zero;
-			_player.Play();
+				Log.Debug("ShutterSound failed : " + sound.Path + " " + e.ErrorException?.Message);
+				Release(player);
+			};
+			player.Open(new Uri(sound.Path));
+			player.Play();
 		});
+	}
+
+	private static void Release(MediaPlayer player)
+	{
+		_playing.Remove(player);
+		player.Close();
 	}
 
 	private static void Dispatch(Action action)

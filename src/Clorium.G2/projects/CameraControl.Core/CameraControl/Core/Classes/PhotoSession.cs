@@ -181,6 +181,38 @@ public class PhotoSession : BaseFieldClass
 
 	public int FilesCount => Files?.Count ?? 0;
 
+	private int? _diskFilesCount;
+
+	// G2 session popup: pictures in the session folder (the files LoadData would list). Files is emptied for every
+	// session but the open one, so FilesCount alone showed 0 for the others. Null until counted.
+	[XmlIgnore]
+	[JsonIgnore]
+	public int? DiskFilesCount
+	{
+		get
+		{
+			return _diskFilesCount;
+		}
+		private set
+		{
+			_diskFilesCount = value;
+			NotifyPropertyChanged("DiskFilesCount");
+		}
+	}
+
+	public void CountDiskFiles()
+	{
+		try
+		{
+			DiskFilesCount = Directory.Exists(Folder) ? Directory.EnumerateFiles(Folder).Count((string file) => SupportedExtensions.Contains(Path.GetExtension(file).ToLower())) : 0;
+		}
+		catch (Exception ex)
+		{
+			Log.Debug("세션 컷수 세기 실패 : " + Folder + " " + ex.Message);
+			DiskFilesCount = null;
+		}
+	}
+
 	public string FileNameTemplate
 	{
 		get

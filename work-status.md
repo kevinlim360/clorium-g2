@@ -309,3 +309,64 @@ USB 재연결 후: 현재 보완본 SHA256 4모듈 일치 확인. EOS R 초기�
 2026-11-01 수퍼포커스 Claude 이관: 현재 전체 개발 변경을 기존 GitHub origin/main에 보존하기 위해 점검. handoff/superfocus에 전용 PRD·인수인계·시작요청·검사기록을 추가하고 root CLAUDE/README 연결. 수퍼포커스19묶음 및 별도 라이선스 정책16 재실행 PASS(정책빌드 오류0/경고0). Claude 새 프로젝트 수퍼포커스개발 생성: https://claude.ai/project/01a1979e-d0c7-763f-a3a5-63d3889f83bd . 첨부/첫인수대화 및 푸시 최종상태는 실제 서비스 결과로 별도 확인. 기존 private local/baseline/research/delivery 제외를 유지한다. 최신 화살표 수동전환의 실렌즈 확인은 후속 과제로 보존.
 
 2026-11-02 라이선스 관리 Claude Code 이관: 사용자 요청으로 handoff/licensing에 PRD·변경 이력·개발 인수인계·검사 명령·첫 요청·실제 인수 응답을 작성했다. 기존 저장소 origin/main의 소스 기준은 2a4b6b9이며 이번에는 제품 코드를 수정하지 않았다. projects/클로리움라이선스관리에 전용 CLAUDE.md를 두고 같은 저장소 소스를 참조한다. Claude Code 2.1.312 새 영구 세션 e21eb88f-704e-441d-b3ec-2a7c154e0206(이름 클로리움라이선스관리)이 문서와 실제 소스 확인 후 인수 응답을 반환했으며 전용 실행 CMD로 재개한다. 달력 정책 16개는 새 임시 데이터로 재실행 PASS. GitHub는 기존 공개 저장소·main 보호 없음·Actions workflow 없음으로 확인했고 .local/비밀/회사 데이터/로컬 배포물은 제외한다. 회사 키 보존·정식 최초 1회 영구권·직원 PC 고정 및 KST 3개월 인증을 유지한다. AWS/DNS/TLS/운영 인증 완료는 아직 별개 미완료이다. 이 기록을 포함한 최종 커밋을 원격 main에 푸시하고 SHA 일치를 확인하는 것이 이관 전달 경계다.
+
+## 2026-11-13 · 메인메뉴 파일·세션 통합, 세션 및 파일 삭제, 상단 세션 팝업 (개발본)
+
+- 로고 메뉴의 '파일'과 '세션'을 하나의 '파일·세션'으로 합쳤습니다.
+  - 순서: 세션 만들기 · 세션 열기 · 현재 세션 편집 | 다른 이름으로 저장 | 세션 목록에서 제거 · 세션 및 파일 삭제
+  - 세션 항목은 기존처럼 `Branding.ShowSessionPanel`일 때만 보입니다.
+- '현재 세션 제거' → '세션 목록에서 제거'. 확인 문구에 "사진 파일과 폴더는 그대로 남습니다"를 넣었습니다. 목록에서 빼면 세션 설정 파일(ConfigFile)만 지웁니다(기존 동작).
+- '세션 및 파일 삭제'(`MainMenuViewModel.DelSessionFilesCommand`, 신규)
+  - 경로·파일 수·용량을 보여 주는 확인 팝업(G2Dialog, 기본값 아니오)에서 '예'를 눌러야 진행합니다.
+  - 다른 세션으로 먼저 바꿔 썸네일 파일 잠금을 푼 뒤 폴더 전체를 **휴지통으로** 보내고, 성공하면 목록에서도 뺍니다. 실패하면 목록에 남깁니다.
+  - 거부: 폴더 미지정, 드라이브 루트, 사진 저장 기본 폴더(DownloadFolder) 또는 그 상위, 다른 세션 폴더와 겹침, 카메라 IsBusy, 마지막 남은 세션.
+- 오른쪽 아래 '최근 세션' 목록을 없애고, 상단 가운데의 현재 세션 표시(`G2SessionToggle`)를 누르면 세션 팝업이 뜨게 했습니다.
+  - 8줄 높이 + 스크롤, 현재 세션이 미리 선택됩니다. 클릭/Enter = 세션 바꾸기, Delete = 목록에서만 제거(확인 없이, 파일·폴더는 그대로), Esc = 닫기, 톱니 = 현재 세션 편집.
+  - 팝업이 열려 있는 동안에는 단축키(TriggerClass)와 창의 Delete(사진 삭제)로 키가 넘어가지 않습니다.
+  - 숨긴 `txt_CaptureName`/Series 텍스트상자는 상단 세션 영역으로 옮겼습니다(코드 참조 유지).
+- 빌드: Release 오류 0. 통합 테스트 실행본 `.local/g2-integration-test`에 `Build-G2IntegrationTest.ps1 -SkipBuild -ProgramOnly`로 반영(후처리·verify PASS, CameraControl.exe SHA256 385D043C690B4A3E…), 새로 실행해 둠.
+- 회귀 `build-test-20261113-111956.log`: 빌드·점검본·수퍼포커스·기존차단19·색보정WPF·정리guard·하자모의·Stack·라이선스 PASS. FAIL 2건은 이번 변경 파일과 무관해 보이나 HEAD에서 재실행으로 확인하지는 않음:
+  - 색보정 엔진 검사: net10 테스트 프로젝트가 `G2ColorTemplates.cs`/`G2ImageAdjust.cs`의 `CameraControl.Devices.UiText` 참조를 컴파일하지 못함(메시지 문구 적용 이후 테스트 참조 미갱신 추정).
+  - WPF 검사 G2ManualTakeoverCheck: `anchors must populate high count25`(수퍼포커스 창 기대값 불일치).
+- 화면 확인 못 함: 이번 세션의 화면 접근이 승인되지 않아 팝업·메뉴 실화면은 사용자 확인 필요. 실제 '세션 및 파일 삭제'는 실행하지 않았습니다.
+- 커밋: 하지 않음.
+## 2026-11-13 · 가로/세로 촬영이 모든 촬영 버튼·라이브뷰에 일관 적용 (개발본)
+
+- 사용자 재현: '세로 촬영'을 골랐는데 가로 사진이 섞여 저장됨.
+- 원인
+  - 오른쪽 아래 '촬영'(Space, 외부 트리거)의 `CaptureOfIcon_Click`은 가로/세로 상태를 넘기지 않아 항상 기본 회전으로 저장. F/B/D·치수만 반영.
+  - 버튼 문구가 토글 상태 고정(기본='세로')이라, 설정 RotateIndex=0인 PC(통합 테스트본 포함)에서는 '세로 촬영' 표시인데 실제 결과는 가로.
+  - RotateIndex=0·무회전이면 EXIF를 쓰지 않아 카메라 기울기 센서가 쓴 방향 태그가 그대로 남을 수 있음.
+- 수정 (`MainWindow.xaml.cs`, `MainWindow.xaml`)
+  - `is270CaptureMode`를 `bool?`로 바꾸고, `CaptureAsync`(촬영·Space·F/B/D·치수·바코드 공통)가 누른 순간의 가로/세로를 고정. 라이브뷰 창·카메라 셔터처럼 G2 밖에서 시작한 촬영은 저장 시점의 현재 선택을 사용. 다운로드 후 null로 초기화.
+  - `ApplyCaptureOrientation`: 모든 JPEG에 선택 방향의 EXIF Orientation을 적용(RotateIndex + 토글 270°). 이미 같은 값이면 다시 저장하지 않음. JPEG 서명(FF D8)이 아닌 파일(RAW)은 건드리지 않음.
+  - 버튼 문구·아이콘·촬영 배지는 `but_ToggleRot.Tag`(Portrait/Landscape) = 실제 결과 방향으로 표시. RotateIndex 변경 시 갱신.
+  - 라이브뷰 회전은 기존 `LiveViewWnd_ToggleRotation270` 경로 그대로(같은 RotateIndex+270 규칙).
+- 빌드 오류 0, 통합 테스트 실행본 반영·재실행(CameraControl.exe SHA256 97DE309D89E13A5E…).
+- 회귀 `build-test-20261113-113818.log`: 직전과 동일(색보정 엔진·G2ManualTakeoverCheck 2건 FAIL 지속, 나머지 PASS).
+- 미확인: 실카메라로 가로/세로 각각 촬영 버튼·F/B/D 저장 결과, 라이브뷰 방향 실화면. 커밋 안 함.- 사용자 확인(2026-11-13): 실카메라 가로/세로 촬영 결과 정상.
+
+## 2026-11-13 · 컷 표기, 세션 표시 폭, 셔터음 누락, 세션 Delete 오류 (개발본)
+
+- '이 세션 N건' → 'N컷'(상단·세션 팝업 행 모두).
+- 상단 세션 표시: `G2SessionInfo_SizeChanged`가 이름+경로 폭의 1.3배를 `G2SessionToggle.MinWidth`로 지정(상단 바 남은 폭이 상한). 팝업은 최소 460, 세션 상자 폭에 맞춰 넓어짐.
+- 세션 팝업 Delete가 목록에서 안 빠지던 원인: 로그 `세션 지우기 에러 : IOException ... Sessions\test.json 사용 중`. 현재 세션을 지울 때 다른 세션으로 먼저 바꾸면(이번 세션의 순서 변경) `App.Settings_SessionSelected`가 이전 세션 .json을 백그라운드로 저장하는 중에 같은 파일을 지우려 해 실패 → 목록 제거 전 예외.
+  - 수정: `RemoveSessionFromList`는 목록에서 먼저 빼고 세션을 바꿈(목록에 없는 세션은 저장 안 함), .json 삭제는 사용 중이면 100ms×최대 20회 재시도.
+  - '세션 및 파일 삭제'도 같은 순서: 목록 제거·세션 전환 → 폴더 휴지통. 폴더 삭제 실패 시 세션을 목록에 다시 넣음.
+- 셔터음 누락: 오늘 로그의 F/B/D/촬영 67회 모두 전송 후 `PhotoUtils.PlayCaptureSound` 호출 지점(Transfer time 기록)까지 도달 → 촬영 경로가 아니라 재생 단계에서 누락. `ShutterSounds.Play`가 MediaPlayer 하나를 Stop→Position=0→Play로 재사용하던 방식이 직전 소리 직후 간헐적으로 무음이 되는 것으로 판단(실기 재현 로그는 없음, 추정). 촬영마다 새 MediaPlayer를 만들고 끝날 때까지 보관·종료 후 Close, MediaFailed는 로그.
+- 빌드 오류 0, 통합 테스트 실행본 반영·재실행(CameraControl.exe 63CF24CAC6E95384…, Core 93024F30D8787F29…).
+- 회귀 `build-test-20261113-115616.log`: 직전과 동일(기존 FAIL 2건 지속: 색보정 엔진 컴파일, G2ManualTakeoverCheck).
+- 미확인: 실화면 컷 표기·폭, 실카메라 연속 촬영 셔터음, 실제 Delete 동작. 커밋 안 함.
+## 2026-11-13 · 세션 팝업 컷수, 히스토그램 제거, 상시전원 배터리, 결과 메인 표시, 라이브뷰 격자 아이콘 (개발본)
+
+- 세션 팝업 컷수: 열려 있지 않은 세션은 `Files`가 비워져 `FilesCount`=0으로 보였음. `PhotoSession.DiskFilesCount`/`CountDiskFiles()`(신규, JsonIgnore/XmlIgnore) — 세션 폴더 최상위의 지원 확장자 파일 수(LoadData와 같은 규칙). 팝업이 열릴 때 백그라운드로 모든 세션을 세고, 세는 중에는 '…'.
+- 오른쪽 패널 '미리보기 · 히스토그램' 숨김(Collapsed). 코드가 `PreviewPanel.DataContext`를 쓰므로 요소는 남김.
+- 상시전원 배터리: Canon EDSDK BatteryLevel이 AC(DC 커플러)에서 0xFFFFFFFF인데 `(int)level + 20`으로 19%가 됐음. `CanonSDKBase.UpdateBattery()`가 AC면 `BaseCameraDevice.ExternalPower`(신규)=true·Battery=100, 아니면 기존 +20(상한 100). 카메라 아이콘 툴팁은 가득 찬 배터리 + '상시전원'.
+- 결과 메인 표시: `Classes/G2ResultView.Show`(신규) — 결과 파일을 현재 세션 사진 줄에 추가(이미 있으면 그 항목)하고 `Select_Image`. 자동 내보내기는 실행 안 함.
+  - 수퍼포커스: 합성 완료 직후(두 촬영 경로 모두) Superfocus.png.
+  - 배경제거: 작업이 끝나면(완료·중지, 저장 1장 이상) 마지막 미리보기 항목의 `_bgr.png`.
+  - 하위 폴더 파일이라 세션을 다시 열면 사진 줄에서는 빠짐(파일은 그대로).
+- 라이브뷰 격자 버튼 아이콘: 4칸 사각형 → 바둑판(`G2IcoGridLines`, 외곽+가로·세로 3줄). 메인 '더보기'의 G2IcoGrid는 그대로.
+- 빌드 오류 0. 통합 테스트 반영 1차는 종료 직후 exe 잠금으로 실패(Core/Devices만 교체된 상태) → 남은 임시 staged 파일 정리 후 재실행 성공. CameraControl.exe 40A015062C46E8F6…, Core 0631450711DA7D5D…, Devices 7C863E9923C953DC….
+- 회귀 `build-test-20261113-121655.log`: 직전과 동일(기존 FAIL 2건 지속).
+- 미확인: 상시전원 실기 툴팁, 수퍼포커스·배경제거 완료 후 메인 표시, 팝업 컷수·격자 아이콘 실화면. 커밋 안 함.- 사용자 확인(2026-11-13): 세션 팝업 컷수, 히스토그램 제거, 상시전원 배터리, 수퍼포커스·배경제거 결과 메인 표시, 라이브뷰 바둑판 아이콘 모두 정상. 앞서 요청한 컷 표기·세션 표시 폭·셔터음·세션 Delete도 이 확인 이전 사용 중 이상 보고 없음(개별 확인 기록은 없음).

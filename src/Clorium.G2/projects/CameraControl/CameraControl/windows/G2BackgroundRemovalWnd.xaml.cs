@@ -495,6 +495,12 @@ public partial class G2BackgroundRemovalWnd : Window
 		_running = false;
 		_planId = null;
 		StopButton.IsEnabled = true;
+		// the last saved PNG goes to the main screen (and the open session's photo strip)
+		string last = ResultPathOf(_currentName);
+		if (success > 0 && last != null && File.Exists(last))
+		{
+			G2ResultView.Show(last);
+		}
 		switch (status)
 		{
 			case "done":

@@ -126,7 +126,9 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 
 	private bool isToggleRot = false;
 
-	private bool is270CaptureMode = false;
+	// 가로/세로 of the capture in progress, fixed when the shot starts; null = a shot not started from G2 (live view,
+	// camera shutter), which uses the current 가로/세로 choice when it is saved.
+	private bool? is270CaptureMode;
 
 	private bool _isInternalChange = false;
 
@@ -256,6 +258,10 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 				{
 					Dispatcher.BeginInvoke(new Action(UpdateCaptureFaceColumns));
 				}
+				if (e.PropertyName == "RotateIndex")
+				{
+					Dispatcher.BeginInvoke(new Action(UpdateOrientationLabel));
+				}
 			};
 		}
 		InitializeComponent();
@@ -320,6 +326,7 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 		ServiceProvider.DeviceManager.CameraConnected += DeviceManager_CameraConnected;
 		ServiceProvider.DeviceManager.CameraDisconnected += DeviceManager_CameraDisconnected;
 		SetLayout(ServiceProvider.Settings.SelectedLayout);
+		UpdateOrientationLabel();
 		if (ServiceProvider.Settings.StartMinimized)
 		{
 			WindowState = WindowState.Minimized;
@@ -378,7 +385,8 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 
 	private void MetroWindow_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
 	{
-		if (!txt_CaptureName.IsFocused)
+		// keys in the session popup (Enter, Delete, arrows) are for the session list, not shortcuts
+		if (!txt_CaptureName.IsFocused && !G2SessionPopup.IsOpen)
 		{
 			TriggerClass.KeyDown(e);
 		}
@@ -607,7 +615,7 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 				mode = StatusTip.ModeName(-1, "");
 			}
 			tip.Text("모드", mode);
-			tip.Battery("배터리", camera.Battery);
+			tip.Battery("배터리", camera.Battery, (camera as BaseCameraDevice)?.ExternalPower == true);
 		}
 		// Today's counts come from the session folders on disk (TodayCaptures): the old counters only saw normal
 		// captures since this start and barcode sessions. The two lines are updated in place when the scan finishes.
@@ -1573,24 +1581,32 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 
 	private void setExifOrientation(bool rotate270)
 	{
-		if (rotate270)
+		Exif_Rotate = ExifOrientationFor(rotate270);
+	}
+
+	// EXIF orientation of a saved picture: the mount rotation (설정 RotateIndex, 0..3 × 90°) plus 270° when toggled.
+	private static ushort ExifOrientationFor(bool rotate270)
+	{
+		int quarter = (ServiceProvider.Settings.RotateIndex + (rotate270 ? 3 : 0)) % 4;
+		switch (quarter)
 		{
-			switch (ServiceProvider.Settings.RotateIndex)
-			{
-			case 0:
-				Exif_Rotate = 8;
-				break;
-			case 1:
-				Exif_Rotate = 1;
-				break;
-			case 2:
-				Exif_Rotate = 6;
-				break;
-			case 3:
-				Exif_Rotate = 3;
-				break;
-			}
+		case 1:
+			return 6;
+		case 2:
+			return 3;
+		case 3:
+			return 8;
+		default:
+			return 1;
 		}
+	}
+
+	// G2 가로/세로: the button and the capture badge show the orientation the next picture will actually have.
+	private bool IsPortraitCapture => ((ServiceProvider.Settings.RotateIndex % 2 == 1) ^ isToggleRot);
+
+	private void UpdateOrientationLabel()
+	{
+		but_ToggleRot.Tag = IsPortraitCapture ? "Portrait" : "Landscape";
 	}
 
 	private bool IsMusinsaOK()
@@ -1898,7 +1914,8 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 				ServiceProvider.Settings.ThumbailLoaded = true;
 				return;
 			}
-			Log.Debug("아이콘 캡쳐 Click");
+			Log.Debug("아이콘 캡쳐 Click : " + (isToggleRot ? "270 회전" : "무 회전"));
+			is270CaptureMode = isToggleRot;
 			ServiceProvider.Settings.FrontBackMode = 0;
 			if (ServiceProvider.DeviceManager.SelectedCameraDevice.DeviceName == "Z-App camera")
 			{
@@ -1955,6 +1972,7 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 			icon.RenderTransformOrigin = new System.Windows.Point(0.5, 0.5);
 			ServiceProvider.WindowsManager.ExecuteCommand("LiveViewWnd_ToggleRotation270", isToggleRot);
 		}
+		UpdateOrientationLabel();
 	}
 
 	private void Capture()
@@ -2008,7 +2026,7 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 		ServiceProvider.Settings.IsMeasureOnly = false;
 		ServiceProvider.Settings.GetMeasurePicture = false;
 		ServiceProvider.Settings.Background = false;
-		is270CaptureMode = false;
+		is270CaptureMode = null;
 		isCalibrationMode = false;
 		ServiceProvider.Settings.ThumbailLoaded = true;
 		ServiceProvider.Settings.isBtnPressed = false;
@@ -2022,6 +2040,8 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 			global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0217", "연결된 카메라가 없습니다."));
 			return false;
 		}
+		// every G2 capture (촬영 · Space · F/B/D · 치수 · 바코드) keeps the 가로/세로 chosen when it was pressed
+		is270CaptureMode ??= isToggleRot;
 		ServiceProvider.Settings.isBtnPressed = true;
 		ServiceProvider.Settings.ThumbailLoaded = false;
 		try
@@ -2187,33 +2207,18 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 		}
 	}
 
+	// Every saved picture gets the orientation of the chosen 가로/세로, also when the camera's own tilt sensor wrote another
+	// one. The JPEG is rewritten only when the tag differs.
 	private void ApplyCaptureOrientation(string tempFile)
 	{
-		if (is270CaptureMode)
+		Exif_Rotate = ExifOrientationFor(is270CaptureMode ?? isToggleRot);
+		if (!IsJpegFile(tempFile))
+		{
+			return;
+		}
+		if (GetExifOrientation(tempFile) != Exif_Rotate)
 		{
 			SetExifOrientation(tempFile, Exif_Rotate);
-		}
-		else
-		{
-			switch (ServiceProvider.Settings.RotateIndex)
-			{
-			case 0:
-				Exif_Rotate = 1;
-				break;
-			case 1:
-				Exif_Rotate = 6;
-				break;
-			case 2:
-				Exif_Rotate = 3;
-				break;
-			case 3:
-				Exif_Rotate = 8;
-				break;
-			}
-			if (ServiceProvider.Settings.RotateIndex != 0)
-			{
-				SetExifOrientation(tempFile, Exif_Rotate);
-			}
 		}
 	}
 
@@ -2306,6 +2311,98 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 			fe.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
 			fe.ContextMenu.IsOpen = true;
 		}
+	}
+
+	// G2 UI: the top-bar session box is 30% longer than its name and path (within the top bar).
+	private void G2SessionInfo_SizeChanged(object sender, SizeChangedEventArgs e)
+	{
+		if (!e.WidthChanged)
+		{
+			return;
+		}
+		Thickness pad = G2SessionToggle.Padding;
+		double natural = e.NewSize.Width + pad.Left + pad.Right;
+		double room = (G2SessionToggle.Parent as FrameworkElement)?.ActualWidth ?? 0;
+		double wanted = Math.Ceiling(natural * 1.3);
+		G2SessionToggle.MinWidth = room > 0 ? Math.Min(wanted, room) : wanted;
+	}
+
+	// G2 UI: top-bar session popup — the current session is preselected; the list shows 8 rows and scrolls.
+	private void G2SessionPopup_Opened(object sender, EventArgs e)
+	{
+		G2SessionPopupBody.Width = Math.Max(460, G2SessionToggle.ActualWidth - 30);
+		G2SessionList.SelectedItem = ServiceProvider.Settings.DefaultSession;
+		// cut counts from each session's folder, off the UI thread (folders may be on a slow drive)
+		List<PhotoSession> sessions = ServiceProvider.Settings.PhotoSessions.ToList();
+		Task.Run(() =>
+		{
+			foreach (PhotoSession session in sessions)
+			{
+				session.CountDiskFiles();
+			}
+		});
+		Dispatcher.BeginInvoke(DispatcherPriority.Loaded, (Action)(() =>
+		{
+			if (G2SessionList.ItemContainerGenerator.ContainerFromIndex(0) is FrameworkElement row && row.ActualHeight > 0)
+			{
+				G2SessionList.MaxHeight = row.ActualHeight * 8 + 1;
+			}
+			if (G2SessionList.SelectedItem != null)
+			{
+				G2SessionList.ScrollIntoView(G2SessionList.SelectedItem);
+			}
+			(G2SessionList.ItemContainerGenerator.ContainerFromItem(G2SessionList.SelectedItem) as System.Windows.Controls.ListBoxItem ?? (UIElement)G2SessionList).Focus();
+		}));
+	}
+
+	private void G2SessionList_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+	{
+		if (System.Windows.Controls.ItemsControl.ContainerFromElement(G2SessionList, e.OriginalSource as DependencyObject) is System.Windows.Controls.ListBoxItem row && row.DataContext is PhotoSession session)
+		{
+			G2SwitchSession(session);
+		}
+	}
+
+	private void G2SessionList_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+	{
+		PhotoSession session = G2SessionList.SelectedItem as PhotoSession;
+		switch (e.Key)
+		{
+		case Key.Return:
+			if (session != null) G2SwitchSession(session);
+			e.Handled = true;
+			break;
+		case Key.Delete:
+			// list only: the photo folder and files stay on disk
+			if (session != null)
+			{
+				int index = G2SessionList.SelectedIndex;
+				if (MainMenuViewModel.RemoveSessionFromList(session) && G2SessionList.Items.Count > 0)
+				{
+					G2SessionList.SelectedIndex = Math.Min(index, G2SessionList.Items.Count - 1);
+					(G2SessionList.ItemContainerGenerator.ContainerFromIndex(G2SessionList.SelectedIndex) as System.Windows.Controls.ListBoxItem)?.Focus();
+				}
+			}
+			e.Handled = true;
+			break;
+		case Key.Escape:
+			G2SessionToggle.IsChecked = false;
+			e.Handled = true;
+			break;
+		}
+	}
+
+	private void G2SwitchSession(PhotoSession session)
+	{
+		G2SessionToggle.IsChecked = false;
+		Log.Debug("세션 바꾸기 : " + session.Name);
+		ServiceProvider.Settings.DefaultSession = session;
+	}
+
+	private void G2SessionPopupEdit_Click(object sender, RoutedEventArgs e)
+	{
+		G2SessionToggle.IsChecked = false;
+		EditSession();
 	}
 
 	// G2 UI: 파일 > 세션 열기 — pick a session (photo) folder anywhere with the Explorer folder picker and make it the
@@ -2696,7 +2793,7 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 			eventArgs.CameraDevice.IsBusy = false;
 			ServiceProvider.Settings.GetMeasurePicture = false;
 			ServiceProvider.Settings.FrontBackMode = 0;
-			is270CaptureMode = false;
+			is270CaptureMode = null;
 			isCalibrationMode = false;
 			ServiceProvider.Settings.Background = false;
 			ServiceProvider.Settings.IsDefect = false;
@@ -2783,6 +2880,13 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 		}
 		File.Delete(jpgPath);
 		File.Move(tempFile, jpgPath);
+	}
+
+	// the downloaded temp file has no extension to go by (RAW cannot carry this tag)
+	private static bool IsJpegFile(string path)
+	{
+		using FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
+		return fs.ReadByte() == 0xFF && fs.ReadByte() == 0xD8;
 	}
 
 	private ushort GetExifOrientation(string jpgPath)

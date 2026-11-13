@@ -47,6 +47,8 @@
   <Geometry x:Key="G2IcoCamera">M3,8 H7 L9,5 H15 L17,8 H21 V19 H3 Z M12,10 A3.5,3.5 0 1 0 12.001,10 Z</Geometry>
   <Geometry x:Key="G2IcoExpand">M15,3 H21 V9 M9,21 H3 V15 M21,3 L14,10 M3,21 L10,14</Geometry>
   <Geometry x:Key="G2IcoGrid">M4,4 H10 V10 H4 Z M14,4 H20 V10 H14 Z M4,14 H10 V20 H4 Z M14,14 H20 V20 H14 Z</Geometry>
+  <!-- 바둑판 (live view grid lines): a board with 3 lines each way -->
+  <Geometry x:Key="G2IcoGridLines">M3,3 H21 V21 H3 Z M7.5,3 V21 M12,3 V21 M16.5,3 V21 M3,7.5 H21 M3,12 H21 M3,16.5 H21</Geometry>
   <Geometry x:Key="G2IcoCameras">M2,8 H5 L6.5,6 H12.5 L14,8 H16 V17 H2 Z M9,10 A2.5,2.5 0 1 0 9.001,10 Z M18,10 L22,8 V17 L18,15</Geometry>
   <Geometry x:Key="G2IcoWebcam">M12,3 A7,7 0 1 0 12.001,3 Z M12,7 A3,3 0 1 0 12.001,7 Z M8,21 H16 M12,17 V21</Geometry>
   <Geometry x:Key="G2IcoAlert">M12,3 L22,20 H2 Z M12,10 V14 M12,17 L12.01,17</Geometry>

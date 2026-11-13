@@ -85,22 +85,23 @@
           <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
-        <!-- logo = main menu (파일 · 화면 · 세션 · 카메라 · 플러그인 · 도움말) -->
+        <!-- logo = main menu (파일·세션 · 화면 · 카메라 · 설정 · 종료) -->
         <Button Grid.Column="0" Style="{StaticResource G2ButtonBase}" Tag="9" Height="42" Padding="10,0,8,0" Margin="0,0,20,0" ToolTip="메뉴" Click="G2LogoMenu_Click">
           <FrameworkElement.ContextMenu>
             <ContextMenu Placement="Bottom" VerticalOffset="6">
               <FrameworkElement.DataContext>
                 <viewModel:MainMenuViewModel />
               </FrameworkElement.DataContext>
-              <MenuItem Header="파일">
+              <!-- 파일·세션: the former 파일 and 세션 menus in one -->
+              <MenuItem Header="파일·세션">
+                <MenuItem Header="{T:Translate MenuSessionAdd}" Command="{Binding NewSessionCommand}" Visibility="{Binding Branding.ShowSessionPanel, Converter={StaticResource BooleanToVisibilityConverter1}}" />
                 <MenuItem Header="세션 열기" ToolTip="탐색기에서 원하는 폴더를 골라 그 세션을 엽니다 (목록에 없는 폴더는 새 세션으로 추가)" Click="G2OpenSessionFolder_Click" />
-                <MenuItem Header="다른 이름으로 저장" ToolTip="선택한 사진을 다른 이름으로 복사해 저장합니다 (원본은 그대로)" Click="G2SaveAs_Click" />
-              </MenuItem>
-              <MenuItem Header="{T:Translate MenuSession}" Visibility="{Binding Branding.ShowSessionPanel, Converter={StaticResource BooleanToVisibilityConverter1}}">
-                <MenuItem Header="{T:Translate MenuSessionAdd}" Command="{Binding NewSessionCommand}" />
+                <MenuItem Header="{T:Translate MenuSessionEdit}" Command="{Binding EditSessionCommand}" Visibility="{Binding Branding.ShowSessionPanel, Converter={StaticResource BooleanToVisibilityConverter1}}" />
                 <Separator />
-                <MenuItem Header="{T:Translate MenuSessionEdit}" Command="{Binding EditSessionCommand}" />
-                <MenuItem Header="{T:Translate MenuSessionDel}" Command="{Binding DelSessionCommand}" />
+                <MenuItem Header="다른 이름으로 저장" ToolTip="선택한 사진을 다른 이름으로 복사해 저장합니다 (원본은 그대로)" Click="G2SaveAs_Click" />
+                <Separator Visibility="{Binding Branding.ShowSessionPanel, Converter={StaticResource BooleanToVisibilityConverter1}}" />
+                <MenuItem Header="세션 목록에서 제거" ToolTip="현재 세션을 목록에서만 뺍니다 (사진 파일과 폴더는 그대로)" Command="{Binding DelSessionCommand}" Visibility="{Binding Branding.ShowSessionPanel, Converter={StaticResource BooleanToVisibilityConverter1}}" />
+                <MenuItem Header="세션 및 파일 삭제" ToolTip="현재 세션의 폴더와 그 안의 모든 파일을 휴지통으로 보내고 목록에서도 뺍니다 (삭제 전 확인)" Command="{Binding DelSessionFilesCommand}" Visibility="{Binding Branding.ShowSessionPanel, Converter={StaticResource BooleanToVisibilityConverter1}}" />
               </MenuItem>
               <MenuItem Header="{T:Translate MenuView}" Visibility="{Binding Branding.ShowViewMenu, Converter={StaticResource BooleanToVisibilityConverter1}}">
                 <MenuItem IsCheckable="True" Header="{T:Translate MenuFlip}" IsChecked="{Binding FlipPreview}" />
@@ -188,7 +189,7 @@
         <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,22,0">
           <StackPanel Margin="0,0,20,0" VerticalAlignment="Center">
             <TextBlock Text="이 세션" Style="{StaticResource G2Caption}" FontSize="{DynamicResource G2Fs12}" />
-            <TextBlock FontFamily="{StaticResource G2Mono}" FontSize="{DynamicResource G2Fs15}" FontWeight="SemiBold" Text="{Binding Path=DefaultSession.FilesCount, StringFormat={}{0}건}" />
+            <TextBlock FontFamily="{StaticResource G2Mono}" FontSize="{DynamicResource G2Fs15}" FontWeight="SemiBold" Text="{Binding Path=DefaultSession.FilesCount, StringFormat={}{0}컷}" />
           </StackPanel>
           <ToggleButton x:Name="G2TimerToggle" Style="{StaticResource G2ButtonBase}" Padding="6,2" HorizontalContentAlignment="Left" ToolTip="작업 타이머 · 오늘 카운터" Visibility="{Binding Source={x:Static Core:ServiceProvider.Settings}, Path=ShowStatistics, Converter={StaticResource BooleanToVisibilityConverter1}}">
             <StackPanel>
@@ -241,12 +242,43 @@
           </Popup>
         </StackPanel>
 
-        <!-- current session -->
-        <StackPanel Grid.Column="3" Orientation="Horizontal" VerticalAlignment="Center" ToolTip="{Binding Path=DefaultSession.Folder}" Margin="0,0,18,0">
-          <Viewbox Width="17" Height="17" VerticalAlignment="Center"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoFolder}" Stroke="{DynamicResource G2Sub}" /></Viewbox>
-          <TextBlock Margin="8,0,10,0" VerticalAlignment="Center" FontWeight="SemiBold" Text="{Binding Path=DefaultSession.Name}" />
-          <TextBlock VerticalAlignment="Center" FontFamily="{StaticResource G2Mono}" FontSize="{DynamicResource G2Fs11}" Foreground="{DynamicResource G2Sub}" TextTrimming="CharacterEllipsis" Text="{Binding Path=DefaultSession.Folder}" />
-        </StackPanel>
+        <!-- current session = session list (click: popup of sessions, 8 rows visible, scroll; pick = switch, Delete = remove from list only) -->
+        <Grid Grid.Column="3" Margin="0,0,18,0" VerticalAlignment="Center" HorizontalAlignment="Left">
+          <ToggleButton x:Name="G2SessionToggle" Style="{StaticResource G2ButtonBase}" Tag="9" Padding="10,6" HorizontalContentAlignment="Left" ToolTip="{Binding Path=DefaultSession.Folder}" IsEnabled="{Binding Source={x:Static Core:ServiceProvider.Branding}, Path=ShowSessionPanel}">
+            <DockPanel x:Name="G2SessionInfo" SizeChanged="G2SessionInfo_SizeChanged">
+              <Viewbox DockPanel.Dock="Left" Width="17" Height="17" VerticalAlignment="Center"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoFolder}" Stroke="{DynamicResource G2Sub}" /></Viewbox>
+              <Viewbox DockPanel.Dock="Right" Width="12" Height="12" Margin="10,1,0,0" VerticalAlignment="Center"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoChevron}" Stroke="{DynamicResource G2Sub}" /></Viewbox>
+              <TextBlock DockPanel.Dock="Left" Margin="8,0,10,0" VerticalAlignment="Center" FontWeight="SemiBold" Text="{Binding Path=DefaultSession.Name}" />
+              <TextBlock VerticalAlignment="Center" FontFamily="{StaticResource G2Mono}" FontSize="{DynamicResource G2Fs11}" Foreground="{DynamicResource G2Sub}" TextTrimming="CharacterEllipsis" Text="{Binding Path=DefaultSession.Folder}" />
+            </DockPanel>
+          </ToggleButton>
+          <Popup x:Name="G2SessionPopup" PlacementTarget="{Binding ElementName=G2SessionToggle}" Placement="Bottom" StaysOpen="False" AllowsTransparency="True" VerticalOffset="6" IsOpen="{Binding IsChecked, ElementName=G2SessionToggle, Mode=TwoWay}" Opened="G2SessionPopup_Opened">
+            <Border Style="{StaticResource G2Popup}">
+              <StackPanel x:Name="G2SessionPopupBody" Width="460">
+                <DockPanel Margin="2,0,0,6">
+                  <Button DockPanel.Dock="Right" Style="{StaticResource G2IconButton}" Foreground="{DynamicResource G2Sub}" ToolTip="현재 세션 편집" Click="G2SessionPopupEdit_Click"><Viewbox Width="16" Height="16"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoGear}" /></Viewbox></Button>
+                  <TextBlock Style="{StaticResource G2SectionTitle}" Text="세션" />
+                  <TextBlock Margin="8,0,0,0" VerticalAlignment="Center" FontSize="{DynamicResource G2Fs11}" Foreground="{DynamicResource G2Sub}" Text="{Binding Path=PhotoSessions.Count, StringFormat=전체 {0}개}" />
+                </DockPanel>
+                <ListBox x:Name="G2SessionList" Style="{StaticResource G2List}" ItemsSource="{Binding Path=PhotoSessions}" PreviewKeyDown="G2SessionList_PreviewKeyDown" PreviewMouseLeftButtonUp="G2SessionList_PreviewMouseLeftButtonUp">
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                      <DockPanel ToolTip="{Binding Folder}">
+                        <Ellipse DockPanel.Dock="Left" Width="6" Height="6" Fill="{DynamicResource G2Line2}" Margin="0,0,8,0" VerticalAlignment="Center" />
+                        <TextBlock DockPanel.Dock="Right" Margin="8,0,0,0" FontSize="{DynamicResource G2Fs10_5}" FontWeight="Normal" FontFamily="{StaticResource G2Mono}" Foreground="{DynamicResource G2Sub}" VerticalAlignment="Center" Text="{Binding DiskFilesCount, StringFormat={}{0}컷, TargetNullValue=…}" />
+                        <TextBlock DockPanel.Dock="Left" Text="{Binding Name}" Margin="0,0,8,0" VerticalAlignment="Center" />
+                        <TextBlock FontSize="{DynamicResource G2Fs10_5}" FontWeight="Normal" Foreground="{DynamicResource G2Sub}" FontFamily="{StaticResource G2Mono}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" Text="{Binding DisplayFolder}" />
+                      </DockPanel>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ListBox>
+                <TextBlock Margin="2,8,0,0" Style="{StaticResource G2Caption}" FontSize="{DynamicResource G2Fs11}" Text="클릭 · Enter: 세션 바꾸기    Delete: 목록에서만 제거 (파일·폴더는 그대로)" />
+              </StackPanel>
+            </Border>
+          </Popup>
+          <TextBox Name="txt_CaptureName" Visibility="Collapsed" Text="{Binding Path=DefaultSession.CaptureName, UpdateSourceTrigger=PropertyChanged}" />
+          <TextBox Visibility="Collapsed" Text="{Binding Path=DefaultSession.Series}" />
+        </Grid>
 
         <!-- settings + right panel toggle -->
         <StackPanel Grid.Column="5" Orientation="Horizontal" VerticalAlignment="Center">
@@ -558,7 +590,7 @@
                   <Style TargetType="TextBlock">
                     <Setter Property="Text" Value="세로" />
                     <Style.Triggers>
-                      <DataTrigger Binding="{Binding ElementName=but_ToggleRot, Path=Content.Kind}" Value="ToggleSwitch">
+                      <DataTrigger Binding="{Binding ElementName=but_ToggleRot, Path=Tag}" Value="Landscape">
                         <Setter Property="Text" Value="가로" />
                       </DataTrigger>
                     </Style.Triggers>
@@ -569,29 +601,6 @@
             <TextBlock Text="촬영" FontSize="{DynamicResource G2Fs17}" FontWeight="Bold" Margin="12,0,0,1" VerticalAlignment="Center" />
           </DockPanel>
         </Button>
-
-        <!-- recent sessions (above capture) -->
-        <StackPanel DockPanel.Dock="Bottom" Margin="0,10,0,0" Visibility="{Binding Source={x:Static Core:ServiceProvider.Branding}, Path=ShowSessionPanel, Converter={StaticResource BooleanToVisibilityConverter1}}">
-          <DockPanel Margin="2,0,0,4">
-            <Button DockPanel.Dock="Right" Style="{StaticResource G2IconButton}" Foreground="{DynamicResource G2Sub}" ToolTip="세션 편집" Click="Button_EditSession_Click"><Viewbox Width="16" Height="16"><Path Style="{StaticResource G2IconPath}" Data="{StaticResource G2IcoGear}" /></Viewbox></Button>
-            <TextBlock Style="{StaticResource G2SectionTitle}" Text="최근 세션" />
-            <TextBlock Margin="8,0,0,0" VerticalAlignment="Center" FontSize="{DynamicResource G2Fs11}" Foreground="{DynamicResource G2Sub}" Text="{Binding Path=PhotoSessions.Count, StringFormat=전체 {0}개}" />
-          </DockPanel>
-          <ListBox Name="cmb_session" Style="{StaticResource G2List}" MaxHeight="126" SelectedItem="{Binding Path=DefaultSession}" ItemsSource="{Binding Path=PhotoSessions}">
-            <ItemsControl.ItemTemplate>
-              <DataTemplate>
-                <DockPanel ToolTip="{Binding Folder}">
-                  <Ellipse DockPanel.Dock="Left" Width="6" Height="6" Fill="{DynamicResource G2Line2}" Margin="0,0,8,0" VerticalAlignment="Center" />
-                  <TextBlock DockPanel.Dock="Right" Margin="8,0,0,0" FontSize="{DynamicResource G2Fs10_5}" FontWeight="Normal" FontFamily="{StaticResource G2Mono}" Foreground="{DynamicResource G2Sub}" VerticalAlignment="Center" Text="{Binding FilesCount, StringFormat={}{0}건}" />
-                  <TextBlock DockPanel.Dock="Left" Text="{Binding Name}" Margin="0,0,8,0" VerticalAlignment="Center" />
-                  <TextBlock FontSize="{DynamicResource G2Fs10_5}" FontWeight="Normal" Foreground="{DynamicResource G2Sub}" FontFamily="{StaticResource G2Mono}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" Text="{Binding DisplayFolder}" />
-                </DockPanel>
-              </DataTemplate>
-            </ItemsControl.ItemTemplate>
-          </ListBox>
-          <TextBox Name="txt_CaptureName" Visibility="Collapsed" Text="{Binding Path=DefaultSession.CaptureName, UpdateSourceTrigger=PropertyChanged}" />
-          <TextBox Visibility="Collapsed" Text="{Binding Path=DefaultSession.Series}" />
-        </StackPanel>
 
         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" PanningMode="VerticalOnly" Margin="0,0,-10,0" Padding="0,0,10,0">
           <StackPanel>
@@ -758,7 +767,7 @@
                               <Setter Property="Background" Value="{DynamicResource G2Panel2}" />
                               <Setter Property="BorderBrush" Value="{DynamicResource G2Line}" />
                               <Style.Triggers>
-                                <DataTrigger Binding="{Binding Content.Kind, RelativeSource={RelativeSource AncestorType=Button}}" Value="ToggleSwitch">
+                                <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource AncestorType=Button}}" Value="Landscape">
                                   <Setter Property="Background" Value="{DynamicResource G2AccentSoft}" />
                                   <Setter Property="BorderBrush" Value="{DynamicResource G2Accent}" />
                                 </DataTrigger>
@@ -773,7 +782,7 @@
                                     <Setter Property="Stroke" Value="{DynamicResource G2Text}" />
                                     <Setter Property="Data" Value="{StaticResource G2IcoPortrait}" />
                                     <Style.Triggers>
-                                      <DataTrigger Binding="{Binding Content.Kind, RelativeSource={RelativeSource AncestorType=Button}}" Value="ToggleSwitch">
+                                      <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource AncestorType=Button}}" Value="Landscape">
                                         <Setter Property="Stroke" Value="{DynamicResource G2Accent}" />
                                         <Setter Property="Data" Value="{StaticResource G2IcoLandscape}" />
                                       </DataTrigger>
@@ -787,7 +796,7 @@
                                 <Style TargetType="TextBlock">
                                   <Setter Property="Text" Value="세로 촬영" />
                                   <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Content.Kind, RelativeSource={RelativeSource AncestorType=Button}}" Value="ToggleSwitch">
+                                    <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource AncestorType=Button}}" Value="Landscape">
                                       <Setter Property="Text" Value="가로 촬영" />
                                     </DataTrigger>
                                   </Style.Triggers>
@@ -812,8 +821,8 @@
                 <TextBlock Style="{StaticResource G2SectionTitle}" Text="카메라 설정" />
               </DockPanel>
             </ToggleButton>
-            <Border Style="{StaticResource G2Divider}" />
-            <Expander Style="{StaticResource G2Expander}" Header="미리보기 · 히스토그램">
+            <!-- 미리보기 · 히스토그램: removed from the panel (kept collapsed: the code still points PreviewPanel at the layout's zoom) -->
+            <Expander Style="{StaticResource G2Expander}" Header="미리보기 · 히스토그램" Visibility="Collapsed">
               <StackPanel Margin="0,2,0,4">
                 <Border CornerRadius="10" Background="{DynamicResource G2Panel2}" Padding="8" Margin="0,0,0,8" Visibility="{Binding Source={x:Static Core:ServiceProvider.Branding}, Path=ShowPreviewPanel, Converter={StaticResource BooleanToVisibilityConverter1}}">
                   <Grid Height="170">

@@ -371,6 +371,22 @@ public class BaseCameraDevice : BaseFieldClass, ICameraDevice
 		}
 	}
 
+	private bool _externalPower;
+
+	// G2: the camera runs on an AC adapter / DC coupler (Canon reports BatteryLevel_AC); Battery is 100 then.
+	public bool ExternalPower
+	{
+		get
+		{
+			return _externalPower;
+		}
+		set
+		{
+			_externalPower = value;
+			NotifyPropertyChanged("ExternalPower");
+		}
+	}
+
 	public uint TransferProgress
 	{
 		get

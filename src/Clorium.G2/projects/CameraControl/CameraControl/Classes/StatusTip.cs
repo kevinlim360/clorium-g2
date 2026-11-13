@@ -77,9 +77,10 @@ public sealed class StatusTip
 	}
 
 	// Battery glyph (body, cap, level fill) followed by the percentage. Red at 20 % or less, amber up to 50 %.
-	public void Battery(string label, int percent)
+	// On an AC adapter / DC coupler: a full glyph and "상시전원".
+	public void Battery(string label, int percent, bool externalPower = false)
 	{
-		percent = Math.Max(0, Math.Min(100, percent));
+		percent = externalPower ? 100 : Math.Max(0, Math.Min(100, percent));
 		Grid g = Row(label);
 		Brush fill = percent <= 20 ? Alarm : percent <= 50 ? Caution : Ok;
 		var glyph = new Canvas { Width = 26, Height = 12, VerticalAlignment = VerticalAlignment.Center };
@@ -93,7 +94,7 @@ public sealed class StatusTip
 		Canvas.SetTop(level, 2);
 		glyph.Children.Add(level);
 		Put(g, glyph, 1);
-		Put(g, new TextBlock { Text = percent + "%", FontWeight = FontWeights.SemiBold, Margin = new Thickness(8, 0, 0, 0), VerticalAlignment = VerticalAlignment.Center }, 2);
+		Put(g, new TextBlock { Text = externalPower ? "상시전원" : percent + "%", FontWeight = FontWeights.SemiBold, Margin = new Thickness(8, 0, 0, 0), VerticalAlignment = VerticalAlignment.Center }, 2);
 	}
 
 	public void Note(string text)

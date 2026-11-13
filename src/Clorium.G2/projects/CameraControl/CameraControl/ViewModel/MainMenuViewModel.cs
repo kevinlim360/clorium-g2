@@ -122,6 +122,8 @@ public class MainMenuViewModel : ViewModelBase
 
 	public RelayCommand DelSessionCommand { get; private set; }
 
+	public RelayCommand DelSessionFilesCommand { get; private set; }
+
 	public RelayCommand RefreshSessionCommand { get; private set; }
 
 	public RelayCommand ShowSessionCommand { get; private set; }
@@ -297,6 +299,7 @@ public class MainMenuViewModel : ViewModelBase
 		NewSessionCommand = new RelayCommand(NewSession);
 		EditSessionCommand = new RelayCommand(EditSession);
 		DelSessionCommand = new RelayCommand(DelSession);
+		DelSessionFilesCommand = new RelayCommand(DelSessionFiles);
 		RefreshSessionCommand = new RelayCommand(RefreshSession);
 		ShowSessionCommand = new RelayCommand(ShowSession);
 		ImportSessionCommand = new RelayCommand(ImportSession);
@@ -580,35 +583,184 @@ public class MainMenuViewModel : ViewModelBase
 		}
 	}
 
+	// G2: 파일·세션 > 세션 목록에서 제거 — the session leaves the list; its photo folder and files stay on disk.
 	private void DelSession()
 	{
 		Log.Debug("Menu : Delete Session Click");
+		PhotoSession session = ServiceProvider.Settings.DefaultSession;
+		if (session == null || !CanRemoveSession())
+		{
+			return;
+		}
+		if (G2Dialog.Show("'" + session.Name + "' 세션을 목록에서 제거할까요?\n\n사진 파일과 폴더는 그대로 남습니다.\n" + session.Folder, "세션 목록에서 제거", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No) == MessageBoxResult.Yes)
+		{
+			RemoveSessionFromList(session);
+		}
+	}
+
+	private static bool CanRemoveSession()
+	{
 		if (ServiceProvider.Settings.PhotoSessions.Count > 1)
+		{
+			return true;
+		}
+		ServiceProvider.WindowsManager.ExecuteCommand("MainWnd_Message", TranslationStrings.MsgLastSessionCantBeDeleted);
+		G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0258", "세션이 하나뿐이면 삭제할 수 없습니다."));
+		return false;
+	}
+
+	// Removes a session from the session list only (menu, Delete key in the top-bar session popup). Files and folder stay.
+	public static bool RemoveSessionFromList(PhotoSession session)
+	{
+		Settings settings = ServiceProvider.Settings;
+		if (session == null || !settings.PhotoSessions.Contains(session) || !CanRemoveSession())
+		{
+			return false;
+		}
+		try
+		{
+			// Out of the list first: switching away saves the old session's .json in the background only while it is listed.
+			settings.PhotoSessions.Remove(session);
+			if (settings.DefaultSession == session)
+			{
+				settings.DefaultSession = settings.PhotoSessions[0];
+			}
+			DeleteSessionConfig(session);
+			settings.Save();
+			Log.Debug("세션 목록에서 제거 : " + session.Name + " (" + session.Folder + ")");
+			return true;
+		}
+		catch (Exception ex)
+		{
+			Log.Error("세션 지우기 에러 : ", ex);
+			ServiceProvider.WindowsManager.ExecuteCommand("MainWnd_Message", TranslationStrings.LabelUnabletoDeleteSession + ex.Message);
+			return false;
+		}
+	}
+
+	// The session's .json in the data folder; a save still writing it gets a moment to finish.
+	private static void DeleteSessionConfig(PhotoSession session)
+	{
+		if (string.IsNullOrEmpty(session.ConfigFile))
+		{
+			return;
+		}
+		for (int attempt = 1; File.Exists(session.ConfigFile); attempt++)
 		{
 			try
 			{
-				if (global::CameraControl.Core.Classes.G2Dialog.Show(string.Format(TranslationStrings.MsgDeleteSessionQuestion, ServiceProvider.Settings.DefaultSession.Name), TranslationStrings.LabelDeleteSession, MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-				{
-					PhotoSession session = ServiceProvider.Settings.DefaultSession;
-					if (!string.IsNullOrEmpty(session.ConfigFile) && File.Exists(session.ConfigFile))
-					{
-						File.Delete(session.ConfigFile);
-					}
-					ServiceProvider.Settings.PhotoSessions.Remove(session);
-					ServiceProvider.Settings.DefaultSession = ServiceProvider.Settings.PhotoSessions[0];
-					ServiceProvider.Settings.Save();
-				}
-				return;
+				File.Delete(session.ConfigFile);
 			}
-			catch (Exception ex)
+			catch (IOException ex) when (attempt < 20)
 			{
-				Log.Error("세션 지우기 에러 : ", ex);
-				ServiceProvider.WindowsManager.ExecuteCommand("MainWnd_Message", TranslationStrings.LabelUnabletoDeleteSession + ex.Message);
-				return;
+				Log.Debug("세션 파일 사용 중, 다시 시도 : " + ex.Message);
+				Thread.Sleep(100);
 			}
 		}
-		ServiceProvider.WindowsManager.ExecuteCommand("MainWnd_Message", TranslationStrings.MsgLastSessionCantBeDeleted);
-		global::CameraControl.Core.Classes.G2Dialog.Show(global::CameraControl.Devices.UiText.T("M0258", "세션이 하나뿐이면 삭제할 수 없습니다."));
+	}
+
+	// G2: 파일·세션 > 세션 및 파일 삭제 — after a confirmation, the current session's folder (with every file in it) goes to
+	// the Recycle Bin and the session leaves the list. Refuses folders that hold the download root or another session.
+	private void DelSessionFiles()
+	{
+		Log.Debug("Menu : Delete Session And Files Click");
+		Settings settings = ServiceProvider.Settings;
+		PhotoSession session = settings.DefaultSession;
+		const string caption = "세션 및 파일 삭제";
+		if (session == null || !CanRemoveSession())
+		{
+			return;
+		}
+		if (ServiceProvider.DeviceManager.SelectedCameraDevice?.IsBusy == true)
+		{
+			G2Dialog.Show("촬영이나 사진 전송이 끝난 뒤 다시 시도해 주세요.", caption);
+			return;
+		}
+		string folder = string.IsNullOrWhiteSpace(session.Folder) ? null : Path.GetFullPath(session.Folder).TrimEnd('\\');
+		string refusal = SessionFolderDeleteRefusal(session, folder);
+		if (refusal != null)
+		{
+			G2Dialog.Show(refusal, caption, MessageBoxButton.OK, MessageBoxImage.Warning);
+			return;
+		}
+		bool exists = Directory.Exists(folder);
+		string detail;
+		if (exists)
+		{
+			long bytes = 0;
+			int count = 0;
+			foreach (string file in Directory.EnumerateFiles(folder, "*", SearchOption.AllDirectories))
+			{
+				count++;
+				bytes += new System.IO.FileInfo(file).Length;
+			}
+			detail = folder + "\n파일 " + count + "개 · " + (bytes / 1048576.0).ToString("0.#") + " MB\n\n폴더와 그 안의 모든 파일이 휴지통으로 이동합니다.";
+		}
+		else
+		{
+			detail = folder + "\n(폴더가 이미 없습니다. 세션만 목록에서 제거합니다.)";
+		}
+		if (G2Dialog.Show("'" + session.Name + "' 세션과 사진 파일을 정말 삭제할까요?\n\n" + detail, caption, MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No) != MessageBoxResult.Yes)
+		{
+			return;
+		}
+		// out of the list (and switched away, so its thumbnails let go of the files) before the folder goes
+		if (!RemoveSessionFromList(session))
+		{
+			return;
+		}
+		try
+		{
+			if (exists)
+			{
+				Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(folder, Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
+			}
+			Log.Debug("세션 및 파일 삭제 : " + session.Name + " (" + folder + ")");
+		}
+		catch (Exception ex)
+		{
+			Log.Error("세션 및 파일 삭제 에러 : ", ex);
+			// the folder (or part of it) is still there: put the session back in the list
+			settings.Add(session);
+			settings.Save();
+			G2Dialog.Show("폴더를 삭제하지 못했습니다. 세션은 목록에 다시 넣어 둡니다.\n" + ex.Message, caption, MessageBoxButton.OK, MessageBoxImage.Warning);
+		}
+	}
+
+	private static string SessionFolderDeleteRefusal(PhotoSession session, string folder)
+	{
+		if (folder == null)
+		{
+			return "이 세션에는 폴더가 지정되어 있지 않습니다.";
+		}
+		if (Path.GetPathRoot(folder).TrimEnd('\\').Equals(folder, StringComparison.OrdinalIgnoreCase))
+		{
+			return "드라이브 전체는 삭제할 수 없습니다.\n" + folder;
+		}
+		string download = ServiceProvider.Settings.DownloadFolder;
+		if (!string.IsNullOrWhiteSpace(download) && IsSameOrInside(Path.GetFullPath(download).TrimEnd('\\'), folder))
+		{
+			return "사진 저장 기본 폴더(또는 그 상위 폴더)는 삭제할 수 없습니다.\n" + folder;
+		}
+		foreach (PhotoSession other in ServiceProvider.Settings.PhotoSessions)
+		{
+			if (other == session || string.IsNullOrWhiteSpace(other.Folder))
+			{
+				continue;
+			}
+			string otherFolder = Path.GetFullPath(other.Folder).TrimEnd('\\');
+			if (IsSameOrInside(otherFolder, folder) || IsSameOrInside(folder, otherFolder))
+			{
+				return "다른 세션 '" + other.Name + "'과 폴더가 겹쳐 삭제할 수 없습니다.\n" + folder + "\n" + otherFolder;
+			}
+		}
+		return null;
+	}
+
+	// true when path is folder itself or somewhere below it
+	private static bool IsSameOrInside(string path, string folder)
+	{
+		return path.Equals(folder, StringComparison.OrdinalIgnoreCase) || path.StartsWith(folder + "\\", StringComparison.OrdinalIgnoreCase);
 	}
 
 	private void ExportSession()

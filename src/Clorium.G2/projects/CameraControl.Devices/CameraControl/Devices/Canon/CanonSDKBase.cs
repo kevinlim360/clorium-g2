@@ -521,7 +521,7 @@ public class CanonSDKBase : BaseMTPCamera
 		Log.Debug("Canon SDK : LoadProperties 4-11", debugMode);
 		InitCompression();
 		Log.Debug("Canon SDK : LoadProperties 4-12", debugMode);
-		Battery = (int)Camera.BatteryLevel + 20;
+		UpdateBattery();
 		IsBusy = false;
 		Log.Debug("Canon SDK : LoadProperties 4-12-1", debugMode);
 		CaptureInSdRam = true;
@@ -1411,7 +1411,7 @@ public class CanonSDKBase : BaseMTPCamera
 					break;
 				}
 				case 8u:
-					Battery = (int)Camera.BatteryLevel + 20;
+					UpdateBattery();
 					break;
 				case 16778300u:
 				{
@@ -2213,6 +2213,15 @@ public class CanonSDKBase : BaseMTPCamera
 			stringBuilder.AppendFormat("\n\tWhite Balance.........{0}", Camera.WhiteBalance);
 		}
 		return stringBuilder.ToString();
+	}
+
+	// EDSDK BatteryLevel: a level, or BatteryLevel_AC (0xFFFFFFFF) on an AC adapter / DC coupler, which the old
+	// "(int)level + 20" turned into 19 %.
+	private void UpdateBattery()
+	{
+		long level = Camera.BatteryLevel;
+		ExternalPower = level == 0xFFFFFFFFL;
+		Battery = ExternalPower ? 100 : Math.Min(100, (int)level + 20);
 	}
 
 	private void PlayWave(string filePath)

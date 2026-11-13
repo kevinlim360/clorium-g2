@@ -282,7 +282,7 @@ public sealed class SuperfocusWindow : Window
                 }
                 Log.Debug("Superfocus : "+files.Count+" cuts in "+clock.Elapsed.TotalSeconds.ToString("0.0")+" s");
                 token.Token.ThrowIfCancellationRequested();SetStatus(global::CameraControl.Devices.UiText.T("M0509", "합성하는 중"));
-                lastResult=await CloriumStackProcess.RunAsync(py,script,files,Path.Combine(folder,"Superfocus.png"),progress,token.Token);
+                lastResult=await CloriumStackProcess.RunAsync(py,script,files,Path.Combine(folder,"Superfocus.png"),progress,token.Token);global::CameraControl.Classes.G2ResultView.Show(lastResult);
                 SetStatus(global::CameraControl.Devices.UiText.T("M0510", "완료 · ")+files.Count+global::CameraControl.Devices.UiText.T("M0511", "컷 · 촬영 ")+clock.Elapsed.TotalSeconds.ToString("0")+global::CameraControl.Devices.UiText.T("M0512", "초\n")+lastResult);
             }
         }catch(OperationCanceledException){SetStatus(global::CameraControl.Devices.UiText.T("M0501", "중지됨")+(folder==null?"":global::CameraControl.Devices.UiText.T("M0513", "\n원본: ")+folder));}
@@ -375,7 +375,7 @@ public sealed class SuperfocusWindow : Window
                 cancellation=token;Refresh();var progress=new Progress<string>(message=>{SetStatus(CloriumStackProcess.DescribeProgress(message));Refresh();});captureStarted=true;
                 var files=await Task.Run(()=>new FocusCaptureSequence().RunPlannedRangeAsync(adapter,range,targets,wait,TimeSpan.FromSeconds(90),progress,token.Token));
                 token.Token.ThrowIfCancellationRequested();SetStatus(global::CameraControl.Devices.UiText.T("M0509", "합성하는 중"));
-                lastResult=await CloriumStackProcess.RunAsync(py,script,files,Path.Combine(folder,"Superfocus.png"),progress,token.Token);
+                lastResult=await CloriumStackProcess.RunAsync(py,script,files,Path.Combine(folder,"Superfocus.png"),progress,token.Token);global::CameraControl.Classes.G2ResultView.Show(lastResult);
                 SetStatus(global::CameraControl.Devices.UiText.T("M0510", "완료 · ")+files.Count+global::CameraControl.Devices.UiText.T("M0534", "컷\n")+lastResult);
             }
         }catch(OperationCanceledException){if(captureStarted){range.Invalidate();boxA=boxB=null;}SetStatus(global::CameraControl.Devices.UiText.T("M0535", "중지됨\n원본: ")+folder);}
