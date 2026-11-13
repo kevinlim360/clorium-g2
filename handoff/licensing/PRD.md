@@ -48,6 +48,7 @@ RSA 3072 서명, PC 지문(펌웨어 UUID 우선/MachineGuid 대체), DPAPI 로�
 7. 2026-11-02: GitHub 보존 및 Claude Code 새 작업 프로젝트 **클로리움라이선스관리**로 이관 요청. 같은 날 G2 제품 통합은 사용자 요청으로 롤백(a3679ea), 모듈은 보존.
 8. 2026-11-03: `license.clorium.com` A 레코드(54.153.232.149) 전파 확인, Lightsail에 swap 1GB·.NET 10 런타임·Caddy·Let's Encrypt TLS 구성(앱 미배포). 정책 변경: 버전 Major.Minor 변경 시 1회 확인(자동 승인), 이전 설치 '라이선스 없음', PC 변경 회사 승인, 임시 1/3/12개월(임시 시리얼 입력 → 목적·기간 승인). 직원 3개월·외부 고정만료 정책은 대체.
 9. 2026-11-03: 클로리움 오토사이징 단독 설치본을 별도 제품으로 관리하고, 제품이 늘어날 수 있도록 같은 라이선스 체계·관리 앱에서 제품별 발급·승인·관리로 확장.
+10. 2026-11-13: 기존 회사 서명키·데이터를 복원해 Lightsail 운영 서버에 배포(사용자 승인).
 
 ## 운영 인프라와 미완료 사항
 
@@ -59,7 +60,9 @@ RSA 3072 서명, PC 지문(펌웨어 UUID 우선/MachineGuid 대체), DPAPI 로�
 
 2026-11-03 재조회: 공개 DNS(8.8.8.8, 1.1.1.1) 모두 `license.clorium.com` A `54.153.232.149`, 네임서버 카페24 유지, 홈페이지·MX 유지. 서버는 Ubuntu 24.04.4, 실메모리 412MB + swap 1GB, .NET ASP.NET Core 10.0.14, Caddy 2.6.2가 `127.0.0.1:5088`로 프록시, Let's Encrypt 인증서(만료 2027-02-01, 자동 갱신). 서비스 계정 `clorium-license`, 폴더 `/opt/clorium-license`, `/var/lib/clorium-license`(700). 외부 `/health`는 앱이 없어 502.
 
-Linux 앱 배포·기존 키/데이터 복원·실제 인증 검증은 아직 완료되지 않았다. 현재 최종 고객 후보는 루프백 주소이므로 외부 고객용으로 배포하지 않는다. 운영 URL과 기존 공개키를 넣어 필수 관리 모드로 다시 빌드하고 검증해야 한다. 배포/운영 수용 조건은 `DEVELOPMENT_HANDOFF.md`에 정리한다.
+2026-11-13 운영 배포: 소스 3abac0e(라이선스 모듈)를 이식형으로 게시해 `/opt/clorium-license/releases/<UTC시각>`에 설치하고 `current` 링크로 연결했다. 회사 데이터(`.local/company-data`의 settings·signing-key·licenses)를 `/var/lib/clorium-license/data`(서비스 계정 전용 700/600)로 복원했다. 관리자 토큰 원문 파일은 서버에 두지 않았다. systemd `clorium-license`(부팅 자동 시작, 재시작 정책, MemoryMax 300M, 보호 옵션, 로그 Warning)로 루프백 5088에서 실행한다. 외부 HTTPS `/health` 200, 관리자 무인증·잘못된 토큰 401, 회사 토큰 200, 서버 공개키 지문이 로컬 회사 키와 일치(32ECB7C842598DFE), 미등록 시리얼 인증 409 UNKNOWN_LICENSE, 기본 제품 2개 자동 등록, 서버 자동 백업 생성, 프로세스 메모리 약 73MB를 확인했다. 운영 DB에는 아직 고객·라이선스가 없다. 운영 DB를 바꾸는 실제 발급·인증 수용 검사는 하지 않았다.
+
+이후 발급·승인의 기준 서버는 `https://license.clorium.com`이다. 회사 PC의 로컬 서버(`.local/company-data`)로 따로 발급하면 두 DB가 갈라지므로 쓰지 않는다. 관리 앱은 `-ServerUrl https://license.clorium.com -AdminTokenFile <회사 보관 토큰 파일>`로 연결한다. 현재 최종 고객 후보는 루프백 주소이므로 외부 고객용으로 배포하지 않는다. 운영 URL과 기존 공개키를 넣어 필수 관리 모드로 다시 빌드하고 검증해야 한다. 배포/운영 수용 조건은 `DEVELOPMENT_HANDOFF.md`에 정리한다.
 
 ## 검증 근거
 
