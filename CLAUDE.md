@@ -1,17 +1,32 @@
 # 클로리움 G2
 
-2026-11-02 라이선스 전용 이관: Claude Code **클로리움라이선스관리**는 `projects/클로리움라이선스관리`에서 시작하며 `handoff/licensing/PRD.md`, `DEVELOPMENT_HANDOFF.md`, `CHECKS.md`, `START_HERE.txt`를 우선한다. 정식 최초 1회/같은 PC 영구 사용 및 직원 PC 고정/한국시간 달력 3개월 재인증이 최신 정책이다. AWS/DNS 상태와 미완료 운영 배포도 전용 문서에 기록했다. 루트 `Claude_클로리움라이선스관리_개발시작.cmd`로 전용 세션을 이어간다.
+개발 루트는 이 폴더이며 한국어로 작업한다. 제품 소스는 `src/Clorium.G2`, 보존 기준은 `baseline/Clorium_Source_4.7.1.5`이다.
 
-2026-11-01 추가 이관: Claude의 **수퍼포커스개발** 프로젝트에서는 `handoff/superfocus/PRD.md`, `handoff/superfocus/DEVELOPMENT_HANDOFF.md`, `handoff/superfocus/CHECKS.md`를 우선 읽는다. 아래 프로젝트 전체 보존 조건은 유지한다. 사용자 확인으로 숫자 입력/미리보기 박스 이동은 정상이며, 최신 화살표 수동 전환은 WPF 비동기 검사 통과·실렌즈 미검증이다. 고스트 위 메뉴와 3줄 소형 팝업, 고=3단계, A0/B72=25/17/8, 직접입력2..고최대(200상한), 현재 가까운 끝점부터 양방향 촬영을 유지한다.
+## 먼저 읽을 문서
 
-개발 루트는 이 폴더이다. 한국어로 사용자와 작업한다.
+- 공통: `handoff/PRD.md`, `handoff/DEVELOPMENT_HANDOFF.md`, 최신 `work-status.md`. 예전 README의 첫 시안 상태만 보고 최신 수퍼포커스·라이선스 구현을 누락하지 않는다.
+- 수퍼포커스 작업: `handoff/superfocus/PRD.md`, `DEVELOPMENT_HANDOFF.md`, `CHECKS.md`가 동작 규칙과 검증 상태의 기준이다.
+- 라이선스 작업: 전용 세션 `projects/클로리움라이선스관리`(루트 `Claude_클로리움라이선스관리_개발시작.cmd`)에서 하며 `handoff/licensing/PRD.md`, `DEVELOPMENT_HANDOFF.md`, `CHECKS.md`, `START_HERE.txt`가 정책·AWS/DNS·배포 상태의 기준이다.
 
-먼저 `handoff/PRD.md`, `handoff/DEVELOPMENT_HANDOFF.md`, 최신 `work-status.md`를 읽는다. 제품 소스는 `src/Clorium.G2`, 보존 기준은 `baseline/Clorium_Source_4.7.1.5`이다. 이전 README의 첫 시안 상태만 보고 최신 수퍼포커스/라이선스 구현을 누락하지 않는다.
+## 보존할 제품 규칙
 
-UI 시안과 제품 통합, 모의 검사와 실카메라 검사, 로컬 라이선스 후보와 운영 배포를 구분한다. F/B/D, PR_F/PR_B, 하자·치수 PR 제외, 턴테이블 예외, 폴더/API/AutoSizing 호환성을 보존한다. Monsterdeck 신규 구현은 제외한다. `preview-frame-presets`의 실제 비율 자동 연결과 프리셋 영구저장은 제품 통합 과제이다.
+- F/B/D 파일명(미감개선 ON/OFF와 관계없이 동일), 턴테이블 예외, 폴더/API/AutoSizing 호환성을 보존한다.
+- Monsterdeck 신규 구현은 제외한다.
+- 수퍼포커스 확정 동작은 바꾸지 않는다: 고=3작은단계, A0/B72=25/17/8컷, 직접입력 2..고최대(200 상한), 현재 가까운 끝점부터 양방향 촬영, 고스트 위 메뉴와 3줄 소형 팝업.
 
-수퍼포커스 최신 고 규칙은 3작은단계이며 A0/B72=25/17/8컷이다. 최종 수동전환 후보 실기 및 RF24–240은 미검증이다. 라이선스 후보는 루프백 주소이며 외부 고객 배포 전 운영 주소/복원/재빌드/검사가 필요하다.
+## 상태를 구분해 보고
 
-설치본·사진·설정·baseline을 덮어쓰지 않는다. `.local`의 개인키/토큰/회사DB/백업은 출력·업로드·커밋하지 않는다. 기존 로컬 입력은 필요 범위에서만 참조한다. 개발본 배치는 Build-SuperfocusDev.ps1의 호환 후처리와 개발 표식을 유지한다. Git의 untracked 파일을 버리지 않는다.
+- UI 시안과 제품 통합, 모의 검사와 실카메라 검사, 로컬 라이선스 후보와 운영 배포를 구분한다.
+- 미검증 항목과 남은 제품 통합 과제(`preview-frame-presets` 실제 비율 자동 연결, 프리셋 영구저장 등)는 위 handoff 문서와 `work-status.md`의 최신 기록을 따른다.
 
-이관 후 첫 작업은 실제 경로와 문서/소스 일치 확인 및 UI 제품 통합의 구체적 다음 단계 정리다. 사용자 지정 없이 기존 실행 앱/카메라/서버를 종료하거나 운영 배포하지 않는다. 이후 승인된 개발은 검증 근거와 남은 한계를 기록하며 이어간다.
+## 금지·보호
+
+- 설치본·사진·설정·baseline을 덮어쓰지 않는다.
+- `.local`의 개인키/토큰/회사DB/백업은 출력·업로드·커밋하지 않는다. 기존 로컬 입력은 필요 범위에서만 참조한다.
+- Git의 untracked 파일을 버리지 않는다.
+- 사용자 지정 없이 실행 중인 앱/카메라/서버를 종료하거나 운영 배포하지 않는다.
+- 개발본 배치는 `Build-SuperfocusDev.ps1`로 하며 호환 후처리와 개발 표식을 유지한다.
+
+## 작업 기록
+
+- 승인된 개발은 검증 근거와 남은 한계를 `work-status.md`에 기록한다.

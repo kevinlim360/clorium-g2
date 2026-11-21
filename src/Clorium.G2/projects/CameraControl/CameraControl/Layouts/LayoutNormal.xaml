@@ -9,7 +9,7 @@
       </ResourceDictionary.MergedDictionaries>
       <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
       <classes:G2FaceTagConverter x:Key="G2FaceTag" />
-      <!-- thumbnails: image only + face tag (PR_F / PR_B / F / B / D) -->
+      <!-- thumbnails: image only + face tag (F / B / D) -->
       <Style x:Key="G2ThumbItem" TargetType="ListBoxItem">
         <EventSetter Event="MouseDoubleClick" Handler="DoubleClickHandler" />
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />

@@ -73,7 +73,7 @@ static class Program
 		string temp = Path.Combine(Path.GetTempPath(), "G2-BgRemoval-" + Guid.NewGuid().ToString("N").Substring(0, 8));
 		string session = Path.Combine(temp, "2026년11월", "03일", "C05_상품 A&B #1");
 		Directory.CreateDirectory(session);
-		string front = Path.Combine(session, "C05_32987_001_PR_F.jpg"), raw = Path.Combine(session, "C05_32987_001_F.cr2"), webp = Path.Combine(session, "detail.webp");
+		string front = Path.Combine(session, "C05_32987_001_F.jpg"), raw = Path.Combine(session, "C05_32987_001_F.cr2"), webp = Path.Combine(session, "detail.webp");
 		File.WriteAllBytes(front, Jpeg()); File.WriteAllText(raw, "raw"); File.WriteAllText(webp, "x");
 		string frontHash = Hash(front);
 
@@ -192,7 +192,7 @@ static class Program
 		Console.WriteLine($"  batch status={status.GetProperty("status").GetString()} success={status.GetProperty("success").GetInt32()} seconds={status.GetProperty("seconds")}");
 		Check("batch: one photo processed", status.GetProperty("status").GetString() == "done" && status.GetProperty("success").GetInt32() == 1);
 		Check("batch: before/after thumbnails for the window", status.GetProperty("preview").GetProperty("result").GetString().StartsWith("data:image/png;base64,"));
-		Check("batch: transparent PNG saved in _bgr, original unchanged", File.Exists(Path.Combine(session + "_bgr", "C05_32987_001_PR_F_bgr.png")) && Hash(front) == frontHash);
+		Check("batch: transparent PNG saved in _bgr, original unchanged", File.Exists(Path.Combine(session + "_bgr", "C05_32987_001_F_bgr.png")) && Hash(front) == frontHash);
 		Check("cancel request is accepted", CloriumBackgroundRemoval.CancelBatch(jobId).GetProperty("message").GetString().Length > 0);
 	}
 
@@ -205,7 +205,7 @@ static class Program
 		string temp = Path.Combine(Path.GetTempPath(), "G2-BgRemoval-" + Guid.NewGuid().ToString("N").Substring(0, 8));
 		string session = Path.Combine(temp, "2026년11월", "03일", "C05_상품 A&B #1");
 		Directory.CreateDirectory(session);
-		string front = Path.Combine(session, "C05_32987_001_PR_F.jpg"), raw = Path.Combine(session, "C05_32987_001_F.cr2"), webp = Path.Combine(session, "detail.webp");
+		string front = Path.Combine(session, "C05_32987_001_F.jpg"), raw = Path.Combine(session, "C05_32987_001_F.cr2"), webp = Path.Combine(session, "detail.webp");
 		File.WriteAllBytes(front, Jpeg()); File.WriteAllText(raw, "raw"); File.WriteAllText(webp, "x");
 		string frontHash = Hash(front);
 		Check("rail click opens the window for the photo (running engine)", CloriumBackgroundRemoval.Open(front).Result == front && opened.Last() == front);

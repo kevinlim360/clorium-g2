@@ -134,11 +134,11 @@ public class Session {public string Name="";public List<object> Files=new();publ
 		}
 		else if (ServiceProvider.Settings.FrontBackMode == 1)
 		{
-			res += ServiceProvider.Settings.IsAestheticImprovementActive ? "_PR_F" : "_F";
+			res += "_F";
 		}
 		else if (ServiceProvider.Settings.FrontBackMode == 2)
 		{
-			res += ServiceProvider.Settings.IsAestheticImprovementActive ? "_PR_B" : "_B";
+			res += "_B";
 		}
 		else if (ServiceProvider.Settings.Background)
 		{
@@ -499,11 +499,11 @@ public static class Program {
    Check("aesthetic mode survives "+previous+" "+outcome+" active="+active,ServiceProvider.Settings.IsAestheticImprovementActive==active,new{active,previous,outcome});
    Outcome="success";var created=menu.CreateNewSessionFolder("AES_"+active+previous+outcome);session=ServiceProvider.Settings.DefaultSession;
    Check("aesthetic product switch clean state "+active+previous+outcome,created!=null&&!ServiceProvider.Settings.IsDefect&&ServiceProvider.Settings.IsAestheticImprovementActive==active,new{created});
-   await main.Front();ExpectSuffix("aesthetic next front "+active+previous+outcome,active?"_PR_F.jpg":"_F.jpg");await main.Back();ExpectSuffix("aesthetic next back "+active+previous+outcome,active?"_PR_B.jpg":"_B.jpg");ServiceProvider.Settings.IsDefect=true;await main.Front();ExpectSuffix("aesthetic next defect "+active+previous+outcome,"_D.jpg");
+   await main.Front();ExpectSuffix("aesthetic next front "+active+previous+outcome,"_F.jpg");await main.Back();ExpectSuffix("aesthetic next back "+active+previous+outcome,"_B.jpg");ServiceProvider.Settings.IsDefect=true;await main.Front();ExpectSuffix("aesthetic next defect "+active+previous+outcome,"_D.jpg");
   }
   Reset();for(int product=1;product<=50;product++){
    bool active=(product/5)%2==0;ServiceProvider.Settings.IsAestheticImprovementActive=active;menu.CreateNewSessionFolder("AES_BATCH_"+product);session=ServiceProvider.Settings.DefaultSession;
-   await main.Front();ExpectSuffix("aesthetic 50 product front "+product,active?"_PR_F.jpg":"_F.jpg");await main.Back();ExpectSuffix("aesthetic 50 product back "+product,active?"_PR_B.jpg":"_B.jpg");ServiceProvider.Settings.IsDefect=true;await main.Front();ExpectSuffix("aesthetic 50 product defect "+product,"_D.jpg");
+   await main.Front();ExpectSuffix("aesthetic 50 product front "+product,"_F.jpg");await main.Back();ExpectSuffix("aesthetic 50 product back "+product,"_B.jpg");ServiceProvider.Settings.IsDefect=true;await main.Front();ExpectSuffix("aesthetic 50 product defect "+product,"_D.jpg");
   }
   Reset();ServiceProvider.Settings.IsAestheticImprovementActive=true;Outcome="focus-error";await main.Front();ServiceProvider.Settings.IsDefect=true;Outcome="success";await main.Front();ExpectSuffix("aesthetic failed front then same-product defect","_D.jpg");Check("aesthetic same-product retry keeps active mode",ServiceProvider.Settings.IsAestheticImprovementActive,new{LastName});  var report=new{scope="Exact current production method bodies, fake camera/dialogs/lighting; front/back signatures adapted async void to Task. File I/O uses synthetic payloads, not JPEG encoding.",tests=results.Count,passed=results.Count(r=>r.passed),failed=results.Count(r=>!r.passed),results};File.WriteAllText(Path.Combine(AppContext.BaseDirectory,"results.json"),JsonSerializer.Serialize(report,new JsonSerializerOptions{WriteIndented=true}));Console.WriteLine(JsonSerializer.Serialize(new{report.tests,report.passed,report.failed,resultPath=Path.Combine(AppContext.BaseDirectory,"results.json")}));Environment.ExitCode=report.failed==0?0:1;
  }finally{var cleanup=Path.GetFullPath(Directory.GetParent(TempFolder).FullName);if(!cleanup.StartsWith(Path.GetFullPath(Path.GetTempPath()))||!Path.GetFileName(cleanup).StartsWith("Clorium2161-"))throw new IOException("Unexpected temporary cleanup path");Directory.Delete(cleanup,true);}}

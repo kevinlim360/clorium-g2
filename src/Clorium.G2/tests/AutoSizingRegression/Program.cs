@@ -53,17 +53,16 @@ static class Program
 		int existingDesks = Process.GetProcessesByName(DeskProcess).Length;
 		Check("Desk executable built", File.Exists(exe));
 
-		// G2 session fixture: DownloadFolder/.../C05_32987 with PR front, plain back, RAW and the _M measurement copy.
+		// G2 session fixture: DownloadFolder/.../C05_32987 with front, back, RAW and the _M measurement copy.
 		string session = Path.Combine(temp, "2026년11월", "03일", "C05_32987"), measure = Path.Combine(session, CloriumAutoSizing.MeasureFolder);
 		Directory.CreateDirectory(measure);
-		string front = Path.Combine(session, "C05_32987_001_PR_F.jpg"), back = Path.Combine(session, "C05_32987_001_B.jpg"), raw = Path.Combine(session, "C05_32987_001_F.cr2");
+		string front = Path.Combine(session, "C05_32987_001_F.jpg"), back = Path.Combine(session, "C05_32987_001_B.jpg"), raw = Path.Combine(session, "C05_32987_001_F.cr2");
 		string frontM = Path.Combine(measure, "C05_32987_001_F_M.jpeg"), korean = Path.Combine(temp, "한글 폴더 'quote'", "상품 사진.jpg");
 		Jpeg(front, null); Jpeg(back, null); File.WriteAllText(raw, "raw"); Jpeg(frontM, "0.25"); Jpeg(korean, "0.3");
 		string other = Path.Combine(temp, "other"); Directory.CreateDirectory(other); string loose = Path.Combine(other, "IMG_0001.cr2"); File.WriteAllText(loose, "raw");
 
 		// Target selection (pure)
-		Check("PR front -> its _M measurement copy (PR stripped)", Same(CloriumAutoSizing.ResolveTarget(front), frontM));
-		Check("plain front name -> same _M copy", Same(CloriumAutoSizing.ResolveTarget(Path.Combine(session, "C05_32987_001_F.jpg")), frontM));
+		Check("front -> its _M measurement copy", Same(CloriumAutoSizing.ResolveTarget(front), frontM));
 		Check("back without measurement -> the photo itself", Same(CloriumAutoSizing.ResolveTarget(back), back));
 		Check("RAW front -> its _M measurement copy", Same(CloriumAutoSizing.ResolveTarget(raw), frontM));
 		string rawBack = Path.Combine(session, "C05_32987_002_B.cr2"); File.WriteAllText(rawBack, "raw");

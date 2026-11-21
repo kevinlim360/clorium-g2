@@ -3020,7 +3020,7 @@ public partial class MainWindow : MetroWindow, IMainWindowPlugin, INotifyPropert
 			{
 				Directory.CreateDirectory(measurePath);
 			}
-			string metapathfile = Path.Combine(measurePath, System.Text.RegularExpressions.Regex.Replace(Path.GetFileNameWithoutExtension(namePath), "_PR(?=_[FB]$)", "") + "_M.jpeg");
+			string metapathfile = Path.Combine(measurePath, Path.GetFileNameWithoutExtension(namePath) + "_M.jpeg");
 			using (Stream outputFile = File.Open(metapathfile, FileMode.Create, FileAccess.Write))
 			{
 				JpegBitmapEncoder encoder = new JpegBitmapEncoder

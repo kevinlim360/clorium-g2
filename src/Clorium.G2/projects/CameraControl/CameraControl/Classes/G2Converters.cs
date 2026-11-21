@@ -9,15 +9,13 @@ using System.Windows.Media;
 namespace CameraControl.Classes
 {
 	/// <summary>
-	/// G2 UI: derives the face tag (PR_F, PR_B, F, B, D) from a capture file name for thumbnails.
+	/// G2 UI: derives the face tag (F, B, D) from a capture file name for thumbnails.
 	/// Display only; file naming rules are not changed here.
 	/// ConverterParameter: null = tag text, "brush" = tag background, "border" = thumbnail border, "visibility" = tag visibility.
 	/// </summary>
 	public class G2FaceTagConverter : IValueConverter
 	{
-		private static readonly Regex FaceSuffix = new Regex("_(PR_)?([FBD])$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
-
-		private static readonly Brush PrBrush = Frozen(new SolidColorBrush(Color.FromRgb(0xB3, 0x54, 0x00)));
+		private static readonly Regex FaceSuffix = new Regex("_([FBD])$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
 
 		private static readonly Brush PlainBrush = Frozen(new SolidColorBrush(Color.FromArgb(0x99, 0x00, 0x00, 0x00)));
 
@@ -49,20 +47,18 @@ namespace CameraControl.Classes
 			{
 				return string.Empty;
 			}
-			string face = match.Groups[2].Value.ToUpperInvariant();
-			return (match.Groups[1].Success && face != "D" ? "PR_" : string.Empty) + face;
+			return match.Groups[1].Value.ToUpperInvariant();
 		}
 
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
 			string tag = TagOf(value as string);
-			bool pr = tag.StartsWith("PR_", StringComparison.Ordinal);
 			switch (parameter as string)
 			{
 				case "brush":
-					return pr ? PrBrush : PlainBrush;
+					return PlainBrush;
 				case "border":
-					return pr ? PrBrush : LineBrush;
+					return LineBrush;
 				case "visibility":
 					return tag.Length > 0 ? Visibility.Visible : Visibility.Collapsed;
 				default:

@@ -4,7 +4,7 @@
 
 # 현재 배포: 4.7.1.4 / 2026-10-23-aesthetic-mode
 
-미감개선 기능은 Custom에서 켜며 실행 시 ON, 제품 전환 시 유지됩니다. 촬영 원본만 _PR_F/_PR_B, 하자와 치수사진은 기존 이름입니다. 적용·검증·한계는 RELEASE_AESTHETIC_20261023.txt를 먼저 읽으세요. 몬스타덱은 제외했습니다.
+미감개선 기능은 Custom에서 켜며 실행 시 ON, 제품 전환 시 유지됩니다. 2026-11-21 고객 취소로 미감개선 전용 파일명은 삭제했으며, ON/OFF와 관계없이 앞·뒷면은 _F/_B, 하자와 치수사진은 기존 이름입니다. 적용·검증·한계는 RELEASE_AESTHETIC_20261023.txt를 먼저 읽으세요. 몬스타덱은 제외했습니다.
 
 전체 빌드는 기존 비공개 키 입력을 CloriumLegacyLicenseKeyFile 속성으로 참조하며 복제하지 않습니다. Build.proj는 CoreWpfCompatibility 도구로 기존 WPF 공개 보조 타입을 보존하고 업무 메서드 IL 불변을 확인합니다. template은 기존 릴리스 Core DLL이며 이 소스의 releases/Clorium_4.7.1.4_20261023/files에 포함됩니다.
 

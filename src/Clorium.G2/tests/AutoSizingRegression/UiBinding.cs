@@ -228,7 +228,7 @@ class UiBinding
 		var tidy = core.GetType("CameraControl.Core.Classes.PhotoSession").GetMethod("TidyUnderscores", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static);
 		Func<string, string> T = n => (string)tidy.Invoke(null, new object[] { n });
 		Check("file names: C1_360photo__011_F -> C1_360photo_011_F", T("C1_360photo__011_F") == "C1_360photo_011_F");
-		Check("file names: _360photo__001 -> 360photo_001, sub folders kept", T("_360photo__001") == "360photo_001" && T(@"sub\__a__b_D") == @"sub\a_b_D" && T("test_001_PR_F") == "test_001_PR_F");
+		Check("file names: _360photo__001 -> 360photo_001, sub folders kept", T("_360photo__001") == "360photo_001" && T(@"sub\__a__b_D") == @"sub\a_b_D" && T("test_001_F") == "test_001_F");
 		Check("Core has the square-board calibration", core.GetType("CameraControl.Core.Classes.SquareBoardCalibration") != null);
 
 		Assembly g2 = Assembly.LoadFrom(Path.Combine(bin, "CameraControl.exe"));

@@ -779,11 +779,11 @@ public class PhotoSession : BaseFieldClass
 		}
 		else if (ServiceProvider.Settings.FrontBackMode == 1)
 		{
-			res += ServiceProvider.Settings.IsAestheticImprovementActive ? "_PR_F" : "_F";
+			res += "_F";
 		}
 		else if (ServiceProvider.Settings.FrontBackMode == 2)
 		{
-			res += ServiceProvider.Settings.IsAestheticImprovementActive ? "_PR_B" : "_B";
+			res += "_B";
 		}
 		else if (ServiceProvider.Settings.Background)
 		{

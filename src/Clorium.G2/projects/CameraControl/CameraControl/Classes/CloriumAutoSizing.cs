@@ -49,7 +49,7 @@ internal static class CloriumAutoSizing
 	public static bool IsPhoto(string file) => Array.IndexOf(PhotoExtensions, Path.GetExtension(file ?? "").ToLowerInvariant()) >= 0;
 
 	// What the rail button opens for the photo selected in G2:
-	// its measurement copy (PR stripped, as WriteMetadata names it) > the photo itself > its 치수측정 folder > its folder > nothing.
+	// its measurement copy (as WriteMetadata names it) > the photo itself > its 치수측정 folder > its folder > nothing.
 	public static string ResolveTarget(string selected)
 	{
 		if (string.IsNullOrWhiteSpace(selected)) return null;
@@ -61,7 +61,7 @@ internal static class CloriumAutoSizing
 			string measureFolder = insideMeasure ? folder : Path.Combine(folder, MeasureFolder);
 			if (!insideMeasure)
 			{
-				string measure = Path.Combine(measureFolder, Regex.Replace(Path.GetFileNameWithoutExtension(selected), "_PR(?=_[FB]$)", "") + "_M.jpeg");
+				string measure = Path.Combine(measureFolder, Path.GetFileNameWithoutExtension(selected) + "_M.jpeg");
 				if (File.Exists(measure)) return measure;
 			}
 			if (File.Exists(selected) && IsPhoto(selected)) return Path.GetFullPath(selected);

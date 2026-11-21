@@ -384,7 +384,7 @@
     <TextBlock Style="{StaticResource G2Caption}" TextWrapping="Wrap" Margin="14,0,14,10" Text="촬영 화면에 F/B 버튼을 표시하고 파일 이름 끝에 _F, _B를 붙입니다." />
     
   </StackPanel>
-</Border><Border Style="{StaticResource G2Card}" Padding="0" Margin="0,0,0,10" Tag="하자 촬영 (D) 켜면 촬영 화면에 하자(D) 버튼이 생기고, 누르면 바로 _D로 저장합니다. 미감개선(PR)과 치수 측정에서 제외됩니다.">
+</Border><Border Style="{StaticResource G2Card}" Padding="0" Margin="0,0,0,10" Tag="하자 촬영 (D) 켜면 촬영 화면에 하자(D) 버튼이 생기고, 누르면 바로 _D로 저장합니다. 치수 측정에서 제외됩니다.">
   <StackPanel>
     <DockPanel Margin="14,12,12,4">
       <ContentControl DockPanel.Dock="Right" Focusable="False" VerticalAlignment="Center"><CheckBox x:Name="G2Feat_defect" Style="{StaticResource G2Switch}" IsChecked="{Binding UseDefectCapture}" /></ContentControl>
@@ -393,7 +393,7 @@
         <Border Style="{StaticResource G2Chip}" Background="{DynamicResource G2PrBg}" Margin="8,0,0,0"><TextBlock Text="무신사" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="{DynamicResource G2PrText}" /></Border>
       </StackPanel>
     </DockPanel>
-    <TextBlock Style="{StaticResource G2Caption}" TextWrapping="Wrap" Margin="14,0,14,10" Text="켜면 촬영 화면에 하자(D) 버튼이 생기고, 누르면 바로 _D로 저장합니다. 미감개선(PR)과 치수 측정에서 제외됩니다." />
+    <TextBlock Style="{StaticResource G2Caption}" TextWrapping="Wrap" Margin="14,0,14,10" Text="켜면 촬영 화면에 하자(D) 버튼이 생기고, 누르면 바로 _D로 저장합니다. 치수 측정에서 제외됩니다." />
     
   </StackPanel>
 </Border><Border Style="{StaticResource G2Card}" Padding="0" Margin="0,0,0,10" Tag="치수 촬영 (M) 치수 버튼 치수자동저장 앞면 왼쪽에 치수 버튼을 표시합니다.">
@@ -406,16 +406,16 @@
     </DockPanel>
     <TextBlock Style="{StaticResource G2Caption}" TextWrapping="Wrap" Margin="14,0,14,10" Text="켜면 촬영 화면 앞면 왼쪽에 치수 버튼이, 앞면 위에 치수자동저장 체크박스가 생깁니다. 체크하면 앞면을 찍을 때 치수 사진도 저장하고, 해제하면 치수 버튼을 누를 때만 치수 사진을 찍습니다. 끄면 지금처럼 앞면을 찍을 때 치수 사진을 함께 저장합니다." />
   </StackPanel>
-</Border><Border Style="{StaticResource G2Card}" Padding="0" Margin="0,0,0,10" Tag="미감개선 모드 (PR) 앞·뒷면을 _PR_F, _PR_B로 저장합니다. 켜면 세로·가로 버튼 옆에 미감개선 스위치가 생깁니다. 촬영·저장 중에는 바꿀 수 없습니다.">
+</Border><Border Style="{StaticResource G2Card}" Padding="0" Margin="0,0,0,10" Tag="미감개선 모드 켜면 세로·가로 버튼 옆에 미감개선 스위치가 생깁니다. 촬영·저장 중에는 바꿀 수 없습니다.">
   <StackPanel>
     <DockPanel Margin="14,12,12,4">
       <ContentControl DockPanel.Dock="Right" Focusable="False" VerticalAlignment="Center"><CheckBox Name="EnableAestheticImprovement" Style="{StaticResource G2Switch}" IsChecked="{Binding UseAestheticImprovement, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding CanChangeAestheticImprovement}" ToolTip="프로그램을 다시 실행하면 미감개선은 ON으로 시작합니다." /></ContentControl>
       <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-        <TextBlock Style="{StaticResource G2SectionTitle}" Text="미감개선 모드 (PR)" />
+        <TextBlock Style="{StaticResource G2SectionTitle}" Text="미감개선 모드" />
         <Border Style="{StaticResource G2Chip}" Background="{DynamicResource G2PrBg}" Margin="8,0,0,0"><TextBlock Text="무신사" FontSize="{DynamicResource G2Fs10_5}" FontWeight="SemiBold" Foreground="{DynamicResource G2PrText}" /></Border>
       </StackPanel>
     </DockPanel>
-    <TextBlock Style="{StaticResource G2Caption}" TextWrapping="Wrap" Margin="14,0,14,10" Text="앞·뒷면을 _PR_F, _PR_B로 저장합니다. 켜면 세로·가로 버튼 옆에 미감개선 스위치가 생깁니다. 촬영·저장 중에는 바꿀 수 없습니다." />
+    <TextBlock Style="{StaticResource G2Caption}" TextWrapping="Wrap" Margin="14,0,14,10" Text="켜면 세로·가로 버튼 옆에 미감개선 스위치가 생깁니다. 촬영·저장 중에는 바꿀 수 없습니다." />
     
   </StackPanel>
 </Border><Border Style="{StaticResource G2Card}" Padding="0" Margin="0,0,0,10" Tag="배경제거 배경 제거 Matting Studio 클로리움 배경제거(Matting Studio)로 선택한 사진이나 폴더의 배경을 지웁니다. 켜면 왼쪽 도구에 배경제거 버튼이 나타납니다. 실행 스크립트">
